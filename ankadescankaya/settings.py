@@ -92,9 +92,9 @@ WSGI_APPLICATION = 'ankadescankaya.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ankadescankaya',
+        'NAME': 'ankades-student-sharing-platform',
         'USER': 'postgres',
-        'PASSWORD': '8448767.Bac',
+        'PASSWORD': 'ankades.SharingPlatform2020',
         'HOST': 'localhost',
         'PORT': '5432',
     }
