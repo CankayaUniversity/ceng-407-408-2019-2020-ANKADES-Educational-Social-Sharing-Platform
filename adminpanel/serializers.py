@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
 
 from account.models import Account
@@ -8,3 +9,15 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = ['url', 'id', 'username', 'first_name', 'last_name', 'email', 'description', 'groups', 'is_active',
                   'is_superuser', 'image']
+
+
+class AccountGroupsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
+
+
+class AccountPermissionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'

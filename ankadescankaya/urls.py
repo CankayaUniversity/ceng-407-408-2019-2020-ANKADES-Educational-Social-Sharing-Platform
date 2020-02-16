@@ -8,9 +8,12 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
 from account.views import AccountViewSet
+from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet
 
 router = routers.SimpleRouter()
 router.register('Account', AccountViewSet, "account")
+router.register('Account/Groups', AccountGroupsViewSet, "accountGroups")
+router.register('Account/Permissions', AccountPermissionsViewSet, "accountPermissions")
 
 schema_view = get_schema_view(
    openapi.Info(

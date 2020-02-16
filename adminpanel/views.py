@@ -1,28 +1,41 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-
-
-# Create your views here.
-#Main View
+from django.contrib.auth.models import Group, Permission
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework import viewsets
 from account.models import Account
-from adminpanel.forms import AdminLoginForm
+from adminpanel.forms import AdminLoginForm, CourseCategoryForm, CourseSubCategoryForm, CourseSubToSubCategoryForm
+from adminpanel.serializers import AccountPermissionsSerializer, AccountGroupsSerializer
+from course.models import CourseCategory, CourseSubCategory, Course, CourseSubToSubCategory
 
 
+#UserViewSet
+class AccountGroupsViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = AccountGroupsSerializer
+
+class AccountPermissionsViewSet(viewsets.ModelViewSet):
+    queryset = Permission.objects.all()
+    serializer_class = AccountPermissionsSerializer
+
+
+#Main View
 @login_required(login_url="login_admin")
 def admin_index(request):
     if request.user.is_superuser:
         user = Account.objects.all()
-        # article_count = Article.objects.all().count()
-        # article_category_count = ArticleCategory.objects.all().count()
-        # article_sub_category_count = ArticleSubCategory.objects.all().count()
-        # article_comment_count = ArticleComment.objects.all().count()
+        course_count = Course.objects.all().count()
+        course_category_count = CourseCategory.objects.all().count()
+        course_sub_category_count = CourseSubCategory.objects.all().count()
+        course_sub_to_sub_category_count = CourseSubToSubCategory.objects.all().count()
         context = {
             "user": user,
-            # "article_count": article_count,
-            # "article_category_count": article_category_count,
-            # "article_sub_category_count": article_sub_category_count,
-            # "article_comment_count": article_comment_count,
+            "course_count": course_count,
+            "course_category_count": course_category_count,
+            "course_sub_category_count": course_sub_category_count,
+            "course_sub_to_sub_category_count": course_sub_to_sub_category_count,
         }
         return render(request, "admin/index.html", context)
     else:
@@ -63,3 +76,138 @@ def logout_admin(request):
     else:
         return redirect("login_admin")
 
+
+@login_required(login_url="login_admin")
+def users_table(request):
+    keyword = request.GET.get("keyword")
+    if keyword:
+        user_pagination = Account.objects.filter(
+            Q(username__contains=keyword) |
+            Q(first_name__contains=keyword) |
+            Q(id__contains=keyword) |
+            Q(last_name__contains=keyword))
+        context = {
+            "user_pagination": user_pagination,
+        }
+        return render(request, "admin/account/all_users.html", context)
+
+    users_list = Account.objects.all()
+    users_limit = Account.objects.all().order_by('-date_joined')[:5]
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_limit, 5)
+    try:
+        user_pagination = paginator.page(page)
+    except PageNotAnInteger:
+        user_pagination = paginator.page(1)
+    except EmptyPage:
+        user_pagination = paginator.page(paginator.num_pages)
+
+    context = {
+        "users_list": users_list,
+        "user_pagination": user_pagination,
+        "users_limit": users_limit,
+    }
+    return render(request, "admin/account/all_users.html", context)
+
+
+@login_required(login_url="login_admin")
+def add_course_category(request):
+    form = CourseCategoryForm(request.POST or None)
+    if form.is_valid():
+        course = form.save(commit=False)
+        course.save()
+        return redirect("admin_index")
+    return render(request, "admin/course/add-category.html", {"form": form})
+
+
+@login_required(login_url="login_admin")
+def edit_course_category(request, category_slug):
+    instance = get_object_or_404(CourseCategory, category_slug=category_slug)
+    form = CourseCategoryForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        return redirect("admin_index")
+    return render(request, "admin/course/edit-category.html", {"form": form})
+
+
+@login_required(login_url="login_admin")
+def delete_course_category(request, course_category_slug):
+    course_category = get_object_or_404(CourseCategory, course_category_slug=course_category_slug)
+    course_category.delete()
+    return redirect("admin_index")
+
+
+@login_required(login_url="login_admin")
+def delete_course_sub_category(request, course_sub_category_slug):
+    course_sub_category = get_object_or_404(CourseSubCategory, course_sub_category_slug=course_sub_category_slug)
+    course_sub_category.delete()
+    return redirect("admin_index")
+
+
+@login_required(login_url="login_admin")
+def edit_course_sub_category(request, course_sub_category_slug):
+    instance = get_object_or_404(CourseSubCategory, course_sub_category_slug=course_sub_category_slug)
+    form = CourseSubCategoryForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        return redirect("admin_index")
+    return render(request, "admin/course/edit-sub-category.html", {"form": form})
+
+
+@login_required(login_url="adminpanel:login_admin")
+def sub_categories(request):
+    keyword = request.GET.get("keyword")
+    if keyword:
+        course_sub_categories_pagination = CourseSubCategory.objects.filter(
+            Q(id__contains=keyword) |
+            Q(course_sub_category_title__contains=keyword) |
+            Q(course_sub_category_created_date__contains=keyword) |
+            Q(course_sub_category_slug__contains=keyword) | Q(course_category_id__contains=keyword))
+        context = {
+            "course_sub_categories_pagination": course_sub_categories_pagination,
+        }
+        return render(request, "admin/course/sub-categories.html", context)
+
+    course_sub_categories_list = CourseSubCategory.objects.all()
+    course_sub_categories_limit = CourseSubCategory.objects.all().order_by('-course_sub_category_created_date')[:5]
+    page = request.GET.get('page', 1)
+    paginator = Paginator(course_sub_categories_limit, 5)
+    try:
+        course_sub_categories_pagination = paginator.page(page)
+    except PageNotAnInteger:
+        course_sub_categories_pagination = paginator.page(1)
+    except EmptyPage:
+        course_sub_categories_pagination = paginator.page(paginator.num_pages)
+
+    context = {
+        "course_sub_categories_list": course_sub_categories_list,
+        "course_sub_categories_pagination": course_sub_categories_pagination,
+        "course_sub_categories_limit": course_sub_categories_limit,
+    }
+    return render(request, "admin/course/sub-categories.html", context)
+
+
+@login_required(login_url="login_admin")
+def add_course_sub_category(request):
+    form = CourseSubCategoryForm(request.POST or None)
+    if form.is_valid():
+        add_course_sub_category = form.save(commit=False)
+        add_course_sub_category.save()
+        return redirect("admin_index")
+    return render(request, "admin/course/add-sub-category.html", {"form": form})
+
+
+@login_required(login_url="login_admin")
+def add_course_sub_to_subcategory(request):
+    form = CourseSubToSubCategoryForm(request.POST or None)
+    if form.is_valid():
+        add_course_sub_to_sub_category = form.save(commit=False)
+        add_course_sub_to_sub_category.save()
+        return redirect("admin_index")
+    return render(request, "admin/course/add-sub-to-sub-category.html", {"form": form})
+
+
+def course_table(request):
+    return None

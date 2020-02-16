@@ -98,7 +98,7 @@ DATABASES = {
         'NAME': 'ankades-student-sharing-platform',
         'USER': 'postgres',
         # 'PASSWORD': 'ankades.SharingPlatform2020',
-        'PASSWORD': 'ankades.CANKAYA2020',
+        'PASSWORD': '8448767.Bac',
         'HOST': 'localhost',
         'PORT': '5432',
     }
