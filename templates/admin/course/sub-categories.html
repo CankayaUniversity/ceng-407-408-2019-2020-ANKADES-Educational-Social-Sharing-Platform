@@ -1,0 +1,90 @@
+{% extends "admin/layout/layout.html" %}
+{% block title %}Kurs Kategori Ekle{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <div id="wrapper">
+        <!-- Top Bar Start -->
+        {% include "admin/layout/navbar.html" %}
+        <!-- Top Bar End -->
+
+        <!-- ========== Left Sidebar Start ========== -->
+        {% include "admin/layout/sidebar.html" %}
+        <!-- Left Sidebar End -->
+
+        <div class="content-page">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="page-title-box">
+                        <div class="row align-items-center">
+                            <div class="col-sm-6">
+                                <h4 class="page-title">Kurs Kategori Listesi</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-right">
+                                    <li class="breadcrumb-item"><a href="">Kurs</a></li>
+                                    <li class="breadcrumb-item"><a href="">Kurs Kategori Listesi</a></li>
+                                </ol>
+                            </div>
+                        </div> <!-- end row -->
+                    </div>
+                    {#Ana Kategori#}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+
+                                    <h4 class="mt-0 header-title">Ana Kategori Listesi</h4>
+                                    <p class="sub-title../plugins">Aşağıdan ana kategorileri görüntüleyebilir,
+                                        düzenleyebilirsiniz.
+                                    </p>
+                                    <table id="datatable-buttons"
+                                           class="table table-striped table-bordered dt-responsive nowrap"
+                                           style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;">
+                                        <thead>
+                                        <tr>
+                                            <th>Kurs Kategori Başlığı</th>
+                                            <th>Kurs Kategori Oluşturan</th>
+                                            <th>Kurs Kategori Oluşturulma Tarihi</th>
+                                            <th>Düzenle</th>
+                                            <th>Sil</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if course_sub_categories_list %}
+                                            {% for courseSubCategory in course_sub_categories_list %}
+                                                <tr>
+                                                    <td>{{ courseSubCategory.course_sub_category_title }}</td>
+                                                    <td>{{ courseSubCategory.course_sub_category_creator.get_full_name }}</td>
+                                                    <td>{{ courseSubCategory.course_sub_category_created_date }}</td>
+                                                    <td>
+                                                        <a href="{% url 'admin_edit_course_sub_category' courseSubCategory.course_sub_category_slug %}"
+                                                           class="btn btn-success btn-sm">Düzenle</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{% url 'admin_delete_course_sub_category' courseSubCategory.course_sub_category_slug %}"
+                                                           class="btn btn-danger btn-sm">Sil</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td>Veri Bulunamadı !</td>
+                                                <td>Veri Bulunamadı !</td>
+                                                <td>Veri Bulunamadı !</td>
+                                                <td>Veri Bulunamadı !</td>
+                                                <td>Veri Bulunamadı !</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

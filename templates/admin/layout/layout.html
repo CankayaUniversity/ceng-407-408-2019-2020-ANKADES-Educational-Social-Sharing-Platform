@@ -7,34 +7,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" href="{% static "ankadeslogo.png" %}" />
+    <link rel="icon" href="{% static "ankadeslogo.png" %}"/>
     <link rel="stylesheet" href="{% static "admin/assets/css/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "admin/assets/css/metismenu.min.css" %}">
     <link rel="stylesheet" href="{% static "admin/assets/css/icons.css" %}">
     <link rel="stylesheet" href="{% static "admin/assets/css/style.css" %}">
-    <link rel="stylesheet" href="{% static "admin/assets/css/form.css "%}">
+    <link rel="stylesheet" href="{% static "admin/assets/css/form.css " %}">
 
 
     {% if request.path == '/ankades-admin-panel/' %}
         <link rel="stylesheet" href="{% static "admin/plugins/morris/morris.css" %}">
     {% endif %}
 
+    {% if request.path == '/ankades-admin-panel/kurslar/kurs-kategorileri/' or request.path == '/ankades-admin-panel/kurslar/kurs-en-alt-kategorileri/' or request.path == '/ankades-admin-panel/kurslar/kurs-alt-kategorileri/'%}
+        <link rel="stylesheet" href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css " %}">
+        <link rel="stylesheet" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css " %}">
+        <link rel="stylesheet" href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css " %}">
+    {% endif %}
+
 </head>
 
 <body>
 {% block body %}{% endblock %}
-    <script src="{% static 'admin/assets/js/jquery.min.js' %}"></script>
-    <script src="{% static 'admin/assets/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'admin/assets/js/metismenu.min.js' %}"></script>
-    <script src="{% static 'admin/assets/js/jquery.slimscroll.js' %}"></script>
-    <script src="{% static 'admin/assets/js/waves.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/metismenu.min.js' %}"></script>
+<script src="{% static 'admin/assets/js/jquery.slimscroll.js' %}"></script>
+<script src="{% static 'admin/assets/js/waves.min.js' %}"></script>
 
 {% if request.path == '/ankades-admin-panel/' %}
-    <script src="{% static 'admin/plugins/morris/morris.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/morris/morris.js' %}"></script>
     <script src="{% static 'admin/plugins/raphael/raphael.min.js' %}"></script>
     <script src="{% static 'admin/assets/pages/dashboard.init.js' %}"></script>
 {% endif %}
-    <script src="{% static 'admin/assets/js/app.js' %}"></script>
+{% if request.path == '/ankades-admin-panel/kurslar/kurs-kategorileri/' or request.path == '/ankades-admin-panel/kurslar/kurs-en-alt-kategorileri/' or request.path == '/ankades-admin-panel/kurslar/kurs-alt-kategorileri/'%}
+    <script src="{% static 'admin/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/jszip.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/pdfmake.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/vfs_fonts.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.print.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.colVis.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/datatables.init.js' %}"></script>
+{% endif %}
+<script src="{% static 'admin/assets/js/app.js' %}"></script>
 
 </body>
 

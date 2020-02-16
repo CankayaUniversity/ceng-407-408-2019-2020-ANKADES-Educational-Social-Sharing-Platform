@@ -2,14 +2,17 @@ import uuid
 
 from django.db import models
 
+from account.models import Account
+
 
 class ArticleCategory(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Article Category Id")
-    article_category_title = models.CharField(max_length=254, verbose_name="Article Category Title")
-    article_category_slug = models.SlugField(unique=True, max_length=254, verbose_name="Article Category Slug")
-    article_category_description = models.TextField(verbose_name="Article Category Description", null=True, blank=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Kategori Id")
+    article_category_creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Makale Kategori Başlığı")
+    article_category_title = models.CharField(max_length=254, verbose_name="Makale Kategori Başlığı")
+    article_category_slug = models.SlugField(unique=True, max_length=254, verbose_name="Makale Kategori Slug")
+    article_category_description = models.TextField(verbose_name="Makale Kategori Açıklama", null=True, blank=True)
     article_category_created_date = models.DateTimeField(auto_now_add=True,
-                                                         verbose_name="Article Category Created Date")
+                                                         verbose_name="Makale Kategori Oluşturulma Tarihi")
 
     def __str__(self):
         return self.article_category_title
@@ -19,14 +22,15 @@ class ArticleCategory(models.Model):
 
 
 class ArticleSubCategory(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Article Sub Category Id")
-    article_sub_category_title = models.CharField(max_length=254, verbose_name="Article Sub Category Title")
-    article_sub_category_slug = models.SlugField(unique=True, max_length=254, verbose_name="Article Sub Category Slug")
-    article_sub_category_description = models.TextField(verbose_name="Article Sub Category Description", null=True,
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Alt Kategori Id")
+    article_sub_category_creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Makale Yazarı")
+    article_sub_category_title = models.CharField(max_length=254, verbose_name="Makale Alt Kategori Başlık")
+    article_sub_category_slug = models.SlugField(unique=True, max_length=254, verbose_name="Makale Alt Kategori Slug")
+    article_sub_category_description = models.TextField(verbose_name="Makale Alt Kategori Açıklama", null=True,
                                                         blank=True)
     article_sub_category_created_date = models.DateTimeField(auto_now_add=True,
-                                                             verbose_name="Article Sub Category Created Date")
-    article_category_id = models.ForeignKey(ArticleCategory, verbose_name="Course Main Category", on_delete=models.CASCADE)
+                                                             verbose_name="Makale Oluşturulma Tarihi")
+    article_category_id = models.ForeignKey(ArticleCategory, verbose_name="Makale Ana Kategori", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.article_sub_category_title

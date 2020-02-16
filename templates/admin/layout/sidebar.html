@@ -8,7 +8,7 @@
             <ul class="metismenu" id="side-menu">
                 <li class="menu-title">Dashboard</li>
                 <li>
-                    <a href="index.html" class="waves-effect">
+                    <a href="{% url 'admin_index' %}" class="waves-effect">
                         {#                        <i class="icon-accelerator"></i><span#}
                         {#                            class="badge badge-success badge-pill float-right">9+</span>#}
                         <span> Dashboard </span>
@@ -22,14 +22,14 @@
                             class="icon-profile"></i><span> Kullanıcılar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="#"><i
+                        <li><a href="{% url 'users_table' %}"><i
                                 class="far fa-address-book"></i> Tüm Kullanıcılar</a></li>
                         <li><a href="#"><i class="fas fa-user-graduate"></i> Öğrenciler</a></li>
                         <li><a href="#"><i class="fas fa-user-check"></i> Öğretmenler</a></li>
                         <li><a href="#"><i class="fas fa-user-tag"></i> Moderatörler</a></li>
                         <li><a href="#"><i class="fas fa-user-lock"></i> Adminler</a></li>
                         <li><a href="tables-datatable.html"><i class="fas fa-user-alt-slash"></i> Yasaklı Kullanıcılar</a></li>
-                        <li><a href="tables-datatable.html"><i class="fas fa-user-plus"></i> Kullanıcı Ekle</a></li>
+{#                        <li><a href="{% url 'admin_add_user' %}"><i class="fas fa-user-plus"></i> Kullanıcı Ekle</a></li>#}
                      </ul>
                 </li>
 
@@ -72,10 +72,14 @@
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Makaleler <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="tables-basic.html">Makaleler</a></li>
-                        <li><a href="tables-datatable.html">Kategori Ekle</a></li>
-                        <li><a href="tables-responsive.html">Alt Kategori Ekle</a></li>
-                        <li><a href="tables-editable.html">Makele Ekle</a></li>
+                        <li><a href="{% url 'course_table' %}">Makaleler</a></li>
+                        <li><a href="{% url 'course_category' %}">Ana Kategori Listesi</a></li>
+                        <li><a href="{% url 'course_sub_category' %}">Alt Kategori Listesi</a></li>
+                        <li><a href="{% url 'course_sub_to_sub_category' %}">En Alt Kategori Listesi</a></li>
+                        <li><a href="{% url 'add_course' %}">Makale Ekle</a></li>
+                        <li><a href="{% url 'add_course_category' %}">Kategori Ekle</a></li>
+                        <li><a href="{% url 'add_course_sub_category' %}">Alt Kategori Ekle</a></li>
+                        <li><a href="{% url 'add_course_sub_to_sub_category' %}">En Alt Kategori Ekle</a></li>
                     </ul>
                 </li>
 
@@ -83,11 +87,14 @@
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Kurslar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="#">Kurs Listesi</a></li>
+                        <li><a href="{% url 'course_table' %}">Kurslar</a></li>
+                        <li><a href="{% url 'course_category' %}">Ana Kategori Listesi</a></li>
+                        <li><a href="{% url 'course_sub_category' %}">Alt Kategori Listesi</a></li>
+                        <li><a href="{% url 'course_sub_to_sub_category' %}">En Alt Kategori Listesi</a></li>
+                        <li><a href="{% url 'add_course' %}">Kurs Ekle</a></li>
                         <li><a href="{% url 'add_course_category' %}">Kategori Ekle</a></li>
                         <li><a href="{% url 'add_course_sub_category' %}">Alt Kategori Ekle</a></li>
-                        <li><a href="{% url 'add_course_sub_to_subcategory' %}">En Alt Kategori Ekle</a></li>
-                        <li><a href="#">Kurs Ekle</a></li>
+                        <li><a href="{% url 'add_course_sub_to_sub_category' %}">En Alt Kategori Ekle</a></li>
                     </ul>
                 </li>
 

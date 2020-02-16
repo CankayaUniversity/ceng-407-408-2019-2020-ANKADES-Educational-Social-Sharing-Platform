@@ -97,8 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ankades-student-sharing-platform',
         'USER': 'postgres',
-        # 'PASSWORD': 'ankades.SharingPlatform2020',
-        'PASSWORD': '8448767.Bac',
+        'PASSWORD': 'ankades.SharingPlatform2020',
         'HOST': 'localhost',
         'PORT': '5432',
     }

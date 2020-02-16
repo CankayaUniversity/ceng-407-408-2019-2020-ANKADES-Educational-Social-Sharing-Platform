@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -9,11 +8,18 @@ from rest_framework import routers, permissions
 
 from account.views import AccountViewSet
 from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet
+from course.views import CourseViewSet, CourseSubToSubCategoryViewSet, CourseCategoryViewSet
 
 router = routers.SimpleRouter()
+#Account API
 router.register('Account', AccountViewSet, "account")
 router.register('Account/Groups', AccountGroupsViewSet, "accountGroups")
 router.register('Account/Permissions', AccountPermissionsViewSet, "accountPermissions")
+
+#Course API
+router.register('Course', CourseViewSet, 'course')
+router.register('Course/Category', CourseCategoryViewSet, 'courseCategory')
+router.register('Course/SubToSub/Category', CourseSubToSubCategoryViewSet, 'courseSubToSubCategory')
 
 schema_view = get_schema_view(
    openapi.Info(

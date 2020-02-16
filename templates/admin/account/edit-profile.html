@@ -1,0 +1,78 @@
+{% extends "admin/layout/layout.html" %}
+{% block title %}Düzenle | {{ request.user.username|upper }}{% endblock %}
+{% block body %}
+
+    {% load crispy_forms_tags %}
+    <!-- Begin page -->
+    <div id="wrapper">
+
+       <!-- Top Bar Start -->
+        {% include "admin/layout/navbar.html" %}
+        <!-- Top Bar End -->
+
+        <!-- ========== Left Sidebar Start ========== -->
+        {% include "admin/layout/sidebar.html" %}
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="page-title-box">
+                        <div class="row align-items-center">
+                            <div class="col-sm-6">
+                                <h4 class="page-title">Profil Düzenleme</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-right">
+                                    <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Kullanıcılar</a></li>
+                                    <li class="breadcrumb-item">Profil
+                                        Düzenle</li>
+                                </ol>
+                            </div>
+                        </div> <!-- end row -->
+                    </div>
+                    <!-- end page-title -->
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+                                    <form method="post" enctype="multipart/form-data" class="form-control-user">
+                                        {% csrf_token %}
+                                        {{ form.media }}
+                                        {{ form|crispy }}
+                                        <br>
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">Düzenle
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+
+                </div>
+                <!-- container-fluid -->
+
+            </div>
+            <!-- content -->
+
+            <footer class="footer">
+                © 2019 - 2020 Stexo <span class="d-none d-sm-inline-block"> - Crafted with <i
+                    class="mdi mdi-heart text-danger"></i> by Themesdesign</span>.
+            </footer>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Right content here -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <!-- jQuery  -->
+{% endblock body %}
