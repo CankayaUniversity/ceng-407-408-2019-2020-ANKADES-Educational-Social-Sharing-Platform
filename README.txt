@@ -23,3 +23,4 @@ If the virtual environment was enabled, you have to see like this
 (wvenv) D:\ceng-407-408-2019-2020-ANKADES-Educational-Social-Sharing-Platform> on terminal (cmd). The important point is (wvenv).
 
 
+
