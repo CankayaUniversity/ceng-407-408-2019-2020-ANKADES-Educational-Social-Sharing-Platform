@@ -1,6 +1,7 @@
 import uuid
 
 from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.db import models
 
 from account.models import Account
@@ -8,6 +9,7 @@ from account.models import Account
 
 class CourseCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Kategori Id")
+    course_category_creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
     course_category_title = models.CharField(max_length=254, verbose_name="Kurs Kategori Başlığı")
     course_category_slug = models.SlugField(unique=True, max_length=254, verbose_name="Kurs Kategori Slug")
     course_category_description = models.TextField(verbose_name="Kurs Kategori Açıklama", null=True, blank=True)
@@ -23,6 +25,7 @@ class CourseCategory(models.Model):
 
 class CourseSubCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Alt Kategori Id")
+    course_sub_category_creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
     course_sub_category_title = models.CharField(max_length=254, verbose_name="Kurs Alt Kategori Başlığı")
     course_sub_category_slug = models.SlugField(unique=True, max_length=254, verbose_name="Kurs Alt Kategori Slug")
     course_sub_category_description = models.TextField(verbose_name="Kurs Alt Kategori Açıklama", null=True,
@@ -41,6 +44,7 @@ class CourseSubCategory(models.Model):
 
 class CourseSubToSubCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs En Alt Kategori Id")
+    course_sub_to_sub_category_creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
     course_sub_to_sub_category_title = models.CharField(max_length=254, verbose_name="Kurs En Alt Kategori Başlığı")
     course_sub_to_sub_category_slug = models.SlugField(
         unique=True, max_length=254, verbose_name="Kurs En Alt Kategori Slug")
@@ -60,8 +64,8 @@ class CourseSubToSubCategory(models.Model):
 
 class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Id")
-    course_author = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Kurs Öğretmeni")
-    course_sub_category_id = models.ForeignKey(CourseSubCategory, verbose_name="Kurs Alt Kategori",
+    course_author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Kurs Öğretmeni")
+    course_sub_to_sub_category_id = models.ForeignKey(CourseSubToSubCategory, verbose_name="Kurs En Alt Kategori",
                                                on_delete=models.CASCADE)
     course_title = models.CharField(max_length=254, verbose_name="Kurs Başlığı")
     course_slug = models.SlugField(unique=True, max_length=254, verbose_name="Kurs Slug")

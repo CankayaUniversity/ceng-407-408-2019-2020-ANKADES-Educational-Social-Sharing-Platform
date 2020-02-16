@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
@@ -10,9 +11,15 @@ urlpatterns = [
     path('giris-yap', views.login_admin, name="login_admin"),
     path('cikis/', views.logout_admin, name="logout_admin"),
     path('kullanicilar/', views.users_table, name="users_table"),
-    path('kurslar/', views.course_table, name="course_table"),
+    # path('kurslar/', views.course_table, name="course_table"),
+    path('kurs-kategorileri/', views.course_category, name="course_category"),
     path('kurs-kategori-ekle/', views.add_course_category, name="add_course_category"),
     path('kurs-alt-kategori-ekle/', views.add_course_sub_category, name="add_course_sub_category"),
     path('kurs-en-alt-kategori-ekle/', views.add_course_sub_to_subcategory, name="add_course_sub_to_subcategory"),
+    path('kurs-ekle/', views.add_course, name="add_course"),
+
+    # User Urls
+    path('kullanicilar/', views.users_table, name="users_table"),
+    url(r'^profil-duzenle/(?P<username>\w+)/$', views.admin_edit_profile, name="admin_edit_profile"),
 ]
 

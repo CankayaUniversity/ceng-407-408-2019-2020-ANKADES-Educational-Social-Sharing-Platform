@@ -19,6 +19,12 @@
         <link rel="stylesheet" href="{% static "admin/plugins/morris/morris.css" %}">
     {% endif %}
 
+    {% if request.path == '/ankades-admin-panel/kurs-kategorileri/' %}<!-- DataTables -->
+        <link rel="stylesheet" href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css "%}">
+        <link rel="stylesheet" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css "%}">
+        <link rel="stylesheet" href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css "%}">
+    {% endif %}
+
 </head>
 
 <body>
@@ -33,6 +39,19 @@
     <script src="{% static 'admin/plugins/morris/morris.min.js' %}"></script>
     <script src="{% static 'admin/plugins/raphael/raphael.min.js' %}"></script>
     <script src="{% static 'admin/assets/pages/dashboard.init.js' %}"></script>
+{% endif %}
+{% if request.path == '/ankades-admin-panel/kurs-kategorileri/' %}
+    <script src="{% static 'admin/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/jszip.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/pdfmake.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/vfs_fonts.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.print.min.js' %}"></script>
+    <script src="{% static 'admin/plugins/datatables/buttons.colVis.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/datatables.init.js' %}"></script>
 {% endif %}
     <script src="{% static 'admin/assets/js/app.js' %}"></script>
 
