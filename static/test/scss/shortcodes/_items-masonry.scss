@@ -1,0 +1,130 @@
+/*
+** Items Masonry
+*/
+.items-tile {
+  .item-content {
+    //for icons
+    padding-bottom: 100px;
+    h3 {
+      //font-weight: 900;
+      text-transform: none;
+      margin-bottom: 0.3em;
+    }
+
+    @media (min-width: 992px) {
+      h3 {
+        //content overflow
+        a {
+          display: inline-block;
+          max-height: 3.05em;
+          overflow: hidden;
+          padding-bottom: 0.1em;
+        }
+
+        //excerpt
+        & + p {
+          max-height: 5.5em;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
+  .item-icons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    line-height: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0 40px;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.1);
+    span {
+      padding: 0 15px;
+    }
+  }
+
+  @media (min-width: 992px) and (max-width: 1199px) {
+    .col-lg-4 [class*='col-'] {
+      &:first-child .item-media {
+        margin-bottom: 32px;
+      }
+      &:last-child .item-content {
+        min-height: 320px;
+      }
+    }
+  }
+  @media (min-width: 1200px) {
+    .item-content {
+      padding: 60px 60px 100px;
+      h3 {
+        font-size: 38px;
+      }
+    }
+
+    //making vertical item media image +10px height on big screens
+    .col-lg-4 [class*='col-'] {
+      &:first-child .item-media {
+        margin-bottom: 16px;
+      }
+      &:last-child .item-content {
+        min-height: 388px;
+      }
+    }
+  }
+}
+
+/*
+filters
+*/
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  @media (max-width: 991px) {
+    justify-content: center;
+  }
+  &.gallery-filters {
+    padding-bottom: 40px;
+    @media (max-width: 767px) {
+      padding-bottom: 20px;
+    }
+  }
+  &.filters-active-tob-border {
+    padding-top: 0;
+    a {
+      padding-top: 60px;
+      padding-bottom: 60px;
+      //for s-bordertop section
+      position: relative;
+
+      @media (max-width: 991px) {
+        padding-top: 10px;
+        padding-bottom: 7px;
+      }
+      &.active {
+        &:after {
+          content: '';
+          position: absolute;
+          right: 0;
+          left: 0;
+          top: 0;
+          height: 1px;
+          background: $colorMain;
+          z-index: 1;
+        }
+      }
+    }
+  }
+  a {
+    padding: 0 15px;
+    line-height: 10px;
+    @media (max-width: 991px) {
+      line-height: 30px;
+    }
+  }
+  .active {
+    color: $colorMain;
+  }
+}

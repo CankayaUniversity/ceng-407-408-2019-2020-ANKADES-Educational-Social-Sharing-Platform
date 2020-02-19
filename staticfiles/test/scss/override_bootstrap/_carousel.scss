@@ -1,0 +1,14 @@
+/* carousel */
+.carousel-item.active,
+.carousel-item-next,
+.carousel-item-prev {
+  display: block;
+}
+
+.carousel-indicators {
+  li {
+    max-width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+}

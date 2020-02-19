@@ -6,20 +6,23 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
-from account.views import AccountViewSet
-from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet
+from account.views import AccountViewSet, AccountActivityViewSet
+from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet, AdminActivityViewSet
 from course.views import CourseViewSet, CourseSubToSubCategoryViewSet, CourseCategoryViewSet
 
 router = routers.SimpleRouter()
 #Account API
-router.register('Account', AccountViewSet, "account")
-router.register('Account/Groups', AccountGroupsViewSet, "accountGroups")
-router.register('Account/Permissions', AccountPermissionsViewSet, "accountPermissions")
-
-#Course API
-router.register('Course', CourseViewSet, 'course')
-router.register('Course/Category', CourseCategoryViewSet, 'courseCategory')
-router.register('Course/SubToSub/Category', CourseSubToSubCategoryViewSet, 'courseSubToSubCategory')
+# router.register('Account', AccountViewSet, "account")
+# router.register('Account/Groups', AccountGroupsViewSet, "accountGroups")
+# router.register('Account/Permissions', AccountPermissionsViewSet, "accountPermissions")
+#
+# #Course API
+# router.register('Course', CourseViewSet, 'course')
+# router.register('Course/Category', CourseCategoryViewSet, 'courseCategory')
+# router.register('Course/SubToSub/Category', CourseSubToSubCategoryViewSet, 'courseSubToSubCategory')
+#
+# router.register('Activity/Admin', AdminActivityViewSet, 'activityAdmin')
+# router.register('Activity/Account', AccountActivityViewSet, 'activityAccount')
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -36,6 +39,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('ankades-admin-panel/', include("adminpanel.urls")), #include ankades admin panel applications url
+    path('', include("account.urls")), #include ankades account
     # path('', include("question.urls")), #include ankades question applications url
     # path('makaleler/', include("article.urls")), #include ankades article applications url
     # path('kullanici/', include("account.urls")), #include ankades account applications url

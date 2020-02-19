@@ -1,0 +1,45 @@
+/*
+** 404
+*/
+
+.error-404 {
+  .page-header {
+    h1 {
+      background-image: url("../img/404.jpg");
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 160px;
+      font-family: 'Poppins', sans-serif;
+      line-height: 0.79;
+      margin: 0;
+      background-repeat: no-repeat;
+      background-position: top;
+      background-color: #000;
+      @media (min-width: 992px) {
+        font-size: 386px;
+      }
+    }
+    h6 {
+      font-weight: 300;
+    }
+  }
+
+  .btn-white { 
+    width: 270px;
+    height: 80px;
+    span {
+      letter-spacing: 0.2em;
+    }
+  }
+  h3 {
+    margin-top: 67px;
+    margin-bottom: 16px;
+    @media (max-width: 992px) {
+      margin-top: 20px;
+    }
+  }
+  h6 {
+    margin-top: 0px;
+    margin-bottom: 52px;
+  }
+}

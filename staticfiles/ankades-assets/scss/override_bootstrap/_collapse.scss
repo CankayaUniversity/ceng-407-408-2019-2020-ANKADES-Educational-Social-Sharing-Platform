@@ -1,0 +1,134 @@
+/* bootstrap collapse*/
+//unstyled
+[data-toggle="collapse"] {
+  display: inline-block;
+  position: relative;
+  font-weight: 500;
+  &:after {
+    font-size: 24px;
+    font-weight: 300;
+    width: 24px;
+    position: absolute;
+    top: 0;
+    left: -28px;
+    color: $colorMain2;
+    transition: opacity 0.3s ease-in-out;
+    height: 30px;
+    content: '-';
+  }
+  &.collapsed {
+    &:after {
+      content: "+";
+    }
+  }
+}
+
+//cards as tabs
+[role="tablist"] {
+  .card {
+    border-radius: 0;
+    border: none;
+    background: none;
+  }
+  .card-header {
+    padding: 0;
+    background: none;
+    border: none;
+    a {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: $lightColor;
+      display: block;
+      position: relative;
+      padding: 21px 50px 21px 30px;
+      border-radius: 30px;
+      word-wrap: break-word;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.13);
+      background-image: linear-gradient(to right, $colorMain 0%, $colorMain2 100%);
+
+      &:before,
+      &:after {
+        text-align: center;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 500;
+        content: '';
+        width: 60px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        color: $lightColor;
+        background-color: transparent;
+        transition: opacity 0.3s ease-in-out;
+      }
+      &:after {
+        height: 30px;
+        line-height: 30px;
+        margin-top: -18px;
+        vertical-align: top;
+        top: 50%;
+        bottom: auto;
+        content: '-';
+        background: none;
+      }
+      &:hover {
+         color: $lightColor;
+        opacity: 1;
+        &:before,
+        &:after {
+          //opacity: 0.9;
+        }
+      }
+      &.collapsed {
+        background-image: none;
+        background-color: #f7f6fb;
+        color: #4c4c4c;
+        i {
+          color: $colorMain;
+        }
+        &:hover {
+          background-image: linear-gradient(to right, $colorMain 0%, $colorMain2 100%);
+          color: #fff;
+          &:after {
+            color: #fff;
+          }
+          i {
+            color: #fff;
+          }
+        }
+        &:after {
+          content: '+';
+          margin-top: -15px;
+         color: $colorMain;
+        }
+      }
+    }
+  }
+  .card-body {
+    padding: 0;
+  }
+  .media img {
+    max-width: 80px;
+  }
+}
+
+.card .card-header i {
+  margin-right: 7px;
+}
+
+.card {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  [data-toggle="collapse"]:after {
+    right: 0;
+    left: auto;
+  }
+  .card-body {
+    padding: 30px 40px 10px;
+  }
+}

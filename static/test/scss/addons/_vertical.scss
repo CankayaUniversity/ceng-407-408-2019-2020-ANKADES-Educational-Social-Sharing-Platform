@@ -1,0 +1,157 @@
+/*
+** Vertical margins and padding for sections and columns
+*/
+
+/* Vertical padding for sections
+.s - section
+pt-* - padding top value
+pb-* - padding bottom value
+py-* - same value for top and for bottom padding
+*/
+
+//setting value not on section but for child container for section with top and bottom borders with container width
+@each $value in $section-vertical-padding {
+  .s-pt-#{$value} > [class*='container'] {
+    padding-top: #{$value}px;
+  }
+}
+
+@each $value in $section-vertical-padding {
+  .s-pb-#{$value} > [class*='container'] {
+    padding-bottom: #{$value}px;
+  }
+}
+
+@each $value in $section-vertical-padding {
+  .s-py-#{$value} > [class*='container'] {
+    padding-top: #{$value}px;
+    padding-bottom: #{$value}px;
+  }
+}
+
+@each $breakpoint-abbr, $breakpoint-value in $grid-breakpoints {
+  @media (min-width: #{$breakpoint-value}) {
+    @each $value in $section-vertical-padding {
+      .s-pt-#{$breakpoint-abbr}-#{$value} > [class*='container'] {
+        padding-top: #{$value}px;
+      }
+    }
+
+    @each $value in $section-vertical-padding {
+      .s-pb-#{$breakpoint-abbr}-#{$value} > [class*='container'] {
+        padding-bottom: #{$value}px;
+      }
+    }
+
+    @each $value in $section-vertical-padding {
+      .s-py-#{$breakpoint-abbr}-#{$value} > [class*='container'] {
+        padding-top: #{$value}px;
+        padding-bottom: #{$value}px;
+      }
+    }
+  }
+}
+
+
+/* Vertical margins for columns in sections and rows
+.c - columns
+mt-* - margin top value
+mb-* - margin bottom value
+my-* - same value for top and for bottom margin
+*/
+@each $value in $columns-vertical-margins {
+  .c-mt-#{$value} [class*="col-"],
+  .row.c-mt-#{$value} > [class*="col-"] {
+    margin-top: #{$value}px;
+  }
+}
+
+@each $value in $columns-vertical-margins {
+  .c-mb-#{$value} [class*="col-"],
+  .row.c-mb-#{$value} > [class*="col-"] {
+    margin-bottom: #{$value}px;
+  }
+}
+
+@each $value in $columns-vertical-margins {
+  .c-my-#{$value} [class*="col-"],
+  .row.c-my-#{$value} > [class*="col-"] {
+    margin-top: #{$value}px;
+    margin-bottom: #{$value}px;
+  }
+}
+
+@each $breakpoint-abbr, $breakpoint-value in $grid-breakpoints {
+  @media (min-width: #{$breakpoint-value}) {
+    @each $value in $columns-vertical-margins {
+      .c-mt-#{$breakpoint-abbr}-#{$value} [class*="col-"],
+      .row.c-mt-#{$breakpoint-abbr}-#{$value} > [class*="col-"] {
+        margin-top: #{$value}px;
+      }
+    }
+
+    @each $value in $columns-vertical-margins {
+      .c-mb-#{$breakpoint-abbr}-#{$value} [class*="col-"],
+      .row.c-mb-#{$breakpoint-abbr}-#{$value} > [class*="col-"] {
+        margin-bottom: #{$value}px;
+      }
+    }
+
+    @each $value in $columns-vertical-margins {
+      .c-my-#{$breakpoint-abbr}-#{$value} [class*="col-"],
+      .row.c-my-#{$breakpoint-abbr}-#{$value} > [class*="col-"] {
+        margin-top: #{$value}px;
+        margin-bottom: #{$value}px;
+      }
+    }
+  }
+}
+
+//removing bottom margin for last row - for contact form in wrapper
+form[class*="c-mb-"] .row:last-child [class^="col-"],
+[class*="c-mb-"] form .row:last-child [class^="col-"] {
+  margin-bottom: 0 !important;
+}
+
+/* overlap featured image on top section (for big screens) */
+@media screen and (min-width: 1200px) {
+  .s-top-overlap {
+    margin-top: -140px;
+  }
+  .s-top-overlap-big {
+    margin-top: -180px;
+  }
+  .s-top-overlap-small {
+    margin-top: -100px;
+  }
+}
+
+/* full height section */
+.s-full-height {
+  min-height: 100vh;
+}
+
+/* Vertical dividers - use them with Bootstrap responsive utilities - http://getbootstrap.com/docs/4.1/utilities/display/#hiding-elements */
+[class*='divider-'] {
+  width: 100%;
+  clear: both;
+  &:last-child {
+    order: 10000;
+  }
+}
+
+@each $value in $dividers-height {
+  .divider-#{$value} {
+    margin-top: #{$value}px;
+  }
+}
+@each $breakpoint-abbr, $breakpoint-value in $grid-breakpoints {
+  @media (min-width: #{$breakpoint-value}) {
+    @each $value in $dividers-height {
+      .divider-#{$breakpoint-abbr}-#{$value} {
+        margin-top: #{$value}px;
+      }
+    }
+  }
+}
+

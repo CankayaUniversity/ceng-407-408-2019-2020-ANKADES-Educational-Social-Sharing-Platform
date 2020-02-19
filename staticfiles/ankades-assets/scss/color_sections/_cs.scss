@@ -1,0 +1,210 @@
+/*
+** Color Background Section - .cs
+*/
+.cs.cs2 {
+  background-color: $colorMain2;
+  .color-main {
+    color: $colorMain;
+  }
+}
+
+.cs.cs3 {
+  background-color: $colorMain3;
+  .color-main {
+    color: $colorMain;
+  }
+}
+
+/* color section grey - .cs.gs */
+.cs.gs {
+  background-color: #aaa6a7;
+}
+
+.cs.cs-success {
+  background-color: $colorSuccess;
+}
+
+.cs.cs-info {
+  background-color: $colorInfo;
+}
+
+.cs.cs-warning {
+  background-color: $colorWarning;
+}
+
+.cs.cs-danger {
+  background-color: $colorDanger;
+}
+
+.cs {
+  background-color: $colorMain;
+  color: $lightColor;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $lightColor;
+
+    a {
+      color: $lightColor;
+      &:hover {
+        color: rgba($lightColor, 0.6);
+      }
+    }
+  }
+
+  a:not(.btn) {
+    color: $lightColor;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  blockquote, .blockquote {
+    border-color: lighten($colorMain, 10%);
+  }
+  hr {
+    border-color: $colorBorderColor;
+  }
+
+  pre {
+    color: $lightColor;
+  }
+
+  .hero-bg {
+    background-color: $colorBackgroundColor;
+  }
+  .bordered {
+    border-color: $colorBorderColor;
+  }
+
+  //sections with borders
+  &.s-bordertop:before,
+  &.s-borderbottom:after,
+  &.s-bordertop-container .container:before,
+  &.s-borderbottom-container .container:after {
+    background-color: $colorBorderColor;
+
+  }
+  &.s-bordered-columns {
+    [class*='col-'] + [class*='col-']:before {
+      background-color: $colorBorderColor;
+    }
+  }
+  .links-darkgrey a,
+  .links-grey a {
+    color: $lightColor;
+    opacity: 0.9;
+    &:hover {
+      opacity: 1;
+      color: $lightColor;
+    }
+  }
+
+  .color-dark {
+    border-color: $lightColor;
+    color: $lightColor;
+  }
+
+  .color-darkgrey {
+    border-color: #7f7f7f;
+    color: #7f7f7f;
+  }
+  .response,
+  .color-main {
+    color: $lightColor;
+  }
+
+  //forms
+  input[type="text"],
+  input[type="email"],
+  input[type="url"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select,
+  .form-control {
+    color: #7f7f7f;
+    background-color: $lightColor;
+    border-color: $lightColor;
+  }
+
+  .form-control:focus {
+    border-color: rgba($lightColor, 0.5);
+  }
+
+  .form-control:-moz-placeholder {
+    color: #7f7f7f;
+    opacity: 1;
+  }
+  .form-control::-moz-placeholder {
+    color: #7f7f7f;
+    opacity: 1;
+  }
+
+  .form-control:-ms-input-placeholder {
+    color: #7f7f7f;
+  }
+
+  .form-control::-webkit-input-placeholder {
+    color: #7f7f7f;
+  }
+  .form-control:focus:-moz-placeholder {
+    color: transparent;
+  }
+  .form-control:focus::-moz-placeholder {
+    color: transparent;
+  }
+
+  .form-control:focus:-ms-input-placeholder {
+    color: transparent;
+  }
+
+  .form-control:focus::-webkit-input-placeholder {
+    color: transparent;
+  }
+
+
+  //social icons
+  a.fa {
+    color: $colorMain7;
+    border-color: $colorBorderColor;
+  }
+  a.bg-icon {
+    background-color: #fff;
+  }
+  .color-icon.bg-icon {
+    background-color: rgba($colorBackgroundColor, 0.9);
+  }
+  a.fa.color-bg-icon:hover {
+    background-color: #7f7f7f;
+
+  }
+}
+
+.cs,
+.cs .cs2 {
+  .btn-outline-maincolor,
+  .btn-outline-maincolor2,
+  .btn-outline-maincolor3 {
+    &:hover span {
+      background: transparent;
+    }
+    span {
+      background-color: $colorMain;
+      color: #fff;
+
+    }
+  }
+  .btn-maincolor,
+  .btn-maincolor2,
+  .btn-maincolor3 {
+    &:hover span {
+      background: $colorMain;
+       color: #fff;
+    }
+  }
+}

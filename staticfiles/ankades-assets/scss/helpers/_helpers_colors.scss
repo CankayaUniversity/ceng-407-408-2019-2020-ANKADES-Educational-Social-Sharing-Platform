@@ -1,0 +1,161 @@
+/* borders, colors and backgrounds */
+.light-bg {
+  background-color: $lightColor;
+}
+
+.hero-bg {
+  background-color: #f7f6fb;
+}
+
+.muted-bg {
+  background-color: rgba($darkgreyColor, 0.06);
+}
+
+.color-main {
+  color: $colorMain !important;
+  border-color: $colorMain !important;
+}
+
+.color-main2 {
+  color: $colorMain2 !important;
+  border-color: $colorMain2 !important;
+}
+
+.color-main3 {
+  color: $colorMain3 !important;
+  border-color: $colorMain3 !important;
+}
+
+.color-main4 {
+  color: $colorMain4 !important;
+  border-color: $colorMain4 !important;
+}
+
+.color-main5 {
+  color: $colorMain5 !important;
+  border-color: $colorMain5 !important;
+}
+
+.color-main6 {
+  color: $colorMain6 !important;
+  border-color: $colorMain6 !important;
+}
+
+.color-main7 {
+  color: $colorMain7 !important;
+  border-color: $colorMain7 !important;
+}
+
+.color-dark {
+  color: $darkColor;
+  border-color: $darkColor;
+}
+
+.color-darkgrey {
+  color: $darkgreyColor;
+  border-color: $darkgreyColor;
+}
+
+//bootstrap colors
+.color-success {
+  color: $colorSuccess;
+}
+
+.color-info {
+  color: $colorInfo;
+}
+
+.color-warning {
+  color: $colorWarning;
+}
+
+.required,
+.color-danger {
+  color: $colorDanger;
+}
+
+.bordered {
+  border: 1px solid rgba(76, 76, 76, 0.1);
+}
+
+.box-shadow {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+}
+
+.links-maincolor a {
+  color: $colorMain;
+}
+
+.links-maincolor2 a {
+  color: $colorMain2;
+}
+
+.links-maincolor3 a {
+  color: $colorMain3;
+}
+
+.links-grey a {
+  color: $fontColor;
+  &:hover {
+    color: $colorMain;
+  }
+}
+
+.links-darkgrey a {
+  color: $darkgreyColor;
+  &:hover {
+    color: $colorMain;
+  }
+}
+
+//theme background colors
+.bg-maincolor {
+ background-image: linear-gradient(to right, $colorMain 0%, $colorMain2 100%);
+}
+
+.bg-maincolor2 {
+  background-image: linear-gradient(to right, $colorMain3 0%, $colorMain4 100%);
+}
+
+.bg-maincolor3 {
+ background-image: linear-gradient(to right, $colorMain5 0%, $colorMain6 100%);
+}
+
+.bg-dark {
+  background-color: $darkColor;
+}
+
+.bg-darkblue {
+  color: $lightColor;
+  background-color: $darkBlueColor;
+}
+
+.bg-darkgrey {
+  color: $lightColor;
+  background-color: $darkgreyColor;
+}
+
+//bootstrap background colors
+.bg-success {
+  background-color: #a0ce4e !important;
+}
+
+.bg-info {
+  background-color: #00bea3 !important;
+}
+
+.bg-warning {
+  background-color: #f1894c !important;
+}
+
+.bg-danger {
+  background-color: #ff497c !important;
+}
+
+//setting colors for elements inside color or dark background to light color - add :not('.bg-faded')?
+[class*='bg-'] {
+  color: $lightColor;
+  a, h1, h2, h3, h4, h5, h6 {
+    color: $lightColor;
+  }
+}

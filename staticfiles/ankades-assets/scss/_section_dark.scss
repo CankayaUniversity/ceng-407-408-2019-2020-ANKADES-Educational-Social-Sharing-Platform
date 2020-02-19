@@ -1,0 +1,312 @@
+.ds {
+  //bordered list
+  .list-bordered li {
+    border-color: $darkBorderColor;
+  }
+
+  //forms
+  input[type="text"],
+  input[type="email"],
+  input[type="url"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select,
+  .form-control {
+    background-color: transparent;
+    border-color: $darkBorderColor;
+    color: $darkFontColor;
+  }
+
+  .form-group-select {
+    &:before {
+      border-color: $darkBorderColor;
+    }
+  }
+  .form-control:focus {
+    border-color: lighten($darkBorderColor, 5%);
+  }
+
+  .form-control:-moz-placeholder {
+    color: $darkFontColor;
+    opacity: 1;
+  }
+  .form-control::-moz-placeholder {
+    color: $darkFontColor;
+    opacity: 1;
+  }
+
+  .form-control:-ms-input-placeholder {
+    color: $darkFontColor;
+  }
+
+  .form-control::-webkit-input-placeholder {
+    color: $darkFontColor;
+  }
+  .form-control:focus:-moz-placeholder {
+    color: transparent;
+  }
+  .form-control:focus::-moz-placeholder {
+    color: transparent;
+  }
+
+  .form-control:focus:-ms-input-placeholder {
+    color: transparent;
+  }
+
+  .form-control:focus::-webkit-input-placeholder {
+    color: transparent;
+  }
+
+  .contact-form.transparent-background .form-control {
+    border-color: $darkBorderColor;
+  }
+
+  // tabs
+  .tab-content {
+    border-color: $darkBorderColor;
+  }
+  .nav-tabs .nav-link {
+    border-color: $darkBorderColor;
+  }
+
+  .owl-theme .owl-dots .owl-dot span {
+    border-color: $lightColor;
+  }
+
+  .post-adds .share_button > i,
+  .post-adds .like_button > i {
+    color: $lightColor;
+  }
+
+  .side-item {
+    border-color: $darkBorderColor;
+  }
+
+  .excerpt {
+    color: $lightColor;
+  }
+  .reply a {
+    color: $lightColor;
+  }
+
+  .widget_search .form-inline .btn, .widget_product_search [type="submit"], .widget_mailchimp .form-inline .btn {
+    background-color: transparent;
+    color: $colorMain;
+  }
+
+  //icons for buttons
+  .widget_search button,
+  .widget_mailchimp button,
+   //input instead of button is used in woo html
+  .widget_product_search form {
+    &:before {
+      //color: $colorMain;
+    }
+  }
+
+  .widget_shopping_cart .cart_list,
+  .widget_recent_entries li,
+  .widget_recent_comments li,
+  .widget_archive li,
+  .widget_categories li,
+  .widget_meta li,
+  .widget_nav_menu li,
+  .widget_pages li,
+  .widget_popular_entries li {
+    border-color: $darkBorderColor;
+  }
+  .widget_nav_menu ul ul {
+    border-color: $darkBorderColor;
+  }
+  .widget_popular_entries .media-heading {
+    color: $lightColor;
+  }
+
+  .tweet_list li + li .tweet_right {
+    border-color: $darkBorderColor;
+  }
+
+  .widget_tag_cloud a {
+    color: $lightColor;
+    border-color: $lightColor;
+
+  }
+  .widget_shopping_cart li a + a {
+    color: $lightColor;
+    &:hover {
+      color: $colorMain;
+    }
+  }
+
+  .summary {
+    .price {
+      color: $lightColor;
+      border-color: $darkBorderColor;
+    }
+    .product_meta {
+      border-color: $darkBorderColor;
+    }
+  }
+  .widget_price_filter .price_label {
+    color: $lightColor;
+  }
+
+  #calendar_wrap {
+    border-color: $darkBorderColor;
+  }
+  .widget_calendar table {
+    background-color: $darkBackgroundColor;
+    border-color: $darkBorderColor;
+  }
+  .widget_calendar tfoot td a {
+    border-color: $darkBorderColor;
+  }
+
+  .widget_calendar caption,
+  .widget_calendar thead,
+  .widget_calendar th {
+    color: $lightColor;
+  }
+
+  .widget_calendar tbody td a {
+    &:hover {
+      color: $lightColor;
+    }
+  }
+
+  /* shop */
+  .grid-view h3:before, .grid-view h3:after {
+    background-color: $darkBorderColor;
+  }
+  .price {
+  }
+  .owl-carousel.product-thumbnails .owl-nav > div:after {
+    color: $lightColor;
+  }
+  .ui-slider {
+    background-color: $darkBackgroundColor;
+  }
+  .ui-slider .ui-slider-handle {
+    background-color: $lightColor;
+  }
+  #sort_view {
+    // border-color: $darkBorderColor;
+    background-color: transparent;
+    color: $lightColor;
+  }
+  #toggle_shop_view.grid-view:after, #toggle_shop_view:before {
+    background-color: darken($darkBackgroundColor, 3%);
+  }
+  .widget_layered_nav .color-filters a:before {
+    border-color: $darkBorderColor;
+  }
+  .table.cart a {
+    color: $lightColor;
+  }
+
+  //pagination
+  .pagination > li > a,
+  .pagination > li > span {
+    color: $lightColor;
+    background-color: transparent;
+    border: 1px solid $darkBorderColor;
+  }
+  .pagination > li.active > a,
+  .pagination > li.active > span,
+  .pagination > li > a:hover,
+  .pagination > li > span:hover,
+  .pagination > li > a:focus,
+  .pagination > li > span:focus {
+    border-color: $colorMain;
+    background-color: $colorMain;
+    color: $lightColor;
+  }
+
+  .thumbnail {
+    background-color: transparent;
+    h3 a {
+      color: $lightColor;
+    }
+  }
+  .thumbnail .caption {
+    border-color: transparent;
+    background-color: darken($darkBackgroundColor, 1%);
+  }
+  .progress {
+    background-color: $darkBorderColor;
+  }
+
+  .panel-heading .panel-title > a.collapsed,
+  .vertical-tabs .nav > li > a {
+    background-color: $darkBackgroundColor;
+    color: $lightColor;
+  }
+
+  .panel-heading .panel-title > a,
+  .panel-heading .panel-title > a:hover,
+  .vertical-tabs .nav > li.active > a,
+  .vertical-tabs .nav > li > a:hover {
+    background-color: $colorMain;
+  }
+  .panel-heading .panel-title > a:hover:after,
+  .vertical-tabs .nav > li > a:hover:after {
+    color: $lightColor
+  }
+
+  .entry-meta .comments-link a {
+    color: $lightColor;
+  }
+
+  #timetable tbody th,
+  #timetable tbody td {
+    border-color: $darkBorderColor;
+  }
+
+  #isotope_filters,
+  .filters {
+    a {
+      color: $lightColor;
+    }
+  }
+
+  //unyson calendar
+  //for wordpress - unyson calendar
+  div .fw-shortcode-calendar-wrapper .page-header h3,
+  div .btn-group button[data-calendar-nav],
+  div .btn-group button[data-calendar-nav*='today'] {
+    color: $lightColor;
+  }
+}
+
+.ds {
+[class*='btn-outline-'] span {
+    background-color: #4c4c4c;
+  }
+}
+
+
+.ds {
+  .btn-outline-maincolor,
+  .btn-outline-maincolor2,
+  .btn-outline-maincolor3 {
+    &:hover span {
+      background: transparent;
+    }
+    span {
+      background-color: #4c4c4c;
+      color: #fff;
+
+    }
+  }
+  .btn-maincolor,
+  .btn-maincolor2,
+  .btn-maincolor3 {
+    &:hover span {
+      background: #4c4c4c;
+       color: #fff;
+    }
+  }
+}

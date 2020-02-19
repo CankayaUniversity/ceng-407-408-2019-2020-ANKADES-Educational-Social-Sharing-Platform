@@ -1,0 +1,307 @@
+/*
+** General Styles for HTML tags
+*/
+html {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+::selection {
+  color: $lightColor;
+  background-color: $colorMain;
+}
+
+::-moz-selection {
+  color: $lightColor;
+  background-color: $colorMain;
+}
+
+body {
+  font-family: 'poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 30px;
+  background-color: $lightColor;
+  overflow: visible;
+  overflow-x: hidden;
+  //for scrollbar always seen
+  overflow-y: scroll;
+  //for scrollspy
+  position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: break-word;
+ 
+  letter-spacing: 1px;
+}
+
+h1 {
+  font-size: 60px;
+  margin-top: 33px;
+  margin-bottom: 13px;
+}
+
+h2 {
+  font-size: 50px;
+  margin-top: 33px;
+  margin-bottom: 13px;
+}
+
+h3 {
+  font-size: 40px;
+  margin-top: 37px;
+  margin-bottom: 20px;
+}
+
+h4 {
+  font-size: 30px;
+  margin-top: 37px;
+  margin-bottom: 20px;
+}
+
+h5 {
+  font-size: 24px;
+  margin-top: 43px;
+  margin-bottom: 23px;
+}
+
+h6 {
+  font-size: 20px;
+  margin-top: 43px;
+  margin-bottom: 23px;
+}
+
+@media (max-width: 575px) {
+  h1 {
+    font-size: 1.8rem
+  }
+  h2 {
+    font-size: 1.6rem
+  }
+  h3 {
+    font-size: 30px;
+  }
+  h4 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 25px;
+  }
+  h5 {
+    font-size: 1.2rem
+  }
+  h6 {
+    font-size: 1.1rem
+  }
+}
+
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
+  margin-top: 0;
+}
+
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child,
+h6:last-child {
+  margin-bottom: 0;
+}
+
+p {
+  margin-bottom: 10px;
+}
+
+ul:last-child,
+ol:last-child,
+p:last-child {
+  margin-bottom: 0;
+}
+
+p:last-child {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+img, figure {
+  max-width: 100%;
+  height: auto;
+}
+
+figcaption {
+  p {
+    margin-bottom: 0;
+  }
+  font-size: 0.95em;
+  line-height: 1.4;
+  padding: 10px 0 7px;
+}
+
+b, strong {
+  font-weight: 700;
+}
+
+label {
+  color: $darkgreyColor;
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.2s ease-in-out 0s;
+  color: #4c4c4c;
+  &:hover {
+    color: $colorMain;
+    text-decoration: none;
+    transition: all 0.15s linear 0s;
+  }
+}
+
+blockquote {
+  font-style: italic;
+  margin: 30px 0 23px;
+  .media {
+    margin: 15px 0;
+    .media-body > p:first-child {
+      margin-top: -9px;
+      letter-spacing: 0.42em;
+    }
+  }
+  h3, h4, .small-text {
+    font-style: normal;
+  }
+  .quote-icon {
+    display: inline;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    text-align: center; 
+  }
+  h6 {
+    font-weight: 300;
+    margin-top: 21px; 
+  }
+}
+
+input:focus,
+button:focus,
+select:focus,
+textarea:focus,
+a:focus {
+  outline: medium none;
+  text-decoration: none;
+}
+
+a > img {
+  transition: all 0.15s ease-in-out 0s;
+}
+
+a:hover > img {
+  opacity: 0.8;
+}
+
+a.btn:active,
+a.button:active,
+button:active,
+input[type="submit"]:active {
+  position: relative;
+  top: 1px !important;
+}
+
+hr {
+  border-color: $borderColor;
+  //for flexbox
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 40px;
+  margin-bottom: 32px;
+  @media (max-width: 767px) {
+    margin-top: 33px;
+    margin-bottom: 30px;
+  }
+}
+
+iframe {
+  border: none;
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  margin: 10px 0;
+  td, th {
+    padding: 13px 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+  }
+  th {
+    color: $darkgreyColor;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+}
+
+canvas {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+pre {
+  line-height: 1.5;
+  background-color: $universalBackgroundColor;
+  padding: 0.5em 1em;
+}
+//block with signature on main page
+.big {
+  margin: 7px 0 23px;
+  font-size: 20px;
+  line-height: 1.5em;
+  @media (max-width: 575px) {
+    font-size: 16px;
+  }
+  em {
+    display: inline-block;
+    margin: 0.3em 0 0;
+    @media (min-width:768px) {
+      margin: 1em 0 0.5em;
+
+    }
+  }
+}
+
+.media {
+  h3 {
+    text-transform: uppercase;
+  }
+  .dropcap {
+    margin-right: 0;
+  }
+}
+
+.small-text {
+  @include small-text();
+  &.extra-letter-spacing {
+    @media (min-width: 768px) {
+      letter-spacing: 1em;
+    }
+  }
+}

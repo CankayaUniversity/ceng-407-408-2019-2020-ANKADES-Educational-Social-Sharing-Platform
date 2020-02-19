@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
 
 from account.models import Account
+from adminpanel.models import AdminActivity
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -20,4 +21,10 @@ class AccountGroupsSerializer(serializers.ModelSerializer):
 class AccountPermissionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
+        fields = '__all__'
+
+
+class AdminActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminActivity
         fields = '__all__'

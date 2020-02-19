@@ -1,0 +1,65 @@
+.ls.ms {
+
+  //tabs
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background-color: $lightColor;
+    border-color: $lightColor;
+  }
+  .tab-content {
+    background-color: $lightColor;
+
+    .bordered {
+      border-color: darken($lightColor, 10%);
+    }
+    &.no-border {
+      background-color: transparent;
+    }
+    .form-control {
+      background-color: $greyColor;
+    }
+  }
+  .vertical-tabs .nav > li > a {
+    background-color: $lightColor;
+  }
+  .vertical-tabs .nav > li > a:hover,
+  .vertical-tabs .nav > li.active > a {
+    background-color: $darkgreyColor;
+  }
+
+  //accordion
+  .panel-title > a {
+    background-color: $darkgreyColor;
+  }
+  .panel-title > a.collapsed {
+    background-color: $lightColor;
+  }
+
+  .hero-bg .panel-title > a {
+    border: 1px solid $borderColor;
+
+  }
+  .panel-title > a.collapsed:hover,
+  .panel-title > a:hover {
+    background-color: $darkgreyColor;
+  }
+
+  .pagination a,
+  .pagination span {
+    background-color: $lightColor;
+    border-color: $lightColor;
+  }
+
+  .breadcrumb {
+    color: $fontColor;
+    a {
+      color: darken($fontColor, 10);
+      &:hover {
+        color: $colorMain;
+      }
+    }
+  }
+
+  [class*='btn-outline-'] span {
+    background-color: #f7f6fb;
+  }
+}

@@ -364,10 +364,11 @@
                                             {% for act in activity_limit %}
                                                 <li class="feed-item">
                                                     <div class="feed-item-list">
-                                                        <p class="text-muted mb-1">{{ act.activity_created_date }}</p>
-                                                        <p class="font-15 mt-0 mb-0">{{ act.activity_action }}: {{ act.activity }}
-                                                            <b class="text-primary">{{ act.activity_application }}</b>
+                                                        <p class="text-muted mb-1">{{ act.act_created_date }}</p>
+                                                        <p class="font-15 mt-0 mb-0">{{ act.act_method }}: {{ act.act_title }}
+                                                            <b class="text-primary">{{ act.act_app}}</b>
                                                         </p>
+                                                        <a href="{% url 'admin_test' act.id %}">Detay</a>
                                                     </div>
                                                 </li>
                                             {% endfor %}

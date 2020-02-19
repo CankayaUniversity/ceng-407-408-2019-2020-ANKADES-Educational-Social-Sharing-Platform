@@ -1,0 +1,122 @@
+{% extends "admin/layout/layout.html" %}
+{% block title %}Anasayfa | {{ request.user.first_name|upper }}{% endblock %}
+{% block body %}
+
+    {% load static %}
+    {% load crispy_forms_tags %}
+
+    <link rel="stylesheet" type="text/css"
+          href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
+    <!-- Begin page -->
+    <div id="wrapper">
+
+        <!-- Top Bar Start -->
+        {% include "admin/layout/navbar.html" %}
+        <!-- Top Bar End -->
+
+        <!-- ========== Left Sidebar Start ========== -->
+        {% include "admin/layout/sidebar.html" %}
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <!-- Start content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="page-title-box">
+                        <div class="row align-items-center">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Kullanıcı Listesi</h4>
+                            </div>
+                        </div> <!-- end row -->
+                    </div>
+                    <!-- end page-title -->
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+
+                                    <h4 class="mt-0 header-title">Tüm Kullanıcılar</h4>
+                                    <p class="sub-title../plugins">
+                                        Aşağıdan kullanıcıları düzenleyebilirsiniz.
+                                    </p>
+
+                                    <table id="datatable-buttons"
+                                           class="table table-striped table-bordered dt-responsive nowrap"
+                                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                        <tr>
+                                            <th>Kullanıcı Adı</th>
+                                            <th>İsim</th>
+                                            <th>Email</th>
+                                            <th>Aktiflik</th>
+                                            <th>Adminlik</th>
+                                            <th>Son Giriş</th>
+                                            <th>Düzenle</th>
+                                            <th>Sil</th>
+                                        </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                        {% if user_pagination %}
+                                            {% for users_count in user_pagination %}
+                                                <tr>
+                                                    <td>{{ users_count.username }}</td>
+                                                    <td>{{ users_count.get_full_name }}</td>
+                                                    <td>{{ users_count.email }}</td>
+                                                    <td>
+                                                        {% if users_count.is_active %} Aktif {% else %}
+                                                            Kapalı {% endif %}</td>
+                                                    <td>{% if users_count.is_superuser %} Admin {% else %}
+                                                        Öğrenci{% endif %}
+                                                    </td>
+                                                    <td>{{ users_count.last_login }}</td>
+                                                    <td>
+                                                        <a href="{% url 'admin_edit_profile' users_count.username %}"
+                                                           class="btn btn-success btn-sm">Düzenle</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{% url 'admin_edit_profile' users_count.username %}"
+                                                           class="btn btn-danger btn-sm">Sil</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                    <!-- end page-title -->
+
+                </div>
+                <!-- container-fluid -->
+
+            </div>
+            <!-- content -->
+
+            <footer class="footer">
+                © 2019 - 2020 Tüm Hakları Saklıdır
+            </footer>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Right content here -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- jQuery  -->
+{% endblock body %}

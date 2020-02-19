@@ -1,0 +1,86 @@
+/**
+*** Table Of Contents
+**/
+
+/*
+** Template colors
+*
+
+Accent Colors:
+1: #{$colorMain}
+2: #{$colorMain2}
+3: #{$colorMain3}
+4: #{$colorMain4}
+
+Light section (.ls) colors:
+Text color in light section: #{$fontColor}
+Background color for light section and font color in dark section: #{$lightColor}
+Color for headings in light section and for background in dark section (.ds): #{$darkgreyColor}
+Background color for light muted section (grey - .ls.ms): #{$greyColor}
+Background color for dark muted section (.ds.ms): #{$darkColor}
+Border colors for elements in light section (and .bordered elements): #{$borderColor}, #{$borderColorRGBA}
+Background color for elements in light section (.hero-bg): #{$backgroundColor}
+
+Dark section (.ds) colors: 
+Text color in dark section: #{$darkFontColor}
+Border colors for elements in dark section: #{$darkBorderColor}
+Background color for elements in dark section (.hero-bg): #{$darkBackgroundColor}
+
+Color section (.cs) colors: 
+Background color for elements in color section: #{$colorBackgroundColor}
+Border color for elements in color section: #{$colorBorderColor}
+
+
+1. Common tags styles
+2. Styled lists
+3. Overrides for default Bootstrap components
+4. jQuery plugins styles
+  - owl
+  - flexslider
+  - photoswipe
+  - piechart
+  - timetable
+  - totop
+  - countdown
+5. Bootstrap Addons helpers styles for sections and elements
+  - horizontal
+  - vertical
+  - sections
+  - media_items
+  - buttons
+6. Light background sections (.ls) styles
+7. Dark background sections (.ds) styles
+8. Color background sections (.cs) styles
+9. Bootstrap Addons utility styles
+  - layout
+  - colors
+  - spacing
+10. Shortcodes styles
+  - icon-box
+  - special-heading
+  - number-card
+  - price_table
+  - quote-item
+  - items-masonry
+11. Widgets styles
+  - search_mailchimp
+  - nav_cat_arch_meta_pages
+  - calendar
+  - rss
+  - tag_cloud
+  - flickr
+  - instagram
+  - access_press
+  - twitter
+  - post_slider
+  - post_tabs
+  - post_2cols
+12. Social icons styles
+13. WordPress styles
+14. Menu styles
+15. Header styles
+16. Side header styles
+17. Intro section styles
+18. Common sub-pages styles
+19. Template specific sections styles
+*/

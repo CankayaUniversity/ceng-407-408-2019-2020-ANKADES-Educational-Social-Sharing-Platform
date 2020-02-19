@@ -30,3 +30,18 @@ class AccountRegisterForm(forms.Form):
             # "captcha": captcha,
         }
         return values
+
+
+class AccountLoginForm(forms.Form):
+    username = forms.CharField(label="Kullanıcı Adı")
+    password = forms.CharField(label="Şifre", widget=forms.PasswordInput())
+
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+
+        values = {
+            "username": username,
+            "password": password
+        }
+        return values

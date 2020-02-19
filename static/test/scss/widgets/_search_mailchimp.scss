@@ -1,0 +1,98 @@
+/*
+widget_search,
+widget_mailchimp
+widget_product_search
+*/
+
+.widget_search,
+.widget_product_search,
+.widget_mailchimp {
+  form {
+    position: relative;
+    max-width: 370px;
+    margin: auto;
+  }
+  label {
+    margin: 0;
+    padding: 0;
+    display: inline;
+  }
+  input {
+    width: 100%;
+    max-width: 370px;
+    border-radius: 5px;
+  }
+}
+
+//buttons and icons inside a form to the right
+.widget_search button,
+.widget_mailchimp button,
+  //input instead of button is used in woo html
+.widget_product_search form input[type="submit"],
+.widget_product_search form:before {
+  text-align: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 60px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: none;
+  background-color: transparent;
+  opacity: 1;
+}
+
+.widget_search button,
+.widget_mailchimp button,
+  //input instead of button is used in woo html
+.widget_product_search form input[type="submit"] {
+  padding: 0;
+  height: 60px;
+  &:hover {
+    opacity: 0.5;
+  }
+   &:active {
+    top: 0 !important;
+  }
+}
+
+.widget_search button {
+  border-radius: 0px 5px 5px 0px;
+  background-color: $colorMain2;
+  &:before {
+    font-size: 20px !important;
+    color: #fff !important;
+  }
+}
+
+//icons for buttons
+.widget_search button,
+.widget_mailchimp button,
+  //input instead of button is used in woo html
+.widget_product_search form {
+  &:before {
+    color: #fff;
+    font-size: 20px;
+    content: "\f002";
+    font-family: 'FontAwesome';
+    border-radius: 0px 5px 5px 0px;
+    background-color: $colorMain2;
+  }
+}
+
+.widget_mailchimp form button:before {
+  content: "\f040";
+  color: $colorMain;
+  background-color: transparent;
+  font-size: 14px;
+}
+
+.widget_product_search {
+  form:before {
+    line-height: 60px;
+  }
+  input[type="submit"] {
+    color: transparent;
+    font-size: 0;
+  }
+}

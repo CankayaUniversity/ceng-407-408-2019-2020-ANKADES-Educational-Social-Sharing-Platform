@@ -3,7 +3,8 @@ from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
 
 # Admin
-from account.models import Account
+from account.models import Account, MainPermission, MainGroup, AccountGroupPermission, AccountGroup, \
+    AccountHasPermission
 from article.models import ArticleCategory, ArticleSubCategory
 from course.models import CourseCategory, CourseSubCategory, CourseSubToSubCategory, Course
 
@@ -65,3 +66,33 @@ class CourseForm(forms.ModelForm):
         model = Course
         fields = ["course_sub_to_sub_category_id", "course_title", "course_slug", "course_content",
                   "course_media"]
+
+
+class AddAccountMainPermissionForm(forms.ModelForm):
+    class Meta:
+        model = MainPermission
+        fields = ["name", "name_slug"]
+
+
+class AddAccountMainGroupForm(forms.ModelForm):
+    class Meta:
+        model = MainGroup
+        fields = ["name", "name_slug"]
+
+
+class AddAccountGroupPermissionForm(forms.ModelForm):
+    class Meta:
+        model = AccountGroupPermission
+        fields = ["permission_id", "group_id"]
+
+
+class AddAccountGroupForm(forms.ModelForm):
+    class Meta:
+        model = AccountGroup
+        fields = ["user_id", "group_id"]
+
+
+class AddAccountHasPermission(forms.ModelForm):
+    class Meta:
+        model = AccountHasPermission
+        fields = ["user_id", "permission_id"]

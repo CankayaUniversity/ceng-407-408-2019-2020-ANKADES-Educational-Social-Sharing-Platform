@@ -1,0 +1,175 @@
+/*
+** Buttons
+ */
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: 0 0 3px 0 rgba(100, 100, 100, .75);
+}
+
+.btn-maincolor,
+.btn-maincolor2,
+.btn-maincolor3 {
+  color: #fff;
+  &:hover span {
+    background: #fff;
+    color: #4c4c4c;
+  }
+}
+
+.btn-white,
+.btn-white2,
+.btn-white3 {
+  border: 1px solid rgba(76, 76, 76, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  color: $colorMain2;
+  &:hover {
+    color: $colorMain;
+  }
+}
+
+.btn-white2 {
+  color: $colorMain4;
+  &:hover {
+    color: $colorMain3;
+  }
+}
+
+.btn-white3 {
+  color: $colorMain6;
+  &:hover {
+    color: $colorMain5;
+  }
+}
+
+.btn-white:focus {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+.btn-maincolor, .btn-maincolor:not(:disabled):not(.disabled):active {
+  background-image: linear-gradient(to right, $colorMain 0%, $colorMain2 100%);
+}
+
+.btn-maincolor2, .btn-maincolor2:not(:disabled):not(.disabled):active {
+  background-image: linear-gradient(to right,  $colorMain3 0%, $colorMain4 100%);
+ 
+}
+
+.btn-maincolor3, .btn-maincolor3:not(:disabled):not(.disabled):active {
+  background-image: linear-gradient(to right,  $colorMain5 0%, $colorMain6 100%);
+}
+
+
+.btn-outline-maincolor,
+.btn-outline-maincolor2,
+.btn-outline-maincolor3 {
+  &:hover span {
+    background: transparent;
+    color: #fff;
+  }
+  span {
+    background-color: #fff;
+  }
+}
+
+.btn-outline-maincolor, .btn-outline-maincolor:not(:disabled):not(.disabled):active {
+  background-image: linear-gradient(to right, $colorMain 0%, $colorMain2 100%);
+  color: $colorMain2;
+}
+
+.btn-outline-maincolor2, .btn-outline-maincolor2:not(:disabled):not(.disabled):active {
+  background-image: linear-gradient(to right, $colorMain3 0%, $colorMain4 100%);
+  color: $colorMain4;
+}
+
+.btn-outline-maincolor3, .btn-outline-maincolor3:not(:disabled):not(.disabled):active {
+  background-image: linear-gradient(to right, $colorMain5 0%, $colorMain6 100%);
+  color: $colorMain6;
+}
+
+.btn-google,
+.btn-apple {
+  margin-right: 12px; 
+  color: #4c4c4c;
+  font-size: 24px;
+  font-weight: 500;
+  border-radius: 5px;
+  line-height: 60px;
+  border: 2px solid #4c4c4c;
+  background-color: transparent;
+  padding: 15px 5px 5px 45px;
+  position: relative;
+  width: 270px;
+  height: 80px;
+  letter-spacing: -1px;
+  @media (max-width: 767px) {
+    margin-right: 0; 
+    margin-bottom: 10px;
+  }
+  &:hover {
+    color: #4c4c4c;;
+    opacity: 0.5;
+  }
+}
+
+.btn-google:before {
+  content:"";
+  background-image: url("../images/google-play.png");
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 37px;
+  top: 50%;
+  margin-top: -20px;
+}
+
+.btn-google:after,
+.btn-apple:after {
+  content:"get it on";
+  text-transform: uppercase;
+  position: absolute;
+  top: 15px;
+  left: 87px;
+  font-size: 14px;
+  font-weight: 200;
+  letter-spacing: 0px;
+  line-height: 1.5;
+}
+
+.btn-apple {
+  margin-left: 12px; 
+  margin-right: 0; 
+  color: #fff;
+  border: 2px solid #4c4c4c;
+  background-color: #4c4c4c;
+  @media (max-width: 767px) {
+    margin-left: 0; 
+    margin-bottom: 0;
+  }
+   &:hover {
+    color: #fff;
+  }
+}
+
+.btn-apple:before {
+  content: "";
+  background-image: url("../images/apple.png");
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 38px;
+  top: 50%;
+  margin-top: -27px;
+}
+
+.btn-apple:after {
+  content:"download on";
+  left: 89px;
+}

@@ -1,0 +1,207 @@
+/* layout */
+.clear, .clearfix {
+  clear: both;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+.text-normal {
+  text-transform: none;
+}
+
+/* paddings for .*-bg, .bg-* and .bordered */
+.p-big {
+  padding: 40px 45px;
+  @media(min-width: 1200px) {
+    padding: 55px 60px;
+  }
+}
+
+.p-normal {
+  padding: 40px 45px;
+}
+
+.p-small {
+  padding: 30px 35px;
+}
+
+.cover-before,
+.cover-after {
+  overflow: hidden;
+}
+
+.cover-before,
+.cover-after,
+.cover-before > *,
+.cover-after > * {
+  position: relative;
+  z-index: 2;
+}
+
+.cover-before:before,
+.cover-after:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.top-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 1;
+}
+
+/* text helpers */
+//.fs-XX { font-size: XXpx }
+@each $value in $font-size-helpers {
+  .fs-#{$value} {
+    font-size: #{$value}px;
+  }
+}
+
+.fw-100 {
+  font-weight: 100;
+}
+
+.fw-200 {
+  font-weight: 200;
+}
+
+.fw-300,
+.thin {
+  font-weight: 300;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fw-500 {
+  font-weight: 500;
+}
+
+.fw-700,
+.bolder {
+  font-weight: 700;
+}
+
+.fw-900,
+.bold {
+  font-weight: 900;
+}
+
+.dropcap {
+  font-size: 108px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin: 0 15px 0 0;
+  float: left;
+
+  @media (max-width: 1600px) {
+    font-size: 92px;
+    margin-right: 15px;
+  }
+}
+
+.overflow-hidden {
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.overflow-visible {
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+.z-index-2 {
+  z-index: 2;
+}
+
+/*display helpers*/
+// in addition to http://getbootstrap.com/docs/4.1/utilities/display/
+//hide all elements that are visible on certain resolutions
+[class*='visible-above-'],
+[class*='visible-below-'] {
+  display: none !important;
+}
+//showing elements - only display block.
+//if you need opposite, use hiding utilities
+@each $breakpoint-abbr, $breakpoint-value in $grid-breakpoints {
+  //showing on breakpoint and above
+  @media (min-width: #{$breakpoint-value}) {
+    .visible-above-#{$breakpoint-abbr} {
+      display: block !important;
+    }
+  }
+  //showing on breakpoint and below
+  @media (max-width: #{$breakpoint-value - 1px}) {
+    .visible-below-#{$breakpoint-abbr} {
+      display: block !important;
+    }
+  }
+}
+
+//hiding elements below certain breakpoints
+@each $breakpoint-abbr, $breakpoint-value in $grid-breakpoints {
+  //hiding on breakpoint and below
+  @media (max-width: #{$breakpoint-value - 1px}) {
+    .hidden-below-#{$breakpoint-abbr} {
+      display: none !important;
+    }
+  }
+  //hiding on breakpoint and above
+  @media (min-width: #{$breakpoint-value}) {
+    .hidden-above-#{$breakpoint-abbr} {
+      display: none !important;
+    }
+  }
+}
+
+//hiding elements between certain breakpoints
+@for $i from 1 through length($grid-breakpoints) {
+  $current: nth($grid-breakpoints, $i);
+  $current_breakpoint: nth($current, 1);
+  $current_width: nth($current, 2);
+
+
+  $next: if($i < length($grid-breakpoints), nth($grid-breakpoints, $i+1), null);
+  $next_breakpoint: if($next, nth($next, 1), null);
+  $next_width: if($next, nth($next, 2), null);
+
+  //first element
+  @if $i == 1 {
+    @media (max-width: #{$current_width - 1px}) {
+      .hidden-xs {
+        display: none !important;
+      }
+    }
+  }
+
+  //middle elements
+  @if $i < length($grid-breakpoints) {
+    @media (min-width: #{$current_width}) and (max-width: #{$next_width - 1px}) {
+      .hidden-#{$current_breakpoint} {
+        display: none !important;
+      }
+    }
+  }
+
+  //last elements
+  @if $i == length($grid-breakpoints) {
+    @media (min-width: #{$current_width})  {
+      .hidden-#{$current_breakpoint} {
+        display: none !important;
+      }
+    }
+  }
+}

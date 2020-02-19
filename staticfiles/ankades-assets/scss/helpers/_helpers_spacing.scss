@@ -1,0 +1,77 @@
+/*Dividers, margins and padding helpers*/
+$spacing-values: 10 15 20 30 40 50 60;
+/* margins */
+/*top&bottom equal margins - dividers*/
+@each $value in $spacing-values {
+  .my-#{$value} {
+    margin-top: #{$value}px;
+    margin-bottom: #{$value}px;
+  }
+}
+
+/*left&right equal margins*/
+@each $value in $spacing-values {
+  .mx-#{$value} {
+    margin-left: #{$value}px;
+    margin-right: #{$value}px;
+  }
+}
+
+/*top margins*/
+@each $value in $spacing-values {
+  .mt-#{$value} {
+    margin-top: #{$value}px;
+  }
+}
+
+/*bottom margins*/
+@each $value in $spacing-values {
+  .mb-#{$value} {
+    margin-bottom: #{$value}px;
+  }
+}
+
+/*top right bottom left margins*/
+@each $value in $spacing-values {
+  .m-#{$value} {
+    margin: #{$value}px;
+  }
+}
+
+/* paddings */
+/*top&bottom equal paddings - dividers*/
+@each $value in $spacing-values {
+  .py-#{$value} {
+    padding-top: #{$value}px;
+    padding-bottom: #{$value}px;
+  }
+}
+
+/*left&right equal paddings*/
+@each $value in $spacing-values {
+  .px-#{$value} {
+    padding-left: #{$value}px;
+    padding-right: #{$value}px;
+  }
+}
+
+/*top paddings*/
+@each $value in $spacing-values {
+  .pt-#{$value} {
+    padding-top: #{$value}px;
+  }
+}
+
+/*bottom paddings*/
+@each $value in $spacing-values {
+  .pb-#{$value} {
+    padding-bottom: #{$value}px;
+  }
+}
+
+/*top right bottom left paddings*/
+@each $value in $spacing-values {
+  .p-#{$value} {
+    padding: #{$value}px;
+  }
+}

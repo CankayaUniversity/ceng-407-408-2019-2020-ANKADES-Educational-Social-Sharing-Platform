@@ -1,5 +1,6 @@
 import uuid
 
+from ckeditor.fields import RichTextField
 from django.db import models
 
 from account.models import Account
@@ -37,3 +38,13 @@ class ArticleSubCategory(models.Model):
 
     class Meta:
         ordering = ['-article_sub_category_created_date']
+
+
+class Article(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    article_sub_category_id = models.ManyToManyField(ArticleSubCategory)
+    article_title = models.CharField(max_length=254)
+    article_slug = models.CharField(max_length=300)
+    article_content = RichTextField()
+
+

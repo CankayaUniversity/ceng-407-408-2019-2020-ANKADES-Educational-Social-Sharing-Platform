@@ -1,0 +1,397 @@
+/* Media Items - Common Side and Top Image Items */
+//making media
+
+//image overlap borders for border items - remove if not needed
+.bordered .item-media,
+.bordered .entry-thumbnail {
+  margin: -1px -1px -1px -1px;
+  z-index: 1;
+}
+
+.bordered .item-media.cover-image {
+  //border * 2
+  height: calc(100% + 2px);
+}
+
+.bordered.full-padding .item-media {
+  margin: 0;
+}
+
+/* side and vertical items paddings */
+.full-padding {
+  padding: 40px;
+}
+
+.content-padding .item-content {
+  padding: 40px;
+}
+
+//make padding smaller on small screens
+@media (max-width: 767px) {
+  .full-padding {
+    padding: 30px;
+  }
+  .content-padding .item-content {
+    padding: 30px 20px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .event-post.content-padding .item-content {
+    padding: 30px 0 30px 20px !important;
+  }
+}
+
+
+/*side item*/
+.side-item {
+  h2, h3, h4 {
+    line-height: 1;
+  }
+  .row {
+    margin: 0;
+    [class*="col-"] {
+      padding: 0;
+      margin: 0;
+    }
+  }
+  //color item title
+  .item-title + .item-content {
+    padding-top: 30px;
+  }
+  [class*="col-"] > .item-title {
+    padding: 15px 30px;
+    h2, h3, h4 {
+      margin: 0;
+    }
+  }
+  //color item title not inside .item-content - border width 1px
+  &.bordered [class*="col-"] > .item-title {
+    margin: -1px;
+  }
+}
+
+/*-xs- -sm- side-item paddings and margins*/
+@media (max-width: 767px) {
+  .no-content-padding,
+  .full-padding {
+    [class*='col-sm-'],
+    [class*='col-xs-'] {
+      .item-content {
+        padding-left: 30px;
+      }
+      //bootstrap 3
+      &[class*='sm-pull-'],
+      &[class*='xs-pull-'],
+        //bootstrap 4
+      &[class*='order-sm-1'],
+      &[class*='order-xs-1'] {
+        .item-content {
+          padding-left: 0;
+          padding-right: 30px;
+        }
+      }
+    }
+    .col-sm-12 .item-content,
+    .col-xs-12 .item-content {
+      padding-top: 30px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+/*-md- side-item paddings and margins*/
+@media (min-width: 768px) {
+  .no-content-padding,
+  .full-padding {
+    [class*='col-md-'] {
+      .item-content {
+        padding-left: 30px;
+      }
+      //bootstrap 3
+      &[class*='md-pull-'],
+      //bootstrap 4
+      &[class*='order-md-1'] {
+        .item-content {
+          padding-left: 0;
+          padding-right: 30px;
+        }
+      }
+    }
+    .col-sm-12 .item-content {
+      padding-top: 30px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+/*-lg- side-item paddings and margins*/
+@media (min-width: 992px) {
+  .no-content-padding,
+  .full-padding {
+    [class*='col-lg-'] {
+      .item-content {
+        padding-left: 30px;
+      }
+      //bootstrap 3
+      &[class*='lg-pull-'],
+      //bootstrap 4
+      &[class*='order-lg-1'] {
+        .item-content {
+          padding-left: 0;
+          padding-right: 30px;
+        }
+      }
+    }
+    .col-md-12 .item-content {
+      padding-top: 30px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+/*-xl- side-item paddings and margins*/
+@media (min-width: 1200px) {
+  .no-content-padding,
+  .full-padding {
+    [class*='col-xl-'] {
+      .item-content {
+        padding-left: 30px;
+      }
+      &[class*='order-xl-1'] {
+        .item-content {
+          padding-left: 0;
+          padding-right: 30px;
+        }
+      }
+    }
+    .col-lg-12 .item-content {
+      padding-top: 30px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+/* vertical media item */
+.vertical-item {
+  .item-media + .item-content {
+    padding-top: 20px;
+  }
+
+  &.content-padding {
+    .item-content {
+      padding: 60px;
+      @media(max-width: 767px) {
+        padding: 35px 30px !important;
+      }
+    }
+    &.padding-small .item-content {
+      padding: 40px 35px;
+    }
+  }
+
+  &.content-absolute {
+    position: relative;
+    .item-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 30px 20px;
+      z-index: 2;
+    }
+    &.vertical-center .item-content {
+      top: 0;
+    }
+  }
+  //title at the bottom of item
+  & + .item-title {
+    padding: 10px 30px;
+    h2, h3, h4 {
+      margin: 0;
+    }
+  }
+}
+
+/* item meta */
+.item-meta {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  i {
+    width: 0.5em;
+    text-align: center;
+    position: relative;
+    font-size: 14px;
+  }
+  span {
+    padding: 0 0.5em;
+    margin-right: 15px;
+    @media (max-width: 767px) {
+      margin-right: 7px;
+    }
+  }
+}
+
+/* item media & item links */
+.item-media {
+  position: relative;
+  overflow: hidden;
+  //fixing cut images on extra large screens
+  img {
+    width: 100%;
+  }
+  &.cover-image {
+    height: 100%;
+  }
+}
+
+.media-links {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  //.links-wrap
+  div {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+
+    // media-link a height 60/2
+    margin-top: -30px;
+    z-index: 4;
+    //making links to top right corner when absolute content is used
+    //to avoid overlap the content
+    .content-absolute & {
+      a {
+        transition: all 0.35s ease 0.1s;
+        &:hover {
+          transform: scaleX(-1);
+        }
+        &:first-child {
+          transition-delay: 0s;
+        }
+      }
+    }
+  }
+
+}
+
+//overlay
+.media-links:before {
+  border-radius: 5px 5px 0 0;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(91, 131, 205, 0.6);
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+
+[class*="-item"]:hover .media-links:before {
+  opacity: 0.6;
+}
+
+.media-links a.abs-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  [class*="-item"]:hover & {
+    opacity: 1;
+  }
+ 
+}
+
+[class*="-item"] {
+  .links-wrap {
+    a {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      line-height: 58px;
+      top: -100px;
+      border: 2px solid transparent;
+      display: inline-block;
+      z-index: 5;
+      font-size: 16px;
+      text-align: center;
+      opacity: 0;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s;
+    }
+    a.link-zoom {
+      color: $lightColor;
+      background-color: $colorMain2;
+      border-color: $colorMain2;  
+      font-size: 20px;
+      &:hover {
+        opacity: 1;
+        background-color: $colorMain3;
+        border-color: $colorMain3;
+        color: $lightColor;
+      }
+    }
+    a.link-anchor {
+      color: $darkgreyColor;
+      background-color: $lightColor;
+      border-color: $lightColor;
+      &:hover {
+        opacity: 1;
+        color: $lightColor;
+        background-color: $colorMain;
+        border-color: $colorMain;
+      }
+
+      //delay for second link
+      transition-delay: 0.1s;
+
+    }
+    a:before {
+      font-family: 'FontAwesome';
+      content: "\f002";
+    }
+    a.link-anchor:before {
+      content: "\f041";
+    }
+  }
+}
+
+[class*="-item"]:hover {
+  .links-wrap a {
+    top: 0;
+    filter: alpha(opacity=100);
+    opacity: 1;
+  }
+  .media-links div {
+    filter: alpha(opacity=100);
+    opacity: 1;
+  }
+}
+
+/* item icons */
+.item-icons {
+  margin-top: 35px;
+  font-size: 12px;
+  .content-padding & {
+    margin-top: 0;
+  }
+  i {
+    padding: 0 4px;
+  }
+  .col {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 20px;
+  }
+}

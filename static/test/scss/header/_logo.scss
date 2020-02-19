@@ -1,0 +1,78 @@
+/*logo*/
+a.logo {
+  display: flex;
+  //display: inline-flex;
+  align-items: center;
+
+  img {
+    display: inline-block;
+    //limit logo - who knows what image user will use
+    max-height: 80px;
+  }
+  .logo-text {
+    font-size: 24px;
+    padding: 3px 6px 3px 14px;
+    border: 2px solid #fff;
+    text-transform: uppercase;
+    border-radius: 5px;
+    letter-spacing: 10px;
+  }
+  .logo-subtext {
+    font-size: 22px;
+    padding: 0 10px;
+  }
+
+  //text below logo
+  .logo-text-bottom {
+    font-size: 26px;
+  }
+  .flex-column,
+  &.flex-column {
+    align-items: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    &.text-center {
+      display: inline-block;
+    }
+  }
+  //text below logo centered
+  .text-center & {
+    justify-content: center;
+    align-items: center;
+  }
+  @media(max-width: 767px) {
+    //why?
+    //justify-content: center;
+  }
+  //header in menu
+  .header_logo_center & {
+    position: relative;
+    display: inline-block;
+    padding: 10px 0;
+    z-index: 2;
+  }
+  .header_logo_center.affix & {
+    padding: 5px 0;
+  }
+}
+
+//centered logo
+@media (min-width: 992px) {
+  .header_logo_center .logo_wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.page_copyright a.logo {
+  color: $colorMain2;
+ .logo-text {
+    border-color: $colorMain2;
+  }
+}

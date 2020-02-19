@@ -40,8 +40,10 @@
                             class="icon-spread"></i><span> Gruplar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="tables-basic.html">Grup Listesi</a></li>
-                        <li><a href="tables-datatable.html">Grup Ekle</a></li>
+                        <li><a href="{% url 'all_groups' %}">Grup Listesi</a></li>
+                        <li><a href="{% url 'add_account_main_group' %}">Grup Ekle</a></li>
+                        <li><a href="{% url 'add_account_group_permission' %}">Gruba İzin Ekle</a></li>
+                        <li><a href="{% url 'add_account_group' %}">Kullanıcıya Grup Ekle</a></li>
                     </ul>
                 </li>
 
@@ -49,22 +51,35 @@
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i
-                            class="icon-spread"></i><span> Moderatörler <span
+                            class="icon-spread"></i><span> İzinler <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="tables-basic.html">Moderatör Listesi</a></li>
-                        <li><a href="tables-datatable.html">Moderatör Ekle</a></li>
+                        <li><a href="{% url 'all_permissions' %}">İzin Listesi</a></li>
+                        <li><a href="{% url 'add_account_main_permission' %}">İzin Ekle</a></li>
+                        <li><a href="{% url 'add_account_has_permission' %}">Kullanıcıya İzin Ekle</a></li>
                     </ul>
                 </li>
 
-                <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Adminler <span
-                            class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-                    <ul class="submenu">
-                        <li><a href="tables-basic.html">Admin Listesi</a></li>
-                        <li><a href="tables-datatable.html">Admin Ekle</a></li>
-                    </ul>
-                </li>
+{#                <li class="menu-title">İzinler</li>#}
+{##}
+{#                <li>#}
+{#                    <a href="javascript:void(0);" class="waves-effect"><i#}
+{#                            class="icon-spread"></i><span> Moderatörler <span#}
+{#                            class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>#}
+{#                    <ul class="submenu">#}
+{#                        <li><a href="tables-basic.html">Moderatör Listesi</a></li>#}
+{#                        <li><a href="tables-datatable.html">Moderatör Ekle</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+{##}
+{#                <li>#}
+{#                    <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Adminler <span#}
+{#                            class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>#}
+{#                    <ul class="submenu">#}
+{#                        <li><a href="tables-basic.html">Admin Listesi</a></li>#}
+{#                        <li><a href="tables-datatable.html">Admin Ekle</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
 
                 <li class="menu-title">Uygulamalar</li>
 

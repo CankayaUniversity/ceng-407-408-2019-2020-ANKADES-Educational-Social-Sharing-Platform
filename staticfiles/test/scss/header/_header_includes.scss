@@ -1,0 +1,55 @@
+/*header includes*/
+.top-includes {
+  //for ul.top-includes
+  margin: 0;
+  padding: 0;
+
+  //media for topline top includes
+  @media (min-width: 992px) {
+    white-space: nowrap;
+
+  }
+  > * {
+    display: inline-block;
+  }
+  //margins between top includes elements
+  > li {
+    margin-left: 10px;
+    @media(min-width: 768px) and (max-width: 991px) {
+      margin-left: 0;
+    }  
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+  &.border-divided {
+    @media(min-width: 992px) {
+      > li + li {
+        border-left: 2px solid $universalBorderColor;
+        margin-left: 26px;
+        padding-left: 30px;
+      }
+    }
+  }
+  @media (min-width: 992px) {
+    .top-nav + & {
+      margin-left: 50px;
+    }
+  }
+
+  @media (max-width: 991px) {
+    &.md-absolute {
+      position: absolute;
+      bottom: 0;
+      //place for mobile toggler
+      right: 80px;
+    }
+  }
+
+  a.border-icon,
+  a.bg-icon,
+  a.color-bg-icon {
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+}

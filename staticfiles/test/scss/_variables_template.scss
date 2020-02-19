@@ -1,0 +1,150 @@
+///////////////////
+//theme variables//
+///////////////////
+
+//Colors
+
+//Monochrome colors
+
+//text color in light section (.ls)
+$fontColor: #808080;
+//background color for light section (.ls) and font color in dark section (.ds)
+$lightColor: #ffffff;
+//text color for headings in light section (.ls) and background color for dark section (.ds)
+$darkgreyColor: #4c4c4c;
+//background color for light grey background light section (grey - .ls.ms)
+$greyColor: #f2f2f2;
+//background color for dark muted section (.ds.ms)
+$darkColor: #252525;
+//border colors for elements in light section (.ls) (and .bordered elements)
+$borderColor: #e1e1e1;
+//rgba variant for bordered elements
+$borderColorRGBA: rgba(#000, 0.1);
+//background color for hero background elements in light section (.hero-bg)
+$backgroundColor: #f5f5f5;
+
+$boxShadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+
+//section specific variables
+
+// dark section - .ds
+
+//font color in dark section (.ds)
+$darkFontColor: #9a9a9a;
+//border colors in dark section (.ds)
+$darkBorderColor: #454545;
+//background color for elements with background (.hero-bg etc.)
+$darkBackgroundColor: rgba(#fff, 0.05);
+
+//color section - .cs
+
+//border colors in color section (.cs)
+$colorBorderColor: rgba(#fff, 0.15);
+$colorBackgroundColor: rgba(#fff, 0.1);
+
+//dark grey background dark blue section - (.ds.bs)
+$darkBlueColor: #253138;
+$darkBlueColorLighter: #2f3e47;
+
+//Accent Color schemes
+
+//this variables is used in development process
+//in production color variables are overridden in 'color_schemes' folder
+
+//theme accent colors
+$styleNumber: '1' !default;
+$colorMain: #8073b2 !default;
+$colorMain2: #c280bf !default;
+$colorMain3: #2165a9 !default;
+$colorMain4: #3197d4 !default;
+$colorMain5: #208291 !default;
+$colorMain6: #32b9c2 !default;
+$colorMain7: #5b83cd !default;
+
+
+$gradient-color1: linear-gradient( to right, #b2a9d4 0%, #deb2dc 100%);
+$gradient-color2: linear-gradient( to right, #54a7d4 0%,  #86cff7 100%);
+$gradient-color3: linear-gradient( to right, #4ab4cb 0%, #7ad0c7 100%);
+$gradient-color4: linear-gradient( to right, #58ba5d 0%,  #7ad07e 100%);
+
+//////bootstrap colors
+//orange - warning
+$colorPrimary: $colorMain !default;
+//green
+$colorSuccess: #4db19e !default;
+//blue
+$colorInfo: #007ebd !default;
+//orange
+$colorWarning: #eeb269 !default;
+//red
+$colorDanger: #dc5753 !default;
+
+//universal muted background color
+$universalBackgroundColor: rgba(150, 150, 150, 0.05) !default;
+$universalBorderColor: rgba(200, 200, 200, 0.35) !default;
+
+//Layout
+//////side header
+$sideHeaderWidth: 340px;
+//inner side header padding
+$sideHeaderLeftRightPadding: 30px;
+//header transition
+$headerTransition: 0.5s ease-in-out;
+
+$grid-breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+//_horizontal spacers
+//reverse for smaller gutters has priority
+$columns-horizontal-gutters-sum: 130 100 80 60 50 30 25 20 15 10 5 2 1 0;
+$container-horizontal-padding: 0 1 2 5 10 20 30 60;
+
+//_vertical spacers - vertical margins and padding for sections and columns
+$section-vertical-padding: 0 1 2 3 5 10 15 20 25 30 40 45 50 60 70 75 80 90 100 105 110 120 130 135 150 155 160;
+$columns-vertical-margins: 0 1 2 5 10 15 20 25 30 40 50 60;
+
+//top and bottom borders height for sections with borders - 1px by default
+$section-borders-height: 2 3 5;
+
+//font size helpers - fs-xx
+$font-size-helpers: 12 14 16 18 20 24 28 32 36 40 56;
+
+$dividers-height: 0 4 5 8 10 15 20 25 30 35 40 45 50 55 60 70 80 90 100 110 120;
+
+@mixin small-text() {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #4c4c4c;
+}
+
+@mixin cover() {
+  content: '';
+  position: absolute;
+  display: block;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@mixin widget-title() {
+  font-weight: 700;
+  margin-bottom: 1.5em;
+  line-height: 1;
+}
+
+@mixin widget-a-before() {
+  font-family: 'FontAwesome';
+  content: '\f111';
+  font-size: 5px;
+  color: $colorMain2;
+  position: relative;
+  top: 0px;
+  padding-right: 12px;
+}

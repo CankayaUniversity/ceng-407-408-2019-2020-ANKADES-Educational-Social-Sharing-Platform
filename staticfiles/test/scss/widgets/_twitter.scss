@@ -1,0 +1,39 @@
+/* widget_twitter */
+.tweet_avatar {
+  img {
+    max-width: 25px;
+    display: none;
+  }
+  float: left;
+  margin-top: 4px;
+  &:before {
+    font-family: 'FontAwesome';
+    content: "\f099";
+    color: #55acee;
+  }
+}
+
+.tweet_right {
+  overflow: hidden;
+  zoom: 1;
+  margin-left: 35px;
+}
+
+.tweet_list {
+  list-style: none;
+  padding: 0;
+  li + li {
+    padding-top: 20px;
+    clear: both;
+  }
+}
+
+.tweet_text {
+  a:last-child {
+    display: block;
+  }
+}
+
+.tweet_time {
+  display: block;
+}

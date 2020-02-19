@@ -44,4 +44,26 @@ urlpatterns = [
     # User Urls
     path('kullanicilar/', views.users_table, name="users_table"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', views.admin_edit_profile, name="admin_edit_profile"),
+
+    # Group
+    path('grup-ekle/', views.add_account_main_group, name="add_account_main_group"),
+    path('izin-ekle/', views.add_account_main_permission, name="add_account_main_permission"),
+    path('gruba-izin-ekle/', views.add_account_group_permission, name="add_account_group_permission"),
+    path('kullaniciya-grup-ekle/', views.add_account_group, name="add_account_group"),
+    path('kullaniciya-izin-ekle/', views.add_account_has_permission, name="add_account_has_permission"),
+
+    path('gruplar/', views.all_groups, name="all_groups"),
+    path('gruplar/grup-sil/<slug:name_slug>', views.delete_main_group,
+         name="delete_main_group"),
+    path('gruplar/grup-duzenle/<slug:name_slug>', views.edit_main_group,
+         name="edit_main_group"),
+
+    path('izinler/', views.all_permissions, name="all_permissions"),
+    path('izinler/izin-sil/<slug:name_slug>', views.delete_main_permission,
+         name="delete_main_permission"),
+    path('izinler/izin-duzenle/<slug:name_slug>', views.edit_main_permission,
+         name="edit_main_permission"),
+
+    # Test
+    path('test/<uuid:id>', views.admin_test, name="admin_test"),
 ]

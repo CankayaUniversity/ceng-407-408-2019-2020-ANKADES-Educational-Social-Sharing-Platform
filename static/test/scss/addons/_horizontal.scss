@@ -1,0 +1,56 @@
+/*
+** Horizontal padding (gutters) for columns and rows
+*/
+
+/* columns
+.c - columns
+px-* - horizontal padding value
+*/
+
+@each $value in $columns-horizontal-gutters-sum {
+  @if ($value == 0) {
+    /*same as bootstrap .no-gutters class*/
+  }
+  .c-gutter-#{$value} [class*="col-"],
+  .row.c-gutter-#{$value} > [class*="col-"] {
+
+    //even gutter value
+    @if ($value % 2 == 0) {
+      padding-right: #{($value/2)}px;
+      padding-left: #{$value/2}px;
+    }
+      //odd gutter value
+    @else {
+      padding-right: #{(($value+1)/2 - 1)}px;
+      padding-left: #{($value+1)/2}px;
+    }
+  }
+}
+
+/* rows */
+@each $value in $columns-horizontal-gutters-sum {
+  .c-gutter-#{$value} .row,
+    //adding div tag selector for higher priority for setting classes on rows. For nested rows
+  div.row.c-gutter-#{$value} {
+
+    //even gutter value
+    @if ($value % 2 == 0) {
+      margin-left: #{(0 - $value/2)}px;
+      margin-right: #{0 - $value/2}px;
+    }
+      //odd gutter value
+    @else {
+      margin-left: #{((0 - $value+1)/2 - 1)}px;
+      margin-right: #{(0 - $value+1)/2}px;
+    }
+
+  }
+}
+
+/* containers */
+@each $value in $container-horizontal-padding {
+  .container-px-#{$value} [class*='container'] {
+    padding-left: #{$value}px;
+    padding-right: #{$value}px;
+  }
+}

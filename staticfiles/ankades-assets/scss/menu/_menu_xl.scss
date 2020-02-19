@@ -1,0 +1,317 @@
+/*
+** Main Menu styles
+*/
+.nav-wrap {
+  display: flex;
+  //vertical align all nav content (logo, nav, header buttons etc)
+  align-items: center;
+  justify-content: space-between;
+  @media(min-width: 768px) and (max-width: 991px) {
+    justify-content: flex-end;
+  }
+  //header includes that goes right after menu and before top-includes
+  & > .top-nav + *:not(.top-includes) {
+    flex-grow: 100;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+/* Desktop menu - (min 1200px) styles */
+@media(min-width: 1200px) {
+  //nav .top-nav - wrapper for ul.nav.sf-menu
+  .top-nav {
+    position: relative;
+    flex-grow: 10;
+    flex-wrap: nowrap;
+
+    display: flex;
+    align-items: center;
+
+    .justify-nav-end & {
+      justify-content: flex-end;
+    }
+
+    .justify-nav-center & {
+      justify-content: center;
+    }
+  }
+
+  /* menu layout */
+  //override .nav - display flex - for correct menuHideExtraElements
+  .sf-menu {
+    display: block;
+  }
+  .sf-menu, .sf-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sf-menu li {
+    position: relative;
+    text-align: center;
+  }
+  .sf-menu li > ul {
+    position: absolute;
+    display: none;
+    top: 74%;
+    z-index: 99;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .sf-menu li:hover > ul,
+  .sf-menu li.sfHover > ul {
+    display: block;
+  }
+
+  .sf-menu a {
+    display: block;
+    position: relative;
+  }
+
+  /* menu skin */
+
+  .sf-menu a {
+
+    padding: 10px 1.1em;
+    text-decoration: none;
+    // /* IE7 */
+    zoom: 1;
+    transition-property: color, background-color, border-color, padding-top, padding-bottom;
+
+    font-size: 12px;
+    line-height: 1.6em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+  }
+
+  .sf-menu li {
+    // /* no need for Supersubs plugin */
+    white-space: nowrap;
+    // /* ...unless you support IE7 (let it wrap) */
+    *white-space: normal;
+  }
+
+  //first level
+  .sf-menu > li {
+    //inline-block for easy change menu items alignment to right, center or left
+    display: inline-block;
+    position: relative;
+  }
+
+  //.nav is added to override .nav-narrow
+  .sf-menu.nav > li:first-child > a {
+    margin-left: 0;
+  }
+  .sf-menu.nav > li:last-child > a {
+    margin-right: 0;
+  }
+
+  .sf-menu > li > a {
+    //uncomment following if you need border on active and hovered item
+    line-height: 14px;
+    padding-top: 73px;
+    padding-bottom: 73px;
+    padding-right: 0;
+    padding-left: 0;
+    margin: 0 15px;
+    transition-duration: 0.15s;
+
+    .affix & {
+      padding-top: 23px;
+      padding-bottom: 23px;
+    }
+    @media (min-width: 1500px) {
+      margin: 0 25px;
+    }
+  }
+
+  .sf-menu > li > a:hover,
+  .sf-menu > li.active > a {
+    //uncomment following if you need border on active and hovered item
+    //border-color: $colorMain;
+    color: $colorMain;
+  }
+
+  .nav-narrow {
+    .sf-menu > li {
+      padding: 0;
+    }
+
+    .sf-menu > li > a {
+      padding-top: 24px;
+      padding-bottom: 24px;
+      margin-left: 29px;
+      margin-right: 29px;
+    }
+
+    .sf-menu > li.active > a {
+      &:before {
+        content: '';
+        position: absolute;
+        height: 1px;
+        left: -20px;
+        right: -20px;
+        top: 0;
+        z-index: 1;
+        background-color: $colorMain;
+      }
+    }
+  }
+
+  .nav-bordered {
+    .sf-menu > li + li:before {
+      content: '';
+      width: 1px;
+      position: absolute;
+      left: -2px;
+      top: 0;
+      bottom: 0;
+      background-color: $colorBorderColor;
+    }
+  }
+  .cs {
+    .sf-menu > li > a {
+      color: $lightColor;
+    }
+    .sf-menu > li > a:hover,
+    .sf-menu > li.active > a {
+      color: $darkgreyColor;
+    }
+  }
+  .ds {
+    .sf-menu > li > a {
+      color: $lightColor;
+    }
+    .sf-menu > li > a:hover,
+    .sf-menu > li.active > a {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+  }
+  .ls {
+    .sf-menu > li > a:hover,
+    .sf-menu > li.active > a {
+      color: $colorMain;
+    }
+
+    .sf-menu > li + li:before {
+      background-color: $borderColor;
+    }
+  }
+
+  .sf-menu li:hover,
+  .sf-menu li.sfHover {
+    /* only transition out, not in */
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  /* second and next levels */
+  .sf-menu > li .mega-menu,
+  .sf-menu li > ul {
+    //for animation
+    border-radius: 10px;
+    margin-top: 5px;
+    text-align: left;
+    list-style: none;
+    padding: 28px 0 28px;
+    background-color: $lightColor;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    min-width: 10em; /* allow long menu items to determine submenu width */
+    *width: 10em; /* no auto sub width for IE7, see white-space comment below */
+  }
+  .sf-menu > li .mega-menu {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  //.nav added to override .ds:not(.btn)
+  .sf-menu.nav ul a {
+    color: $darkgreyColor;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .sf-menu .mega-menu ul {
+    box-shadow: none;
+    padding: 0;
+    background: transparent;
+  }
+  .sf-menu .mega-menu ul a {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .sf-menu ul > li + li:before {
+  }
+  .sf-menu ul a:hover,
+  .sf-menu ul li.active > a {
+    color: $colorMain;
+  }
+  /* third level */
+  .sf-menu ul ul {
+    margin-top: 0;
+    transform: translateX(3%);
+    //making third level on exact height as second
+    top: -32px;
+  }
+
+  // styling for both css and generated arrows
+  // uncomment for add arrows for ul with sub-menus
+  .sf-arrows .sf-with-ul:after {
+    // font-family: 'FontAwesome';
+    // content: "\f107";
+    // padding-left: 7px;
+  }
+  // styling for right-facing arrows
+  // sub-menus
+  //.sf-arrows ul li > .sf-with-ul:focus:after,
+  //.sf-arrows ul li:hover > .sf-with-ul:after,
+  //.sf-arrows ul .sfHover > .sf-with-ul:after {
+  //}
+  .sf-arrows ul .sf-with-ul:after {
+    font-family: 'FontAwesome';
+    padding-left: 7px;
+    content: '\f105';
+
+  }
+}
+
+.sf-menu i[class] {
+  margin-right: 7px;
+  font-size: 1.1em;
+}
+
+/* hidden menu items */
+@media(min-width: 1200px) {
+  .sf-menu .sf-xl-hidden {
+    display: none !important;
+  }
+}
+
+@media(max-width: 1199px) {
+  .sf-more-li {
+    display: none;
+  }
+}
+
+.header_absolute.header_layout_1 {
+  .ls.affix-top .sf-menu > li > a {
+    color: $lightColor;
+  }
+}
+
+.sf-menu > li > a {
+  padding-top: 52px;
+  padding-bottom: 52px;
+  margin: 0 23px;
+}
+
+
+@media (min-width: 992px) {
+.top-nav + .top-includes.search-icon {
+    margin-left: 37px;
+    margin-right: -38px;
+  }
+}

@@ -1,0 +1,112 @@
+/* Mobile Menu (max 991px) styles */
+
+@media(max-width: 767px) {
+  .nav-wrap {
+    justify-content: center;
+  }
+}
+
+@media(max-width: 1199px) {
+  .page_header {
+    [class*="col"] {
+      min-height: 0;
+    }
+  }
+  .top-nav {
+    position: fixed;
+    visibility: hidden;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: transparent;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .mobile-active .top-nav {
+    visibility: visible;
+    opacity: 1;
+    background-color: #111;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1002;
+
+  }
+
+  .nav-justified > li > a {
+    text-align: left;
+  }
+  .sf-menu {
+    display: block;
+    position: fixed;
+    overflow: auto;
+    background-color: $lightColor;
+    border-top: 61px solid $colorMain;
+    padding: 20px 10px 20px 20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 100%;
+
+    text-align: center;
+    @include small-text();
+
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+
+    .mobile-active & {
+      opacity: 1;
+      right: 0;
+      padding-top: 60px;
+    }
+
+    li {
+      position: relative;
+    }
+  }
+  //.top-nav added for color in .ds was dark
+  .top-nav .sf-menu a {
+    color: $darkgreyColor !important;
+    z-index: 2;
+    display: block;
+    padding: 5px 10px;
+  }
+  .sf-menu ul {
+    list-style: none;
+    padding-left: 10px;
+    margin-top: 0 !important;
+  }
+  .sf-menu ul li a {
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+ 
+
+  /* arrows (for all except IE7) */
+  .sf-arrows .sf-with-ul {
+    padding-right: 3.5em;
+  }
+  /* styling for both css and generated arrows */
+  //.sf-arrows .sf-with-ul:after {
+  .sf-arrows .sf-with-ul + .sf-menu-item-mobile-toggler {
+    display: none;
+    &:after {
+      font-family: 'FontAwesome';
+      content: '\f105';
+      color: $darkgreyColor;
+    }
+  }
+
+  .sfHover > .sf-with-ul + .sf-menu-item-mobile-toggler:after {
+    content: '\f107';
+  }
+}
+
+@media (max-width: 1199px) {
+  a.sf-with-ul:after {
+    font-family: 'FontAwesome';
+    padding-left: 7px;
+    content: '\f105';
+  }
+}
