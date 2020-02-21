@@ -66,8 +66,8 @@
 
 
                                         <tbody>
-                                        {% if user_pagination %}
-                                            {% for users_count in user_pagination %}
+                                        {% if users_list %}
+                                            {% for users_count in users_list %}
                                                 <tr>
                                                     <td>{{ users_count.username }}</td>
                                                     <td>{{ users_count.get_full_name }}</td>
@@ -75,8 +75,16 @@
                                                     <td>
                                                         {% if users_count.is_active %} Aktif {% else %}
                                                             Kapalı {% endif %}</td>
-                                                    <td>{% if users_count.is_superuser %} Admin {% else %}
-                                                        Öğrenci{% endif %}
+                                                    <td>
+                                                        {% if user_groups %}
+                                                            {% for grp in user_groups %}
+                                                                {% if grp.user_id and grp.group_id %}
+                                                                    {{ grp.group_id.name }}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                        Group Yok !
+                                                        {% endif %}
                                                     </td>
                                                     <td>{{ users_count.last_login }}</td>
                                                     <td>

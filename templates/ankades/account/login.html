@@ -11,9 +11,9 @@
             <header class="mb-auto" style="display: inline-block !important">
                 <div class="inner cover">
                     <nav class="text-center nav nav-masthead justify-content-center">
-                        <a class="nav-link" href="#">Anasayfa</a>
-                        <a class="nav-link active" href="#">Giriş Yap</a>
-                        <a class="nav-link" href="#">Kayıt Ol</a>
+                        <a class="nav-link" href="{% url 'index' %}">Anasayfa</a>
+                        <a class="nav-link active" href="{% url 'login_account' %}">Giriş Yap</a>
+                        <a class="nav-link" href="{% url 'register_account' %}">Kayıt Ol</a>
                     </nav>
                 </div>
             </header>

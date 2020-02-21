@@ -14,7 +14,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static "ankades/css/cover.css" %}" rel="stylesheet">
-    {% if request.path == "/giris-yap/" %}
+    {% if request.path == "/giris-yap/" or request.path == '/kayit-ol/'%}
         <link href="{% static "ankades/css/login-signup.css" %}" rel="stylesheet">
         <link href="{% static "ankades/css/form.css" %}" rel="stylesheet">
     {% endif %}

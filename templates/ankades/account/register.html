@@ -11,15 +11,15 @@
             <header class="mb-auto" style="display: inline-block !important">
                 <div class="inner cover">
                     <nav class="text-center nav nav-masthead justify-content-center">
-                        <a class="nav-link" href="#">Anasayfa</a>
-                        <a class="nav-link active" href="#">Giriş Yap</a>
-                        <a class="nav-link" href="#">Kayıt Ol</a>
+                        <a class="nav-link" href="{% url 'index' %}">Anasayfa</a>
+                        <a class="nav-link" href="{% url 'login_account' %}">Giriş Yap</a>
+                        <a class="nav-link active" href="{% url 'register_account' %}">Kayıt Ol</a>
                     </nav>
                 </div>
             </header>
         </div>
 
-        <main role="main" class="inner cover">
+        <main role="main" class="inner cover" style="width: 600px !important">
             <div class="container">
                 <div class="card card-container">
                     <img id="profile-img" class="profile-img-card" src="{% static "image/default-user-image.png" %}"/>
@@ -37,7 +37,10 @@
                         </div>
                     </form>
                     <a href="#" class="forgot-password" style="color: #0d5aa7">
-                        Şifrenizi mi unuttunuz ? | Zaten hesabınız var mı ?
+                        Şifrenizi mi unuttunuz ?
+                    </a>
+                    <p>--------------------------</p>
+                    <a href="#" class="forgot-password" style="color: #0d5aa7">Zaten hesabınız var mı ?
                     </a>
                 </div><!-- /card-container -->
             </div><!-- /container -->

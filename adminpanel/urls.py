@@ -42,7 +42,7 @@ urlpatterns = [
          views.admin_delete_course_sub_to_sub_category, name="admin_delete_course_sub_to_sub_category"),
 
     # User Urls
-    path('kullanicilar/', views.users_table, name="users_table"),
+    path('kullanicilar/', views.all_users, name="all_users"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', views.admin_edit_profile, name="admin_edit_profile"),
 
     # Group
@@ -64,6 +64,4 @@ urlpatterns = [
     path('izinler/izin-duzenle/<slug:name_slug>', views.edit_main_permission,
          name="edit_main_permission"),
 
-    # Test
-    path('test/<uuid:id>', views.admin_test, name="admin_test"),
 ]

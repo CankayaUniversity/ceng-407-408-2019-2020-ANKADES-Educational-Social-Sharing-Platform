@@ -8,4 +8,5 @@ urlpatterns = [
     path('giris-yap/', views.login_account, name="login_account"),
     path('', views.index, name="index"),
     path('cikis-yap/', views.logout_account, name="logout_account"),
+    path('kayit-ol/', views.register_account, name="register_account"),
 ]

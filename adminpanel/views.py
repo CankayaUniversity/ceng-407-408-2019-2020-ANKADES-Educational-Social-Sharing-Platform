@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
-from account.models import Account, MainGroup, MainPermission
+from account.models import Account, MainGroup, MainPermission, AccountGroup
 from adminpanel.forms import AdminLoginForm, CourseCategoryForm, CourseSubCategoryForm, CourseSubToSubCategoryForm, \
     AdminEditProfileForm, CourseForm, AddAccountMainPermissionForm, AddAccountMainGroupForm, \
     AddAccountGroupPermissionForm, AddAccountGroupForm, AddAccountHasPermission
@@ -35,6 +35,10 @@ class AdminActivityViewSet(viewsets.ModelViewSet):
 def admin_index(request):
     if request.user.is_superuser:
         user = Account.objects.all()
+        admin = AccountGroup.objects.filter(group_id__name__contains="Admin")
+        moderator = AccountGroup.objects.filter(group_id__name__contains="Moderatör")
+        ogretmen = AccountGroup.objects.filter(group_id__name__contains="Öğretmen")
+        ogrenci = AccountGroup.objects.filter(group_id__name__contains="Öğrenci")
         user_count = Account.objects.all().count()
         course_count = Course.objects.all().count()
         course_category_count = CourseCategory.objects.all().count()
@@ -44,6 +48,10 @@ def admin_index(request):
         activity_limit = AdminActivity.objects.all().order_by("-act_created_date")[:4]
         context = {
             "user": user,
+            "ogrenci": ogrenci,
+            "moderator": moderator,
+            "ogretmen": ogretmen,
+            "admin": admin,
             "user_count": user_count,
             "course_count": course_count,
             "course_category_count": course_category_count,
@@ -93,7 +101,7 @@ def logout_admin(request):
 
 
 @login_required(login_url="login_admin")
-def users_table(request):
+def all_users(request):
     keyword = request.GET.get("keyword")
     if keyword:
         user_pagination = Account.objects.filter(
@@ -106,6 +114,7 @@ def users_table(request):
         }
         return render(request, "admin/account/all-users.html", context)
 
+    user_groups = AccountGroup.objects.values()
     users_list = Account.objects.all()
     users_limit = Account.objects.all().order_by('-date_joined')[:5]
     page = request.GET.get('page', 1)
@@ -121,6 +130,7 @@ def users_table(request):
         "users_list": users_list,
         "user_pagination": user_pagination,
         "users_limit": users_limit,
+        "user_groups": user_groups,
     }
     return render(request, "admin/account/all-users.html", context)
 
@@ -141,12 +151,21 @@ def admin_edit_profile(request, username):
 
 
 @login_required(login_url="login_admin")
+def admin_delete_user(request, username):
+    instance = get_object_or_404(Account, username=username)
+    instance.delete()
+    return redirect("all_users")
+
+
+@login_required(login_url="login_admin")
 def admin_get_groups(request):
     return None
-#End Of User View
 
 
-#Course View
+# End Of User View
+
+
+# Course View
 @login_required(login_url="login_admin")
 def courses(request):
     keyword = request.GET.get("keyword")
@@ -239,9 +258,11 @@ def admin_delete_course(request, course_slug):
     instance = get_object_or_404(Course, course_slug=course_slug)
     instance.delete()
     return redirect("course_category")
-#End Of Course View
 
-#Course Category View
+
+# End Of Course View
+
+# Course Category View
 @login_required(login_url="login_admin")
 def course_category(request):
     keyword = request.GET.get("keyword")
@@ -325,9 +346,10 @@ def admin_delete_course_category(request, course_category_slug):
     instance.delete()
     return redirect("admin_index")
 
-#End Of Course Category View
 
-#Course Sub Category View
+# End Of Course Category View
+
+# Course Sub Category View
 @login_required(login_url="login_admin")
 def course_sub_category(request):
     keyword = request.GET.get("keyword")
@@ -401,6 +423,7 @@ def admin_edit_course_sub_category(request, course_sub_category_slug):
         return redirect("admin_index")
     return render(request, "admin/course/edit-sub-category.html", {"form": form})
 
+
 @login_required(login_url="login_admin")
 def admin_delete_course_sub_category(request, course_sub_category_slug):
     instance = get_object_or_404(CourseSubCategory, course_sub_category_slug=course_sub_category_slug)
@@ -408,7 +431,7 @@ def admin_delete_course_sub_category(request, course_sub_category_slug):
     return redirect("admin_index")
 
 
-#Course Sub To Sub Category View
+# Course Sub To Sub Category View
 @login_required(login_url="login_admin")
 def course_sub_to_sub_category(request):
     keyword = request.GET.get("keyword")
@@ -424,7 +447,8 @@ def course_sub_to_sub_category(request):
         return render(request, "admin/course/sub-to-sub-categories.html", context)
 
     course_sub_to_sub_categories_list = CourseSubToSubCategory.objects.all()
-    course_sub_to_sub_categories_limit = CourseSubToSubCategory.objects.all().order_by('-course_sub_to_sub_category_created_date')[:5]
+    course_sub_to_sub_categories_limit = CourseSubToSubCategory.objects.all().order_by(
+        '-course_sub_to_sub_category_created_date')[:5]
     page = request.GET.get('page', 1)
     paginator = Paginator(course_sub_to_sub_categories_limit, 5)
     try:
@@ -465,7 +489,8 @@ def add_course_sub_to_sub_category(request):
 
 
 def admin_edit_course_sub_to_sub_category(request, course_sub_to_sub_category_slug):
-    instance = get_object_or_404(CourseSubToSubCategory, course_sub_to_sub_category_slug=course_sub_to_sub_category_slug)
+    instance = get_object_or_404(CourseSubToSubCategory,
+                                 course_sub_to_sub_category_slug=course_sub_to_sub_category_slug)
     form = CourseSubToSubCategoryForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -481,6 +506,7 @@ def admin_edit_course_sub_to_sub_category(request, course_sub_to_sub_category_sl
         return redirect("admin_index")
     return render(request, "admin/course/edit-sub-to-sub-category.html", {"form": form})
 
+
 @login_required(login_url="login_admin")
 def admin_delete_course_sub_to_sub_category(request, course_sub_to_sub_category_slug):
     instance = get_object_or_404(CourseSubToSubCategory,
@@ -489,7 +515,7 @@ def admin_delete_course_sub_to_sub_category(request, course_sub_to_sub_category_
     return redirect("course_category")
 
 
-#add group
+# add group
 @login_required(login_url="login_admin")
 def add_account_main_group(request):
     form = AddAccountMainGroupForm(request.POST or None)

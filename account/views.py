@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Main View
 from rest_framework import viewsets
 
-from account.forms import AccountLoginForm
+from account.forms import AccountLoginForm, AccountRegisterForm
 from account.models import Account, AccountActivity
 
 # User View Set
@@ -56,3 +56,35 @@ def logout_account(request):
         return redirect("login_account")
     else:
         return redirect("login_account")
+
+
+def register_account(request):
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            form = AccountRegisterForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data.get("username")
+                email = form.cleaned_data.get("email")
+                password = form.cleaned_data.get("password")
+
+                new_user = Account(username=username, email=email)
+                new_user.is_active = True
+                new_user.is_admin = False
+                new_user.is_superuser = False
+                new_user.save()
+                new_user.set_password(password)
+                new_user.save()
+                login(request, new_user)
+                return redirect("login_account")
+            context = {
+                "form": form
+            }
+            return render(request, "ankades/account/register.html", context)
+        else:
+            form = AccountRegisterForm()
+            context = {
+                "form": form
+            }
+            return render(request, "ankades/account/register.html", context)
+    else:
+        return redirect("index")
