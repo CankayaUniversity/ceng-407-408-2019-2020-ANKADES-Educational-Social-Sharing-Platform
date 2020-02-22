@@ -1,13 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Main View
 from rest_framework import viewsets
 
 from account.forms import AccountLoginForm, AccountRegisterForm
-from account.models import Account, AccountActivity
+from account.models import Account, AccountActivity, AccountGroup
 
 # User View Set
 from account.serializers import AccountActivitySerializer
@@ -66,11 +67,9 @@ def register_account(request):
                 username = form.cleaned_data.get("username")
                 email = form.cleaned_data.get("email")
                 password = form.cleaned_data.get("password")
-
                 new_user = Account(username=username, email=email)
                 new_user.is_active = True
                 new_user.is_admin = False
-                new_user.is_superuser = False
                 new_user.save()
                 new_user.set_password(password)
                 new_user.save()

@@ -6,9 +6,9 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
-from account.views import AccountViewSet, AccountActivityViewSet
-from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet, AdminActivityViewSet
-from course.views import CourseViewSet, CourseSubToSubCategoryViewSet, CourseCategoryViewSet
+# from account.views import AccountViewSet, AccountActivityViewSet
+# from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet, AdminActivityViewSet
+# from course.views import CourseViewSet, CourseSubToSubCategoryViewSet, CourseCategoryViewSet
 
 router = routers.SimpleRouter()
 #Account API

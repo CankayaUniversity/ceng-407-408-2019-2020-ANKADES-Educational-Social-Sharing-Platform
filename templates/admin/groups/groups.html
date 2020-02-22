@@ -53,28 +53,34 @@
                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                         <tr>
+                                            <th>Group Id</th>
                                             <th>Group Adı</th>
                                             <th>Group Slug</th>
                                             <th>Oluşturulduğu Tarih</th>
-                                            <th>Açıklaması</th>
+                                            <th>İşlemler</th>
+                                            <th>İzinler</th>
                                         </tr>
                                         </thead>
-
 
                                         <tbody>
                                         {% if groups %}
                                             {% for grp in groups %}
                                                 <tr>
-                                                    <td>{{ grp.name }}</td>
-                                                    <td>{{ grp.name_slug }}</td>
-                                                    <td>{{ grp.created_date }}</td>
-                                                    <td>
-                                                        <a href="{% url 'edit_main_group' grp.name_slug %}"
-                                                           class="btn btn-success btn-sm">Düzenle</a>
+                                                    <td style="width: 16%">{{ grp.id }}</td>
+                                                    <td style="width: 16%">{{ grp.name }}</td>
+                                                    <td style="width: 16%">{{ grp.name_slug }}</td>
+                                                    <td style="width: 16%">{{ grp.created_date }}</td>
+                                                    <td style="width: 16%">
+                                                        <a href="#"
+                                                           class="btn btn-success btn-sm"  id="alertify-"
+                                                           style="width: 70px;">Düzenle</a>
+                                                        <a href="{% url 'admin_delete_group' grp.name_slug %}"
+                                                           class="btn btn-danger btn-sm"
+                                                           style="width: 70px; margin-left: 50px">Sil</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'delete_main_group' grp.name_slug %}"
-                                                           class="btn btn-danger btn-sm">Sil</a>
+                                                        <a href="{% url 'admin_edit_group' grp.name_slug %}"
+                                                           class="btn btn-primary btn-sm">İzinlere Git</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}

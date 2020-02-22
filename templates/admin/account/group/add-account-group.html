@@ -1,0 +1,73 @@
+{% extends "admin/layout/layout.html" %}
+{% block title %}Kullanıcıya Grup Ekle{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <div id="wrapper">
+        <!-- Top Bar Start -->
+        {% include "admin/layout/navbar.html" %}
+        <!-- Top Bar End -->
+
+        <!-- ========== Left Sidebar Start ========== -->
+        {% include "admin/layout/sidebar.html" %}
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="page-title-box">
+                        <div class="row align-items-center">
+                            <div class="col-sm-6">
+                                <h4 class="page-title">Kullanıcıya Grup Ekleme</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-right">
+                                    <li class="breadcrumb-item"><a href="{% url 'admin_all_groups' %}">Gruplar</a></li>
+                                    <li class="breadcrumb-item"><a href="">Kullanıcıya Grup Ekle</a></li>
+                                </ol>
+                            </div>
+                        </div> <!-- end row -->
+                    </div>
+                    <!-- end page-title -->
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li class="alert alert-{{ message.tags }}" {% if message.tags %} {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+                                    <form method="post" enctype="multipart/form-data" class="form-control-user">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        {{ form.media }}
+                                        <br>
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+
+                </div>
+                <!-- container-fluid -->
+
+            </div>
+            <!-- content -->
+
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Right content here -->
+        <!-- ============================================================== -->
+    </div>
+{% endblock %}
