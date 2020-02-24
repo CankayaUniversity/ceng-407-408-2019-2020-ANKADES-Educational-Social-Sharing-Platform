@@ -2,6 +2,21 @@
 {% block title %}Dashboard{% endblock %}
 {% load static %}
 {% block body %}
+    <div class="preloader">
+        <div class="preloader_image"></div>
+    </div>
+    <!-- Unyson messages modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
+        <div class="fw-messages-wrap ls p-normal">
+            <!-- Uncomment this UL with LI to show messages in modal popup to your user: -->
+            <!--
+        <ul class="list-unstyled">
+            <li>Message To User</li>
+        </ul>
+        -->
+
+        </div>
+    </div><!-- eof .modal -->
     <!-- Begin page -->
     <div id="wrapper">
 
@@ -35,7 +50,15 @@
                         </div>
                         <!-- end row -->
                     </div>
-
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                    style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-sm-6 col-xl-3">
                             <div class="card">
@@ -176,7 +199,7 @@
                                     {#                                             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>#}
                                     {#                                    </div>#}
                                     {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">75%</span>#}
-                                    </p>
+{#                                    </p>#}
                                 </div>
                             </div>
                         </div>
@@ -196,51 +219,10 @@
                                     {#                                             aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>#}
                                     {#                                    </div>#}
                                     {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">88%</span>#}
-                                    </p>
+{#                                    </p>#}
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-heading p-4">
-                                    <div class="mini-stat-icon float-right">
-                                        <i class="mdi mdi-tag-text-outline bg-warning text-white"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="font-16">Kurs Alt Kategori Sayısı</h5>
-                                    </div>
-                                    <h3 class="mt-4">{{ course_sub_category_count }}</h3>
-                                    {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                    {#                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 68%"#}
-                                    {#                                             aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                    {#                                    </div>#}
-                                    {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">68%</span>#}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-heading p-4">
-                                    <div class="mini-stat-icon float-right">
-                                        <i class="mdi mdi-buffer bg-danger text-white"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="font-16">Kurs En Alt Kategori Sayısı</h5>
-                                    </div>
-                                    <h3 class="mt-4">{{ course_sub_to_sub_category_count }}</h3>
-                                    {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                    {#                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 82%"#}
-                                    {#                                             aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                    {#                                    </div>#}
-                                    {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">82%</span>#}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                     {#end of course page title#}
 
@@ -384,25 +366,25 @@
                                 <div class="card-body">
                                     <h4 class="mt-0 header-title mb-4">Son Etkinlikler</h4>
                                     <ol class="activity-feed mb-0">
-                                        {% if activity_limit %}
-                                            {% for act in activity_limit %}
-                                                <li class="feed-item">
-                                                    <div class="feed-item-list">
-                                                        <p class="text-muted mb-1">{{ act.act_created_date }}</p>
-                                                        <p class="font-15 mt-0 mb-0">{{ act.act_method }}: {{ act.act_title }}
-                                                            <b class="text-primary">{{ act.act_app }}</b>
-                                                        </p>
-                                                    </div>
-                                                </li>
-                                            {% endfor %}
-                                        {% else %}
-                                            <li class="feed-item">
-                                                <div class="feed-item-list">
-                                                    <p class="text-muted mb-1">-</p>
-                                                    <p class="font-15 mt-0 mb-0">Veri Bulunamadı !</p>
-                                                </div>
-                                            </li>
-                                        {% endif %}
+{#                                        {% if activity_limit %}#}
+{#                                            {% for act in activity_limit %}#}
+{#                                                <li class="feed-item">#}
+{#                                                    <div class="feed-item-list">#}
+{#                                                        <p class="text-muted mb-1">{{ act.act_created_date }}</p>#}
+{#                                                        <p class="font-15 mt-0 mb-0">{{ act.act_method }}: {{ act.act_title }}#}
+{#                                                            <b class="text-primary">{{ act.act_app }}</b>#}
+{#                                                        </p>#}
+{#                                                    </div>#}
+{#                                                </li>#}
+{#                                            {% endfor %}#}
+{#                                        {% else %}#}
+{#                                            <li class="feed-item">#}
+{#                                                <div class="feed-item-list">#}
+{#                                                    <p class="text-muted mb-1">-</p>#}
+{#                                                    <p class="font-15 mt-0 mb-0">Veri Bulunamadı !</p>#}
+{#                                                </div>#}
+{#                                            </li>#}
+{#                                        {% endif %}#}
                                     </ol>
 
                                 </div>

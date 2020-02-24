@@ -37,7 +37,14 @@
                         </div> <!-- end row -->
                     </div>
                     <!-- end page-title -->
-
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
@@ -53,7 +60,6 @@
                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                         <tr>
-                                            <th>Group Id</th>
                                             <th>Group Adı</th>
                                             <th>Group Slug</th>
                                             <th>Oluşturulduğu Tarih</th>
@@ -66,20 +72,19 @@
                                         {% if groups %}
                                             {% for grp in groups %}
                                                 <tr>
-                                                    <td style="width: 16%">{{ grp.id }}</td>
-                                                    <td style="width: 16%">{{ grp.name }}</td>
-                                                    <td style="width: 16%">{{ grp.name_slug }}</td>
-                                                    <td style="width: 16%">{{ grp.created_date }}</td>
+                                                    <td style="width: 16%">{{ grp.title }}</td>
+                                                    <td style="width: 16%">{{ grp.slug }}</td>
+                                                    <td style="width: 16%">{{ grp.createdDate }}</td>
                                                     <td style="width: 16%">
-                                                        <a href="#"
-                                                           class="btn btn-success btn-sm"  id="alertify-"
-                                                           style="width: 70px;">Düzenle</a>
-                                                        <a href="{% url 'admin_delete_group' grp.name_slug %}"
+                                                        <a href="{% url 'admin_edit_group' grp.slug %}"
+                                                           class="btn btn-success btn-sm"
+                                                           style="width: 70px; margin-left: 50px">Düzenle</a>
+                                                        <a href="{% url 'admin_delete_group' grp.slug %}"
                                                            class="btn btn-danger btn-sm"
                                                            style="width: 70px; margin-left: 50px">Sil</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_group' grp.name_slug %}"
+                                                        <a href="{% url 'admin_edit_group' grp.slug %}"
                                                            class="btn btn-primary btn-sm">İzinlere Git</a>
                                                     </td>
                                                 </tr>

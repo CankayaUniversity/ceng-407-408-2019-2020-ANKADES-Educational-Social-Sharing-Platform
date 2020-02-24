@@ -1,0 +1,246 @@
+.welcome-intro {
+	.service-item {
+		@media (max-width: @screen-sm-max) {
+			margin-bottom: 20px;
+		}
+		margin-top: 40px;
+		i {
+			font-size: 18px;
+			float: left;
+			width: 44px;
+			height: 44px;
+			text-align: center;
+			line-height: 40px;
+			display: inline-block;
+			border: 2px solid @accent-color;
+			border-radius: 50%;
+			color: #444;
+			margin-right: 25px;
+		}
+		h4 {
+			margin-top: 0px;
+			margin-bottom: 8px;
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+		.line-dec {
+			margin: 10px 0px;
+			width: 40px;
+			height: 2px;
+			background-color: @border-color;
+			display: inline-block;
+		}
+		p {
+			margin-left: 69px;
+			margin-right: 20px;
+		}
+	}
+	.last-service {
+		@media (max-width: @screen-sm-max) {
+			margin-bottom: 60px;
+		}
+	}
+}
+
+.welcome-request {
+	padding: 80px 30px;
+	.background-image(linear-gradient(-75deg, @second-color, 44%, @bg-dark 44%));
+	.request-information {
+		background-color: transparent;
+	}
+	@media (max-width: @screen-sm-max) {
+		.background-image(linear-gradient(-190deg, @second-color, 100%, @bg-dark 44%));
+	}
+	.section-heading {
+		@media (max-width: @screen-sm-max) {
+			text-align: center;
+		}
+		h1 {
+			color: @white;
+		}
+		p {
+			color: @white;
+		}
+	}
+	.request-information {
+		padding: 0px!important;
+	}
+	.service-item {
+		margin-top: 40px;
+		i {
+			float: left;
+			width: 44px;
+			height: 44px;
+			text-align: center;
+			line-height: 40px;
+			display: inline-block;
+			border: 2px solid @accent-color;
+			border-radius: 50%;
+			color: @white;
+			margin-right: 25px;
+		}
+		h4 {
+			margin-top: 0px;
+			margin-bottom: 8px;
+			font-size: 13px;
+			text-transform: uppercase;
+			color: @white;
+		}
+		.line-dec {
+			margin: 10px 0px;
+			width: 40px;
+			height: 2px;
+			background-color: @border-color;
+			display: inline-block;
+		}
+		p {
+			margin-left: 69px;
+			color: #d6d6d6;
+		}
+	}
+}
+
+.welcome-intro-2 {
+	.welcome-to-educa {
+		margin-left: 30px;
+		@media (max-width: @screen-sm-max) {
+			margin-left: 0px;
+			margin-top: 30px;
+			text-align: center;
+		}
+	}
+	.section-heading {
+		span {
+			padding-bottom: 30px;
+		}
+	}
+	.left-images {
+		img {
+			width: 100%;
+			overflow: hidden;
+			margin-bottom: 30px;
+		}
+		i {
+			width: 40px;
+			height: 40px;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: inline-block;
+			text-align: center;
+			line-height: 40px;
+			color: @white;
+			position: absolute;
+			margin-top: -70px;
+		}
+	}
+	.service-item {
+		margin-bottom: 30px;
+		@media (max-width: @screen-sm-max) {
+			text-align: center;
+			margin-top: 20px;
+		}
+		i {
+			@media (max-width: @screen-sm-max) {
+				float: none;
+				margin-top: 15px;
+			}
+			font-size: 18px;
+			float: left;
+			width: 60px;
+			height: 60px;
+			text-align: center;
+			line-height: 56px;
+			display: inline-block;
+			border: 2px solid @border-color;
+			border-radius: 50%;
+			color: #444;
+			margin-right: 20px;
+			background-color: @bg-light;
+		}
+		h4 {
+			padding-top: 10px;
+			margin-bottom: 8px;
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+		p {
+			margin-left: 69px;
+			@media (max-width: @screen-sm-max) {
+				margin-left: 0px;
+			}
+		}
+	}
+	.service-item:hover {
+		i {
+			color: @white;
+			background-color: @accent-color;
+			border-color: @accent-color;
+			cursor: pointer;
+			transition: all 0.5s;
+		}
+	}
+}
+
+.books-read {
+	background-color: @white!important;
+	h1 {
+		color: @heading!important;
+	}
+	p {
+		color: @text-color!important;
+	}
+	.books-item {
+		background-color: @bg-light!important;
+	}
+	.books-item:hover {
+		background-color: @accent-color!important;
+		transition: all 0.5s;
+		cursor: pointer;
+	}
+	.border-button {
+		a {
+			border-color: @bg-light;
+			color: @heading;
+		}
+	}
+}
+
+.read-books {
+	background-color: @bg-dark;
+	.section-heading {
+		h1 {
+			color: @white;
+		}
+		p {
+			color: @white;
+			padding-bottom: 50px;
+		}
+	}
+	.books-item {
+		@media (max-width: @screen-sm-max) {
+			margin-bottom: 30px;
+		}
+		background-color: @white;
+		text-align: center; 
+		padding: 40px;
+		i {
+			color: @heading;
+			font-size: 22px;
+		}
+		h4 {
+			margin-top: 20px;
+			font-size: 13px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			line-height: 22px;
+		}
+	}
+	.books-item:hover {
+		background-color: @accent-color;
+		transition: all 0.5s;
+		cursor: pointer;
+	}
+	.border-button {
+		margin-top: 60px;
+		text-align: center;
+	}
+}

@@ -34,7 +34,7 @@
                             <div class="card m-b-30">
                                 <div class="card-body">
 
-                                    <h4 class="mt-0 header-title">Ana Kategori Listesi</h4>
+                                    <h4 class="mt-0 header-title">Kategori Listesi</h4>
                                     <p class="sub-title../plugins">Aşağıdan ana kategorileri görüntüleyebilir,
                                         düzenleyebilirsiniz.
                                     </p>
@@ -46,6 +46,9 @@
                                             <th>Kurs Kategori Başlığı</th>
                                             <th>Kurs Kategori Oluşturan</th>
                                             <th>Kurs Kategori Oluşturulma Tarihi</th>
+                                            <th>Kurs Kategori Güncellenme Tarihi</th>
+                                            <th>Aktiflik</th>
+                                            <th>Üst Kategorisi</th>
                                             <th>Düzenle</th>
                                             <th>Sil</th>
                                         </tr>
@@ -54,15 +57,19 @@
                                         {% if course_categories_list %}
                                             {% for course_category in course_categories_list %}
                                                 <tr>
-                                                    <td>{{ course_category.course_category_title }}</td>
-                                                    <td>{{ course_category.course_category_creator.get_full_name }}</td>
-                                                    <td>{{ course_category.course_category_created_date }}</td>
+                                                    <td>{{ course_category.title }}</td>
+                                                    <td>{{ course_category.creator.get_full_name }}</td>
+                                                    <td>{{ course_category.createdDate }}</td>
+                                                    <td>{{ course_category.updatedDate }}</td>
+                                                    <td>{% if course_category.isActive is True %}Aktif{% else %}
+                                                        Kapalı{% endif %}</td>
+                                                    <td>{{ course_category.parentId.title }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_course_category' course_category.course_category_slug %}"
+                                                        <a href="{% url 'admin_edit_course_category' course_category.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_course_category' course_category.course_category_slug %}"
+                                                        <a href="{% url 'admin_delete_course_category' course_category.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

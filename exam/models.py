@@ -1,59 +1,74 @@
 import uuid
-
+from ckeditor.fields import RichTextField
 from django.db import models
-
+from rest_framework.fields import FileField
 from account.models import Account
 
 
-class ExamSchool(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Exam Category Id")
-    exam_school_title = models.CharField(max_length=254, verbose_name="Exam Category Title")
-    exam_school_slug = models.SlugField(unique=True, max_length=254, verbose_name="Exam Category Slug")
-    exam_school_description = models.TextField(verbose_name="Exam Category Description", null=True,
-                                               blank=True)
-    exam_school_created_date = models.DateTimeField(auto_now_add=True,
-                                                    verbose_name="Exam Category Created Date")
+class School(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sınav Soruları Id")
+    schoolTitle = models.CharField(max_length=254, verbose_name="Okul Adı")
+    schoolSlug = models.SlugField(unique=True, max_length=254, verbose_name="Okul Adı Slug")
+    schoolDescription = RichTextField(verbose_name="Okul Açıklama", null=True,
+                                      blank=True)
+    schoolCreatedDate = models.DateTimeField(auto_now_add=True,
+                                             verbose_name="Okul Oluşturulma Tarihi")
+    schoolUpdatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
+    schoolSince = models.DateTimeField(verbose_name="Okul Kurulduğu Tarih")
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Okul Oluşturan Kişi")
+    schoolImage = FileField(default='default-user-image.png')
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
 
     def __str__(self):
-        return self.exam_school_title
+        return self.schoolTitle
 
     class Meta:
-        ordering = ['-exam_school_created_date']
+        db_table = "School"
+        ordering = ['-schoolCreatedDate']
 
 
-class ExamDepartment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Exam Sub Category Id")
-    exam_department_title = models.CharField(max_length=254, verbose_name="Exam Sub Category Title")
-    exam_department_slug = models.SlugField(unique=True, max_length=254,
-                                            verbose_name="Exam Sub Category Slug")
-    exam_department_description = models.TextField(verbose_name="Exam Sub Category Description", null=True,
-                                                   blank=True)
-    exam_department_created_date = models.DateTimeField(auto_now_add=True,
-                                                        verbose_name="Exam Sub Category Created Date")
-    exam_school_id = models.ForeignKey(ExamSchool, verbose_name="Exam Main Category",
-                                       on_delete=models.CASCADE)
+class Department(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Bölüm Id")
+    title = models.CharField(max_length=254, verbose_name="Bölüm Adı")
+    slug = models.SlugField(unique=True, max_length=254,
+                            verbose_name="Bölüm Adı Slug")
+    departmentDescription = models.TextField(verbose_name="Bölüm Açıklama ", null=True,
+                                             blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True,
+                                       verbose_name="Bölüm Oluşturulduğu Tarih")
+    updatedDate = models.DateTimeField(verbose_name="Bölüm Güncellendiği Tarih", null=True, blank=True)
+    schoolId = models.ForeignKey(School, verbose_name="Okul Adı",
+                                 on_delete=models.CASCADE)
+    image = FileField(default='default-user-image.png')
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Bölüm Oluşturan Kişi")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
 
     def __str__(self):
-        return self.exam_department_title
+        return self.title
 
     class Meta:
-        ordering = ['-exam_department_created_date']
+        db_table = "Department"
+        ordering = ['-createdDate']
 
 
 class Exam(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Exam Id")
-    exam_author = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Exam Author")
-    exam_title = models.CharField(max_length=254, verbose_name="Exam Title")
-    exam_slug = models.SlugField(unique=True, max_length=254, verbose_name="Exam Title Slug")
-    exam_created_date = models.DateTimeField(auto_now_add=True,
-                                             verbose_name="Exam Created Date")
-    exam_school_id = models.ForeignKey(ExamDepartment, verbose_name="Exam Department",
-                                       on_delete=models.CASCADE)
-    exam_media = models.FileField(null=True, blank=True, verbose_name="Exam File")
-    exam_view = models.PositiveIntegerField(default=0, verbose_name="Exam View Count")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sınav Sorusu Id")
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Sınav Sorusu Oluşturan")
+    title = models.CharField(max_length=254, verbose_name="Sınav Sorusu Başlık")
+    description = RichTextField()
+    examSlug = models.SlugField(unique=True, max_length=254, verbose_name="Sınav Sorusu Slug")
+    createdDate = models.DateTimeField(auto_now_add=True,
+                                       verbose_name="Sınav Sorusu Oluşturulduğu Tarih")
+    updatedDate = models.DateTimeField(verbose_name="Sınav Sorusu Güncellendiği Tarih", null=True, blank=True)
+    departmentId = models.ForeignKey(Department, verbose_name="Bölüm Adı",
+                                     on_delete=models.CASCADE)
+    media = models.FileField(default='default-user-image.png', verbose_name="Dosya")
+    view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
 
     def __str__(self):
-        return self.exam_title
+        return self.title
 
     class Meta:
-        ordering = ['-exam_created_date']
+        db_table = "Exam"
+        ordering = ['-createdDate']

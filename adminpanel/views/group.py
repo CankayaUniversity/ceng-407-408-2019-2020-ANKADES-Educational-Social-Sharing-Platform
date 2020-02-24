@@ -1,16 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
+from account.models import AccountGroup, Group, GroupPermission
+from adminpanel.forms import GroupForm, GroupPermissionForm, AccountGroupForm
 
-from account.models import MainGroup, AccountGroup, AccountGroupPermission
-from adminpanel.forms import AddAccountMainGroupForm, AddAccountGroupForm, AddAccountGroupPermissionForm
 
-
-#Gruplar
 @login_required(login_url="login_admin")
 def admin_all_groups(request):
-    groups = MainGroup.objects.all()
+    groups = Group.objects.all()
     context = {
         "groups": groups,
     }
@@ -19,10 +18,11 @@ def admin_all_groups(request):
 
 @login_required(login_url="login_admin")
 def admin_add_group(request):
-    form = AddAccountMainGroupForm(request.POST or None)
+    form = GroupForm(request.POST or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        messages.success(request, "Grup başarıyla eklendi !")
         return redirect("admin_all_groups")
     context = {
         "form": form,
@@ -32,30 +32,44 @@ def admin_add_group(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_group(request, name_slug):
-    instance = get_object_or_404(MainGroup, name_slug=name_slug)
-    form = AddAccountMainGroupForm(request.POST or None, instance=instance)
+    instance = get_object_or_404(Group, name_slug=name_slug)
+    form = GroupForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        messages.success(request, "Grup başarıyla düzenlendi !")
         return redirect("admin_all_groups")
     return render(request, "admin/groups/edit-main-group.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
 def admin_delete_group(request, name_slug):
-    instance = get_object_or_404(MainGroup, name_slug=name_slug)
+    instance = get_object_or_404(Group, name_slug=name_slug)
     instance.delete()
+    success = True
+    if success is True:
+        messages.success(request, "Grup başarıyla silindi !")
+    else:
+        messages.error(request, "Grup silinirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.")
     return redirect("admin_all_groups")
 
 
-#Grup İzinleri
+# Grup İzinleri
 @login_required(login_url="login_admin")
 def admin_add_group_permission(request):
-    form = AddAccountGroupPermissionForm(request.POST or None)
+    form = GroupPermissionForm(request.POST or None)
     if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
-        return redirect("admin_index")
+        form_groupname = form.cleaned_data.get("groupId")
+        form_permissionname = form.cleaned_data.get("permissionId")
+        if GroupPermission.objects.filter(Q(permissionId=form_permissionname) and Q(groupId=form_groupname)):
+            messages.error(request, 'Bu gruba izin daha önce eklenmiş !')
+        else:
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(request, 'Grup izni başarıyla kullanıcıya eklendi.')
+            return redirect("admin_add_group_permission")
+
+        return redirect("admin_add_group_permission")
     context = {
         "form": form,
     }
@@ -64,18 +78,19 @@ def admin_add_group_permission(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_group_permission(request, id):
-    instance = get_object_or_404(AccountGroupPermission, id=id)
-    form = AddAccountGroupPermissionForm(request.POST or None, instance=instance)
+    instance = get_object_or_404(GroupPermission, id=id)
+    form = GroupPermissionForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
-        return redirect("group_permission")
+        messages.success(request, "Grup izni başarıyla düzenlendi !")
+        return redirect("admin_group_permission")
     return render(request, "admin/groups/edit-group-permission.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
 def admin_group_permission(request):
-    group_permissions = AccountGroupPermission.objects.all()
+    group_permissions = GroupPermission.objects.all()
     context = {
         "group_permission": group_permissions,
     }
@@ -84,11 +99,17 @@ def admin_group_permission(request):
 
 @login_required(login_url="login_admin")
 def admin_delete_group_permission(request, id):
-    instance = get_object_or_404(AccountGroupPermission, id=id)
+    instance = get_object_or_404(GroupPermission, id=id)
     instance.delete()
-    return redirect("group_permission")
+    success = True
+    if success is True:
+        messages.success(request, "Grup izni başarıyla silindi !")
+    else:
+        messages.error(request, "Grup izni silinirken bir sorun oluştu. Lütfen tekrar deneyin")
+    return redirect("admin_group_permission")
 
-#Hesap Grupları
+
+# Hesap Grupları
 @login_required(login_url="login_admin")
 def admin_account_groups(request):
     acc_grp = AccountGroup.objects.all()
@@ -98,17 +119,17 @@ def admin_account_groups(request):
 
 @login_required(login_url="login_admin")
 def admin_add_account_group(request):
-    form = AddAccountGroupForm(request.POST or None)
+    form = AccountGroupForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            form_username = form.cleaned_data.get("user_id")
-            if AccountGroup.objects.filter(user_id__username=form_username):
+            form_username = form.cleaned_data.get("userId")
+            if AccountGroup.objects.filter(Q(userId__username=form_username)):
                 messages.error(request, 'Kullanıcının Grubu Var !')
             else:
                 instance = form.save(commit=False)
                 instance.save()
                 messages.success(request, 'Grup başarıyla kullanıcıya eklendi.')
-                return redirect("add_account_group")
+                return redirect("admin_add_account_group")
         else:
             messages.error(request, 'hata')
     return render(request, "admin/account/group/add-account-group.html", {"form": form})
@@ -117,12 +138,16 @@ def admin_add_account_group(request):
 @login_required(login_url="login_admin")
 def admin_edit_account_group(request, id):
     instance = get_object_or_404(AccountGroup, id=id)
-    form = AddAccountGroupForm(request.POST or None, instance=instance)
+    form = AccountGroupForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
-        messages.success(request, 'Başarıyle değiştirildi')
-        return redirect("edit_account_group")
+        success = True
+        if success is True:
+            messages.success(request, 'Başarıyle değiştirildi')
+        else:
+            messages.error(request, "hata")
+        return redirect("admin_edit_account_group")
     return render(request, "admin/account/group/edit-account-group.html", {"form": form})
 
 
@@ -131,4 +156,4 @@ def admin_delete_account_group(request, id):
     instance = get_object_or_404(AccountGroup, id=id)
     instance.delete()
     messages.success(request, 'Başarıyla silindi')
-    return redirect("account_groups")
+    return redirect("admin_account_groups")

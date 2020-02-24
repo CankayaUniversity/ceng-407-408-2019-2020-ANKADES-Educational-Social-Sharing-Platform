@@ -1,54 +1,25 @@
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
-
-# Admin
-from account.models import Account, MainPermission, MainGroup, AccountGroupPermission, AccountGroup, \
-    AccountHasPermission
-from article.models import ArticleCategory, ArticleSubCategory
-from course.models import CourseCategory, CourseSubCategory, CourseSubToSubCategory, Course
-
-MAIN_CATEGORY_CHOICES = CourseCategory.id
+from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
+from course.models import Course, CourseCategory
 
 
 class AdminLoginForm(forms.Form):
     username = forms.CharField(label="Kullanıcı Adı")
     password = forms.CharField(label="Şifre", widget=forms.PasswordInput())
 
-
-class CourseCategoryForm(forms.ModelForm):
-    class Meta:
-        model = CourseCategory
-        fields = ["course_category_title", "course_category_slug", "course_category_description"]
-
-
-class CourseSubCategoryForm(forms.ModelForm):
-    class Meta:
-        model = CourseSubCategory
-        fields = ["course_category_id", "course_sub_category_title", "course_sub_category_slug",
-                  "course_sub_category_description"]
-
-
-class CourseSubToSubCategoryForm(forms.ModelForm):
-    class Meta:
-        model = CourseSubToSubCategory
-        fields = ["course_sub_category_id", "course_sub_to_sub_category_title", "course_sub_to_sub_category_slug",
-                  "course_sub_to_sub_category_description"]
-
-
-class ArticleCategoryForm(forms.ModelForm):
-    class Meta:
-        model = ArticleCategory
-        fields = ["article_category_title", "article_category_slug", "article_category_description"]
-
-
-class ArticleSubCategoryForm(forms.ModelForm):
-    class Meta:
-        model = ArticleSubCategory
-        fields = ["article_category_id", "article_sub_category_title", "article_sub_category_slug",
-                  "article_sub_category_description"]
-
-
+# class ArticleCategoryForm(forms.ModelForm):
+#     class Meta:
+#         model = ArticleCategory
+#         fields = ["article_category_title", "article_category_slug", "article_category_description"]
+#
+#
+# class ArticleSubCategoryForm(forms.ModelForm):
+#     class Meta:
+#         model = ArticleSubCategory
+#         fields = ["article_category_id", "article_sub_category_title", "article_sub_category_slug",
+#                   "article_sub_category_description"]
+#
+#
 class AdminEditProfileForm(forms.ModelForm):
     class Meta:
         model = Account
@@ -64,35 +35,40 @@ class AdminEditProfileForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ["course_sub_to_sub_category_id", "course_title", "course_slug", "course_content",
-                  "course_media"]
+        fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
 
 
-class AddAccountMainPermissionForm(forms.ModelForm):
+class CourseCategoryForm(forms.ModelForm):
     class Meta:
-        model = MainPermission
-        fields = ["name", "name_slug"]
+        model = CourseCategory
+        fields = ["parentId", "title", "slug", "description"]
 
 
-class AddAccountMainGroupForm(forms.ModelForm):
+class PermissionForm(forms.ModelForm):
     class Meta:
-        model = MainGroup
-        fields = ["name", "name_slug"]
+        model = Permission
+        fields = ["title", "slug", "isActive"]
 
 
-class AddAccountGroupPermissionForm(forms.ModelForm):
+class GroupForm(forms.ModelForm):
     class Meta:
-        model = AccountGroupPermission
-        fields = ["permission_id", "group_id"]
+        model = Group
+        fields = ["title", "slug", "isActive"]
 
 
-class AddAccountGroupForm(forms.ModelForm):
+class GroupPermissionForm(forms.ModelForm):
+    class Meta:
+        model = GroupPermission
+        fields = ["groupId", "permissionId", "isActive"]
+
+
+class AccountGroupForm(forms.ModelForm):
     class Meta:
         model = AccountGroup
-        fields = ["user_id", "group_id"]
+        fields = ["userId", "groupId", "isActive"]
 
 
-class AddAccountHasPermission(forms.ModelForm):
+class AccountPermissionForm(forms.ModelForm):
     class Meta:
-        model = AccountHasPermission
-        fields = ["user_id", "permission_id"]
+        model = AccountPermission
+        fields = ["userId", "permissionId", "isActive"]

@@ -37,7 +37,14 @@
                         </div> <!-- end row -->
                     </div>
                     <!-- end page-title -->
-
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
@@ -55,30 +62,35 @@
                                             <th>Kurs Sahibi</th>
                                             <th>Kurs Kategorisi</th>
                                             <th>Kurs Oluşturulduğu Tarih</th>
+                                            <th>Kurs Güncellendiği Tarih</th>
                                             <th>Aktiflik</th>
-                                            <th>Üye Sayısı</th>
-                                            <th>Puan</th>
-                                            <th>Düzenle</th>
-                                            <th>Sil</th>
+                                            <th>Özellik</th>
+                                            <th>Görüntülenme</th>
+                                            <th>İşlemler</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% if course_list %}
                                             {% for courses in course_list %}
                                                 <tr>
-                                                    <td>{{ courses.course_title }}</td>
-                                                    <td>{{ courses.course_author }}</td>
-                                                    <td>{{ courses.course_sub_to_sub_category_id }}</td>
-                                                    <td>{{ courses.course_created_date }}</td>
-                                                    <td>{% if courses.is_active is True %}Aktif{% else %}Kapalı{% endif %}</td>
-                                                    <td>Yapılacak</td>
-                                                    <td>Yapılacak</td>
+                                                    <td>{{ courses.title }}</td>
+                                                    <td>{{ courses.creator.get_full_name }}</td>
+                                                    <td>{{ courses.categoryId }}</td>
+                                                    <td>{{ courses.createdDate }}</td>
+                                                    <td>{{ courses.updatedDate }}</td>
+                                                    <td>{% if courses.isActive is True %}Aktif{% else %}
+                                                        Kapalı{% endif %}</td>
+                                                    <td>{% if courses.isPrivate is True %}Özel{% else %}
+                                                        Açık{% endif %}</td>
+                                                    <td>{{ courses.view }}</td>
+                                                    <td>{% if courses.is_active is True %}Aktif{% else %}
+                                                        Kapalı{% endif %}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_course' courses.course_slug %}"
+                                                        <a href="{% url 'admin_edit_course' courses.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_course' courses.course_slug %}"
+                                                        <a href="{% url 'admin_delete_course' courses.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

@@ -6,7 +6,7 @@
             <ul class="metismenu" id="side-menu">
                 <li class="menu-title">Dashboard</li>
                 <li>
-                    <a href="{% url 'admin_index' %}" class="waves-effect">
+                    <a href="{% url 'admin_index' %}" class="waves-effect"><i class="mdi mdi-speedometer"></i>
 {#                                                <i class="icon-accelerator"></i><span#}
 {#                                                    class="badge badge-success badge-pill float-right">9+</span>#}
                         <span> Dashboard </span>
@@ -28,7 +28,7 @@
                         <li><a href="#"><i class="fas fa-user-check"></i> Öğretmenler</a></li>
                         <li><a href="#"><i class="fas fa-user-tag"></i> Moderatörler</a></li>
                         <li><a href="#"><i class="fas fa-user-lock"></i> Adminler</a></li>
-                        <li><a href="#"><i class="fas fa-user-alt-slash"></i> Yasaklı
+                        <li><a href="{% url 'admin_blocked_users' %}"><i class="fas fa-user-alt-slash"></i> Yasaklı
                             Kullanıcılar</a></li>
                     </ul>
                 </li>
@@ -81,12 +81,8 @@
                     <ul class="submenu">
                         <li><a href="{% url 'admin_courses' %}">Tüm Makaleler</a></li>
                         <li><a href="{% url 'admin_course_category' %}">Ana Kategori Listesi</a></li>
-                        <li><a href="{% url 'admin_course_sub_category' %}">Alt Kategori Listesi</a></li>
-                        <li><a href="{% url 'admin_course_sub_to_sub_category' %}">En Alt Kategori Listesi</a></li>
                         <li><a href="{% url 'admin_add_course' %}">Makale Ekle</a></li>
                         <li><a href="{% url 'admin_add_course_category' %}">Kategori Ekle</a></li>
-                        <li><a href="{% url 'admin_add_course_sub_category' %}">Alt Kategori Ekle</a></li>
-                        <li><a href="{% url 'admin_add_course_sub_to_sub_category' %}">En Alt Kategori Ekle</a></li>
                     </ul>
                 </li>
 
@@ -96,12 +92,8 @@
                     <ul class="submenu">
                         <li><a href="{% url 'admin_courses' %}">Tüm Kurslar</a></li>
                         <li><a href="{% url 'admin_course_category' %}">Ana Kategori Listesi</a></li>
-                        <li><a href="{% url 'admin_course_sub_category' %}">Alt Kategori Listesi</a></li>
-                        <li><a href="{% url 'admin_course_sub_to_sub_category' %}">En Alt Kategori Listesi</a></li>
                         <li><a href="{% url 'admin_add_course' %}">Kurs Ekle</a></li>
                         <li><a href="{% url 'admin_add_course_category' %}">Kategori Ekle</a></li>
-                        <li><a href="{% url 'admin_add_course_sub_category' %}">Alt Kategori Ekle</a></li>
-                        <li><a href="{% url 'admin_add_course_sub_to_sub_category' %}">En Alt Kategori Ekle</a></li>
                     </ul>
                 </li>
 

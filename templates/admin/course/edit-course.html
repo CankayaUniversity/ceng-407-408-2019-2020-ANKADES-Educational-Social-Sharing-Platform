@@ -6,7 +6,7 @@
     <!-- Begin page -->
     <div id="wrapper">
 
-       <!-- Top Bar Start -->
+        <!-- Top Bar Start -->
         {% include "admin/layout/navbar.html" %}
         <!-- Top Bar End -->
 
@@ -30,13 +30,21 @@
                                 <ol class="breadcrumb float-right">
                                     <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Kurslar</a></li>
                                     <li class="breadcrumb-item">Kurs
-                                        Düzenle</li>
+                                        Düzenle
+                                    </li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
                     </div>
                     <!-- end page-title -->
-
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">

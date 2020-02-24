@@ -1,0 +1,687 @@
+.popular-courses {
+	background-color: @bg-light;
+	.section-heading {
+		h1 {
+			margin-bottom: 0px;
+		}
+		img {
+			padding-top: -5px;
+		}
+		p {
+			padding-bottom: 40px;
+		}
+	}
+	.course-item {
+		margin: 0 8px;
+		img {
+			width: 100%;
+			overflow: hidden;
+			position: relative;
+		}
+		.down-content {
+			background-color: @white;
+			margin-top: -10px;
+			img {
+				margin-left: 15px;
+				float: left;
+				width: 46px;
+				height: 46px;
+				border-radius: 50%;
+				margin-top: -27px;
+				border: 2px solid @white;
+			}
+			h6 {
+				padding-top: 6px;
+				font-family: @secondary-font;
+				font-size: 12px;
+				color: @text-color-two;
+				font-weight: 300;
+				letter-spacing: 0.2px;
+				margin-left: 70px;
+			}
+			.price-red {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -21px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @second-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			.price-yellow {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -21px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @accent-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			h4 {
+				margin-top: 20px;
+				font-size: 13px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				margin-left: 20px;
+				line-height: 20px;
+				margin-bottom: 15px;
+			}
+			p {
+				padding: 0px 20px;
+			}
+			.text-button {
+				margin-left: 20px;
+				padding-bottom: 20px;
+			}
+		}
+	}
+	.owl-pagination {
+		margin-top: 40px;
+		opacity: 1;
+    	display: inline-block;
+    	.owl-page span {
+		    display: block;
+		    width: 8px;
+		    height: 8px;
+		    margin: 0px 5px;
+		    filter: alpha(opacity=50);
+		    opacity: 0.5;
+		    background-color: @accent-color;
+		}
+	}
+}
+
+.pre-featured {
+	background-color: @second-color;
+	margin-bottom: 30px;
+	min-height: 68px;
+	h4 {
+		font-family: @primary-font;
+		font-size: 12px;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: @white;
+		float: left;
+		margin-left: 20px;
+		margin-top: 28px;
+		padding-bottom: 25px;
+	}
+	.right-content	{
+		text-align: right;
+		.input-select {
+			margin: 20px 10px;
+			display: inline-block;
+			select {
+				background-color: transparent;
+				cursor: pointer;
+				border-color: transparent;
+				padding: 5px;
+				font-family: @primary-font;
+				font-size: 11px;
+				color: @white;
+				letter-spacing: 0.5px;
+				text-transform: uppercase;
+				outline: none;
+				-webkit-appearance: none;
+			   	-webkit-appearance: none;
+			    -moz-appearance: none;
+			    appearance: none;
+				option {
+					font-size: 10px;
+					color: @text-color;
+					margin-bottom: 15px;
+				}
+			}
+		}
+		.input-select:after {
+		    content:"\f107";
+		    font-family: FontAwesome;
+		    color: @white;
+		    z-index: 1;
+		    text-align: right;
+		    width: 100%;
+		    height: 100%;
+		    margin-right: 15px;      
+		    pointer-events: none;
+		    box-sizing: border-box;   
+		}
+		.grid-list {
+			float: right;
+			display: block;
+			padding: 15px 20px 25px 0px;
+			ul {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				li {
+					margin: 0 2px;
+					display: inline-block;
+					a {
+						color: @white;
+						width: 36px;
+						height: 36px;
+						text-align: center;
+						line-height: 36px;
+						display: inline-block;
+						border: 1px solid #b74043;
+						background-color: transparent;
+					}
+				}
+			}
+		}
+	}
+}
+
+.courses-grid {
+	.course-item {
+		margin-top: 30px;
+		img {
+			width: 100%;
+			overflow: hidden;
+			position: relative;
+		}
+		.down-content {
+			border: 2px solid @border-color;
+			margin-top: -12px;
+			img {
+				margin-left: 15px;
+				float: left;
+				width: 46px;
+				height: 46px;
+				border-radius: 50%;
+				margin-top: -12px;
+				border: 2px solid @white;
+			}
+			h6 {
+				padding-top: 6px;
+				font-family: @secondary-font;
+				font-size: 12px;
+				color: @text-color-two;
+				font-weight: 300;
+				letter-spacing: 0.2px;
+				margin-left: 70px;
+			}
+			.price-red {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -21px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @second-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			.price-yellow {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -21px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @accent-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			h4 {
+				margin-top: 20px;
+				font-size: 13px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				margin-left: 20px;
+				line-height: 20px;
+				margin-bottom: 15px;
+			}
+			p {
+				padding: 0px 20px;
+			}
+			.text-button {
+				margin-left: 20px;
+				padding-bottom: 20px;
+			}
+		}
+	}
+}
+
+.courses-list {
+	.request-information {
+		margin-top: 30px;
+	}
+	.course-item {
+		margin-top: 30px;
+		img {
+			height: 240px;
+			width: 370px;
+			overflow: hidden;
+			position: relative;
+			@media (max-width: @screen-sm-max) {
+				width: 100%;
+				height: auto;
+			}
+		}
+		.down-content {
+			@media (max-width: @screen-sm-max) {
+				float: none;
+				width: 100%;
+				height: auto;
+				display: inline-block;
+				margin: 0px;
+			}
+			margin-top: -240px;
+			height: 240px;
+			float: right;
+			display: inline;
+			border: 2px solid @border-color;
+			margin-left: 370px;
+			img {
+				margin-left: -24px;
+				width: 46px;
+				height: 46px;
+				border-radius: 50%;
+				margin-top: -2px;
+				border: 2px solid @white;
+				@media (max-width: @screen-sm-max) {
+					float: left;
+					margin-left: 20px;
+					margin-right: 10px;
+					margin-top: -24px;
+				}
+			}
+			h6 {
+				@media (max-width: @screen-sm-max) {
+					margin-top: 12px;
+					margin-left: 10px;
+				}
+				margin-top: -30px;
+				font-family: @secondary-font;
+				font-size: 12px;
+				color: @text-color-two;
+				font-weight: 300;
+				letter-spacing: 0.2px;
+				margin-left: 30px;
+			}
+			.price-red {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -29px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @second-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			.price-yellow {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -29px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @accent-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			h4 {
+				margin-top: 25px;
+				font-size: 13px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				margin-left: 20px;
+				line-height: 20px;
+				margin-bottom: 15px;
+				display: block;
+				@media (max-width: @screen-sm-max) {
+					margin-top: 25px;
+				}
+			}
+			p {
+				padding: 0px 20px;
+				display: inline-block;
+			}
+			.text-button {
+				margin-left: 20px;
+				margin-top: 5px;
+				padding-bottom: 20px;
+			}
+		}
+	}
+}
+
+
+.single-course {
+	.course-item {
+		margin-top: 30px;
+		.up-content {
+			img {
+				position: relative;
+				margin-left: 15px;
+				float: left;
+				width: 46px;
+				height: 46px;
+				border-radius: 50%;
+				margin-bottom: -20px;
+				border: 2px solid @white;
+				z-index: 9999;
+			}
+			h6 {
+				padding-top: 0px;
+				margin-bottom: -5px;
+				font-family: @secondary-font;
+				font-size: 12px;
+				color: @text-color-two;
+				font-weight: 300;
+				letter-spacing: 0.2px;
+				margin-left: 70px;
+			}
+			.price-red {
+				float: right;
+				span {
+					position: relative;
+					z-index: 10;
+					margin-top: -5px;
+					display: block;
+					margin-left: 32px;
+					font-family: @primary-font;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					color: @white;
+				}
+				.base {
+					position: relative;
+					z-index: 9;
+					margin-top: -23px;
+				  	width: 85px;
+				    height: 30px;
+				    line-height: 0;
+				    border: 16px solid @second-color;
+				    border-left: 1.5em solid transparent;
+				    left: 0;
+				    top: 0;
+				}
+			}
+			h4 {
+				margin-top: 20px;
+				font-size: 24px;
+				letter-spacing: 0.5px;
+				margin-left: 0px;
+				line-height: 20px;
+				margin-bottom: 15px;
+			}
+			p {
+				padding-bottom: 15px;
+			}
+			.text-button {
+				margin-left: 20px;
+				padding-bottom: 20px;
+			}
+		}
+		.courses-slider {
+			margin-top: 19px;
+			.flex-control-thumbs {
+				text-align: center;
+			}
+			.flex-control-thumbs li {
+				width: 162px;
+				margin: 30px 5px;
+				float: none;
+				display: inline-block;
+				cursor: pointer;
+				@media (max-width: @screen-sm-max) {
+					width: 80px;
+				}
+				img {
+					@media (max-width: @screen-sm-max) {
+						width: 80px;
+					}
+				}
+			}
+			.flex-direction-nav {
+				display: none;
+			}
+		}
+	}
+	.description {
+		h4 {
+			font-size: 13px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			margin-bottom: 20px;
+			margin-top: 20px;
+		}
+	}
+	.topics {
+		h4 {
+			font-size: 13px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			margin-bottom: 20px;
+			margin-top: 40px;
+		}
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: inline-block;
+			li {
+				margin: 5px 0px 20px 0px;
+				font-family: @secondary-font;
+				font-size: 14px;
+				color: @text-color;
+				i {
+					color: @accent-color;
+					margin-right: 8px;
+				}
+			}
+		}
+	}
+	.accordions {
+		h4 {
+			font-size: 13px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			margin-bottom: 40px;
+			margin-top: 40px;
+		}
+		.accordion, .accordion * {
+		    -webkit-box-sizing:border-box; 
+		    -moz-box-sizing:border-box; 
+		    box-sizing:border-box;
+		}	 
+		.accordion {
+		    overflow:hidden;
+		}
+		.accordion-section {
+			margin-bottom: 1px;
+		}
+		.second-accordion-section-title {
+			background-color: transparent!important;
+			border: 2px solid @border-color; 
+			em {
+		    	margin-right: 10px;
+		    	font-size: 10px;
+		    	font-family: @primary-font;
+		    	padding: 5px;
+		    	color: @white;
+		    	background-color: @accent-color!important;
+		    	letter-spacing: 0.3px;
+		    	text-transform: uppercase;
+		    	font-style: normal;
+		    }
+		}
+		.accordion-section-title {
+		    width:100%;
+		    padding:15px;
+		    display:inline-block;
+		    background: @bg-light;
+		    transition:all linear 0.15s;
+		    h6 {
+		    	padding-right: 20px;
+		    	float: right;
+		    	display: inline-block;
+		    	position: relative;
+		    	margin: 0px;
+		    	font-family: @secondary-font;
+		    	font-size: 13px;
+		    	text-transform: capitalize;
+		    	font-weight: 400;
+		    }
+		    em {
+		    	margin-right: 10px;
+		    	font-size: 10px;
+		    	font-family: @primary-font;
+		    	padding: 5px;
+		    	color: @white;
+		    	background-color: @second-color;
+		    	letter-spacing: 0.3px;
+		    	text-transform: uppercase;
+		    	font-style: normal;
+		    }
+			span {
+				font-family: @secondary-font;
+				font-size: 14px;
+				color: @text-color-two;
+				letter-spacing: 0.5px;
+			}
+		    .first-icon {
+		    	i {
+		    		margin-top: 2px;
+			    	float: left;
+			    	margin-left: 10px;
+			    	font-size: 14px;
+			    	border-right: 1px solid darken(@border-color, 10%);
+			    	color: @accent-color;
+			    	padding-right: 10px;
+			    	margin-right: 10px;
+			    }
+		    }
+		    .second-icon {
+		    	i {
+		    		margin-top: -3px;
+		    		margin-left: 15px;
+		    		margin-right: 0px;
+			    	float: right;
+			    	font-size: 18px;
+			    }
+		    }
+		}
+		.accordion-section-title.active {
+			color: @heading;
+			.second-icon {
+				i {
+			    	-webkit-transform: rotate(-180deg);
+					-moz-transform: rotate(-180deg);
+					-o-transform: rotate(-180deg);
+					-ms-transform: rotate(-180deg);
+					transform: rotate(-180deg);
+					transition: all 0.5s;
+			    }
+			}
+		}
+		.accordion-section-content {
+		    padding:15px;
+		    display:none;
+		}
+	}
+}

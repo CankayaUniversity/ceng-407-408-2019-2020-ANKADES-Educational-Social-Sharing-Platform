@@ -1,9 +1,10 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
-from adminpanel.forms import AdminEditProfileForm, AddAccountHasPermission
+from adminpanel.forms import AdminEditProfileForm, AccountPermissionForm
 
 from account.models import Account, AccountGroup
 
@@ -16,14 +17,13 @@ def admin_all_users(request):
         user_pagination = Account.objects.filter(
             Q(username__contains=keyword) |
             Q(first_name__contains=keyword) |
-            Q(id__contains=keyword) |
             Q(last_name__contains=keyword))
         context = {
             "user_pagination": user_pagination,
         }
         return render(request, "admin/account/all-users.html", context)
 
-    user_groups = AccountGroup.objects.values()
+    user_groups = AccountGroup.objects.all()
     users_list = Account.objects.all()
     users_limit = Account.objects.all().order_by('-date_joined')[:5]
     page = request.GET.get('page', 1)
@@ -52,7 +52,8 @@ def admin_edit_profile(request, username):
         instance = form.save(commit=False)
         instance.username = username
         instance.save()
-        return redirect("all_users")
+        messages.success(request, "Profil başarıyla düzenlendi !")
+        return redirect("admin_all_users")
     context = {
         "form": form,
     }
@@ -63,16 +64,27 @@ def admin_edit_profile(request, username):
 def admin_delete_profile(request, username):
     instance = get_object_or_404(Account, username=username)
     instance.delete()
+    messages.success(request, "Profil başarıyla silindi !")
     return redirect("admin_all_users")
+
+
+@login_required(login_url="login_admin")
+def admin_blocked_users(request):
+    blocked_user = Account.objects.all()
+    context = {
+        "blocked_user": blocked_user
+    }
+    return render(request, "admin/account/blocked-user.html", context)
 
 
 #Kullanıcı izinleri
 @login_required(login_url="login_admin")
 def add_account_has_permission(request):
-    form = AddAccountHasPermission(request.POST or None)
+    form = AccountPermissionForm(request.POST or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        messages.success(request, "Kullanıcıya izin başarıyla eklendi !")
         return redirect("admin_index")
     context = {
         "form": form,

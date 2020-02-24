@@ -37,8 +37,14 @@
                         </div> <!-- end row -->
                     </div>
                     <!-- end page-title -->
-
-                    {#Student#}
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
@@ -60,7 +66,6 @@
                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Group</th>
                                             <th>İzin</th>
                                             <th>Oluşturulduğu Tarih</th>
@@ -74,10 +79,9 @@
                                         {% if group_permission %}
                                             {% for grp_perm in group_permission %}
                                                 <tr>
-                                                    <td>{{ grp_perm.id }}</td>
-                                                    <td>{{ grp_perm.group_id.name }}</td>
-                                                    <td>{{ grp_perm.permission_id }}</td>
-                                                    <td>{{ grp_perm.created_date }}</td>
+                                                    <td>{{ grp_perm.groupId.title }}</td>
+                                                    <td>{{ grp_perm.permissionId }}</td>
+                                                    <td>{{ grp_perm.createdDate }}</td>
                                                     <td>
                                                         <a href="{% url 'admin_edit_group_permission' grp_perm.id %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>

@@ -28,13 +28,20 @@
                             </div>
                         </div> <!-- end row -->
                     </div>
-                    {#Ana Kategori#}
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
                                 <div class="card-body">
 
-                                    <h4 class="mt-0 header-title">Ana Kategori Listesi</h4>
+                                    <h4 class="mt-0 header-title">Kategori Listesi</h4>
                                     <p class="sub-title../plugins">Aşağıdan ana kategorileri görüntüleyebilir,
                                         düzenleyebilirsiniz.
                                     </p>

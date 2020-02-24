@@ -37,7 +37,15 @@
                         </div> <!-- end row -->
                     </div>
                     <!-- end page-title -->
-
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                    style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
@@ -53,7 +61,6 @@
                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                         <tr>
-                                            <th>İzin Id</th>
                                             <th>İzin Adı</th>
                                             <th>İzin Slug</th>
                                             <th>Oluşturulduğu Tarih</th>
@@ -65,16 +72,15 @@
                                         {% if permissions %}
                                             {% for perm in permissions %}
                                                 <tr>
-                                                    <td>{{ perm.id }}</td>
-                                                    <td>{{ perm.name }}</td>
-                                                    <td>{{ perm.name_slug }}</td>
-                                                    <td>{{ perm.created_date }}</td>
+                                                    <td>{{ perm.title}}</td>
+                                                    <td>{{ perm.slug }}</td>
+                                                    <td>{{ perm.createdDate }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_permission' perm.name_slug %}"
+                                                        <a href="{% url 'admin_edit_permission' perm.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_permission' perm.name_slug %}"
+                                                        <a href="{% url 'admin_delete_permission' perm.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>
