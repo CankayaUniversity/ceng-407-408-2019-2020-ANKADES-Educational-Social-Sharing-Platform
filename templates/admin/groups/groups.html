@@ -40,7 +40,8 @@
                     {% if messages %}
                         <ul class="messages">
                             {% for message in messages %}
-                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                    style="list-style: none"
                                         {% if message.tags %} {% endif %}>{{ message }}</li>
                             {% endfor %}
                         </ul>
@@ -66,30 +67,32 @@
                                             <th>Güncellendiği Tarih</th>
                                             <th>Aktiflik</th>
                                             <th>İşlemler</th>
-                                            <th>İzinler</th>
+                                            <th>Sil</th>
                                         </tr>
                                         </thead>
 
                                         <tbody>
                                         {% if groups %}
-                                            {% for grp in groups %}
+                                            {% for group in groups %}
                                                 <tr>
-                                                    <td>{{ grp.title }}</td>
-                                                    <td>{{ grp.slug }}</td>
-                                                    <td>{{ grp.createdDate }}</td>
-                                                    <td>{{ grp.updatedDate }}</td>
-                                                    <td>{% if grp.isActive == True %}Aktif{% else %}Kapalı{% endif %}</td>
+                                                    <td>{{ group.title }}</td>
+                                                    <td>{{ group.slug }}</td>
+                                                    <td>{{ group.createdDate }}</td>
+                                                    <td>{{ group.updatedDate }}</td>
+                                                    <td>{% if group.isActive == True %}Aktif{% else %}
+                                                        Kapalı{% endif %}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_group' grp.slug %}"
+                                                        <a href="{% url 'admin_edit_group' group.slug %}"
                                                            class="btn btn-success btn-sm"
                                                            style="width: 70px; margin-left: 50px">Düzenle</a>
-                                                        <a href="{% url 'admin_delete_group' grp.slug %}"
-                                                           class="btn btn-danger btn-sm"
-                                                           style="width: 70px; margin-left: 50px">Sil</a>
+                                                        <a href="{% url 'admin_activation_edit_group' group.slug %}"
+                                                           class="btn btn-primary btn-sm"
+                                                           style="width: 70px; margin-left: 50px">{% if group.isActive == True %}Etkisizleştir{% else %}Etkinleştir{% endif %}</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_group' grp.slug %}"
-                                                           class="btn btn-primary btn-sm">İzinlere Git</a>
+                                                        <a href="{% url 'admin_delete_group' group.slug %}"
+                                                           class="btn btn-danger btn-sm"
+                                                           style="width: 70px; margin-left: 50px">Sil</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}

@@ -7,19 +7,7 @@ class AdminLoginForm(forms.Form):
     username = forms.CharField(label="Kullanıcı Adı")
     password = forms.CharField(label="Şifre", widget=forms.PasswordInput())
 
-# class ArticleCategoryForm(forms.ModelForm):
-#     class Meta:
-#         model = ArticleCategory
-#         fields = ["article_category_title", "article_category_slug", "article_category_description"]
-#
-#
-# class ArticleSubCategoryForm(forms.ModelForm):
-#     class Meta:
-#         model = ArticleSubCategory
-#         fields = ["article_category_id", "article_sub_category_title", "article_sub_category_slug",
-#                   "article_sub_category_description"]
-#
-#
+
 class AdminEditProfileForm(forms.ModelForm):
     class Meta:
         model = Account

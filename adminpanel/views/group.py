@@ -70,19 +70,18 @@ def admin_edit_group(request, slug):
 @login_required(login_url="login_admin")
 def admin_delete_group(request, slug):
     instance = get_object_or_404(Group, slug=slug)
-    if instance.isActive is True:
-        instance.isActive = False
-        activity = AdminActivity()
-        activity.activityTitle = "Grup Kapatıldı"
-        activity.activityCreator = request.user.username
-        activity.activityMethod = "DELETE"
-        activity.activityApplication = "Group"
-        activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Grup artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        activity.save()
-        instance.save()
-        messages.success(request, "Grup başarıyla kapatıldı.")
-        return redirect("admin_all_groups")
+    instance.delete()
+    activity = AdminActivity()
+    activity.activityTitle = "Grup Silindi"
+    activity.activityCreator = request.user.username
+    activity.activityMethod = "DELETE"
+    activity.activityApplication = "Group"
+    activity.activityUpdatedDate = datetime.datetime.now()
+    activity.activityDescription = "Grup silindi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+    activity.save()
+    instance.save()
+    messages.success(request, "Grup başarıyla silindi.")
+    return redirect("admin_all_groups")
 
 
 # Grup İzinleri
@@ -133,7 +132,7 @@ def admin_edit_group_permission(request, id):
         activity.save()
         messages.success(request, "Grup izni başarıyla düzenlendi !")
         return redirect("admin_group_permission")
-    return render(request, "admin/groups/edit-group-permission.html", {"form": form})
+    return render(request, "admin/groups/group-permission/admin-permission.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
@@ -168,20 +167,26 @@ def admin_delete_group_permission(request, id):
 @login_required(login_url="login_admin")
 def admin_deactivate_group_permission(request, id):
     instance = get_object_or_404(GroupPermission, id=id)
+    activity = AdminActivity()
     if instance.isActive is True:
         instance.isActive = False
-        activity = AdminActivity()
+        instance.updatedDate = datetime.datetime.utcnow()
         activity.activityTitle = "Grup izni etkisizleştirildi"
         activity.activityCreator = request.user.username
         activity.activityMethod = "DELETE"
         activity.activityApplication = "Group"
         activity.activityUpdatedDate = datetime.datetime.now()
         activity.activityDescription = "Grup izni artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        activity.save()
         instance.save()
+        activity.save()
         messages.success(request, "Grup izni başarıyla etkisizleştirildi.")
     else:
-        messages.error(request, "Grup izni zaten aktif değil.")
+        instance.isActive = True
+        instance.updatedDate = datetime.datetime.now()
+        activity.activityUpdatedDate = datetime.datetime.utcnow()
+        instance.save()
+        activity.save()
+        messages.error(request, "Grup izni aktifleştirildi.")
     return redirect("admin_group_permission")
 
 
@@ -196,21 +201,27 @@ def admin_account_groups(request):
 @login_required(login_url="login_admin")
 def admin_deactivate_account_group(request, id):
     instance = get_object_or_404(AccountGroup, id=id)
-    if instance.isActive:
+    activity = AdminActivity()
+    if instance.isActive is True:
+        instance.updatedDate = datetime.datetime.utcnow()
         instance.isActive = False
-        activity = AdminActivity()
-        activity.activityTitle = "Kullanıcıdan Grup Silindi"
+        activity.activityTitle = "Kullanıcı Grubu Etkinleştirildi."
         activity.activityCreator = request.user.username
-        activity.activityMethod = "DELETE"
-        activity.activityApplication = "Group"
+        activity.activityMethod = "UPDATE"
+        activity.activityApplication = "Account Group"
         activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Silindi. Silen kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        activity.save()
+        activity.activityDescription = "Kullanıcı grubu etkinleştirildi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
         instance.save()
-        messages.success(request, 'Başarıyla silindi.')
+        activity.save()
+        messages.success(request, 'Başarıyla etkinleştirildi.')
         return redirect("admin_account_groups")
     else:
-        messages.error(request, "Hesabın grubu zaten aktif değil")
+        instance.isActive = True
+        instance.updatedDate = datetime.datetime.utcnow()
+        instance.save()
+        activity.updatedDate = datetime.datetime.utcnow()
+        activity.save()
+        messages.success(request, "Hesabın grubu başarıyla etkisizleştirildi")
         return redirect("admin_account_groups")
 
 
@@ -228,3 +239,30 @@ def admin_delete_account_group(request, id):
     instance.delete()
     messages.success(request, 'Başarıyla silindi.')
     return redirect("admin_account_groups")
+
+
+@login_required(login_url="login_admin")
+def admin_activation_edit_group(request, slug):
+    instance = get_object_or_404(Group, slug=slug)
+    activity = AdminActivity()
+    if instance.isActive is False:
+        instance.updatedDate = datetime.datetime.now()
+        instance.isActive = True
+        activity.activityTitle = "Group etkinleştirildi"
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "UPDATE"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.utcnow()
+        activity.activityDescription = "Grup etkinleştirildi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+        activity.save()
+        instance.save()
+        messages.success(request, "Group etkinleştirildi.")
+        return redirect("admin_all_groups")
+    else:
+        instance.isActive = False
+        instance.updatedDate = datetime.datetime.now()
+        activity.activityUpdatedDate = datetime.datetime.utcnow()
+        instance.save()
+        activity.save()
+        messages.success(request, "Başarıyla etkisizleştirildi.")
+        return redirect("admin_all_groups")

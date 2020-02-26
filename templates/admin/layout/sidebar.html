@@ -27,13 +27,13 @@
                             <ul class="submenu">
                                 <li><a href="{% url 'admin_all_users' %}"><i
                                         class="fas fa-address-book"></i> Tüm Kullanıcılar</a></li>
-                                <li><a href="{% url 'admin_site_student_permission' %}"><i
+                                <li><a href="{% url 'admin_students' %}"><i
                                         class="fas fa-user-graduate"></i> Öğrenci</a></li>
-                                <li><a href="{% url 'admin_site_teacher_permission' %}"><i
+                                <li><a href="{% url 'admin_teachers' %}"><i
                                         class="fas fa-user-check"></i> Öğretmen</a></li>
-                                <li><a href="{% url 'admin_site_moderator_permission' %}"><i
+                                <li><a href="{% url 'admin_moderators' %}"><i
                                         class="fas fa-user-tag"></i> Moderatör</a></li>
-                                <li><a href="{% url 'admin_site_admin_permission' %}"><i class="fas fa-user-lock"></i>
+                                <li><a href="{% url 'admin_admins' %}"><i class="fas fa-user-lock"></i>
                                     Admin</a></li>
                             </ul>
                         </li>
@@ -44,7 +44,7 @@
                                     class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
                                 <li><a href="{% url 'admin_account_groups' %}"><i class="fas fa-user-graduate"></i>
-                                    Liste</a></li>
+                                    Kullanıcı Grupları</a></li>
                                 <li><a href="{% url 'admin_add_account_group' %}">Kullanıcıya Grup Ekle</a></li>
                             </ul>
                         </li>

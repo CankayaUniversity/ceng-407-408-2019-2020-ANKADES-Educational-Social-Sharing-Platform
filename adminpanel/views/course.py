@@ -28,6 +28,7 @@ def admin_add_course(request):
     }
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.creator = request.user
         instance.save()
         messages.success(request, "Kurs başarıyla eklendi !")
         return redirect("admin_courses")
@@ -42,6 +43,7 @@ def admin_edit_course(request, slug):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
+            instance.view += 5
             instance.save()
             messages.success(request, "Kurs başarıyla düzenlendi !")
             context = {

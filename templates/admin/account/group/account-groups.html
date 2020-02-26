@@ -60,7 +60,6 @@
                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Grup Adı</th>
                                             <th>Kullanıcı Adı</th>
                                             <th>Oluşturulduğu Tarih</th>
@@ -74,7 +73,6 @@
                                         {% if accountGroups %}
                                             {% for accountGroup in accountGroups %}
                                                 <tr>
-                                                    <td>{{ accountGroup.id }}</td>
                                                     <td>{{ accountGroup.groupId.title }}</td>
                                                     <td>{{ accountGroup.userId }}</td>
                                                     <td>{{ accountGroup.createdDate }}</td>
@@ -83,7 +81,9 @@
                                                         <a href="{% url 'admin_edit_account_group' accountGroup.id %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                         <a href="{% url 'admin_deactivate_account_group' accountGroup.id %}"
-                                                           class="btn btn-primary btn-sm">Etkisizleştir</a>
+                                                           class="btn btn-primary btn-sm">
+                                                            {% if accountGroup.isActive == False %}
+                                                                Etkinleştir{% else %}Etkisizleştir{% endif %}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{% url 'admin_delete_account_group' accountGroup.id %}"

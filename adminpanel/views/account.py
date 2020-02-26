@@ -12,17 +12,6 @@ from adminpanel.models import AdminActivity
 
 @login_required(login_url="login_admin")
 def admin_all_users(request):
-    keyword = request.GET.get("keyword")
-    if keyword:
-        user_pagination = Account.objects.filter(
-            Q(username__contains=keyword) |
-            Q(first_name__contains=keyword) |
-            Q(last_name__contains=keyword))
-        context = {
-            "user_pagination": user_pagination,
-        }
-        return render(request, "admin/account/all-users.html", context)
-
     accounts = Account.objects.all()
     accountGroups = AccountGroup.objects.all()
     accountFiveLimitOrdered = Account.objects.all().order_by('-date_joined')[:5]
@@ -32,6 +21,42 @@ def admin_all_users(request):
         "accountFiveLimitOrdered": accountFiveLimitOrdered,
     }
     return render(request, "admin/account/all-users.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_students(request):
+    accounts = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
+    context = {
+        "accounts": accounts,
+    }
+    return render(request, "admin/account/group/students.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_teachers(request):
+    accounts = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
+    context = {
+        "accounts": accounts,
+    }
+    return render(request, "admin/account/group/teachers.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_moderators(request):
+    accounts = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
+    context = {
+        "accounts": accounts,
+    }
+    return render(request, "admin/account/group/moderators.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_admins(request):
+    accounts = AccountGroup.objects.filter(Q(groupId__slug="admin"))
+    context = {
+        "accounts": accounts,
+    }
+    return render(request, "admin/account/group/admins.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -131,7 +156,7 @@ def admin_add_account_group(request):
             activity.activityMethod = "POST"
             activity.activityApplication = "Account Group"
             activity.activityUpdatedDate = datetime.datetime.now()
-            activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. Oluşturan kişi: " + activity.activityCreator
+            activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlem yapılan kullanıcı: x. İşlemi yapan kişi: " + activity.activityCreator
             instance.save()
             activity.save()
             messages.success(request, "Kullanıcıya başarıyla grup eklendi.")

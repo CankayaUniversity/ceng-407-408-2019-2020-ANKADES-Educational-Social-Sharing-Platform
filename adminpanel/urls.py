@@ -18,17 +18,20 @@ urlpatterns = [
 
     # kullanicilar/...
     path('kullanicilar/', account.admin_all_users, name="admin_all_users"),
+    path('kullanicilar/ogrenciler/', account.admin_students, name="admin_students"),
+    path('kullanicilar/ogretmenler/', account.admin_teachers, name="admin_teachers"),
+    path('kullanicilar/moderatorler', account.admin_moderators, name="admin_moderators"),
+    path('kullanicilar/adminler', account.admin_admins, name="admin_admins"),
     path('kullanicilar/yasakli', account.admin_blocked_users, name="admin_blocked_users"),
 
     # kullanicilar/kullanici-izinleri/...
     path('kullanicilar/kullanici-izinleri/', account.admin_account_permission, name="admin_account_permission"),
-    path('kullanicilar/kullanici-izinleri/ekle', account.admin_add_account_permission,
+    path('kullanicilar/kullanici-izinleri/ekle/', account.admin_add_account_permission,
          name="admin_add_account_permission"),
     path('kullanicilar/kullanici-izinleri/duzenle/<uuid:id>', account.admin_edit_account_permission,
          name="admin_edit_account_permission"),
     path('kullanicilar/kullanici-izinleri/etkisizlestir/<uuid:id>', account.admin_deactivate_account_permission,
          name="admin_deactivate_account_permission"),
-    # path('kullanicilar/kullanici-izinleri/etkinlestir/<uuid:id>', account.admin_activate_account_permission, name="admin_activate_account_permission"),
     path('kullanicilar/kullanici-izinleri/sil/<uuid:id>', account.admin_delete_account_permission,
          name="admin_delete_account_permission"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
@@ -38,7 +41,7 @@ urlpatterns = [
     path('kullanicilar/grup/', group.admin_account_groups, name="admin_account_groups"),
     path('kullanicilar/grup/ekle/', account.admin_add_account_group, name="admin_add_account_group"),
     path('kullanicilar/grup/duzenle/<uuid:id>', account.admin_edit_account_group, name="admin_edit_account_group"),
-    path('kullanicilar/grup/etkisizlestir/<uuid:id>', group.admin_deactivate_account_group,
+    path('kullanicilar/grup/etkinlestirme/<uuid:id>', group.admin_deactivate_account_group,
          name="admin_deactivate_account_group"),
     path('kullanicilar/grup/sil/<uuid:id>', group.admin_delete_account_group, name="admin_delete_account_group"),
 
@@ -49,6 +52,8 @@ urlpatterns = [
          name="admin_edit_group"),
     path('gruplar/sil/<slug:slug>', group.admin_delete_group,
          name="admin_delete_group"),
+    path('gruplar/etkinlestirme/<slug:slug>', group.admin_activation_edit_group,
+         name="admin_activation_edit_group"),
 
     # gruplar/grup-izinleri
     path('gruplar/grup-izinleri/', group.admin_group_permission, name="admin_group_permission"),
