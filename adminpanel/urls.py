@@ -1,6 +1,4 @@
-from django.conf import settings
 from django.conf.urls import url
-from django.conf.urls.static import static
 from django.urls import path
 
 from adminpanel.views import views, permission, course, account
@@ -18,21 +16,30 @@ urlpatterns = [
     path('kurslar/kurs-duzenle/<slug:slug>', course.admin_edit_course, name="admin_edit_course"),
     path('kurslar/kurs-sil/<slug:slug>', course.admin_delete_course, name="admin_delete_course"),
 
-
-
     # kullanicilar/...
     path('kullanicilar/', account.admin_all_users, name="admin_all_users"),
     path('kullanicilar/yasakli', account.admin_blocked_users, name="admin_blocked_users"),
 
     # kullanicilar/kullanici-izinleri/...
-    path('kullanicilar/kullanici-izinleri/ekle', account.add_account_has_permission, name="add_account_has_permission"),
+    path('kullanicilar/kullanici-izinleri/', account.admin_account_permission, name="admin_account_permission"),
+    path('kullanicilar/kullanici-izinleri/ekle', account.admin_add_account_permission,
+         name="admin_add_account_permission"),
+    path('kullanicilar/kullanici-izinleri/duzenle/<uuid:id>', account.admin_edit_account_permission,
+         name="admin_edit_account_permission"),
+    path('kullanicilar/kullanici-izinleri/etkisizlestir/<uuid:id>', account.admin_deactivate_account_permission,
+         name="admin_deactivate_account_permission"),
+    # path('kullanicilar/kullanici-izinleri/etkinlestir/<uuid:id>', account.admin_activate_account_permission, name="admin_activate_account_permission"),
+    path('kullanicilar/kullanici-izinleri/sil/<uuid:id>', account.admin_delete_account_permission,
+         name="admin_delete_account_permission"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
-    url(r'^profil-sil/(?P<username>\w+)/$', account.admin_delete_profile, name="admin_delete_profile"),
+    url(r'^profil-sil/(?P<username>\w+)/$', account.admin_deactivate_profile, name="admin_deactivate_profile"),
 
     # kullanicilar/grup/..
     path('kullanicilar/grup/', group.admin_account_groups, name="admin_account_groups"),
-    path('kullanicilar/grup/ekle/', group.admin_add_account_group, name="admin_add_account_group"),
-    path('kullanicilar/grup/duzenle/<uuid:id>', group.admin_edit_account_group, name="admin_edit_account_group"),
+    path('kullanicilar/grup/ekle/', account.admin_add_account_group, name="admin_add_account_group"),
+    path('kullanicilar/grup/duzenle/<uuid:id>', account.admin_edit_account_group, name="admin_edit_account_group"),
+    path('kullanicilar/grup/etkisizlestir/<uuid:id>', group.admin_deactivate_account_group,
+         name="admin_deactivate_account_group"),
     path('kullanicilar/grup/sil/<uuid:id>', group.admin_delete_account_group, name="admin_delete_account_group"),
 
     # guplar/...
@@ -50,6 +57,8 @@ urlpatterns = [
          name="admin_delete_group_permission"),
     path('gruplar/grup-izinleri/duzenle/<uuid:id>', group.admin_edit_group_permission,
          name="admin_edit_group_permission"),
+    path('gruplar/grup-izinleri/duzenle/<uuid:id>', group.admin_deactivate_group_permission,
+         name="admin_deactivate_group_permission"),
 
     # izinler/
     path('izinler/', permission.admin_all_permissions, name="admin_all_permissions"),

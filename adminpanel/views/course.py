@@ -1,6 +1,7 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
@@ -12,23 +13,9 @@ from course.models import CourseCategory, Course
 
 @login_required(login_url="login_admin")
 def admin_courses(request):
-    keyword = request.GET.get("keyword")
-    if keyword:
-        search_course = Course.objects.filter(
-            Q(course_title__contains=keyword) |
-            Q(course_content__contains=keyword) |
-            Q(course_author_id__contains=keyword) |
-            Q(course_created_date__contains=keyword) | Q(course_sub_to_sub_category_id__contains=keyword))
-        context = {
-            "search_course": search_course,
-        }
-        return render(request, "admin/course/all-courses.html", context)
-
-    course_list = Course.objects.all()
-    course_limit = Course.objects.all().order_by('-course_created_date')[:5]
+    courses = Course.objects.all()
     context = {
-        "course_list": course_list,
-        "course_limit": course_limit,
+        "courses": courses,
     }
     return render(request, "admin/course/all-courses.html", context)
 
@@ -48,12 +35,13 @@ def admin_add_course(request):
 
 
 @login_required(login_url="login_admin")
-def admin_edit_course(request, course_slug):
+def admin_edit_course(request, slug):
     if request.user.is_authenticated:
-        instance = get_object_or_404(Course, course_slug=course_slug)
+        instance = get_object_or_404(Course, slug=slug)
         form = CourseForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
+            instance.updatedDate = datetime.datetime.now()
             instance.save()
             messages.success(request, "Kurs başarıyla düzenlendi !")
             context = {
@@ -66,8 +54,8 @@ def admin_edit_course(request, course_slug):
 
 
 @login_required(login_url="login_admin")
-def admin_delete_course(request, course_slug):
-    instance = get_object_or_404(Course, slug=course_slug)
+def admin_delete_course(request, slug):
+    instance = get_object_or_404(Course, slug=slug)
     instance.delete()
     messages.success(request, "Kurs başarıyla silindi !")
     return redirect("admin_courses")
@@ -100,11 +88,12 @@ def admin_add_course_category(request):
 
 
 @login_required(login_url="login_admin")
-def admin_edit_course_category(request, course_category_slug):
-    instance = get_object_or_404(CourseCategory, course_category_slug=course_category_slug)
+def admin_edit_course_category(request, slug):
+    instance = get_object_or_404(CourseCategory, slug=slug)
     form = CourseCategoryForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Kurs kategorisi başarıyla düzenlendi !")
         return redirect("admin_index")
@@ -112,8 +101,8 @@ def admin_edit_course_category(request, course_category_slug):
 
 
 @login_required(login_url="login_admin")
-def admin_delete_course_category(request, course_category_slug):
-    instance = get_object_or_404(CourseCategory, course_category_slug=course_category_slug)
+def admin_delete_course_category(request, slug):
+    instance = get_object_or_404(CourseCategory, slug=slug)
     instance.delete()
     messages.success(request, "Kurs kategorisi başarıyla silindi !")
     return redirect("admin_index")

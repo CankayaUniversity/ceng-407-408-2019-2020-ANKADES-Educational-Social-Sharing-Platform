@@ -1,27 +1,50 @@
-from django.contrib import messages
-from django.contrib.auth import logout, authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-
-# Main View
 from rest_framework import viewsets
+from account.models import Account, Group, AccountGroup, Permission, AccountPermission, GroupPermission, AccountActivity
+from adminpanel.models import AdminActivity
 
-from account.forms import AccountLoginForm, AccountRegisterForm
-from account.models import Account, AccountGroup
-
-# User View Set
+from adminpanel.serializers import AccountSerializer, GroupSerializer, AccountGroupSerializer, PermissionSerializer, \
+    AccountPermissionSerializer, GroupPermissionSerializer, AccountActivitySerializer, AdminActivitySerializer
 
 
-#Account View Set
-# class AccountViewSet(viewsets.ModelViewSet):
-#     queryset = Account.objects.all().order_by('-date_joined')
-#     serializer_class = AccountSerializer
-#
-#
-# class AccountActivityViewSet(viewsets.ModelViewSet):
-#     queryset = AccountActivity.objects.all()
-#     serializer_class = AccountActivitySerializer
+class PermissionViewSet(viewsets.ModelViewSet):
+    queryset = Permission.objects.all().order_by('-date_joined')
+    serializer_class = PermissionSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all().order_by('-createdDate')
+    serializer_class = GroupSerializer
+
+
+class AccountViewSet(viewsets.ModelViewSet):
+    queryset = Account.objects.all().order_by('-date_joined')
+    serializer_class = AccountSerializer
+
+
+class AccountPermissionViewSet(viewsets.ModelViewSet):
+    queryset = AccountPermission.objects.all().order_by('-createdDate')
+    serializer_class = AccountPermissionSerializer
+
+
+class GroupPermissionViewSet(viewsets.ModelViewSet):
+    queryset = GroupPermission.objects.all().order_by('-createdDate')
+    serializer_class = GroupPermissionSerializer
+
+
+class AccountGroupViewSet(viewsets.ModelViewSet):
+    queryset = AccountGroup.objects.all().order_by('-createdDate')
+    serializer_class = AccountGroupSerializer
+
+
+class AccountActivityViewSet(viewsets.ModelViewSet):
+    queryset = AccountActivity.objects.all().order_by('-activityCreatedDate')
+    serializer_class = AccountActivitySerializer
+
+
+class AdminActivityViewSet(viewsets.ModelViewSet):
+    queryset = AdminActivity.objects.all().order_by('-activityCreatedDate')
+    serializer_class = AdminActivitySerializer
 
 
 def index(request):

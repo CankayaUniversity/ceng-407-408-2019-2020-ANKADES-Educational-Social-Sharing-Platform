@@ -70,17 +70,17 @@
                                         </thead>
                                         <tbody>
                                         {% if permissions %}
-                                            {% for perm in permissions %}
+                                            {% for permission in permissions %}
                                                 <tr>
-                                                    <td>{{ perm.title}}</td>
-                                                    <td>{{ perm.slug }}</td>
-                                                    <td>{{ perm.createdDate }}</td>
+                                                    <td>{{ permission.title}}</td>
+                                                    <td>{{ permission.slug }}</td>
+                                                    <td>{{ permission.createdDate }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_permission' perm.slug %}"
+                                                        <a href="{% url 'admin_edit_permission' permission.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_permission' perm.slug %}"
+                                                        <a href="{% url 'admin_delete_permission' permission.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

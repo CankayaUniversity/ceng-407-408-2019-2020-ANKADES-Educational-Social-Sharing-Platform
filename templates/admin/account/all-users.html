@@ -65,37 +65,36 @@
                                             <th>Aktiflik</th>
                                             <th>Grup</th>
                                             <th>Son Giriş</th>
-                                            <th>Düzenle</th>
-                                            <th>Sil</th>
+                                            <th>Güncellendiği Tarih</th>
+                                            <th>İşlemler</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% if users_list %}
-                                            {% for users in users_list %}
+                                        {% if accounts %}
+                                            {% for account in accounts %}
                                                 <tr>
-                                                    <td>{{ users.username }}</td>
-                                                    <td>{{ users.get_full_name }}</td>
-                                                    <td>{{ users.email }}</td>
+                                                    <td>{{ account.username }}</td>
+                                                    <td>{{ account.get_full_name }}</td>
+                                                    <td>{{ account.email }}</td>
                                                     <td>
-                                                        {% if users.is_active %} Aktif {% else %}
+                                                        {% if account.is_active %} Aktif {% else %}
                                                             Yasaklı {% endif %}</td>
                                                     <td>
-                                                        {% if user_groups %}
-                                                            {% for grp in user_groups %}
-                                                                {{ grp.groupId.title }}
+                                                        {% if accountGroups %}
+                                                            {% for accountGroup in accountGroups %}
+                                                                {{ accountGroup.groupId.title }}
                                                             {% endfor %}
                                                         {% else %}
                                                             Group Yok !
                                                         {% endif %}
                                                     </td>
-                                                    <td>{{ users.last_login }}</td>
+                                                    <td>{{ account.last_login }}</td>
+                                                    <td>{{ account.updatedDate }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_profile' users.username %}"
+                                                        <a href="{% url 'admin_edit_profile' account.username %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{% url 'admin_delete_profile' users.username %}"
-                                                           class="btn btn-danger btn-sm">Sil</a>
+                                                        <a href="{% url 'admin_deactivate_profile' account.username %}"
+                                                           class="btn btn-primary btn-sm">Etkisizleştir</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}

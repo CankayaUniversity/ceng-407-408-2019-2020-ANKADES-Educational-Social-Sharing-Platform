@@ -37,12 +37,19 @@
                         </div> <!-- end row -->
                     </div>
                     <!-- end page-title -->
-
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                    style="list-style: none"
+                                        {% if message.tags %} {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
                                 <div class="card-body">
-
                                     <h4 class="mt-0 header-title">Tüm Kullanıcılar</h4>
                                     <p class="sub-title../plugins">
                                         Aşağıdan kullanıcıları düzenleyebilirsiniz.
@@ -57,25 +64,29 @@
                                             <th>Grup Adı</th>
                                             <th>Kullanıcı Adı</th>
                                             <th>Oluşturulduğu Tarih</th>
-                                            <th>Düzenle</th>
+                                            <th>Güncellendiği Tarih</th>
+                                            <th>İşlemler</th>
                                             <th>Sil</th>
                                         </tr>
                                         </thead>
 
                                         <tbody>
-                                        {% if acc_grp %}
-                                            {% for grp in acc_grp %}
+                                        {% if accountGroups %}
+                                            {% for accountGroup in accountGroups %}
                                                 <tr>
-                                                    <td>{{ grp.id }}</td>
-                                                    <td>{{ grp.group_id }}</td>
-                                                    <td>{{ grp.user_id }}</td>
-                                                    <td>{{ grp.created_date }}</td>
+                                                    <td>{{ accountGroup.id }}</td>
+                                                    <td>{{ accountGroup.groupId.title }}</td>
+                                                    <td>{{ accountGroup.userId }}</td>
+                                                    <td>{{ accountGroup.createdDate }}</td>
+                                                    <td>{{ accountGroup.updatedDate }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_account_group' grp.id %}"
+                                                        <a href="{% url 'admin_edit_account_group' accountGroup.id %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
+                                                        <a href="{% url 'admin_deactivate_account_group' accountGroup.id %}"
+                                                           class="btn btn-primary btn-sm">Etkisizleştir</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_account_group' grp.id %}"
+                                                        <a href="{% url 'admin_delete_account_group' accountGroup.id %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

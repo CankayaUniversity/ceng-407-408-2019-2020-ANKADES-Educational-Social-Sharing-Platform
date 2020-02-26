@@ -41,6 +41,7 @@ class Account(AbstractUser):
     description = RichTextField(verbose_name="Biyografi", null=True, blank=True)
     image = models.FileField(default='default-user-image.png', verbose_name="Profil Resmi")
     view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
+    updatedDate = models.DateTimeField(verbose_name="Hesap Güncellendiği Tarih")
 
     def __str__(self):
         return self.username
@@ -98,9 +99,9 @@ class AccountGroup(models.Model):
         ordering = ["-createdDate"]
 
 
-class Activity(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Id")
-    activityCreator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
+class AccountActivity(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Aktivite Id")
+    activityCreator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
     activityTitle = models.CharField(max_length=254, verbose_name="Başlık")
     activityApplication = models.CharField(max_length=254, verbose_name="Uygulama")
     activityDescription = models.CharField(max_length=254, verbose_name="Açıklama")
@@ -112,5 +113,6 @@ class Activity(models.Model):
         return self.activityCreator
 
     class Meta:
+        db_table = "AccountActivity"
         ordering = ['-activityCreatedDate']
 

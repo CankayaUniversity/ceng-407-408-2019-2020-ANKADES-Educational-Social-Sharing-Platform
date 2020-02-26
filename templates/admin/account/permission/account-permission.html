@@ -62,27 +62,37 @@
                                         <thead>
                                         <tr>
                                             <th>İzin Id</th>
+                                            <th>Kullanıcı Adı</th>
                                             <th>İzin Adı</th>
                                             <th>İzin Slug</th>
                                             <th>Oluşturulduğu Tarih</th>
-                                            <th>Düzenle</th>
+                                            <th>Güncellendiği Tarih</th>
+                                            <th>Aktiflik</th>
+                                            <th>İşlemler</th>
                                             <th>Sil</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% if permissions %}
-                                            {% for perm in permissions %}
+                                            {% for permission in permissions %}
                                                 <tr>
-                                                    <td>{{ perm.id }}</td>
-                                                    <td>{{ perm.name }}</td>
-                                                    <td>{{ perm.name_slug }}</td>
-                                                    <td>{{ perm.created_date }}</td>
+                                                    <td>{{ permission.id }}</td>
+                                                    <td>{{ permission.userId.username }}</td>
+                                                    <td>{{ permission.permissionId.title }}</td>
+                                                    <td>{{ permission.permissionId.slug }}</td>
+                                                    <td>{{ permission.createdDate }}</td>
+                                                    <td>{{ permission.updatedDate }}</td>
+                                                    <td>{% if permission.isActive %}Aktif{% else %}Aktif
+                                                        Değil{% endif %}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_permission' perm.name_slug %}"
+                                                        <a href="{% url 'admin_edit_account_permission' permission.id %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
+                                                        <a href="{% url 'admin_deactivate_account_permission' permission.id %}"
+                                                           class="btn btn-primary btn-sm">
+                                                            {% if permission.isActive == False %}Etkinleştir{% else %}Etkisizleştir{% endif %} </a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_permission' perm.name_slug %}"
+                                                        <a href="{% url 'admin_delete_account_permission' permission.id %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

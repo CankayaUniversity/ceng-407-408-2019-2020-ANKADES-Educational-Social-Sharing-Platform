@@ -2,10 +2,18 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
+import datetime
 from rest_framework.generics import get_object_or_404
-from account.models import AccountGroup, Group, GroupPermission
+from account.models import AccountGroup, Group, GroupPermission, Permission, Account
 from adminpanel.forms import GroupForm, GroupPermissionForm, AccountGroupForm
+from adminpanel.models import AdminActivity
 
+
+user = Account()
+group = Group()
+permission = Permission()
+groupPermission = GroupPermission()
+userGroup = AccountGroup()
 
 @login_required(login_url="login_admin")
 def admin_all_groups(request):
@@ -21,9 +29,17 @@ def admin_add_group(request):
     form = GroupForm(request.POST or None)
     if form.is_valid():
         instance = form.save(commit=False)
+        activity = AdminActivity()
+        activity.activityTitle = form.cleaned_data.get("title")
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "POST"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
         instance.save()
+        activity.save()
         messages.success(request, "Grup başarıyla eklendi !")
-        return redirect("admin_all_groups")
+        return redirect("admin_add_group")
     context = {
         "form": form,
     }
@@ -31,49 +47,72 @@ def admin_add_group(request):
 
 
 @login_required(login_url="login_admin")
-def admin_edit_group(request, name_slug):
-    instance = get_object_or_404(Group, name_slug=name_slug)
+def admin_edit_group(request, slug):
+    instance = get_object_or_404(Group, slug=slug)
     form = GroupForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
+        activity = AdminActivity()
+        activity.activityTitle = "Group Güncellendi."
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "UPDATE"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Güncellendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
         instance.save()
-        messages.success(request, "Grup başarıyla düzenlendi !")
+        activity.save()
+        messages.success(request, "Grup başarıyla düzenlendi.")
         return redirect("admin_all_groups")
     return render(request, "admin/groups/edit-main-group.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
-def admin_delete_group(request, name_slug):
-    instance = get_object_or_404(Group, name_slug=name_slug)
-    instance.delete()
-    success = True
-    if success is True:
-        messages.success(request, "Grup başarıyla silindi !")
-    else:
-        messages.error(request, "Grup silinirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.")
-    return redirect("admin_all_groups")
+def admin_delete_group(request, slug):
+    instance = get_object_or_404(Group, slug=slug)
+    if instance.isActive is True:
+        instance.isActive = False
+        activity = AdminActivity()
+        activity.activityTitle = "Grup Kapatıldı"
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "DELETE"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Grup artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+        activity.save()
+        instance.save()
+        messages.success(request, "Grup başarıyla kapatıldı.")
+        return redirect("admin_all_groups")
 
 
 # Grup İzinleri
 @login_required(login_url="login_admin")
 def admin_add_group_permission(request):
     form = GroupPermissionForm(request.POST or None)
+    context = {"form": form}
     if form.is_valid():
         form_groupname = form.cleaned_data.get("groupId")
         form_permissionname = form.cleaned_data.get("permissionId")
-        if GroupPermission.objects.filter(Q(permissionId=form_permissionname) and Q(groupId=form_groupname)):
-            messages.error(request, 'Bu gruba izin daha önce eklenmiş !')
+        if group.isActive is True and permission.isActive is True:
+            if GroupPermission.objects.filter(Q(permissionId=form_permissionname) and Q(groupId=form_groupname)):
+                messages.error(request, 'Bu gruba izin daha önce eklenmiş.')
+            else:
+                instance = form.save(commit=False)
+                activity = AdminActivity()
+                activity.activityTitle = form.cleaned_data.get("groupId")
+                activity.activityCreator = request.user.username
+                activity.activityMethod = "POST"
+                activity.activityApplication = "Group Permission"
+                activity.activityUpdatedDate = datetime.datetime.now()
+                activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
+                instance.save()
+                activity.save()
+                messages.success(request, 'Grup izni başarıyla eklendi.')
+                return redirect("admin_add_group_permission")
         else:
-            instance = form.save(commit=False)
-            instance.save()
-            messages.success(request, 'Grup izni başarıyla kullanıcıya eklendi.')
+            messages.error(request, "Grup ya da İzin aktif değil. Lütfen kontrol edin.")
             return redirect("admin_add_group_permission")
-
-        return redirect("admin_add_group_permission")
-    context = {
-        "form": form,
-    }
-    return render(request, "admin/permissions/add-group-perm.html", context)
+    return render(request, "admin/groups/group-permission/add-group-perm.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -82,7 +121,16 @@ def admin_edit_group_permission(request, id):
     form = GroupPermissionForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
+        activity = AdminActivity()
+        activity.activityTitle = form.cleaned_data.get("groupId")
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "UPDATE"
+        activity.activityApplication = "Group Permission"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Grup izni başarıyla güncellendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
         instance.save()
+        activity.save()
         messages.success(request, "Grup izni başarıyla düzenlendi !")
         return redirect("admin_group_permission")
     return render(request, "admin/groups/edit-group-permission.html", {"form": form})
@@ -90,9 +138,9 @@ def admin_edit_group_permission(request, id):
 
 @login_required(login_url="login_admin")
 def admin_group_permission(request):
-    group_permissions = GroupPermission.objects.all()
+    groupPermissions = GroupPermission.objects.all()
     context = {
-        "group_permission": group_permissions,
+        "groupPermissions": groupPermissions,
     }
     return render(request, "admin/groups/group-permissions.html", context)
 
@@ -100,60 +148,83 @@ def admin_group_permission(request):
 @login_required(login_url="login_admin")
 def admin_delete_group_permission(request, id):
     instance = get_object_or_404(GroupPermission, id=id)
-    instance.delete()
-    success = True
-    if success is True:
-        messages.success(request, "Grup izni başarıyla silindi !")
+    if instance.isActive is False:
+        activity = AdminActivity()
+        activity.activityTitle = "Grup izni silindi"
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "DELETE"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Grup izni artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+        activity.save()
+        instance.save()
+        messages.success(request, "Grup izni başarıyla silindi.")
     else:
-        messages.error(request, "Grup izni silinirken bir sorun oluştu. Lütfen tekrar deneyin")
+        messages.error(request, "Grup izni zaten aktif.")
+        return redirect("admin_group_permission")
+    return redirect("admin_group_permission")
+
+
+@login_required(login_url="login_admin")
+def admin_deactivate_group_permission(request, id):
+    instance = get_object_or_404(GroupPermission, id=id)
+    if instance.isActive is True:
+        instance.isActive = False
+        activity = AdminActivity()
+        activity.activityTitle = "Grup izni etkisizleştirildi"
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "DELETE"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Grup izni artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+        activity.save()
+        instance.save()
+        messages.success(request, "Grup izni başarıyla etkisizleştirildi.")
+    else:
+        messages.error(request, "Grup izni zaten aktif değil.")
     return redirect("admin_group_permission")
 
 
 # Hesap Grupları
 @login_required(login_url="login_admin")
 def admin_account_groups(request):
-    acc_grp = AccountGroup.objects.all()
-    context = {"acc_grp": acc_grp}
+    accountGroups = AccountGroup.objects.all()
+    context = {"accountGroups": accountGroups}
     return render(request, "admin/account/group/account-groups.html", context)
 
 
 @login_required(login_url="login_admin")
-def admin_add_account_group(request):
-    form = AccountGroupForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            form_username = form.cleaned_data.get("userId")
-            if AccountGroup.objects.filter(Q(userId__username=form_username)):
-                messages.error(request, 'Kullanıcının Grubu Var !')
-            else:
-                instance = form.save(commit=False)
-                instance.save()
-                messages.success(request, 'Grup başarıyla kullanıcıya eklendi.')
-                return redirect("admin_add_account_group")
-        else:
-            messages.error(request, 'hata')
-    return render(request, "admin/account/group/add-account-group.html", {"form": form})
-
-
-@login_required(login_url="login_admin")
-def admin_edit_account_group(request, id):
+def admin_deactivate_account_group(request, id):
     instance = get_object_or_404(AccountGroup, id=id)
-    form = AccountGroupForm(request.POST or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
+    if instance.isActive:
+        instance.isActive = False
+        activity = AdminActivity()
+        activity.activityTitle = "Kullanıcıdan Grup Silindi"
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "DELETE"
+        activity.activityApplication = "Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Silindi. Silen kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+        activity.save()
         instance.save()
-        success = True
-        if success is True:
-            messages.success(request, 'Başarıyle değiştirildi')
-        else:
-            messages.error(request, "hata")
-        return redirect("admin_edit_account_group")
-    return render(request, "admin/account/group/edit-account-group.html", {"form": form})
+        messages.success(request, 'Başarıyla silindi.')
+        return redirect("admin_account_groups")
+    else:
+        messages.error(request, "Hesabın grubu zaten aktif değil")
+        return redirect("admin_account_groups")
 
 
 @login_required(login_url="login_admin")
 def admin_delete_account_group(request, id):
     instance = get_object_or_404(AccountGroup, id=id)
+    activity = AdminActivity()
+    activity.activityTitle = "Kullanıcıdan Grup Silindi"
+    activity.activityCreator = request.user.username
+    activity.activityMethod = "DELETE"
+    activity.activityApplication = "Group"
+    activity.activityUpdatedDate = datetime.datetime.now()
+    activity.activityDescription = "Silindi. Silen kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+    activity.save()
     instance.delete()
-    messages.success(request, 'Başarıyla silindi')
+    messages.success(request, 'Başarıyla silindi.')
     return redirect("admin_account_groups")

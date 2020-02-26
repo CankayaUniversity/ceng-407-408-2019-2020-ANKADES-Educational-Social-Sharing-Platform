@@ -7,33 +7,63 @@
                 <li class="menu-title">Dashboard</li>
                 <li>
                     <a href="{% url 'admin_index' %}" class="waves-effect"><i class="mdi mdi-speedometer"></i>
-{#                                                <i class="icon-accelerator"></i><span#}
-{#                                                    class="badge badge-success badge-pill float-right">9+</span>#}
+                        {#                                                <i class="icon-accelerator"></i><span#}
+                        {#                                                    class="badge badge-success badge-pill float-right">9+</span>#}
                         <span> Dashboard </span>
                     </a>
                 </li>
 
-                <li class="menu-title">Kullanıcılar</li>
+                <li class="menu-title">KULLANICILAR</li>
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i
                             class="icon-profile"></i><span> Kullanıcılar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="{% url 'admin_all_users' %}"><i
-                                class="far fa-address-book"></i> Tüm Kullanıcılar</a></li>
-                        <li><a href="{% url 'admin_account_groups' %}"><i class="fas fa-user-graduate"></i> Kullanıcı
-                            Grupları</a></li>
-                        <li><a href="#"><i class="fas fa-user-graduate"></i> Öğrenciler</a></li>
-                        <li><a href="#"><i class="fas fa-user-check"></i> Öğretmenler</a></li>
-                        <li><a href="#"><i class="fas fa-user-tag"></i> Moderatörler</a></li>
-                        <li><a href="#"><i class="fas fa-user-lock"></i> Adminler</a></li>
+                        <li>
+                            <a href="javascript:void(0)"><i
+                                    class="far fa-address-book"></i> Liste<span class="float-right menu-arrow"><i
+                                    class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="submenu">
+                                <li><a href="{% url 'admin_all_users' %}"><i
+                                        class="fas fa-address-book"></i> Tüm Kullanıcılar</a></li>
+                                <li><a href="{% url 'admin_site_student_permission' %}"><i
+                                        class="fas fa-user-graduate"></i> Öğrenci</a></li>
+                                <li><a href="{% url 'admin_site_teacher_permission' %}"><i
+                                        class="fas fa-user-check"></i> Öğretmen</a></li>
+                                <li><a href="{% url 'admin_site_moderator_permission' %}"><i
+                                        class="fas fa-user-tag"></i> Moderatör</a></li>
+                                <li><a href="{% url 'admin_site_admin_permission' %}"><i class="fas fa-user-lock"></i>
+                                    Admin</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)"><i
+                                    class="far fa-address-book"></i> Kullanıcı Grupları<span
+                                    class="float-right menu-arrow"><i
+                                    class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="submenu">
+                                <li><a href="{% url 'admin_account_groups' %}"><i class="fas fa-user-graduate"></i>
+                                    Liste</a></li>
+                                <li><a href="{% url 'admin_add_account_group' %}">Kullanıcıya Grup Ekle</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)"><i
+                                    class="far fa-address-book"></i> Kullanıcı İzinleri<span
+                                    class="float-right menu-arrow"><i
+                                    class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="submenu">
+                                <li><a href="{% url 'admin_account_permission' %}">Kullanıcı İzinleri</a></li>
+                                <li><a href="{% url 'admin_add_account_permission' %}">Kullanıcıya İzin Ekle</a></li>
+                            </ul>
+                        </li>
                         <li><a href="{% url 'admin_blocked_users' %}"><i class="fas fa-user-alt-slash"></i> Yasaklı
                             Kullanıcılar</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title">Gruplar</li>
+                <li class="menu-title">YETKİLENDİRME</li>
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i
@@ -56,11 +86,8 @@
                         </li>
                         <li><a href="{% url 'admin_add_group' %}">Grup Ekle</a></li>
                         <li><a href="{% url 'admin_add_group_permission' %}">Gruba İzin Ekle</a></li>
-                        <li><a href="{% url 'admin_add_account_group' %}">Kullanıcıya Grup Ekle</a></li>
                     </ul>
                 </li>
-
-                <li class="menu-title">İzinler</li>
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i
@@ -69,11 +96,10 @@
                     <ul class="submenu">
                         <li><a href="{% url 'admin_all_permissions' %}">İzin Listesi</a></li>
                         <li><a href="{% url 'admin_add_permission' %}">İzin Ekle</a></li>
-                        <li><a href="{% url 'add_account_has_permission' %}">Kullanıcıya İzin Ekle</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title">Uygulamalar</li>
+                <li class="menu-title">UYGULAMALAR</li>
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Makaleler <span

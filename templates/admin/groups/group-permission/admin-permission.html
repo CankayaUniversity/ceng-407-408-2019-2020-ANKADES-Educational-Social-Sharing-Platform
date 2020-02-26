@@ -67,19 +67,19 @@
 
 
                                         <tbody>
-                                        {% if admin %}
-                                            {% for grp_perm in admin %}
+                                        {% if admins %}
+                                            {% for admin in admins %}
                                                 <tr>
-                                                    <td>{{ grp_perm.id }}</td>
-                                                    <td>{{ grp_perm.group_id.name }}</td>
-                                                    <td>{{ grp_perm.permission_id }}</td>
-                                                    <td>{{ grp_perm.created_date }}</td>
+                                                    <td>{{ admin.id }}</td>
+                                                    <td>{{ admin.groupId.title }}</td>
+                                                    <td>{{ admin.permissionId }}</td>
+                                                    <td>{{ admin.createdDate }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_group_permission' grp_perm.id %}"
+                                                        <a href="{% url 'admin_edit_group_permission' admin.id %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_group_permission' grp_perm.id %}"
+                                                        <a href="{% url 'admin_delete_group_permission' admin.id %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

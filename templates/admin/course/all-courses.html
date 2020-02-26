@@ -70,27 +70,27 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% if course_list %}
-                                            {% for courses in course_list %}
+                                        {% if courses %}
+                                            {% for course in courses %}
                                                 <tr>
-                                                    <td>{{ courses.title }}</td>
-                                                    <td>{{ courses.creator.get_full_name }}</td>
-                                                    <td>{{ courses.categoryId }}</td>
-                                                    <td>{{ courses.createdDate }}</td>
-                                                    <td>{{ courses.updatedDate }}</td>
-                                                    <td>{% if courses.isActive is True %}Aktif{% else %}
+                                                    <td>{{ course.title }}</td>
+                                                    <td>{{ course.creator.get_full_name }}</td>
+                                                    <td>{{ course.categoryId }}</td>
+                                                    <td>{{ course.createdDate }}</td>
+                                                    <td>{{ course.updatedDate }}</td>
+                                                    <td>{% if course.isActive is True %}Aktif{% else %}
                                                         Kapalı{% endif %}</td>
-                                                    <td>{% if courses.isPrivate is True %}Özel{% else %}
+                                                    <td>{% if course.isPrivate is True %}Özel{% else %}
                                                         Açık{% endif %}</td>
-                                                    <td>{{ courses.view }}</td>
-                                                    <td>{% if courses.is_active is True %}Aktif{% else %}
+                                                    <td>{{ course.view }}</td>
+                                                    <td>{% if course.is_active is True %}Aktif{% else %}
                                                         Kapalı{% endif %}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_course' courses.slug %}"
+                                                        <a href="{% url 'admin_edit_course' course.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_course' courses.slug %}"
+                                                        <a href="{% url 'admin_delete_course' course.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

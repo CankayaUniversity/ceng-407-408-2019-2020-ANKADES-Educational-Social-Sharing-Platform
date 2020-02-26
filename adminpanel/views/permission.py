@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -32,7 +34,7 @@ def admin_add_permission(request):
 @login_required(login_url="login_admin")
 def admin_delete_permission(request, slug):
     instance = get_object_or_404(Permission, slug=slug)
-    instance.delete()
+    instance.isActive = False
     messages.success(request, "İzin başarıyla silindi.")
     return redirect("admin_all_permissions")
 
@@ -43,6 +45,7 @@ def admin_edit_permission(request, slug):
     form = PermissionForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "İzin başarıyla güncellendi.")
         return redirect("admin_all_permissions")
@@ -52,35 +55,35 @@ def admin_edit_permission(request, slug):
 #Grup İzinleri
 @login_required(login_url="login_admin")
 def admin_site_admin_permission(request):
-    admin = GroupPermission.objects.filter(groupId__slug__contains="admin")
+    admins = GroupPermission.objects.all()
     context = {
-        "admin": admin,
+        "admins": admins,
     }
     return render(request, "admin/groups/group-permission/admin-permission.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_site_student_permission(request):
-    student = GroupPermission.objects.filter(groupId__slug__contains="ogrenci")
+    students = GroupPermission.objects.filter(groupId__slug__contains="ogrenci")
     context = {
-        "student": student,
+        "students": students,
     }
     return render(request, "admin/groups/group-permission/student-permission.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_site_teacher_permission(request):
-    teacher = GroupPermission.objects.filter(groupId__slug__contains="ogretmen")
+    teachers = GroupPermission.objects.filter(groupId__slug__contains="ogretmen")
     context = {
-        "teacher": teacher,
+        "teachers": teachers,
     }
     return render(request, "admin/groups/group-permission/teacher-permission.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_site_moderator_permission(request):
-    moderator = GroupPermission.objects.filter(groupID__slug__contains="moderator")
+    moderators = GroupPermission.objects.filter(groupId__slug__contains="moderator")
     context = {
-        "moderator": moderator,
+        "moderators": moderators,
     }
     return render(request, "admin/groups/group-permission/moderator-permission.html", context)

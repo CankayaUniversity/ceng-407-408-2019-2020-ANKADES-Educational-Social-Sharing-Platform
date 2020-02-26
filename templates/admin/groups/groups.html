@@ -63,6 +63,8 @@
                                             <th>Group Adı</th>
                                             <th>Group Slug</th>
                                             <th>Oluşturulduğu Tarih</th>
+                                            <th>Güncellendiği Tarih</th>
+                                            <th>Aktiflik</th>
                                             <th>İşlemler</th>
                                             <th>İzinler</th>
                                         </tr>
@@ -72,10 +74,12 @@
                                         {% if groups %}
                                             {% for grp in groups %}
                                                 <tr>
-                                                    <td style="width: 16%">{{ grp.title }}</td>
-                                                    <td style="width: 16%">{{ grp.slug }}</td>
-                                                    <td style="width: 16%">{{ grp.createdDate }}</td>
-                                                    <td style="width: 16%">
+                                                    <td>{{ grp.title }}</td>
+                                                    <td>{{ grp.slug }}</td>
+                                                    <td>{{ grp.createdDate }}</td>
+                                                    <td>{{ grp.updatedDate }}</td>
+                                                    <td>{% if grp.isActive == True %}Aktif{% else %}Kapalı{% endif %}</td>
+                                                    <td>
                                                         <a href="{% url 'admin_edit_group' grp.slug %}"
                                                            class="btn btn-success btn-sm"
                                                            style="width: 70px; margin-left: 50px">Düzenle</a>

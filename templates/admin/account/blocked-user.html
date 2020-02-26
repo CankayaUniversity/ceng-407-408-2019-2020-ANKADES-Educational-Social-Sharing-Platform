@@ -67,16 +67,15 @@
 
                                         <tbody>
                                         <tr>
-                                            {% if blocked_user %}
-                                                {% for blocked in blocked_user %}
-                                                    {% if blocked.is_active is False %}
-
-                                                        <td>{{ blocked.username }}</td>
-                                                        <td>{{ blocked.get_full_name }}</td>
-                                                        <td>{{ blocked.email }}</td>
+                                            {% if blockedUsers %}
+                                                {% for blockedUser in blockedUsers %}
+                                                    {% if blockedUser.is_active is False %}
+                                                        <td>{{ blockedUser.username }}</td>
+                                                        <td>{{ blockedUser.get_full_name }}</td>
+                                                        <td>{{ blockedUser.email }}</td>
                                                         <td>
-                                                            {% if users_count.is_active %} Aktif {% else %}
-                                                                Yasaklı {% endif %}</td>
+                                                            {% if blockedUser.is_active %} Aktif {% else %}
+                                                                Kapalı {% endif %}</td>
                                                         <td>
                                                             {% if user_groups %}
                                                                 {% for grp in user_groups %}

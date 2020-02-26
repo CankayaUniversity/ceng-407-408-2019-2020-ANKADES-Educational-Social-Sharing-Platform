@@ -51,14 +51,10 @@
                                 <div class="card-body">
 
                                     <h4 class="mt-0 header-title">
-                                        {% if student %}
-                                            ÖĞRENCİ
-                                        {% else %}
-                                            Grup Bulunamadı
-                                        {% endif %}
+                                        GRUP İZİNLERİ
                                     </h4>
                                     <p class="sub-title../plugins">
-                                        Aşağıdan öğrenci grubuna ait izinleri görüntüleyebilir, düzenleyebilirsiniz.
+                                        Aşağıdan grup izinlerini görüntüleyebilir, düzenleyebilirsiniz.
                                     </p>
 
                                     <table id="datatable-buttons"
@@ -69,25 +65,27 @@
                                             <th>Group</th>
                                             <th>İzin</th>
                                             <th>Oluşturulduğu Tarih</th>
-                                            <th>Düzenle</th>
+                                            <th>İşlemler</th>
                                             <th>Sil</th>
                                         </tr>
                                         </thead>
 
 
                                         <tbody>
-                                        {% if group_permission %}
-                                            {% for grp_perm in group_permission %}
+                                        {% if groupPermissions %}
+                                            {% for groupPermission in groupPermissions %}
                                                 <tr>
-                                                    <td>{{ grp_perm.groupId.title }}</td>
-                                                    <td>{{ grp_perm.permissionId }}</td>
-                                                    <td>{{ grp_perm.createdDate }}</td>
+                                                    <td>{{ groupPermission.groupId.title }}</td>
+                                                    <td>{{ groupPermission.permissionId.title }}</td>
+                                                    <td>{{ groupPermission.createdDate }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_group_permission' grp_perm.id %}"
+                                                        <a href="{% url 'admin_edit_group_permission' groupPermission.id %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
+                                                        <a href="{% url 'admin_deactivate_group_permission' groupPermission.id %}"
+                                                           class="btn btn-warning btn-sm">Etkisizleştir</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_group_permission' grp_perm.id %}"
+                                                        <a href="{% url 'admin_delete_group_permission' groupPermission.id %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

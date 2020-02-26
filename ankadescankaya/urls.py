@@ -5,25 +5,26 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
-
-# from account.views import AccountViewSet, AccountActivityViewSet
-# from adminpanel.views import AccountGroupsViewSet, AccountPermissionsViewSet, AdminActivityViewSet
-# from course.views import CourseViewSet, CourseSubToSubCategoryViewSet, CourseCategoryViewSet
+from account.views import AccountViewSet, GroupViewSet, AccountGroupViewSet, PermissionViewSet, \
+    AccountPermissionViewSet, GroupPermissionViewSet, AccountActivityViewSet, AdminActivityViewSet
 
 router = routers.SimpleRouter()
-#Account API
-# router.register('Account', AccountViewSet, "account")
-# router.register('Account/Groups', AccountGroupsViewSet, "accountGroups")
-# router.register('Account/Permissions', AccountPermissionsViewSet, "accountPermissions")
-#
-# #Course API
-# router.register('Course', CourseViewSet, 'course')
-# router.register('Course/Category', CourseCategoryViewSet, 'courseCategory')
-# router.register('Course/SubToSub/Category', CourseSubToSubCategoryViewSet, 'courseSubToSubCategory')
-#
-# router.register('Activity/Admin', AdminActivityViewSet, 'activityAdmin')
-# router.register('Activity/Account', AccountActivityViewSet, 'activityAccount')
+router.register('Permission', PermissionViewSet, "permission")
+router.register('Group', GroupViewSet, "group")
+router.register('Account', AccountViewSet, "account")
+router.register('AccountPermission', AccountPermissionViewSet, "accountPermission")
+router.register('GroupPermission', GroupPermissionViewSet, "groupPermission")
+router.register('AccountGroup', AccountGroupViewSet, "accountGroup")
+router.register('AccountActivity', AccountActivityViewSet, "accountActivity")
+router.register('AdminActivity', AdminActivityViewSet, "adminActivity")
 
+#Permission API
+
+
+#Account Permission API
+
+
+#Group Permission API
 schema_view = get_schema_view(
    openapi.Info(
       title="Ankades",
