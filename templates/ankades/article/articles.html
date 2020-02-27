@@ -39,7 +39,6 @@
     {#    {% endif %}#}
     <div id="canvas">
         <div id="box_wrapper">
-
             {% include 'ankades/layout/header.html' %}
             <section class="ls s-py-80 s-py-lg-120 s-py-xl-160">
                 <div class="container">
@@ -51,7 +50,7 @@
                                             class="text-center text-md-left vertical-item content-padding hero-bg post type-post status-publish format-standard has-post-thumbnail sticky rounded rounded-image-top post-color1">
                                         {% if article.media %}
                                             <div class="item-media post-thumbnail">
-                                                <img src="images/gallery/06.jpg" alt="">
+                                                <img src="{{ article.media.url }}" alt="">
                                                 <div class="media-links">
                                                     <a class="abs-link" title="" href="blog-single-right.html"></a>
                                                 </div>
@@ -60,28 +59,20 @@
 
                                         <div class="item-content">
                                             <header class="entry-header">
-                                                <div class="author-avatar">
-                                                    <img src="images/author.jpg" alt="">
-                                                </div>
-                                                <div class="post-data bg-maincolor">
-                                                    <a href="#">
-                                                        <h6>02<span>oct</span></h6>
-                                                    </a>
-                                                </div>
                                                 <div class="header-content">
-											<span class="post-tags">
-												<i class="fa fa-tags fs-14"></i>
-												<span class="screen-reader-text">Categories</span>
-												<a href="blog-right.html" rel="category tag">
-													Internet,
-												</a>
-												<a href="blog-right.html" rel="category tag">
-													Cable,
-												</a>
-												<a href="blog-right.html" rel="category tag">
-													Iptv
-												</a>
-											</span>
+                                                    <span class="post-tags">
+                                                        <i class="fa fa-tags fs-14"></i>
+                                                        <span class="screen-reader-text">Categories</span>
+                                                        <a href="blog-right.html" rel="category tag">
+                                                            Internet,
+                                                        </a>
+                                                        <a href="blog-right.html" rel="category tag">
+                                                            Cable,
+                                                        </a>
+                                                        <a href="blog-right.html" rel="category tag">
+                                                            Iptv
+                                                        </a>
+                                                    </span>
                                                     <h3 class="entry-title">
                                                         <a href="blog-single-right.html" rel="bookmark">
                                                             Sample Post With Image
@@ -98,21 +89,27 @@
                                                     umet
                                                     nusi dolores est dui tu emet impecus.</p>
                                                 <div class="post-footer d-md-flex align-items-center justify-content-between">
-                                                    <a href="#"
-                                                       class="read-more btn btn-primary"><span>Read More</span></a>
+                                                    <a href="{% url 'article_detail' article.slug %}"
+                                                       class="read-more btn btn-primary"><span>Devamı</span></a>
                                                     <div class="entry-meta color-darkgrey post-meta">
-												<span class="comment-count">
-													<a href="#">
-														<i class="color-main fa fa-comments fs-14"></i>
-														5 comments
-													</a>
-												</span>
+                                                    <span class="post-tags">
+                                                        <i class="fa fa-calendar fs-14"></i>
+                                                        <a href="#">
+                                                            {{ article.createdDate }}
+                                                        </a>
+                                                    </span>
+                                                        <span class="comment-count">
+                                                            <a href="#">
+                                                                <i class="color-main fa fa-comments fs-14"></i>
+                                                                5 comments
+                                                            </a>
+                                                        </span>
                                                         <span class="like-count">
-													<a href="#">
-														<i class="color-main fa fa-heart fs-14"></i>
-														36 Likes
-													</a>
-												</span>
+                                                            <a href="#">
+                                                                <i class="color-main fa fa-heart fs-14"></i>
+                                                                36 Likes
+                                                            </a>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div><!-- .entry-content -->

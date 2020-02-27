@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
+from account.models import Group, AccountGroup
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 
@@ -66,27 +67,32 @@ def article_categories(request):
 
 def article_detail(request, slug):
     articleDetail = get_object_or_404(Article, slug=slug)
-    articles = Article.objects.get(articleId)
+    articles = Article.objects.all()
+    accountGroup = AccountGroup.objects.get(userId__article__slug=slug)
     articleComments = ArticleComment.objects.all()
     articleCategories = ArticleCategory.objects.all()
+    articleDetail.view += 1
     context = {
         "articleDetail": articleDetail,
         "articles": articles,
+        "accountGroup": accountGroup,
         "articleComments": articleComments,
         "articleCategories": articleCategories,
     }
     return render(request, "ankades/article/article-detail.html", context)
 
 
-@login_required(login_url="user:login")
-def add_article_comment(request, id):
-    article = get_object_or_404(Article, id=id)
-    if request.method == "POST":
-        article_comment_author = request.POST.get("article_comment_author")
-        article_comment_content = request.POST.get("article_comment_content")
-
-        new_comment = ArticleComment(article_comment_author=article_comment_author,
-                                     article_comment_content=article_comment_content)
-        new_comment.article_comment = article
-        new_comment.save()
-    return redirect(reverse("article:article_detail", kwargs={"id": id}))
+# @login_required(login_url="user:login")
+# def add_article_comment(request, slug):
+#     article = get_object_or_404(Article, slug=slug)
+#     articleCommet = ArticleComment.objects.get(articleId__slug=slug)
+#     if request.method == "POST":
+#          = request.POST.get("article_comment_author")
+#         article_comment_content = request.POST.get("article_comment_content")
+#
+#         new_comment = ArticleComment(article_comment_author=article_comment_author,
+#                                      article_comment_content=article_comment_content)
+#         new_comment.article_comment = article
+#         new_comment.save()
+#     # return redirect(reverse("article:article_detail", kwargs={"id": id}))
+#     return render(request, "ankades/article/article-detail.html")

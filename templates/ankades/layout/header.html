@@ -67,31 +67,37 @@
                     </ul>
                 </nav>
             </div>
-            <div class="col-xl-2 col-lg-3 text-right d-none d-lg-block">
-                <ul class="top-includes icons-include d-none d-xl-block">
-                    <li>
-                        <span class="icon-styled bg-white round fs-14">
-							<a href="#" class="search_modal_button">
-								<i class="fa color-main fa-search"></i>
-							</a>
-						</span>
-                    </li>
-                    <li>
-						<span class="icon-styled bg-white round fs-14">
-							<a href="{% url 'edit_profile' request.user.username %}">
-								<i class="fa color-main fa-user"></i>
-							</a>
-						</span>
-                    </li>
-                    <li>
-						<span class="icon-styled bg-white round fs-14">
-							<a href="#">
-								<i class="fa color-main fa-envelope-o fs-14"></i>
-							</a>
-						</span>
-                    </li>
-                </ul>
-            </div>
+            {% if request.user.is_authenticated %}
+                <div class="col-xl-2 col-lg-3 text-right d-none d-lg-block">
+                    <ul class="top-includes icons-include d-none d-xl-block">
+                        <li>
+                            <a href="{% url 'edit_profile' request.user.username %}">
+                                <i class="fa color-main3 fa-user"></i> Hesabım
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'logout_account' %}">
+                                <i class="fa color-main3 fa-lock"></i> Çıkış Yap
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="col-xl-2 col-lg-3 text-right d-none d-lg-block">
+                    <ul class="top-includes icons-include d-none d-xl-block">
+                        <li>
+                            <a href="{% url 'login_account' %}">
+                                <i class="fa color-main3 fa-user"></i> Giriş Yap
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'register_account' %}">
+                                <i class="fa color-main3 fa-user-plus"></i> Kayıt Ol
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </div>
     <span class="toggle_menu"><span></span></span>

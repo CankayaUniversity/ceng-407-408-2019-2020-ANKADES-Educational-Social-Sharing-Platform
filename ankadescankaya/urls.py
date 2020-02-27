@@ -43,7 +43,6 @@ urlpatterns = [
     path('', include("account.urls")), #include ankades account
     path('', include("article.urls")), #include ankades article
     # path('', include("question.urls")), #include ankades question applications url
-    # path('makaleler/', include("article.urls")), #include ankades article applications url
     # path('kullanici/', include("account.urls")), #include ankades account applications url
     # path('cikmis-sorular/', include("exam.urls")), #include ankades pre-exam applications url
 

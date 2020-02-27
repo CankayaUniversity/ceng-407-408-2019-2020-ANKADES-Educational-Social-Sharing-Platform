@@ -5,5 +5,5 @@ from article import views
 
 urlpatterns = [
     path('makaleler/', views.all_articles, name="all_articles"),
-    # path('makaleler/<slug:slug>', views.article_detail, name="article_detail"),
+    path('makale/<slug:slug>', views.article_detail, name="article_detail"),
 ]
