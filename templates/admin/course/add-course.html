@@ -1,5 +1,5 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Kurs Kategori Ekle{% endblock %}
+{% block title %}Kurs Ekle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -22,12 +22,12 @@
                     <div class="page-title-box">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h4 class="page-title">Kurs Kategori Ekleme</h4>
+                                <h4 class="page-title">Kurs Ekleme</h4>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-right">
                                     <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="">Kurs Kategori Ekle</a></li>
+                                    <li class="breadcrumb-item"><a href="">Kurs Ekle</a></li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
@@ -46,9 +46,10 @@
                             <div class="card m-b-30">
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data" class="form-control-user">
-                                        {% csrf_token %}
-                                        {{ form.media }}
-                                        {{ form|crispy }}
+                                            {% csrf_token %}
+                                            {{ form.media }}
+                                            {{ form|crispy }}
+                                            {{ form_as.p }}
                                         <br>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
                                         </button>

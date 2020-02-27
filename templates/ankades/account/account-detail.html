@@ -1,0 +1,333 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block body %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static "ankades/css/shop.css" %}" class="color-switcher-link">
+
+    <div class="preloader">
+        <div class="preloader_image"></div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" aria-labelledby="search_modal" id="search_modal">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="widget widget_search">
+            <a href="./" class="logo">
+                <span class="logo-text py-20"><strong>Maxi</strong>com</span>
+            </a>
+            <form method="get" class="searchform search-form" action="/">
+                <div class="form-group">
+                    <input type="text" value="" name="search" class="form-control" placeholder="Search keyword"
+                           id="modal-search-input">
+                </div>
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </div>
+    </div>
+    {#    {% if messages %}#}
+    {#        {% for message in messages %}#}
+    {#            <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">#}
+    {#                <div class="fw-messages-wrap ls p-normal">#}
+    {#                    <!-- Uncomment this UL with LI to show messages in modal popup to your user: -->#}
+    {#                    <ul class="list-unstyled">#}
+    {#                        <li>#}
+    {#                            {{ message }}#}
+    {#                        </li>#}
+    {#                    </ul>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#    {% endif %}#}
+    <div id="canvas">
+        <div id="box_wrapper">
+
+            {% include 'ankades/layout/header.html' %}
+            <section class="ls s-py-80 s-py-lg-120 s-py-xl-160 team-single">
+                <div class="container">
+                    <div class="row">
+                        <div class="offset-lg-1 col-lg-10">
+                            <div class="row c-gutter-60 align-items-center">
+                                <div class="col-lg-6 rounded-images">
+                                    <img src="{{ userDetail.image.url }}" alt="">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="d-block d-lg-none divider-20"></div>
+                                    <div class="item-content">
+                                        <h4>{{ userDetail.get_full_name }}</h4>
+                                        <p class="social-icons">
+                                            <a href="#" class="fa fa-facebook color-icon bg-icon rounded-icon"
+                                               title="facebook"></a>
+                                            <a href="#" class="fa fa-twitter color-icon bg-icon rounded-icon"
+                                               title="twitter"></a>
+                                            <a href="#" class="fa fa-google color-icon bg-icon rounded-icon"
+                                               title="google"></a>
+                                            <a href="#" class="fa fa-youtube-play color-icon bg-icon rounded-icon"
+                                               title="youtube-play"></a>
+                                            <a href="#" class="fa fa-linkedin color-icon bg-icon rounded-icon"
+                                               title="linkedin"></a>
+                                        </p>
+                                        <table class="table team-table">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row">Rol:</th>
+                                                <td>{{ userOccupation.groupId.title }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Experience:</th>
+                                                <td>7 Years</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Email:</th>
+                                                <td class="link-a">
+                                                    <a href="#">{{ userDetail.email }}</a>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-bottom">
+                                                <th scope="row">Location:</th>
+                                                <td>Westmond, MA</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="entry-content">
+                                        <h5>Biography:</h5>
+                                        <p>
+                                            Doloremque quam. Exercitation totam or cupidatat culpa but autem. In labore
+                                            so nostrud asper natur officia magna, so quasi. Sit nequeporro dolor Iure.
+                                            In aperiam vitae suscipit, incidunt and accusantium laboris. In aspernatur
+                                            and mollit so ullamco. Fusce eros elit, cursus accumsan maximus in,
+                                            scelerisque eu massa.
+                                        </p>
+                                        <p>
+                                            Aperiam nemo dolores omnis, aliqua error. Quia proident, so dolor. Modi
+                                            dolor, consequuntur aut eman but ullamco. Magnam. Inventore velit quae or
+                                            laborum. Incidunt sit. Sequi occaecat dolore yet sed velit mollit but enim.
+                                            Ipsam fugit and consectetur quia. Explicabo quis quaerat. Reprehen derit.
+                                            Iste ut yet sequi, and mollit est. Excepteur incidunt.
+                                        </p>
+                                        <h5>Personal Experience</h5>
+                                        <p>
+                                            Doloremque quam. Exercitation totam or cupidatat culpa but autem. In labore
+                                            so nostrud asper natur officia magna, so quasi. Sit nequeporro dolor Iure.
+                                            Pellentesque lorem mauris, vehicula vel nulla nec.
+                                        </p>
+                                        <p>
+                                            <div class="row c-gutter-60 mt-20">
+                                                <div class="col-lg-7">
+                                                    <span class="small-text fw-700">Internet connection</span>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar"
+                                                             data-transitiongoal="93" aria-valuemin="0"
+                                                             aria-valuemax="100">
+                                                            <span>93%</span>
+                                                        </div>
+                                                    </div>
+                                                    <span class="small-text fw-700">IPTV installation</span>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar"
+                                                             data-transitiongoal="90" aria-valuemin="0"
+                                                             aria-valuemax="100">
+                                                            <span>90%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <span class="small-text fw-700">Voip Setup</span>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                             data-transitiongoal="98" aria-valuemin="0"
+                                                             aria-valuemax="100">
+                                                            <span>98%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <span class="small-text fw-700">Sales Managing</span>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                             data-transitiongoal="93" aria-valuemin="0"
+                                                             aria-valuemax="100">
+                                                            <span>93%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-block d-lg-none divider-20"></div>
+                                                <div class="col-lg-5">
+                                        <p>
+                                            Rem explicabo proident, and culpa and proident for iste and modi. Tot am
+                                            aliqua but exercitation. Tiam ut bibendum leo.
+                                        </p>
+                                        <p>
+                                            Lorem and ex, and incidunt. Ad cons equuntur. Laboriosam conse quatur ad.
+                                            Ipsa perspiciatis, but laboris and omnis. Excepteur quia totam or cupidatat.
+                                        </p>
+                                    </div>
+                                </div>
+                                <h5>Bana Mesaj Gönder</h5>
+                                {# Daha Sonra Düzenlenecek #}
+                                <form class="team-form c-mb-20 c-gutter-20" method="post" action="/">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group has-placeholder">
+                                                <label for="name">Full Name <span class="required">*</span></label>
+                                                <i class="fa fa-user color-main2"></i>
+                                                <input type="text" aria-required="true" size="30" value="" name="name"
+                                                       id="name" class="form-control" placeholder="Full Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group has-placeholder">
+                                                <label for="email">Email address<span class="required">*</span></label>
+                                                <i class="fa fa-envelope color-main2"></i>
+                                                <input type="email" aria-required="true" size="30" value="" name="email"
+                                                       id="email" class="form-control" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group has-placeholder">
+                                                <label for="phone">Phone Number<span class="required">*</span></label>
+                                                <i class="fa fa-phone color-main2"></i>
+                                                <input type="text" aria-required="true" size="30" value="" name="phone"
+                                                       id="phone" class="form-control" placeholder="Phone Number">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group has-placeholder">
+                                                <label for="topic">Your Topic<span class="required">*</span></label>
+                                                <i class="fa fa-paperclip color-main2"></i>
+                                                <input type="text" aria-required="true" size="30" value=""
+                                                       name="your topic" id="topic" class="form-control"
+                                                       placeholder="Your Topic">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group has-placeholder textarea">
+                                                <label for="message">Your Message</label>
+                                                <i class="fa fa-edit color-main2"></i>
+                                                <textarea aria-required="true" rows="8" cols="45" name="message"
+                                                          id="message" class="form-control"
+                                                          placeholder="Your Message"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <button type="submit" id="contact_form_submit" name="contact_submit"
+                                                        class="btn btn-maincolor">
+                                                    <span>Submit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="page_footer ls ms s-pt-80 s-pb-70 s-py-lg-120 s-pt-xl-135 s-pb-xl-105 c-gutter-60 text-center text-md-left">
+                <div class="container">
+                    <div class="row">
+                        <div class="divider-20 d-none d-xl-block"></div>
+
+                        <div class="col-md-6 col-xl-3 order-xl-1 order-md-1 animate" data-animation="fadeInUp">
+
+                            <div class="widget widget_text">
+                                <h4 class="widget-title">About</h4>
+                                <p>
+                                    Welcome largest broadband and Internet services provider where you can choose the
+                                    best plan ever.
+                                </p>
+                                <div class="widget widget_social_buttons">
+                                    <a href="#" class="fa fa-facebook color-bg-icon rounded-icon" title="facebook"></a>
+                                    <a href="#" class="fa fa-twitter color-bg-icon rounded-icon" title="twitter"></a>
+                                    <a href="#" class="fa fa-youtube-play color-bg-icon rounded-icon"
+                                       title="youtube-play"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 order-xl-2 order-md-4 animate" data-animation="fadeInUp">
+                            <div class="widget links">
+                                <h4 class="widget-title">Links</h4>
+                                <ul>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Packages</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">MaxiNet Media</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Connection</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Support</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Video Tutorials</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 order-xl-3 order-md-3 animate" data-animation="fadeInUp">
+                            <div class="widget services-links">
+                                <h4 class="widget-title">Services</h4>
+                                <ul>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">4K Cable TV</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Dedicated Server</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">High Speed Internet</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Smartphone Service</a>
+                                    </li>
+                                    <li class="cat-item">
+                                        <a href="blog-right.html">Dedicated Server</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 order-xl-4 order-md-2 animate" data-animation="fadeInUp">
+                            <div class="widget widget_icons_list">
+                                <h4 class="widget-title">Call Us</h4>
+                                <p>23-456-7890</p>
+                                <a href="#" class="small-text">
+                                    <i class="fa fa-envelope-o color-main fs-14"></i>
+                                    email us
+                                </a>
+                                <h4 class="widget-title">Visit Us</h4>
+                                <p>246 Benson St., Ashwaubenon</p>
+                                <a href="#" class="small-text">
+                                    <i class="fa fa-map-marker color-main3 fs-14"></i>
+                                    Get Direction
+                                </a>
+                            </div>
+                            <div class="divider-45 d-none d-md-block d-xlz-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <section class="page_copyright ds s-py-10 copyright-bg">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="divider-15 d-none d-lg-block"></div>
+                        <div class="col-md-12 text-center">
+                            <p>&copy; Copyright <span class="copyright_year">2019</span> All Rights Reserved</p>
+                        </div>
+                        <div class="divider-15 d-none d-lg-block"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

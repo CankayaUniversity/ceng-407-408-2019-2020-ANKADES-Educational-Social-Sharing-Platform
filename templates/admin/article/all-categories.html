@@ -1,5 +1,5 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Kurs Kategori Ekle{% endblock %}
+{% block title %}Makale Kategori{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -18,30 +18,23 @@
                     <div class="page-title-box">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h4 class="page-title">Kurs Kategori Listesi</h4>
+                                <h4 class="page-title">Makale Kategori Listesi</h4>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-right">
-                                    <li class="breadcrumb-item"><a href="">Kurs</a></li>
-                                    <li class="breadcrumb-item"><a href="">Kurs Kategori Listesi</a></li>
+                                    <li class="breadcrumb-item"><a href="">Makale</a></li>
+                                    <li class="breadcrumb-item"><a href="">Makale Kategori Listesi</a></li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
                     </div>
-                    {% if messages %}
-                        <ul class="messages">
-                            {% for message in messages %}
-                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
-                                        {% if message.tags %} {% endif %}>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                    {#Ana Kategori#}
                     <div class="row">
                         <div class="col-12">
                             <div class="card m-b-30">
                                 <div class="card-body">
 
-                                    <h4 class="mt-0 header-title">Kategori Listesi</h4>
+                                    <h4 class="mt-0 header-title">Makale Listesi</h4>
                                     <p class="sub-title../plugins">Aşağıdan ana kategorileri görüntüleyebilir,
                                         düzenleyebilirsiniz.
                                     </p>
@@ -53,23 +46,30 @@
                                             <th>Kurs Kategori Başlığı</th>
                                             <th>Kurs Kategori Oluşturan</th>
                                             <th>Kurs Kategori Oluşturulma Tarihi</th>
+                                            <th>Kurs Kategori Güncellenme Tarihi</th>
+                                            <th>Aktiflik</th>
+                                            <th>Üst Kategorisi</th>
                                             <th>Düzenle</th>
                                             <th>Sil</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% if course_sub_categories_list %}
-                                            {% for courseSubCategory in course_sub_categories_list %}
+                                        {% if article_categories_list %}
+                                            {% for article_category in article_categories_list %}
                                                 <tr>
-                                                    <td>{{ courseSubCategory.course_sub_category_title }}</td>
-                                                    <td>{{ courseSubCategory.course_sub_category_creator.get_full_name }}</td>
-                                                    <td>{{ courseSubCategory.course_sub_category_created_date }}</td>
+                                                    <td>{{ article_category.title }}</td>
+                                                    <td>{{ course_category.creator.get_full_name }}</td>
+                                                    <td>{{ article_category.createdDate }}</td>
+                                                    <td>{{ article_category.updatedDate }}</td>
+                                                    <td>{% if article_category.isActive is True %}Aktif{% else %}
+                                                        Kapalı{% endif %}</td>
+                                                    <td>{{ article_category.parentId.title }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_course_sub_category' courseSubCategory.course_sub_category_slug %}"
+                                                        <a href="{% url 'admin_edit_course_category' article_category.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_course_sub_category' courseSubCategory.course_sub_category_slug %}"
+                                                        <a href="{% url 'admin_delete_course_category' article_category.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

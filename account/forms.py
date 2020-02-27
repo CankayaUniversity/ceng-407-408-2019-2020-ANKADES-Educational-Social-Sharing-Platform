@@ -2,6 +2,9 @@ from django import forms
 
 
 # Users
+from account.models import Account
+
+
 class AccountRegisterForm(forms.Form):
     username = forms.CharField(min_length=3, max_length=50, label="Kullanıcı Adı")
     email = forms.EmailField(label="Email Adresi")
@@ -39,4 +42,17 @@ class AccountLoginForm(forms.Form):
             "password": password
         }
         return values
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ["username", "first_name", "last_name", "email", "image", "description"]
+        help_texts = {
+            'username': None,
+            'first_name': None,
+            'last_name': None,
+            'email': None,
+            'description': None
+        }
 

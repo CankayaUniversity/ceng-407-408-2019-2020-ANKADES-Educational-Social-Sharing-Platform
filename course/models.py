@@ -11,7 +11,7 @@ class CourseCategory(models.Model):
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
     title = models.CharField(max_length=254, verbose_name="Kurs Kategori Başlığı")
     slug = models.SlugField(unique=True, max_length=254, verbose_name="Kurs Kategori Slug")
-    description = models.TextField(verbose_name="Kurs Kategori Açıklama", null=True, blank=True)
+    description = RichTextField(verbose_name="Kurs Kategori Açıklama", null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Kurs Kategori Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Kurs Kategori Güncellendiği Tarih", null=True, blank=True)

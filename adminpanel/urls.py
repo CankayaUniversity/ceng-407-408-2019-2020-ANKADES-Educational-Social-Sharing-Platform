@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
 
-from adminpanel.views import views, permission, course, account
+from adminpanel.views import views, permission, course, account, article
 from adminpanel.views import group
 
 urlpatterns = [
@@ -82,7 +82,7 @@ urlpatterns = [
 
     # kurslar/...
     path('kurslar/', course.admin_courses, name="admin_courses"),
-    # path('kurslar/ekle', course.admin_add_course, name="admin_add_course"),
+    path('kurslar/ekle', course.admin_add_course, name="admin_add_course"),
     path('kurslar/duzenle/<slug:slug>', course.admin_edit_course, name="admin_edit_course"),
     path('kurslar/sil/<slug:slug>', course.admin_delete_course, name="admin_delete_course"),
 
@@ -93,5 +93,19 @@ urlpatterns = [
          name="admin_edit_course_category"),
     path('kurslar/kurs-kategorileri/sil/<slug:slug>', course.admin_delete_course_category,
          name="admin_delete_course_category"),
+
+    # makaleler/...
+    path('makaleler/', article.admin_articles, name="admin_articles"),
+    path('makaleler/ekle', article.admin_add_article, name="admin_add_article"),
+    path('makaleler/duzenle/<slug:slug>', article.admin_edit_article, name="admin_edit_article"),
+    path('makaleler/sil/<slug:slug>', article.admin_delete_article, name="admin_delete_article"),
+
+    # kurslar/kurs-kategorileri/...
+    path('makaleler/makale-kategorileri/', article.admin_article_category, name="admin_article_category"),
+    path('makaleler/makale-kategorileri/ekle/', article.admin_add_article_category, name="admin_add_article_category"),
+    path('makaleler/makale-kategorileri/düzenle/<slug:slug>', article.admin_edit_article_category,
+         name="admin_edit_article_category"),
+    path('makaleler/makale-kategorileri/sil/<slug:slug>', article.admin_delete_article_category,
+         name="admin_delete_article_category"),
 
 ]

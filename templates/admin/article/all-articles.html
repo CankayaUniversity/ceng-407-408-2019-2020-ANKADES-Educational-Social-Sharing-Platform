@@ -70,25 +70,25 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% if courses %}
-                                            {% for course in courses %}
+                                        {% if articles %}
+                                            {% for article in articles %}
                                                 <tr>
-                                                    <td>{{ course.title }}</td>
-                                                    <td>{{ course.creator.get_full_name }}</td>
-                                                    <td>{{ course.categoryId }}</td>
-                                                    <td>{{ course.createdDate }}</td>
-                                                    <td>{{ course.updatedDate }}</td>
-                                                    <td>{% if course.isActive is True %}Aktif{% else %}
+                                                    <td>{{ article.title }}</td>
+                                                    <td>{{ article.creator.get_full_name }}</td>
+                                                    <td>{{ article.categoryId }}</td>
+                                                    <td>{{ article.createdDate }}</td>
+                                                    <td>{{ article.updatedDate }}</td>
+                                                    <td>{% if article.isActive is True %}Aktif{% else %}
                                                         Kapalı{% endif %}</td>
-                                                    <td>{% if course.isPrivate is True %}Özel{% else %}
+                                                    <td>{% if article.isPrivate is True %}Özel{% else %}
                                                         Açık{% endif %}</td>
-                                                    <td>{{ course.view }}</td>
+                                                    <td>{{ article.view }}</td>
                                                     <td>
-                                                        <a href="{% url 'admin_edit_course' course.slug %}"
+                                                        <a href="{% url 'admin_edit_article' article.slug %}"
                                                            class="btn btn-success btn-sm">Düzenle</a>
                                                     </td>
                                                     <td>
-                                                        <a href="{% url 'admin_delete_course' course.slug %}"
+                                                        <a href="{% url 'admin_delete_article' article.slug %}"
                                                            class="btn btn-danger btn-sm">Sil</a>
                                                     </td>
                                                 </tr>

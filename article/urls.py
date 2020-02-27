@@ -1,7 +1,9 @@
+from django.conf.urls import url
 from django.urls import path
 
-from question import views
+from article import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('makaleler/', views.all_articles, name="all_articles"),
+    # path('makaleler/<slug:slug>', views.article_detail, name="article_detail"),
 ]

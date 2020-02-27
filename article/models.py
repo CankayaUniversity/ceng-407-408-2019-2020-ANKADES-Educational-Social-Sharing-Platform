@@ -41,10 +41,33 @@ class Article(models.Model):
     updatedDate = models.DateTimeField(verbose_name="Makale Güncellendiği Tarih", null=True, blank=True)
     view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+    isPrivate = models.BooleanField(default=False, verbose_name="Özellik")
+    like = models.PositiveIntegerField(default=0, verbose_name="Makale Beğeni Sayısı")
 
     def __str__(self):
         return self.title
 
     class Meta:
         db_table = "Article"
+        ordering = ['-createdDate']
+
+
+class ArticleComment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
+    articleId = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name="Makale Yorumcusu")
+    creator = models.CharField(max_length=50, verbose_name="Kullanıcı Adı", null=False, blank=False)
+    content = RichTextField(verbose_name="Yorum", blank=False, null=False)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    parentId = models.ForeignKey('self', null=True, related_name="Cevap", on_delete=models.CASCADE)
+    isRoot = models.BooleanField(default=False, verbose_name="Root Durumu")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
+    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
+
+    def __str__(self):
+        return self.creator
+
+    class Meta:
+        db_table = "ArticleComment"
         ordering = ['-createdDate']

@@ -5,20 +5,18 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
-from account.views import AccountViewSet, GroupViewSet, AccountGroupViewSet, PermissionViewSet, \
-    AccountPermissionViewSet, GroupPermissionViewSet, AccountActivityViewSet, AdminActivityViewSet
-from adminpanel.serializers import UserViewSet
+from adminpanel.views.serializer_view import PermissionViewSet, GroupViewSet, AccountViewSet, AccountPermissionViewSet, \
+    GroupPermissionViewSet, AccountGroupViewSet, AccountActivityViewSet, AdminActivityViewSet
 
 router = routers.SimpleRouter()
 router.register('Permission', PermissionViewSet, "permission")
 router.register('Group', GroupViewSet, "group")
 router.register('Account', AccountViewSet, "account")
-router.register('Account/Permission', AccountPermissionViewSet, "accountPermission")
-router.register('Group/Permission', GroupPermissionViewSet, "groupPermission")
+router.register('AccountPermission', AccountPermissionViewSet, "accountPermission")
+router.register('GroupPermission', GroupPermissionViewSet, "groupPermission")
 router.register('AccountGroup', AccountGroupViewSet, "accountGroup")
 router.register('AccountActivity', AccountActivityViewSet, "accountActivity")
 router.register('AdminActivity', AdminActivityViewSet, "adminActivity")
-router.register('User', UserViewSet, "user")
 
 #Permission API
 
@@ -43,6 +41,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('ankades-admin-panel/', include("adminpanel.urls")), #include ankades admin panel applications url
     path('', include("account.urls")), #include ankades account
+    path('', include("article.urls")), #include ankades article
     # path('', include("question.urls")), #include ankades question applications url
     # path('makaleler/', include("article.urls")), #include ankades article applications url
     # path('kullanici/', include("account.urls")), #include ankades account applications url

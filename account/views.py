@@ -1,59 +1,11 @@
+import datetime
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from rest_framework import viewsets
-
-from account.forms import AccountLoginForm, AccountRegisterForm
-from account.models import Account, Group, AccountGroup, Permission, AccountPermission, GroupPermission, AccountActivity
-from adminpanel.models import AdminActivity
-
-from adminpanel.serializers import AccountSerializer, GroupSerializer, AccountGroupSerializer, PermissionSerializer, \
-    AccountPermissionSerializer, GroupPermissionSerializer, AccountActivitySerializer, AdminActivitySerializer
-
-
-class PermissionViewSet(viewsets.ModelViewSet):
-    queryset = Permission.objects.all().order_by('-date_joined')
-    serializer_class = PermissionSerializer
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all().order_by('-createdDate')
-    serializer_class = GroupSerializer
-
-
-class AccountViewSet(viewsets.ModelViewSet):
-    queryset = Account.objects.all().order_by('-date_joined')
-    serializer_class = AccountSerializer
-
-
-class AccountPermissionViewSet(viewsets.ModelViewSet):
-    queryset = AccountPermission.objects.all().order_by('-createdDate')
-    serializer_class = AccountPermissionSerializer
-
-
-class GroupPermissionViewSet(viewsets.ModelViewSet):
-    queryset = GroupPermission.objects.all().order_by('-createdDate')
-    serializer_class = GroupPermissionSerializer
-
-
-class AccountGroupViewSet(viewsets.ModelViewSet):
-    queryset = AccountGroup.objects.all().order_by('-createdDate')
-    serializer_class = AccountGroupSerializer
-
-
-class AccountActivityViewSet(viewsets.ModelViewSet):
-    queryset = AccountActivity.objects.all().order_by('-activityCreatedDate')
-    serializer_class = AccountActivitySerializer
-
-
-class AdminActivityViewSet(viewsets.ModelViewSet):
-    queryset = AdminActivity.objects.all().order_by('-activityCreatedDate')
-    serializer_class = AdminActivitySerializer
-
-
-def index(request):
-    return render(request, "ankades/index.html")
+from django.shortcuts import redirect, render
+from rest_framework.generics import get_object_or_404
+from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm
+from account.models import Account, AccountGroup
 
 
 def login_account(request):
@@ -115,3 +67,33 @@ def register_account(request):
     else:
         messages.error(request, "Zaten giriş yapılmış.")
         return redirect("index")
+
+def account_detail(request, username):
+    userDetail = get_object_or_404(Account, username=username)
+    userOccupation = AccountGroup.objects.get(userId__username=username)
+    context = {
+        "userDetail": userDetail,
+        "userOccupation": userOccupation,
+    }
+    return render(request, "ankades/account/account-detail.html", context)
+
+
+@login_required(login_url="login_admin")
+def edit_profile(request, username):
+    instance = get_object_or_404(Account, username=username)
+    form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
+        instance.username = username
+        instance.save()
+        messages.success(request, "Profil başarıyla düzenlendi !")
+        return redirect("edit_profile")
+    context = {
+        "form": form,
+    }
+    return render(request, "ankades/account/edit-profile.html", context)
+
+
+def index(request):
+    return render(request, "ankades/index.html")

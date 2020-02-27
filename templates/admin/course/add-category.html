@@ -46,8 +46,10 @@
                             <div class="card m-b-30">
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data" class="form-control-user">
-                                        {% csrf_token %}
-                                        {{ form|crispy }}
+                                            {% csrf_token %}
+                                            {{ form.media }}
+                                            {{ form|crispy }}
+                                            {{ form_as.p }}
                                         <br>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
                                         </button>

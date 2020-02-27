@@ -1,33 +1,24 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Kurs Alt Kategori Düzenle{% endblock %}
-{% load static %}
+{% block title %}Makale Düzenle | {{ request.user.username|upper }}{% endblock %}
 {% load crispy_forms_tags %}
 {% block body %}
     <div id="wrapper">
-        <!-- Top Bar Start -->
         {% include "admin/layout/navbar.html" %}
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
         {% include "admin/layout/sidebar.html" %}
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
         <div class="content-page">
-            <!-- Start content -->
             <div class="content">
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h4 class="page-title">Kurs Kategori Düzenleme</h4>
+                                <h4 class="page-title">Makale Düzenleme</h4>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-right">
-                                    <li class="breadcrumb-item"><a href="">Kurs Kategori</a></li>
-                                    <li class="breadcrumb-item"><a href="">Kurs Kategori Düzenle</a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Makaleler</a></li>
+                                    <li class="breadcrumb-item">Makale
+                                        Düzenle
+                                    </li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
@@ -36,7 +27,8 @@
                     {% if messages %}
                         <ul class="messages">
                             {% for message in messages %}
-                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                    style="list-style: none"
                                         {% if message.tags %} {% endif %}>{{ message }}</li>
                             {% endfor %}
                         </ul>
@@ -47,8 +39,8 @@
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data" class="form-control-user">
                                         {% csrf_token %}
-                                        {{ form.media }}
                                         {{ form|crispy }}
+                                        {{ form_as.p }}
                                         <br>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">Düzenle
                                         </button>
@@ -57,18 +49,12 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
-
-
                 </div>
-                <!-- container-fluid -->
-
             </div>
-            <!-- content -->
-
-
+            <footer class="footer">
+                © 2019 - 2020 Stexo <span class="d-none d-sm-inline-block"> - Crafted with <i
+                    class="mdi mdi-heart text-danger"></i> by Themesdesign</span>.
+            </footer>
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
     </div>
-{% endblock %}
+{% endblock body %}

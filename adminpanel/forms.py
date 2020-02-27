@@ -1,5 +1,6 @@
 from django import forms
 from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
+from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
 
 
@@ -60,3 +61,15 @@ class AccountPermissionForm(forms.ModelForm):
     class Meta:
         model = AccountPermission
         fields = ["userId", "permissionId", "isActive"]
+
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
+
+
+class ArticleCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ArticleCategory
+        fields = ["parentId", "title", "slug", "description"]

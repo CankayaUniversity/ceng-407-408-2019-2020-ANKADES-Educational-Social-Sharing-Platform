@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -55,6 +56,7 @@ def login_admin(request):
             else:
                 if user.is_active and user.is_superuser:
                     login(request, user)
+                    messages.success(request, "Hoş geldiniz " + user.get_full_name())
                     return redirect("admin_index")
                 else:
                     return render(request, "admin/login.html", context)

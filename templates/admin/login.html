@@ -10,6 +10,19 @@
         <div class="card card-pages shadow-none">
             <div class="card-body">
                 <h5 class="font-18 text-center">Ankades Admin Panel</h5>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
+                            <div class="fw-messages-wrap ls p-normal">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        {{ message }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 <form class="form-horizontal m-t-30" method="post">
                     {% csrf_token %}
                     {{ form|crispy }}

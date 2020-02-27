@@ -23,7 +23,6 @@
             </form>
         </div>
     </div>
-{##}
 {#    {% if messages %}#}
 {#        {% for message in messages %}#}
 {#            <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">#}
@@ -41,81 +40,7 @@
     <div id="canvas">
         <div id="box_wrapper">
 
-            <!-- template sections -->
-
-            <!--topline section visible only on small screens|-->
-            <section class="page_topline ls s-borderbottom c-my-10 c-my-lg-20">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-md-6 text-md-left text-center">
-                            <ul class="top-includes">
-                                <li>
-									<span class="icon-inline">
-										<span class="icon-styled color-main fs-14">
-											<i class="fa fa-phone"></i>
-										</span>
-										<span class="small-text">
-											<a href="#">800 - 123-45-67</a>
-										</span>
-									</span>
-                                </li>
-                                <li>
-									<span class="icon-inline">
-										<span class="icon-styled color-main fs-14">
-											<i class="fa fa-pencil"></i>
-										</span>
-										<span class="small-text">
-											<a href="#">maxicom@example.com</a>
-										</span>
-									</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6 text-center text-md-right d-none d-md-block">
-                            <ul class="top-includes">
-                                {% if request.user.is_authenticated %}
-                                    <li>
-                                        <span class="icon-inline">
-                                            <span class="icon-styled color-main3 fs-14">
-                                                <i class="fa fa-lock"></i>
-                                            </span>
-                                            <span class="small-text">
-                                                <a class="hover-main2" href="{% url 'logout_account' %}">Çıkış Yap</a>
-                                            </span>
-                                        </span>
-                                    </li>
-                                {% else %}
-                                    <li>
-                                        <span class="icon-inline">
-                                            <span class="icon-styled color-main2 fs-14">
-                                                <i class="fa fa-user-plus"></i>
-                                            </span>
-                                            <span class="small-text">
-                                                <a class="hover-main2" href="{% url 'register_account' %}">Kayıt Ol</a>
-                                            </span>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="icon-inline">
-                                            <span class="icon-styled color-main2 fs-14">
-                                                <i class="fa fa-user-plus"></i>
-                                            </span>
-                                            <span class="small-text">
-                                                <a class="hover-main2" href="{% url 'login_account' %}">Giriş Yap</a>
-                                            </span>
-                                        </span>
-                                    </li>
-
-                                {% endif %}
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!--eof topline-->
-            {% include 'ankades/layout/navbar.html' %}
+            {% include 'ankades/layout/header.html' %}
             <section class="ls s-pt-80 s-pb-70 s-py-lg-120 s-py-xl-160">
                 <div class="container">
                     <div class="row">

@@ -1,0 +1,98 @@
+{% load static %}
+{% if request.user.is_superuser %}
+    <section class="page_topline ds c-my-20 page_title with-padding">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-md-left text-center d-none d-md-block">
+                    <ul class="top-includes">
+                        <li>
+						    <span class="icon-inline">
+						    	<span class="icon-styled fs-14">
+						    		<i class="fa fa-user"></i>
+						    	</span>
+						    	<span class="small-text">
+						    		<a href="{% url 'account_detail' request.user.username %}">Hoş geldiniz
+                                        {% if request.user.get_full_name %}
+                                            {{ request.user.get_full_name }}{% else %}
+                                            {{ request.user.username }}{% endif %}!</a>
+						    	</span>
+						    </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6 text-center text-md-right">
+					<span class="icon-inline">
+						<span class="icon-styled fs-14">
+							<i class="fa fa-pencil"></i>
+						</span>
+						<span class="small-text color-light">
+                            <a href="{% url 'admin_index' %}">Admin Paneline Git</a>
+						</span>
+					</span>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}
+<header class="page_header ls ms justify-nav-center header-layout2 with-padding">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-xl-2 col-lg-3 col-11">
+                <a href="{% url 'index' %}"><img src="{% static 'ankarenkli.jpeg' %}" class="logo" style="height: 55px">
+                    <strong>ANKADES</strong></a>
+            </div>
+            <div class="col-xl-8 col-lg-6 col-1 text-sm-center">
+                <nav class="top-nav">
+                    <ul class="nav sf-menu">
+                        <li class="maincolor2">
+                            <a href="{% url 'index' %}">Home</a>
+                            <ul>
+                                <li>
+                                    <a href="index.html">Home 1</a>
+                                </li>
+                                <li>
+                                    <a href="index2.html">Home 2</a>
+                                </li>
+                                <li>
+                                    <a href="index_static.html">Static Intro</a>
+                                </li>
+                                <li>
+                                    <a href="index_singlepage.html">Single Page</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{% url "all_articles" %}">Makaleler</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-xl-2 col-lg-3 text-right d-none d-lg-block">
+                <ul class="top-includes icons-include d-none d-xl-block">
+                    <li>
+                        <span class="icon-styled bg-white round fs-14">
+							<a href="#" class="search_modal_button">
+								<i class="fa color-main fa-search"></i>
+							</a>
+						</span>
+                    </li>
+                    <li>
+						<span class="icon-styled bg-white round fs-14">
+							<a href="{% url 'edit_profile' request.user.username %}">
+								<i class="fa color-main fa-user"></i>
+							</a>
+						</span>
+                    </li>
+                    <li>
+						<span class="icon-styled bg-white round fs-14">
+							<a href="#">
+								<i class="fa color-main fa-envelope-o fs-14"></i>
+							</a>
+						</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <span class="toggle_menu"><span></span></span>
+</header>
