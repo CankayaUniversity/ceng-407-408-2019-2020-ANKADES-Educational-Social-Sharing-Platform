@@ -1,0 +1,30 @@
+/*.widget_posts_2cols*/
+
+.widget_posts_2cols {
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  li {
+    width: 50%;
+    margin-top: 20px;
+    &:nth-child(even) {
+      padding-left: 10px;
+    }
+    &:nth-child(odd) {
+      padding-right: 10px;
+    }
+    //nom top margin for first two posts
+    &:nth-child(1),
+    &:nth-child(2) {
+      margin-top: 0;
+    }
+  }
+  h5 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: none;
+    margin: 10px 0 0;
+
+  }
+}

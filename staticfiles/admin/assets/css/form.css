@@ -23,3 +23,7 @@ select,
 	padding-top: 9px;
 	width: 100%;
 }
+
+.selectmultiple {
+	height: 120px !important;
+}

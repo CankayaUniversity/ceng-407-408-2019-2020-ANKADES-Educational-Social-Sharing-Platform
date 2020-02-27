@@ -1,0 +1,47 @@
+/* widget_rss */
+
+.widget_rss {
+  //icon
+  .widget-title {
+    .rsswidget:first-child {
+      img {
+        display: none;
+      }
+      &:before {
+        position: relative;
+        top: -1px;
+        font-size: 0.8em;
+        padding-right: 0.3em;
+        font-family: 'FontAwesome';
+        content: '\f09e';
+      }
+    }
+  }
+
+  ul {
+    padding-left: 0;
+    list-style: none;
+    a {
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      line-height: 1.5;
+    }
+  }
+  li {
+    cite:last-child {
+      display: block;
+      margin-top: 0.5em;
+    }
+  }
+  li + li {
+    margin-top: 1.5em;
+  }
+
+  .rss-date {
+    display: block;
+    margin: 0.8em 0;
+    @include small-text();
+    color: $darkgreyColor;
+  }
+}

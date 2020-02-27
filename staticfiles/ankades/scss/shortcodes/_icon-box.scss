@@ -1,0 +1,230 @@
+/*
+** Icon Box
+*/
+//styled icon
+//used in icon box and inline icon
+.icon-styled {
+  text-align: center;
+  display: inline-block;
+
+  //icon style
+  i {
+    width: 1em;
+  }
+
+  //bordered icon, button icon and icon with background
+  &[class*='bg-'],
+  &[class*='btn-'],
+  &.bordered,
+  &.icon-bordered {
+    width: 3em;
+    height: 3em;
+    box-sizing: content-box;
+    .text-center & {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    i {
+      line-height: 3em;
+    }
+
+    border-width: 1px;
+    border-style: solid;
+
+    & + p {
+      margin-top: 12px;
+    }
+  }
+
+  &.icon-bordered:not([class*="color-"]) {
+    border-color: $borderColor;
+  }
+
+  &[class*='bg-'] {
+    border-color: transparent;
+  }
+  &.icon-top {
+    align-self: flex-start;
+    line-height: inherit;
+  }
+
+  //side icon box
+  //styled icon in .media and in icon-inline component
+  .media > &:first-child {
+    flex-shrink: 0;
+  }
+  .media > &:last-child {
+    flex-shrink: 0;
+  }
+
+  .icon-inline > &:first-child {
+    flex-shrink: 0;
+    margin-right: 13px;
+  }
+  .icon-inline > &:last-child {
+    flex-shrink: 0;
+    margin-left: 20px;
+  }
+}
+
+//inline styled icon
+.icon-inline {
+  display: flex;
+  align-items: center;
+  .text-center & {
+    justify-content: center;
+  }
+
+  & > * {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 25px;
+  }
+}
+
+//styled icon in box
+.icon-box {
+  //padding for icon box with borders and background
+  &.ls,
+  &.ds,
+  &.cs,
+  &.bordered,
+  &.hero-bg,
+  &.muted-bg,
+  &.box-shadow {
+    padding: 57px 60px 50px;
+    @media (max-width: 767px) {
+      padding: 30px;
+    }
+  }
+
+  //icon boxes in bordered columns
+  .c-bordered & {
+    padding: 70px 30px 30px;
+    //if P element is a last child - adding bottom margin
+    p:last-child {
+      margin-bottom: 20px;
+    }
+  }
+  //featured box in bordered columns
+  @media (min-width:768px) {
+    &.featured-box {
+      position: relative;
+      z-index: 2;
+      margin: -6px -10px;
+      //padding top and padding bottom more on negative top and bottom margins 70+6,
+      //12px - 6 top and 6 bottom
+      height: calc(100% + 12px);
+      padding-top: 76px;
+      padding-bottom: 36px;
+    }
+  }
+
+  //icon
+  .icon-styled {
+
+    //bordered icon and icon with background
+    &[class*='bg-'],
+    &.icon-bordered {
+      margin-bottom: 0.5em;
+      border: 0;
+    }
+
+    & + h2,
+    & + h3,
+    & + h4,
+    & + h5 {
+      margin-top: 1.6em;
+    }
+    //for counter teaser with counter h3 tag below p description
+    & + p.small-text {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      margin: 0.74em 0;
+    }
+  }
+
+  //headings style
+  h2, h3, h4, h5 {
+    margin-top: 38px;
+    margin-bottom: 17px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    @media (max-width: 767px) {
+      margin-top: 25px;
+    }
+  }
+}
+
+.media,
+.icon-box {
+  //accent heading
+  .heading-accent {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: inherit;
+    font-size: 30px;
+    margin-bottom: 0.6em;
+    line-height: 1;
+
+    @media (min-width: 1200px) {
+      font-size: 38px;
+    }
+  }
+  .icon-styled + .heading-accent {
+    margin-top: 0.6em;
+  }
+
+  //special heading
+  .special-heading {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+.media {
+  &.ls,
+  &.ds,
+  &.cs,
+  &.bordered,
+  &.hero-bg,
+  &.muted-bg,
+  &.box-shadow {
+    padding: 30px;
+
+    [class*='bg-'],
+    .icon-bordered {
+      margin-right: 10px;
+      &:last-child {
+        margin-right: 0;
+        margin-left: 30px;
+      }
+    }
+
+  }
+
+  .media-body > p:first-child {
+    margin-top: -0.2em;
+  }
+}
+
+.side-icon-box {
+  margin: 15px 0 32px;
+  h4 {
+    text-transform: uppercase;
+    letter-spacing: 0.17em;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  @media (min-width: 1200px) {
+    .icon-styled + .media-body {
+      margin-left: 50px;
+    }
+    & {
+      margin-bottom: 50px;
+    }
+  }
+}

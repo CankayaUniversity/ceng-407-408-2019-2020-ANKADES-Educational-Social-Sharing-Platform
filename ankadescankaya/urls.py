@@ -7,16 +7,18 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 from account.views import AccountViewSet, GroupViewSet, AccountGroupViewSet, PermissionViewSet, \
     AccountPermissionViewSet, GroupPermissionViewSet, AccountActivityViewSet, AdminActivityViewSet
+from adminpanel.serializers import UserViewSet
 
 router = routers.SimpleRouter()
 router.register('Permission', PermissionViewSet, "permission")
 router.register('Group', GroupViewSet, "group")
 router.register('Account', AccountViewSet, "account")
-router.register('AccountPermission', AccountPermissionViewSet, "accountPermission")
-router.register('GroupPermission', GroupPermissionViewSet, "groupPermission")
+router.register('Account/Permission', AccountPermissionViewSet, "accountPermission")
+router.register('Group/Permission', GroupPermissionViewSet, "groupPermission")
 router.register('AccountGroup', AccountGroupViewSet, "accountGroup")
 router.register('AccountActivity', AccountActivityViewSet, "accountActivity")
 router.register('AdminActivity', AdminActivityViewSet, "adminActivity")
+router.register('User', UserViewSet, "user")
 
 #Permission API
 

@@ -1,0 +1,53 @@
+/* 
+** toTop
+*/
+#toTop {
+  border-radius: 50%;
+  bottom: 10px;
+  right: 10px;
+  display: none;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  position: fixed;
+  text-decoration: none;
+  //fix for side push header
+  z-index: 1000;
+  font-size: 0;
+  color: transparent;
+  background-color: $colorMain2;
+  opacity: 0.7;
+}
+
+#toTop:after {
+  color: $lightColor;
+  content: '\f106';
+  font-size: 16px;
+  line-height: 60px;
+  font-family: 'FontAwesome';
+  text-align: center;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: all 0.2s linear;
+}
+
+#toTopHover, #toTop:hover {
+  bottom: 3px;
+  opacity: 1;
+}
+
+#toTop:hover:after {
+  color: $lightColor;
+}
+
+#toTop:active, #toTop:focus {
+  outline: medium none;
+}
+
+.modal-open #toTop {
+  visibility: hidden;
+}
