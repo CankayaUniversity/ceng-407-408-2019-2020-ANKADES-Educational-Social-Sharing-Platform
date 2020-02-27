@@ -36,6 +36,7 @@ def all_articles(request):
         return render(request, "ankades/article/articles.html", context)
 
     articles = Article.objects.all()
+    articleComment = ArticleComment.objects.all()
     articles_limit = Article.objects.all().order_by('-id')[:10]
     articles_categories_lists = ArticleCategory.objects.all()
     page = request.GET.get('page', 1)
@@ -49,6 +50,7 @@ def all_articles(request):
 
     context = {
         "articles": articles,
+        "articleComment": articleComment,
         "article_pagination": article_pagination,
         "articles_categories_lists": articles_categories_lists,
         "articles_limit": articles_limit,
