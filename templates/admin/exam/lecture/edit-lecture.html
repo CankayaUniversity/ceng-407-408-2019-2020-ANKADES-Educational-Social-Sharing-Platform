@@ -1,42 +1,32 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Okul Düzenle{% endblock %}
+{% block title %}Ders Düzenle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
     <div id="wrapper">
-        <!-- Top Bar Start -->
         {% include "admin/layout/navbar.html" %}
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
         {% include "admin/layout/sidebar.html" %}
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
         <div class="content-page">
-            <!-- Start content -->
             <div class="content">
                 <div class="container-fluid">
                     <div class="page-title-box">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h4 class="page-title">Okul Düzenle</h4>
+                                <h4 class="page-title">Ders Düzenle</h4>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-right">
                                     <li class="breadcrumb-item"><a href="">Sınav Soruları</a></li>
-                                    <li class="breadcrumb-item"><a href="">Okul Düzenle</a></li>
+                                    <li class="breadcrumb-item"><a href="">Ders Düzenle</a></li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
                     </div>
-                    <!-- end page-title -->
                     {% if messages %}
                         <ul class="messages">
                             {% for message in messages %}
-                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show" style="list-style: none"
+                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                    style="list-style: none"
                                         {% if message.tags %} {% endif %}>{{ message }}</li>
                             {% endfor %}
                         </ul>
@@ -46,29 +36,19 @@
                             <div class="card m-b-30">
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data" class="form-control-user">
-                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                            {{ form_as.p }}
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        {{ form_as.p }}
                                         <br>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">Düzenle
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
-
-
                 </div>
-                <!-- container-fluid -->
-
             </div>
-            <!-- content -->
-
-
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
     </div>
 {% endblock %}

@@ -1,22 +1,17 @@
 {% load static %}
 <div class="topbar">
-
-    <!-- LOGO -->
     <div class="topbar-left">
-        <a href="index.html" class="logo">
-                    <span class="logo-light">
-                            <i class="mdi mdi-camera-control"></i> ANKADES
-                        </span>
+        <a href="" class="logo"><img src="{% static 'ankadeslogo.png' %}" width="40px" height="40px"/>
+            <span class="logo-light">
+                ANKADES
+            </span>
             <span class="logo-sm">
-                            <i class="mdi mdi-camera-control"></i>
-                        </span>
+                <i class="mdi mdi-camera-control"></i>
+            </span>
         </a>
     </div>
-
     <nav class="navbar-custom">
         <ul class="navbar-right list-inline float-right mb-0">
-
-            <!-- full screen -->
             <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
                 <a class="nav-link waves-effect" href="#" id="btn-fullscreen">
                     <i class="mdi mdi-arrow-expand-all noti-icon"></i>
@@ -85,23 +80,25 @@
                 <div class="dropdown notification-list nav-pro-img">
                     <a class="dropdown-toggle nav-link arrow-none nav-user" data-toggle="dropdown" href="#"
                        role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="{{ request.user.image.url }}" alt="user" class="rounded-circle" style="border: 2px solid #35b500 !important">
+                        <img src="{{ request.user.image.url }}" alt="user" class="rounded-circle"
+                             style="border: 2px solid #35b500 !important">
                         {{ request.user.username }}<i class="mdi mdi-chevron-down"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                         <!-- item-->
-                        <a class="dropdown-item" href="{% url 'admin_edit_profile' request.user.username %}"><i class="mdi mdi-account-circle"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'admin_edit_profile' request.user.username %}"><i
+                                class="mdi mdi-account-circle"></i> Profil</a>
                         <a class="dropdown-item" href="#"><i class="mdi mdi-wallet"></i> Wallet</a>
                         <a class="dropdown-item d-block" href="#"><span
                                 class="badge badge-success float-right">11</span><i
                                 class="mdi mdi-settings"></i> Ayarlar</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'logout_admin' %}"><i class="mdi mdi-power text-danger"></i>
-                            Logout</a>
+                        <a class="dropdown-item" href="{% url 'logout_admin' %}"><i
+                                class="mdi mdi-power text-danger"></i>
+                            Çıkış</a>
                     </div>
                 </div>
             </li>
-
         </ul>
 
         <ul class="list-inline menu-left mb-0">

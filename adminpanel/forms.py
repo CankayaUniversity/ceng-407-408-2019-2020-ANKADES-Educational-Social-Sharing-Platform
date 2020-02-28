@@ -85,25 +85,25 @@ class SchoolForm(forms.ModelForm):
 class DepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
-        fields = ["schoolId", "title", "slug", "description", "isActive"]
+        fields = ["schoolId", "title", "slug", "description", "isActive", "media"]
 
 
 class TermForm(forms.ModelForm):
     class Meta:
         model = Term
-        fields = ["departmentId", "term", "slug"]
+        fields = ["schoolId", "departmentId", "term", "slug", "isActive"]
 
 
 class LectureForm(forms.ModelForm):
     class Meta:
         model = Lecture
-        fields = ["departmentId", "termId", "title", "slug", "description", "isActive", "media"]
+        fields = ["schoolId", "departmentId", "termId", "title", "slug", "description", "isActive"]
 
 
 class ExamForm(forms.ModelForm):
     class Meta:
         model = Exam
-        fields = ["lectureId", "title", "slug", "description", "isActive", "media"]
+        fields = ["schoolId", "departmentId", "termId", "lectureId", "title", "slug", "description", "isActive", "media"]
 
 
 class ExamCommentForm(forms.ModelForm):

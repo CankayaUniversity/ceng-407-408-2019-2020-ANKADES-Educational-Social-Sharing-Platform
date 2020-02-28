@@ -1,5 +1,5 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Okul Düzenle{% endblock %}
+{% block title %}Dönem Ekle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -22,12 +22,12 @@
                     <div class="page-title-box">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h4 class="page-title">Okul Düzenle</h4>
+                                <h4 class="page-title">Dönem Ekle</h4>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-right">
                                     <li class="breadcrumb-item"><a href="">Sınav Soruları</a></li>
-                                    <li class="breadcrumb-item"><a href="">Okul Düzenle</a></li>
+                                    <li class="breadcrumb-item"><a href="">Dönem Ekle</a></li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
@@ -50,7 +50,7 @@
                                             {{ form|crispy }}
                                             {{ form_as.p }}
                                         <br>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">Düzenle
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
                                         </button>
                                     </form>
                                 </div>
