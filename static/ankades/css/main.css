@@ -1325,13 +1325,6 @@ td .media-body {
 	opacity: 1;
 }
 
-.alert {
-	border-radius: 0;
-	border-width: 0 0 0 4px;
-	margin-bottom: 40px;
-	padding: 30px;
-}
-
 .mark,
 mark {
 	background-color: transparent;

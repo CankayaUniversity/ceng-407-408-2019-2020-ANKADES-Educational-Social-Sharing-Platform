@@ -28,21 +28,6 @@
             </form>
         </div>
     </div>
-    <!-- Unyson messages modal -->
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
-                <div class="fw-messages-wrap ls p-normal">
-                    <ul class="list-unstyled">
-                        <li>
-                            {{ message }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
     <div id="canvas">
         <div id="box_wrapper">
             {% include 'ankades/layout/header.html' %}

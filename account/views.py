@@ -35,7 +35,7 @@ def logout_account(request):
     if request.user.is_authenticated:
         logout(request)
         messages.success(request, "Başarıyla çıkış yapıldı")
-        return redirect("login_account")
+        return redirect("index")
     else:
         return redirect("index")
 
@@ -56,7 +56,7 @@ def register_account(request):
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             login(request, new_user)
             if login:
-                messages.success(request, "Başarıyla giriş yapıldı.")
+                messages.success(request, "Başarıyla giriş yapıldı. Hoş geldiniz: " + new_user.username + ".")
             else:
                 messages.error(request, "Giriş yapılırken bir sorun oluştu.")
             return redirect("login_account")
