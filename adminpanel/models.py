@@ -23,3 +23,20 @@ class AdminActivity(models.Model):
     class Meta:
         db_table = "AdminActivity"
         ordering = ['-activityCreatedDate']
+
+
+class Tag(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Tag Id")
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
+    title = models.CharField(max_length=254, verbose_name="Tag Adı", unique=True)
+    slug = models.SlugField(max_length=254, verbose_name="Slug")
+    view = models.PositiveIntegerField(default=0, verbose_name="Tag Görüntülenme")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "Tag"
+        ordering = ['-createdDate']

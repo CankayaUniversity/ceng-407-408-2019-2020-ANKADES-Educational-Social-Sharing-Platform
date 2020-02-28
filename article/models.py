@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from account.models import Account
+from adminpanel.models import Tag
 
 
 class ArticleCategory(models.Model):
@@ -71,3 +72,15 @@ class ArticleComment(models.Model):
     class Meta:
         db_table = "ArticleComment"
         ordering = ['-createdDate']
+
+
+class ArticleTag(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Tag Id")
+    articleId = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name="Makale")
+    tagId = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.articleId
+
+    class Meta:
+        db_table = "ArticleTag"

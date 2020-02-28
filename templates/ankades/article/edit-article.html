@@ -78,9 +78,11 @@
                                         </ul>
                                     </nav>
                                     <div class="woocommerce-MyAccount-content">
+                                        <div class="container">
+                                            <img src="{{ articleDetail.media.url }}"/>
+                                        </div>
                                         <form class="form-horizontal" enctype="multipart/form-data" method="post">
                                             {% csrf_token %}
-                                            {{ form.media }}
                                             {{ form|crispy }}
                                             {{ form_as.p }}
                                             <br>

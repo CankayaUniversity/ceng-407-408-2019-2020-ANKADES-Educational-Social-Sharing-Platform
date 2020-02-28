@@ -1,3 +1,6 @@
+import datetime
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
@@ -5,7 +8,8 @@ from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
-from account.models import Group, AccountGroup
+from account.models import AccountGroup, Account
+from article.forms import ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 
@@ -83,18 +87,47 @@ def article_detail(request, slug):
     }
     return render(request, "ankades/article/article-detail.html", context)
 
+@login_required(login_url="login_account")
+def article_delete(request, slug):
+    instance = get_object_or_404(Article, slug=slug)
+    instance.delete()
+    messages.success(request, "Makale başarıyla silindi.")
+    return redirect(request, "all_articles")
 
-# @login_required(login_url="user:login")
-# def add_article_comment(request, slug):
-#     article = get_object_or_404(Article, slug=slug)
-#     articleCommet = ArticleComment.objects.get(articleId__slug=slug)
-#     if request.method == "POST":
-#          = request.POST.get("article_comment_author")
-#         article_comment_content = request.POST.get("article_comment_content")
-#
-#         new_comment = ArticleComment(article_comment_author=article_comment_author,
-#                                      article_comment_content=article_comment_content)
-#         new_comment.article_comment = article
-#         new_comment.save()
-#     # return redirect(reverse("article:article_detail", kwargs={"id": id}))
-#     return render(request, "ankades/article/article-detail.html")
+
+@login_required(login_url="login_account")
+def article_edit(request, slug):
+    instance = get_object_or_404(Article, slug=slug)
+    articleDetail = Article.objects.get(slug=slug)
+    form = ArticleForm(request.POST or None, instance=instance)
+    context = {
+        "form": form,
+        "articleDetail": articleDetail
+    }
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
+        instance.save()
+        messages.success(request, "Kurs kategorisi başarıyla düzenlendi !")
+        return redirect("all_articles")
+    return render(request, "ankades/article/edit-article.html", context)
+
+
+@login_required(login_url="login_account")
+def my_articles(request, username):
+    keyword = request.GET.get("keyword")
+    if keyword:
+        article_pagination = Article.objects.filter(Q(title__contains=keyword) |
+                                                    Q(description__contains=keyword))
+        context = {
+            "article_pagination": article_pagination,
+        }
+        return render(request, "ankades/article/my-articles.html", context)
+    user = get_object_or_404(Account, username=username)
+    articleCategories = Article.objects.all()
+    myArticles = Article.objects.filter(Q(creator=user))
+    context = {
+        "myArticles": myArticles,
+        "articleCategories": articleCategories,
+    }
+    return render(request, "ankades/article/my-articles.html", context)
