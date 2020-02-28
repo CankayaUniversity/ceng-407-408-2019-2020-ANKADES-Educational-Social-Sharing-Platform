@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from django.urls import path
 
-from adminpanel.views import views, permission, course, account, article
 from adminpanel.views import group
+from adminpanel.views import views, permission, course, account, article, exam
 
 urlpatterns = [
     # Main Urls
@@ -107,5 +107,19 @@ urlpatterns = [
          name="admin_edit_article_category"),
     path('makaleler/makale-kategorileri/sil/<slug:slug>', article.admin_delete_article_category,
          name="admin_delete_article_category"),
+
+    # okullar/...
+    path('okullar/', exam.admin_schools, name="admin_schools"),
+    path('okullar/ekle', exam.admin_add_school, name="admin_add_school"),
+    path('okullar/duzenle/<slug:slug>', exam.admin_edit_school, name="admin_edit_school"),
+    path('okullar/sil/<slug:slug>', exam.admin_delete_school, name="admin_delete_school"),
+
+    # okullar/bölümler/...
+    path('okullar/bolumler/', exam.admin_departments, name="admin_departments"),
+    path('okullar/bolum/ekle/', exam.admin_add_department, name="admin_add_department"),
+    path('okullar/bolum/düzenle/<slug:slug>', exam.admin_edit_department,
+         name="admin_edit_department"),
+    path('kurslar/bolum/sil/<slug:slug>', exam.admin_delete_department,
+         name="admin_delete_department"),
 
 ]

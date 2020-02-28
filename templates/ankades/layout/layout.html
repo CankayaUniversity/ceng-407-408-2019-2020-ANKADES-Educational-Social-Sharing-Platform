@@ -29,6 +29,9 @@
     <script src="js/vendor/respond.min.js"></script>
     <script src="js/vendor/jquery-1.12.4.min.js"></script>
     <![endif]-->
+    {% if request.path == '/kurslar/' %}
+    <link rel="stylesheet" href="{% static "ankades/css/shop.css" %}">
+    {% endif %}
 
 </head>
 <body>
@@ -40,7 +43,7 @@
     $(document).ready(function () {
         // show the alert
         setTimeout(function () {
-            $(".alert").alert('close');
+            $(".message").alert('close');
         }, 2000);
     });
 </script>

@@ -65,7 +65,7 @@
                             <a href="{% url "all_articles" %}">Makaleler</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)">Kurslar</a>
+                            <a href="{% url 'all_courses' %}">Kurslar</a>
                         </li>
                         <li>
                             <a href="javascript:void(0)">Sınav Soruları</a>
@@ -113,7 +113,7 @@
 </header>
 {% if messages %}
     {% for message in messages %}
-        <div class="col-lg-12 alert toast" id="alert" data-autohide="false" style="position: relative; min-height: 200px;">
+        <div class="col-lg-12 alert message" id="alert" data-autohide="false" style="position: relative; min-height: 200px;">
             <div class="media cs rounded" style="position: absolute; top: 0; right: 0;">
                 <div class="media-body">
                     <p>
@@ -125,15 +125,5 @@
                 </button>
             </div>
         </div>
-{#        <div aria-live="polite" class="alert" aria-atomic="true" style="position: relative; min-height: 200px;">#}
-{#            <div class="toast alert" style="position: absolute; top: 0; right: 0;">#}
-{#                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">#}
-{#                        <span aria-hidden="true">&times;</span>#}
-{#                    </button>#}
-{#                <div class="media-body">#}
-{#                    {{ message }}#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
     {% endfor %}
 {% endif %}

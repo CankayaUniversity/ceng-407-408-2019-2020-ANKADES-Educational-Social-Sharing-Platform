@@ -40,8 +40,8 @@ class Account(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = RichTextField(verbose_name="Biyografi", null=True, blank=True)
     image = models.FileField(default='default-user-image.png', verbose_name="Profil Resmi")
-    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
-    updatedDate = models.DateTimeField(verbose_name="Hesap Güncellendiği Tarih")
+    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi", null=True, blank=True)
+    updatedDate = models.DateTimeField(verbose_name="Hesap Güncellendiği Tarih", null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -53,8 +53,8 @@ class Account(AbstractUser):
 
 class AccountPermission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Hesap İzin Id")
-    userId = models.ForeignKey(Account, verbose_name="Bağlı Olduğu Hesap", on_delete=models.CASCADE)
-    permissionId = models.ForeignKey(Permission, verbose_name="Bağlı Olduğu İzin", on_delete=models.CASCADE)
+    userId = models.ForeignKey(Account, verbose_name="Bağlı Olduğu Hesap", on_delete=models.SET_NULL, null=True)
+    permissionId = models.ForeignKey(Permission, verbose_name="Bağlı Olduğu İzin", on_delete=models.SET_NULL, null=True)
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Hesap İzni Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Hesap İzni Güncellendiği Tarih", null=True, blank=True)
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
@@ -69,8 +69,8 @@ class AccountPermission(models.Model):
 
 class GroupPermission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Account Group Permission Id")
-    permissionId = models.ForeignKey(Permission, verbose_name="İzin Adı", on_delete=models.CASCADE)
-    groupId = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="Grup Adı")
+    permissionId = models.ForeignKey(Permission, verbose_name="İzin Adı", on_delete=models.SET_NULL, null=True)
+    groupId = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, verbose_name="Grup Adı")
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Grup İzni Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Grup İzni Güncellendiği Tarih", null=True, blank=True)
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
@@ -85,8 +85,8 @@ class GroupPermission(models.Model):
 
 class AccountGroup(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Account Group Id")
-    userId = models.ForeignKey(Account, verbose_name="Kullanıcı Adı", on_delete=models.CASCADE)
-    groupId = models.ForeignKey(Group, verbose_name="Grup Adı", on_delete=models.CASCADE)
+    userId = models.ForeignKey(Account, verbose_name="Kullanıcı Adı", on_delete=models.SET_NULL, null=True)
+    groupId = models.ForeignKey(Group, verbose_name="Grup Adı", on_delete=models.SET_NULL, null=True)
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Hesap Grup Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Hesap Grup Oluşturulduğu Tarih", null=True, blank=True)
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")

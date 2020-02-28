@@ -1,8 +1,10 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Okul Ekle{% endblock %}
+{% block title %}Makale Ekle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
     <div id="wrapper">
         <!-- Top Bar Start -->
         {% include "admin/layout/navbar.html" %}
@@ -22,12 +24,12 @@
                     <div class="page-title-box">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h4 class="page-title">Okul Ekle</h4>
+                                <h4 class="page-title">Makale Ekleme</h4>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-right">
-                                    <li class="breadcrumb-item"><a href="">Sınav Soruları</a></li>
-                                    <li class="breadcrumb-item"><a href="">Okul Ekle</a></li>
+                                    <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="">Makale Ekle</a></li>
                                 </ol>
                             </div>
                         </div> <!-- end row -->
@@ -46,8 +48,9 @@
                             <div class="card m-b-30">
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data" class="form-control-user">
-                                        {% csrf_token %}
-                                        {{ form|crispy }}
+                                            {% csrf_token %}
+                                            {{ form|crispy }}
+                                            {{ form_as.p }}
                                         <br>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
                                         </button>

@@ -2,6 +2,7 @@ from django import forms
 from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
 from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
+from exam.models import School, Department, Lecture, Term, Exam, ExamComment
 
 
 class AdminLoginForm(forms.Form):
@@ -73,3 +74,41 @@ class ArticleCategoryForm(forms.ModelForm):
     class Meta:
         model = ArticleCategory
         fields = ["parentId", "title", "slug", "description"]
+
+
+class SchoolForm(forms.ModelForm):
+    class Meta:
+        model = School
+        fields = ["title", "slug", "description", "isActive", "since", "media"]
+
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ["schoolId", "title", "slug", "description", "isActive"]
+
+
+class TermForm(forms.ModelForm):
+    class Meta:
+        model = Term
+        fields = ["departmentId", "term", "slug"]
+
+
+class LectureForm(forms.ModelForm):
+    class Meta:
+        model = Lecture
+        fields = ["departmentId", "termId", "title", "slug", "description", "isActive", "media"]
+
+
+class ExamForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ["lectureId", "title", "slug", "description", "isActive", "media"]
+
+
+class ExamCommentForm(forms.ModelForm):
+    class Meta:
+        model = ExamComment
+        fields = ["content", "media"]
+
+

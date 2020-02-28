@@ -27,7 +27,7 @@ class AdminActivity(models.Model):
 
 class Tag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Tag Id")
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Oluşturan Kişi")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Oluşturan Kişi")
     title = models.CharField(max_length=254, verbose_name="Tag Adı", unique=True)
     slug = models.SlugField(max_length=254, verbose_name="Slug")
     view = models.PositiveIntegerField(default=0, verbose_name="Tag Görüntülenme")

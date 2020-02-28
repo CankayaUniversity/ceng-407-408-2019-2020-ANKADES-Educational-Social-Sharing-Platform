@@ -100,7 +100,7 @@
                 </li>
 
                 <li class="menu-title">UYGULAMALAR</li>
-
+                {# Article #}
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Makaleler <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -111,7 +111,8 @@
                         <li><a href="{% url 'admin_add_article_category' %}">Kategori Ekle</a></li>
                     </ul>
                 </li>
-
+                {# End Article #}
+                {# Course #}
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Kurslar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -122,20 +123,51 @@
                         <li><a href="{% url 'admin_add_course_category' %}">Kategori Ekle</a></li>
                     </ul>
                 </li>
-
+                {# End Course #}
+                {# Exam #}
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Sınav Soruları <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="#">Okul Ekle</a></li>
-                        <li><a href="#">Bölüm Ekle</a></li>
-                        <li><a href="#">Ders Ekle</a></li>
-                        <li><a href="#">Okul Listesi</a></li>
-                        <li><a href="#">Bölüm Listesi</a></li>
-                        <li><a href="#">Ders Listesi</a></li>
+                        <li>
+                            <a href="javascript:void(0)">Okul<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+
+                            <ul class="submenu">
+                                <li><a href="{% url 'admin_schools' %}">Okul Listesi<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a></li>
+                                <li><a href="{% url 'admin_add_school' %}">Okul Ekle</a></li>
+{#                                <li><a href="{% url 'admin_add_school_department' %}">Okula Bölüm Ekle</a></li>#}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Bölüm</a>
+                            <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
+                            <ul class="submenu">
+                                <li><a href="{% url 'admin_departments' %}">Bölüm Listesi</a></li>
+                                <li><a href="{% url 'admin_add_department' %}">Bölüm Ekle</a></li>
+{#                                <li><a href="{% url 'admin_add_department_lecture' %}">Bölüme Ders Ekle</a></li>#}
+{#                                <li><a href="{% url 'admin_terms' %}">Dönem Listesi</a></li>#}
+{#                                <li><a href="{% url 'admin_add_term' %}">Dönem Ekle</a></li>#}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Ders</a>
+                            <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
+                            <ul class="submenu">
+{#                                <li><a href="{% url 'admin_lectures' %}">Ders Listesi</a></li>#}
+{#                                <li><a href="{% url 'admin_add_lecture' %}">Ders Ekle</a></li>#}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Ders</a>
+                            <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
+                            <ul class="submenu">
+{#                                <li><a href="{% url 'admin_all_exams' %}">Sınav Arşivi</a></li>#}
+{#                                <li><a href="{% url 'admin_add_exam' %}">Sınav Ekle</a></li>#}
+                            </ul>
+                        </li>
                     </ul>
                 </li>
-
+                {# End School #}
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Sorular <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>

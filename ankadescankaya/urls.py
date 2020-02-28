@@ -41,10 +41,11 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('ankades-admin-panel/', include("adminpanel.urls")), #include ankades admin panel applications url
     path('', include("account.urls")), #include ankades account
+    path('', include("course.urls")), #include ankades account
     path('', include("article.urls")), #include ankades article
     # path('', include("question.urls")), #include ankades question applications url
     # path('kullanici/', include("account.urls")), #include ankades account applications url
-    # path('cikmis-sorular/', include("exam.urls")), #include ankades pre-exam applications url
+    path('', include("exam.urls")),
 
     # swagger
     url(r'^ankades-api/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
