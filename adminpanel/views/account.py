@@ -5,9 +5,15 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
+
+from account.forms import AccountRegisterForm
 from adminpanel.forms import AdminEditProfileForm, AccountPermissionForm, AccountGroupForm
 from account.models import Account, AccountGroup, Permission, Group, AccountPermission
 from adminpanel.models import AdminActivity
+
+
+user = Account()
+group = Group()
 
 
 @login_required(login_url="login_admin")
@@ -167,26 +173,21 @@ def admin_add_account_group(request):
 @login_required(login_url="login_admin")
 def admin_edit_account_group(request, id):
     instance = get_object_or_404(AccountGroup, id=id)
-    form = AccountGroupForm(request.POST or None)
+    form = AccountGroupForm(request.POST or None, instance=instance)
     if form.is_valid():
-        form_username = form.cleaned_data.get("userId")
-        form_groupname = form.cleaned_data.get("groupId")
-        if AccountGroup.objects.filter(Q(groupId__slug=form_groupname) and Q(userId__username=form_username)):
-            messages.error(request, 'Bu kullanıcıya grup daha önce eklenmiş. Lütfen önce kullanıcının grubunu silin.')
-        else:
-            instance = form.save(commit=False)
-            instance.updatedDate = datetime.datetime.now()
-            activity = AdminActivity()
-            activity.activityTitle = "Kullanıcı Grubu Düzenlendi"
-            activity.activityCreator = request.user.username
-            activity.activityMethod = "UPDATE"
-            activity.activityApplication = "Account Group"
-            activity.activityUpdatedDate = datetime.datetime.now()
-            activity.activityDescription = "Kullanıcı grubu düzenlendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-            activity.save()
-            instance.save()
-            messages.success(request, "Kullanıcı grubu başarıyla güncellendi.")
-            return redirect("admin_account_groups")
+        instance = form.save(commit=False)
+        instance.updatedDate = datetime.datetime.now()
+        activity = AdminActivity()
+        activity.activityTitle = "Kullanıcı Grubu Düzenlendi"
+        activity.activityCreator = request.user.username
+        activity.activityMethod = "UPDATE"
+        activity.activityApplication = "Account Group"
+        activity.activityUpdatedDate = datetime.datetime.now()
+        activity.activityDescription = "Kullanıcı grubu düzenlendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+        activity.save()
+        instance.save()
+        messages.success(request, "Kullanıcı grubu başarıyla güncellendi.")
+        return redirect("admin_account_groups")
     return render(request, "admin/account/group/edit-account-group.html", {"form": form})
 
 
@@ -255,3 +256,28 @@ def admin_delete_account_permission(request, id):
     else:
         messages.error(request, "Kullanıcı izni aktif.")
         return redirect("admin_account_permission")
+
+
+def admin_register_account(request):
+    form = AccountRegisterForm(request.POST or None)
+    getGroup = Group.objects.get(slug="ogrenci")
+    accountGroup = AccountGroup()
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        new_user = Account(username=username, email=email)
+        new_user.is_active = True
+        new_user.is_admin = False
+        new_user.save()
+        new_user.set_password(password)
+        new_user.save()
+        accountGroup.userId_id = new_user.id
+        accountGroup.groupId_id = getGroup.id
+        accountGroup.save()
+        messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
+        return redirect("admin_account_settings")
+    context = {
+        "form": form
+    }
+    return render(request, "admin/settings/add-account.html", context)

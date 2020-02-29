@@ -1,0 +1,25 @@
+<div class="email-leftbar card">
+    <h6>Ayarlar</h6>
+    <div class="mail-list m-t-10">
+        <a href="{% url 'admin_settings' %}" {% if request.path == '/ankades-admin-panel/ayarlar/site' %} class="active"{% endif %}> <i class="mdi mdi-earth"></i> Site</a>
+        <a href="{% url 'admin_account_settings' %}" {% if request.path == '/ankades-admin-panel/ayarlar/hesap' %} class="active"{% endif %}> <i class="mdi mdi-account"></i> Hesap</a>
+        <a href="{% url 'admin_group_settings' %}" {% if request.path == '/ankades-admin-panel/ayarlar/grup' %} class="active"{% endif %}> <i class="fa fa-users"></i> Grup</a>
+        <a href="{% url 'admin_permission_settings' %}" {% if request.path == '/ankades-admin-panel/ayarlar/izin' %} class="active"{% endif %}> <i class="fa fa-users-cog"></i> İzin</a>
+        <a href="{% url 'admin_social_media_settings' %}" {% if request.path == '/ankades-admin-panel/ayarlar/sosyal-medya' %} class="active"{% endif %}> <i class="mdi mdi-linkedin-box mr-2"></i> Sosyal Medya </a>
+    </div>
+
+    <h6 class="m-t-20">Aktif Olmayanlar</h6>
+
+    <div class="mail-list m-t-10">
+        <a href="#"><span class="mdi mdi-label-outline text-danger mr-2"></span>Site</a>
+        <a href="{% url 'admin_blocked_users' %}"><span class="mdi mdi-label-outline text-info mr-2"></span>Hesap</a>
+        <a href="#"><span class="mdi mdi-label-outline text-primary mr-2"></span>Grup</a>
+        <a href="#"><span class="mdi mdi-label-outline text-warning mr-2"></span>İzin</a>
+        <a href="#"><span class="mdi mdi-label-outline text-primary mr-2"></span>Sosyal Medya</a>
+        <a href="#"><span class="mdi mdi-label-outline text-info mr-2"></span>Makale</a>
+        <a href="#"><span class="mdi mdi-label-outline text-success mr-2"></span>Kurs</a>
+        <a href="#"><span class="mdi mdi-label-outline text-danger mr-2"></span>Sınav Soruları</a>
+        <a href="#"><span class="mdi mdi-label-outline text-primary mr-2"></span>Sorular</a>
+    </div>
+
+</div>

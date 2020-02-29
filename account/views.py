@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
 from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm
-from account.models import Account, AccountGroup
+from account.models import Account, AccountGroup, Group
 
 
 def login_account(request):
@@ -42,6 +42,8 @@ def logout_account(request):
 
 def register_account(request):
     if not request.user.is_authenticated:
+        getGroup = Group.objects.get(slug="ogrenci")
+        accountGroup = AccountGroup()
         form = AccountRegisterForm(request.POST or None)
         if form.is_valid():
             username = form.cleaned_data.get("username")
@@ -53,12 +55,10 @@ def register_account(request):
             new_user.save()
             new_user.set_password(password)
             new_user.save()
+            accountGroup.userId_id = new_user.id
+            accountGroup.groupId_id = getGroup.id
+            accountGroup.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
-            login(request, new_user)
-            if login:
-                messages.success(request, "Başarıyla giriş yapıldı. Hoş geldiniz: " + new_user.username + ".")
-            else:
-                messages.error(request, "Giriş yapılırken bir sorun oluştu.")
             return redirect("login_account")
         context = {
             "form": form

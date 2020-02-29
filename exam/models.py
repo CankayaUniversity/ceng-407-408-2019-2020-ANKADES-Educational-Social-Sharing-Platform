@@ -119,7 +119,7 @@ class Exam(models.Model):
     departmentId = models.ForeignKey(Department, verbose_name="Bölüm Adı",
                                      on_delete=models.SET_NULL, null=True)
     termId = models.ForeignKey(Term, on_delete=models.SET_NULL, verbose_name="Dönem", null=True)
-    lectureId = models.ForeignKey(Lecture, verbose_name="Bölüm Adı",
+    lectureId = models.ForeignKey(Lecture, verbose_name="Ders Adı",
                                   on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

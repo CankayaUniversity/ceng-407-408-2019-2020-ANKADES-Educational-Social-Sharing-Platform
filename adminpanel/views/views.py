@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from account.models import Account, AccountGroup
+from account.models import Account, AccountGroup, Permission
 from adminpanel.forms import AdminLoginForm
 from adminpanel.models import AdminActivity
 from course.models import CourseCategory, Course
@@ -75,9 +75,44 @@ def logout_admin(request):
         return redirect("login_admin")
 
 
+#Site Settings
+@login_required(login_url="login_admin")
+def admin_settings(request):
+    return render(request, "admin/settings/site-settings.html")
 
 
+#Account Settings
+@login_required(login_url="login_admin")
+def admin_account_settings(request):
+    accounts = Account.objects.all()
+    accountGroups = AccountGroup.objects.all()
+    accountFiveLimitOrdered = Account.objects.all().order_by('-date_joined')[:5]
+    context = {
+        "accounts": accounts,
+        "accountGroups": accountGroups,
+        "accountFiveLimitOrdered": accountFiveLimitOrdered,
+    }
+    return render(request, "admin/settings/account-settings.html", context)
 
 
+#Social Media Settings
+@login_required(login_url="login_admin")
+def admin_social_media_settings(request):
+    return render(request, "admin/settings/social-media-settings.html")
 
+
+#Group Settings
+@login_required(login_url="login_admin")
+def admin_group_settings(request):
+    return render(request, "admin/settings/group-settings.html")
+
+
+#Permission Settings
+@login_required(login_url="login_admin")
+def admin_permission_settings(request):
+    permissions = Permission.objects.all()
+    context = {
+        "permissions": permissions
+    }
+    return render(request, "admin/settings/permission-settings.html", context)
 

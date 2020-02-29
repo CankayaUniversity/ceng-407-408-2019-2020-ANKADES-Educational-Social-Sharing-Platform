@@ -12,6 +12,13 @@
                         <span> Dashboard </span>
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'index' %}" class="waves-effect"><i class="mdi mdi-earth"></i>
+                        {#                                                <i class="icon-accelerator"></i><span#}
+                        {#                                                    class="badge badge-success badge-pill float-right">9+</span>#}
+                        <span> Siteye Dön </span>
+                    </a>
+                </li>
 
                 <li class="menu-title">KULLANICILAR</li>
 
@@ -130,11 +137,12 @@
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li>
-                            <a href="javascript:void(0)">Okul<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <a href="javascript:void(0)">Okul<span class="float-right menu-arrow"><i
+                                    class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
                                 <li><a href="{% url 'admin_schools' %}">Okul Listesi</a></li>
                                 <li><a href="{% url 'admin_add_school' %}">Okul Ekle</a></li>
-{#                                <li><a href="{% url 'admin_add_school_department' %}">Okula Bölüm Ekle</a></li>#}
+                                {#                                <li><a href="{% url 'admin_add_school_department' %}">Okula Bölüm Ekle</a></li>#}
                             </ul>
                         </li>
                         <li>
@@ -142,11 +150,12 @@
                             <ul class="submenu">
                                 <li><a href="{% url 'admin_departments' %}">Bölüm Listesi</a></li>
                                 <li><a href="{% url 'admin_add_department' %}">Bölüm Ekle</a></li>
-{#                                <li><a href="{% url 'admin_add_department_lecture' %}">Bölüme Ders Ekle</a></li>#}
+                                {#                                <li><a href="{% url 'admin_add_department_lecture' %}">Bölüme Ders Ekle</a></li>#}
                             </ul>
                         </li>
                         <li>
-                            <a href="#">Ders<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <a href="#">Ders<span class="float-right menu-arrow"><i
+                                    class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
                                 <li><a href="{% url 'admin_lectures' %}">Ders Listesi</a></li>
                                 <li><a href="{% url 'admin_add_lecture' %}">Ders Ekle</a></li>
@@ -155,10 +164,11 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#">Sınav Arşivi<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <a href="#">Sınav Arşivi<span class="float-right menu-arrow"><i
+                                    class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
-{#                                <li><a href="{% url 'admin_all_exams' %}">Sınav Arşivi</a></li>#}
-{#                                <li><a href="{% url 'admin_add_exam' %}">Sınav Ekle</a></li>#}
+                                <li><a href="{% url 'admin_exams' %}">Sınav Arşivi</a></li>
+                                <li><a href="{% url 'admin_add_exam' %}">Sınav Ekle</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -174,7 +184,6 @@
                         <li><a href="#">Soru Ekle</a></li>
                     </ul>
                 </li>
-
             </ul>
 
         </div>

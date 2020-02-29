@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from adminpanel.forms import SchoolForm, DepartmentForm, TermForm, LectureForm
-from exam.models import School, Department, Term, Lecture
+from adminpanel.forms import SchoolForm, DepartmentForm, TermForm, LectureForm, ExamForm
+from exam.models import School, Department, Term, Lecture, Exam
 
 
 # School
@@ -199,3 +199,51 @@ def admin_delete_lecture(request, slug):
     instance.delete()
     messages.success(request, "Ders başarıyla silindi !")
     return redirect("admin_lectures")
+
+
+#Exam
+def admin_exams(request):
+    exams = Exam.objects.all()
+    context = {
+        "exams": exams,
+    }
+    return render(request, "admin/exam/pre-exam/all-exams.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_add_exam(request):
+    form = ExamForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.creator = request.user
+        instance.save()
+        messages.success(request, "Sınav arşivi başarıyla eklendi !")
+        return redirect("admin_exams")
+    return render(request, "admin/exam/pre-exam/add-exam.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_edit_exam(request, slug):
+    if request.user.is_authenticated:
+        instance = get_object_or_404(Exam, slug=slug)
+        form = ExamForm(request.POST or None, request.FILES or None, instance=instance)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.updatedDate = datetime.datetime.now()
+            instance.save()
+            messages.success(request, "Sınav arşivi başarıyla düzenlendi !")
+            return redirect("admin_exams")
+        return render(request, "admin/exam/pre-exam/edit-exam.html", {"form": form})
+    else:
+        return redirect("login_admin")
+
+
+@login_required(login_url="login_admin")
+def admin_delete_exam(request, slug):
+    instance = get_object_or_404(Exam, slug=slug)
+    instance.delete()
+    messages.success(request, "Sınav arşivi başarıyla silindi !")
+    return redirect("admin_exams")

@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.urls import path
 
 from adminpanel.views import group
@@ -7,7 +9,13 @@ from adminpanel.views import views, permission, course, account, article, exam
 urlpatterns = [
     # Main Url
     path('', views.admin_index, name="admin_index"),
-    path('giris-yap', views.login_admin, name="login_admin"),
+    path('ayarlar/site', views.admin_settings, name="admin_settings"),
+    path('ayarlar/hesap', views.admin_account_settings, name="admin_account_settings"),
+    path('ayarlar/sosyal-medya', views.admin_social_media_settings, name="admin_social_media_settings"),
+    path('ayarlar/grup', views.admin_group_settings, name="admin_group_settings"),
+    path('ayarlar/izin', views.admin_permission_settings, name="admin_permission_settings"),
+    path('ayarlar/yeni-kullanici-ekle', account.admin_register_account, name="admin_register_account"),
+    path('giris-yap/', views.login_admin, name="login_admin"),
     path('cikis/', views.logout_admin, name="logout_admin"),
 
     # User
@@ -133,4 +141,15 @@ urlpatterns = [
     path('okullar/bolumler/donemler/ders/sil/<slug:slug>', exam.admin_delete_lecture,
          name="admin_delete_lecture"),
 
+    #Exam
+    path('okullar/bolumler/donemler/dersler/sinav-arsivi', exam.admin_exams, name="admin_exams"),
+    path('okullar/bolumler/donemler/dersler/sinav-arsivi/ekle/', exam.admin_add_exam, name="admin_add_exam"),
+    path('okullar/bolumler/donemler/dersler/sinav-arsivi/duzenle/<slug:slug>', exam.admin_edit_exam,
+         name="admin_edit_exam"),
+    path('okullar/bolumler/donemler/dersler/sinav-arsivi/sil/<slug:slug>', exam.admin_delete_exam,
+         name="admin_delete_exam"),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
