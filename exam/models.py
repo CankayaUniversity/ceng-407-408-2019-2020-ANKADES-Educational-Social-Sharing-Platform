@@ -43,7 +43,6 @@ class Department(models.Model):
     updatedDate = models.DateTimeField(verbose_name="Bölüm Güncellendiği Tarih", null=True, blank=True)
     schoolId = models.ForeignKey(School, verbose_name="Okul Adı",
                                  on_delete=models.SET_NULL, null=True)
-    image = FileField(default='default-user-image.png')
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Bölüm Oluşturan Kişi")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
     media = models.FileField(null=True, blank=True, verbose_name="Dosya")

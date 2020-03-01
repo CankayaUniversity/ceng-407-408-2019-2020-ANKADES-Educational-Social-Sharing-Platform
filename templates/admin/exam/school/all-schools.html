@@ -79,7 +79,13 @@
                                                     <td>{{ school.description|truncatechars:20 }}</td>
                                                     <td>{{ school.createdDate }}</td>
                                                     <td>{{ school.updatedDate }}</td>
-                                                    <td><a href="{{ school.media.url }}">Resme Bak</a></td>
+                                                    <td>
+                                                        {% if school.media %}
+                                                        <a href="{{ school.media.url }}">Resme Bak</a>
+                                                        {% else %}
+                                                        Resim Yok
+                                                        {% endif %}
+                                                    </td>
                                                     <td>{{ school.view }}</td>
                                                     <td>{% if school.isActive is True %}Aktif{% else %}
                                                         Kapalı{% endif %}</td>

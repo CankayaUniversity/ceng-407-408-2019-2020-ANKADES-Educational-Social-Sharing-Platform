@@ -83,7 +83,13 @@
                                                         Yok!{% endif %}</td>
                                                     <td>{{ department.createdDate }}</td>
                                                     <td>{{ department.updatedDate }}</td>
-                                                    <td><a href="{{ department.media.url }}">Resme Bak</a></td>
+                                                    <td>
+                                                        {% if department.media %}
+                                                        <a href="{{ department.media.url }}">Resme Bak</a>
+                                                        {% else %}
+                                                        Resim Yok
+                                                        {% endif %}
+                                                    </td>
                                                     <td>{% if department.isActive is True %}Aktif{% else %}
                                                         Kapalı{% endif %}</td>
                                                     <td>{{ department.view }}</td>

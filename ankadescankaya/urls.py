@@ -43,8 +43,6 @@ urlpatterns = [
     path('', include("account.urls")), #include ankades account
     path('', include("course.urls")), #include ankades account
     path('', include("article.urls")), #include ankades article
-    # path('', include("question.urls")), #include ankades question applications url
-    # path('kullanici/', include("account.urls")), #include ankades account applications url
     path('', include("exam.urls")),
 
     # swagger
