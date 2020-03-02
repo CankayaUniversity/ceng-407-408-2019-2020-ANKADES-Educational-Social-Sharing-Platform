@@ -1,5 +1,4 @@
 import uuid
-
 from ckeditor.fields import RichTextField
 from django.db import models
 from rest_framework.fields import FileField
@@ -24,7 +23,7 @@ class School(models.Model):
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         db_table = "School"
@@ -49,7 +48,7 @@ class Department(models.Model):
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         db_table = "Department"
@@ -58,10 +57,8 @@ class Department(models.Model):
 
 class Term(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Dönem Id")
-    term = models.CharField(max_length=254, verbose_name="Dönem (Bahar-Kış-Yaz)")
+    title = models.CharField(max_length=254, verbose_name="Dönem (Bahar-Kış-Yaz)")
     slug = models.SlugField(unique=True, max_length=254, verbose_name="Dönem Slug")
-    schoolId = models.ForeignKey(School, verbose_name="Okul Adı",
-                                 on_delete=models.SET_NULL, null=True)
     departmentId = models.ForeignKey(Department, verbose_name="Bölüm", on_delete=models.SET_NULL, null=True)
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Dönem Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Dönem Güncellendiği Tarih", null=True, blank=True)
@@ -69,7 +66,7 @@ class Term(models.Model):
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
 
     def __str__(self):
-        return self.term
+        return self.slug
 
     class Meta:
         db_table = "Term"
@@ -85,16 +82,12 @@ class Lecture(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Sınav Sorusu Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Sınav Sorusu Güncellendiği Tarih", null=True, blank=True)
-    schoolId = models.ForeignKey(School, verbose_name="Okul Adı",
-                                 on_delete=models.SET_NULL, null=True)
-    departmentId = models.ForeignKey(Department, verbose_name="Bölüm Adı",
-                                     on_delete=models.SET_NULL, null=True)
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
     termId = models.ForeignKey(Term, on_delete=models.SET_NULL, verbose_name="Dönem", null=True)
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         db_table = "Lecture"
@@ -113,16 +106,11 @@ class Exam(models.Model):
     media = models.FileField(null=True, blank=True, verbose_name="Dosya")
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-    schoolId = models.ForeignKey(School, verbose_name="Okul Adı",
-                                 on_delete=models.SET_NULL, null=True)
-    departmentId = models.ForeignKey(Department, verbose_name="Bölüm Adı",
-                                     on_delete=models.SET_NULL, null=True)
-    termId = models.ForeignKey(Term, on_delete=models.SET_NULL, verbose_name="Dönem", null=True)
     lectureId = models.ForeignKey(Lecture, verbose_name="Ders Adı",
                                   on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         db_table = "Exam"

@@ -9,8 +9,13 @@
     <link rel="stylesheet" type="text/css"
           href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
     <div id="wrapper">
-        {% include "admin/layout/navbar.html" %}
-        {% include "admin/layout/sidebar.html" %}
+         {% if adminGroup %}
+            {% include "admin/layout/navbar.html" %}
+            {% include "admin/layout/sidebar.html" %}
+        {% else %}
+            {% include "admin/layout/navbar-moderator.html" %}
+            {% include "admin/layout/sidebar-moderator.html" %}
+        {% endif %}
         <div class="content-page">
             <!-- Start content -->
             <!-- Start content -->
@@ -59,9 +64,9 @@
                                         {% if terms %}
                                             {% for term in terms %}
                                                 <tr>
-                                                    <td>{{ term.departmentId.schoolId }}</td>
-                                                    <td>{{ term.departmentId }}</td>
-                                                    <td>{{ term.term }}</td>
+                                                    <td>{{ term.departmentId.schoolId.title }}</td>
+                                                    <td>{{ term.departmentId.title }}</td>
+                                                    <td>{{ term.title }}</td>
                                                     <td>{{ term.createdDate }}</td>
                                                     <td>{{ term.updatedDate }}</td>
                                                     <td>{{ term.view }}</td>

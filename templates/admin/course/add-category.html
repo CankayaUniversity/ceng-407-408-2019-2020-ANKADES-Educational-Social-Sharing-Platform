@@ -9,7 +9,13 @@
         <!-- Top Bar End -->
 
         <!-- ========== Left Sidebar Start ========== -->
-        {% include "admin/layout/sidebar.html" %}
+         {% if adminGroup %}
+            {% include "admin/layout/navbar.html" %}
+            {% include "admin/layout/sidebar.html" %}
+        {% else %}
+            {% include "admin/layout/navbar-moderator.html" %}
+            {% include "admin/layout/sidebar-moderator.html" %}
+        {% endif %}
         <!-- Left Sidebar End -->
 
         <!-- ============================================================== -->

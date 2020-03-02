@@ -154,13 +154,19 @@
                             </ul>
                         </li>
                         <li>
+                            <a href="#">Dönem<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="submenu">
+                                <li><a href="{% url 'admin_terms' %}">Dönem Listesi</a></li>
+                                <li><a href="{% url 'admin_add_term' %}">Dönem Ekle</a></li>
+                                {#                                <li><a href="{% url 'admin_add_department_lecture' %}">Bölüme Ders Ekle</a></li>#}
+                            </ul>
+                        </li>
+                        <li>
                             <a href="#">Ders<span class="float-right menu-arrow"><i
                                     class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
                                 <li><a href="{% url 'admin_lectures' %}">Ders Listesi</a></li>
                                 <li><a href="{% url 'admin_add_lecture' %}">Ders Ekle</a></li>
-                                <li><a href="{% url 'admin_terms' %}">Dönem Listesi</a></li>
-                                <li><a href="{% url 'admin_add_term' %}">Dönem Ekle</a></li>
                             </ul>
                         </li>
                         <li>

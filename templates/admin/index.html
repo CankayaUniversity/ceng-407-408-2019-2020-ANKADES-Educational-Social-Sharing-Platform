@@ -21,16 +21,13 @@
     <div id="wrapper">
 
         <!-- Top Bar Start -->
-        {% include "admin/layout/navbar.html" %}
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
-        {% include "admin/layout/sidebar.html" %}
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
+        {% if adminGroup %}
+            {% include "admin/layout/navbar.html" %}
+            {% include "admin/layout/sidebar.html" %}
+        {% else %}
+            {% include "admin/layout/navbar-moderator.html" %}
+            {% include "admin/layout/sidebar-moderator.html" %}
+        {% endif %}
         <div class="content-page">
             <!-- Start content -->
             <div class="content">
@@ -199,7 +196,7 @@
                                     {#                                             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>#}
                                     {#                                    </div>#}
                                     {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">75%</span>#}
-{#                                    </p>#}
+                                    {#                                    </p>#}
                                 </div>
                             </div>
                         </div>
@@ -219,7 +216,7 @@
                                     {#                                             aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>#}
                                     {#                                    </div>#}
                                     {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">88%</span>#}
-{#                                    </p>#}
+                                    {#                                    </p>#}
                                 </div>
                             </div>
                         </div>
@@ -366,25 +363,25 @@
                                 <div class="card-body">
                                     <h4 class="mt-0 header-title mb-4">Son Etkinlikler</h4>
                                     <ol class="activity-feed mb-0">
-{#                                        {% if activity_limit %}#}
-{#                                            {% for act in activity_limit %}#}
-{#                                                <li class="feed-item">#}
-{#                                                    <div class="feed-item-list">#}
-{#                                                        <p class="text-muted mb-1">{{ act.act_created_date }}</p>#}
-{#                                                        <p class="font-15 mt-0 mb-0">{{ act.act_method }}: {{ act.act_title }}#}
-{#                                                            <b class="text-primary">{{ act.act_app }}</b>#}
-{#                                                        </p>#}
-{#                                                    </div>#}
-{#                                                </li>#}
-{#                                            {% endfor %}#}
-{#                                        {% else %}#}
-{#                                            <li class="feed-item">#}
-{#                                                <div class="feed-item-list">#}
-{#                                                    <p class="text-muted mb-1">-</p>#}
-{#                                                    <p class="font-15 mt-0 mb-0">Veri Bulunamadı !</p>#}
-{#                                                </div>#}
-{#                                            </li>#}
-{#                                        {% endif %}#}
+                                        {#                                        {% if activity_limit %}#}
+                                        {#                                            {% for act in activity_limit %}#}
+                                        {#                                                <li class="feed-item">#}
+                                        {#                                                    <div class="feed-item-list">#}
+                                        {#                                                        <p class="text-muted mb-1">{{ act.act_created_date }}</p>#}
+                                        {#                                                        <p class="font-15 mt-0 mb-0">{{ act.act_method }}: {{ act.act_title }}#}
+                                        {#                                                            <b class="text-primary">{{ act.act_app }}</b>#}
+                                        {#                                                        </p>#}
+                                        {#                                                    </div>#}
+                                        {#                                                </li>#}
+                                        {#                                            {% endfor %}#}
+                                        {#                                        {% else %}#}
+                                        {#                                            <li class="feed-item">#}
+                                        {#                                                <div class="feed-item-list">#}
+                                        {#                                                    <p class="text-muted mb-1">-</p>#}
+                                        {#                                                    <p class="font-15 mt-0 mb-0">Veri Bulunamadı !</p>#}
+                                        {#                                                </div>#}
+                                        {#                                            </li>#}
+                                        {#                                        {% endif %}#}
                                     </ol>
 
                                 </div>

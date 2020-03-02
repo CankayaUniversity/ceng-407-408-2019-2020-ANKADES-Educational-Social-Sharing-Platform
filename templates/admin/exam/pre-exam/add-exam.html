@@ -7,11 +7,13 @@
     <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
     <div id="wrapper">
         <!-- Top Bar Start -->
-        {% include "admin/layout/navbar.html" %}
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
-        {% include "admin/layout/sidebar.html" %}
+         {% if adminGroup %}
+            {% include "admin/layout/navbar.html" %}
+            {% include "admin/layout/sidebar.html" %}
+        {% else %}
+            {% include "admin/layout/navbar-moderator.html" %}
+            {% include "admin/layout/sidebar-moderator.html" %}
+        {% endif %}
         <!-- Left Sidebar End -->
 
         <!-- ============================================================== -->

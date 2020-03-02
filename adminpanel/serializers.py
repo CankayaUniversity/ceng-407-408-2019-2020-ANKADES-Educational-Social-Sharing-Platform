@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 
 from account.models import Account, Group, AccountGroup, AccountPermission, Permission, GroupPermission, AccountActivity
 from adminpanel.models import AdminActivity
+from exam.models import School
 
 
 class PermissionSerializer(serializers.ModelSerializer):
@@ -53,5 +54,11 @@ class AdminActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminActivity
         fields = ['activityCreator', 'activityTitle', 'activityApplication', 'activityDescription', 'activityMethod', 'activityCreatedDate', 'activityUpdatedDate']
+
+
+class SchoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = School
+        fields = ['title', 'slug', 'description', 'createdDate', 'updatedDate', 'media', 'isActive', 'view', 'creator']
 
 

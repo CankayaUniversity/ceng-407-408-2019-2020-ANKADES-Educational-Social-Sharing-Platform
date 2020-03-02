@@ -30,15 +30,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                            <h2>Okullar</h2>
+                            <h3>Okullar</h3>
                             <hr>
-                            {% if schools %}
-                                {% for school in schools %}
-                                    <h3>{{ school.title }}</h3>
-                                {% endfor %}
-                            {% endif %}
-                            {% if departments %}
-                                {% for department in departments %}
+                            {% if exams %}
+                                {% for exam in exams %}
+                                    <h5></h5>
                                     <div id="accordion" role="tablist">
                                         <div class="card mt-3">
                                             <div class="card-header" role="tab"
@@ -48,7 +44,7 @@
                                                        href="#collapse{{ forloop.counter }}"
                                                        aria-expanded="false"
                                                        aria-controls="collapse{{ forloop.counter }}">
-                                                        {{ department.title }}
+                                                        bilg müh
                                                     </a>
                                                 </h5>
                                             </div>
@@ -57,26 +53,21 @@
                                                  aria-labelledby="collapse{{ forloop.counter }}_header"
                                                  data-parent="#accordion">
                                                 <div class="card-body rounded hero-bg">
-                                                    {% if lectures %}
-                                                        {% for lecture in lectures %}
-                                                            {% if lecture.departmentId.id == department.id %}
-                                                                <article
-                                                                        class="post side-item text-center text-md-left event-post content-padding rounded">
-                                                                    <div class="row">
-                                                                        <div class="col-xl-12 col-lg-12 col-md-6">
-                                                                            <a href="event-single-full.html">
-                                                                                {{ lecture.title }}
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </article>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                    <article
+                                                            class="post side-item text-center text-md-left event-post content-padding rounded">
+                                                        <div class="row">
+                                                            <div class="col-xl-12 col-lg-12 col-md-6">
+                                                                <a href="event-single-full.html">
+                                                                    {{ lecture.title }}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </article>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 {% endfor %}
                             {% endif %}
                         </div>

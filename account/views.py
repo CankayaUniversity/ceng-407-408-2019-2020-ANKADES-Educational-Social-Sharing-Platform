@@ -9,6 +9,10 @@ from account.models import Account, AccountGroup, Group
 
 
 def login_account(request):
+    """
+    :param request:
+    :return:
+    """
     if not request.user.is_authenticated:
         form = AccountLoginForm(request.POST or None)
         context = {
@@ -32,6 +36,10 @@ def login_account(request):
 
 @login_required(login_url="login_account")
 def logout_account(request):
+    """
+    :param request:
+    :return:
+    """
     if request.user.is_authenticated:
         logout(request)
         messages.success(request, "Başarıyla çıkış yapıldı")
@@ -41,6 +49,10 @@ def logout_account(request):
 
 
 def register_account(request):
+    """
+    :param request:
+    :return:
+    """
     if not request.user.is_authenticated:
         getGroup = Group.objects.get(slug="ogrenci")
         accountGroup = AccountGroup()
@@ -78,8 +90,13 @@ def account_detail(request, username):
     return render(request, "ankades/account/account-detail.html", context)
 
 
-@login_required(login_url="login_admin")
+@login_required(login_url="login_account")
 def edit_profile(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     instance = get_object_or_404(Account, username=username)
     form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
@@ -96,4 +113,8 @@ def edit_profile(request, username):
 
 
 def index(request):
+    """
+    :param request:
+    :return:
+    """
     return render(request, "ankades/index.html")

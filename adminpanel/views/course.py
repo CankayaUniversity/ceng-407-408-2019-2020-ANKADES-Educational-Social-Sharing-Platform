@@ -6,13 +6,17 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from adminpanel.forms import CourseForm, CourseCategoryForm
+from adminpanel.forms import AdminCourseForm, AdminCourseCategoryForm
 from adminpanel.models import AdminActivity
 from course.models import CourseCategory, Course
 
 
 @login_required(login_url="login_admin")
 def admin_courses(request):
+    """
+    :param request:
+    :return:
+    """
     courses = Course.objects.all()
     context = {
         "courses": courses,
@@ -22,7 +26,11 @@ def admin_courses(request):
 
 @login_required(login_url="login_admin")
 def admin_add_course(request):
-    form = CourseForm(request.POST or None)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminCourseForm(request.POST or None)
     context = {
         "form": form
     }
@@ -37,9 +45,14 @@ def admin_add_course(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_course(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     if request.user.is_authenticated:
         instance = get_object_or_404(Course, slug=slug)
-        form = CourseForm(request.POST or None, request.FILES or None, instance=instance)
+        form = AdminCourseForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
@@ -57,6 +70,11 @@ def admin_edit_course(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_course(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Course, slug=slug)
     instance.delete()
     messages.success(request, "Kurs başarıyla silindi !")
@@ -65,6 +83,10 @@ def admin_delete_course(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_course_category(request):
+    """
+    :param request:
+    :return:
+    """
     course_categories_list = CourseCategory.objects.all()
     course_categories_limit = CourseCategory.objects.all().order_by('-createdDate')[:5]
     context = {
@@ -76,7 +98,11 @@ def admin_course_category(request):
 
 @login_required(login_url="login_admin")
 def admin_add_course_category(request):
-    form = CourseCategoryForm(request.POST or None)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminCourseCategoryForm(request.POST or None)
     context = {
         "form": form,
     }
@@ -91,8 +117,13 @@ def admin_add_course_category(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_course_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(CourseCategory, slug=slug)
-    form = CourseCategoryForm(request.POST or None, instance=instance)
+    form = AdminCourseCategoryForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.updatedDate = datetime.datetime.now()
@@ -104,6 +135,11 @@ def admin_edit_course_category(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_course_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(CourseCategory, slug=slug)
     instance.delete()
     messages.success(request, "Kurs kategorisi başarıyla silindi !")

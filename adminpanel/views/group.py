@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
 import datetime
+from rest_framework import request
 from rest_framework.generics import get_object_or_404
 from account.models import AccountGroup, Group, GroupPermission, Permission, Account
-from adminpanel.forms import GroupForm, GroupPermissionForm, AccountGroupForm
+from adminpanel.forms import AdminGroupForm, AdminGroupPermissionForm
 from adminpanel.models import AdminActivity
 
 
@@ -15,8 +16,13 @@ permission = Permission()
 groupPermission = GroupPermission()
 userGroup = AccountGroup()
 
+
 @login_required(login_url="login_admin")
 def admin_all_groups(request):
+    """
+    :param request:
+    :return:
+    """
     groups = Group.objects.all()
     context = {
         "groups": groups,
@@ -26,30 +32,47 @@ def admin_all_groups(request):
 
 @login_required(login_url="login_admin")
 def admin_add_group(request):
-    form = GroupForm(request.POST or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        activity = AdminActivity()
-        activity.activityTitle = form.cleaned_data.get("title")
-        activity.activityCreator = request.user.username
-        activity.activityMethod = "POST"
-        activity.activityApplication = "Group"
-        activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
-        instance.save()
-        activity.save()
-        messages.success(request, "Grup başarıyla eklendi !")
-        return redirect("admin_add_group")
-    context = {
-        "form": form,
-    }
-    return render(request, "admin/groups/add-group.html", context)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminGroupForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
+        if form.is_valid():
+            accountGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+            if accountGroup:
+                instance = form.save(commit=False)
+                activity = AdminActivity()
+                activity.activityTitle = form.cleaned_data.get("title")
+                activity.activityCreator = request.user.username
+                activity.activityMethod = "POST"
+                activity.activityApplication = "Group"
+                activity.activityUpdatedDate = datetime.datetime.now()
+                activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
+                instance.save()
+                activity.save()
+                messages.success(request, "Grup başarıyla eklendi !")
+                return redirect("admin_add_group")
+            else:
+                messages.error(request, "Bu eylemi gerçekleştirmek için yetkiniz yok! Log alındı, geçmiş olsun.")
+                return render(request, "admin/groups/add-group.html", {"form": form, "adminGroup": adminGroup})
+        return render(request, "admin/groups/add-group.html", {"form": form, "adminGroup": adminGroup})
+    else:
+        messages.error(request, "Yetkiniz Yok !")
+        return redirect("admin_index")
+
 
 
 @login_required(login_url="login_admin")
 def admin_edit_group(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Group, slug=slug)
-    form = GroupForm(request.POST or None, instance=instance)
+    form = AdminGroupForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.updatedDate = datetime.datetime.now()
@@ -69,6 +92,11 @@ def admin_edit_group(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_group(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Group, slug=slug)
     instance.delete()
     activity = AdminActivity()
@@ -87,37 +115,51 @@ def admin_delete_group(request, slug):
 # Grup İzinleri
 @login_required(login_url="login_admin")
 def admin_add_group_permission(request):
-    form = GroupPermissionForm(request.POST or None)
-    context = {"form": form}
-    if form.is_valid():
-        form_groupname = form.cleaned_data.get("groupId")
-        form_permissionname = form.cleaned_data.get("permissionId")
-        if group.isActive is True and permission.isActive is True:
-            if GroupPermission.objects.filter(Q(permissionId=form_permissionname) and Q(groupId=form_groupname)):
-                messages.error(request, 'Bu gruba izin daha önce eklenmiş.')
+    """
+    :param request:
+    :return:
+    """
+    form = AdminGroupPermissionForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {"form": form, "adminGroup": adminGroup}
+    if adminGroup:
+        if form.is_valid():
+            form_groupname = form.cleaned_data.get("groupId")
+            form_permissionname = form.cleaned_data.get("permissionId")
+            if group.isActive is True and permission.isActive is True:
+                if GroupPermission.objects.filter(Q(permissionId=form_permissionname)):
+                    if GroupPermission.objects.filter(Q(groupId=form_groupname)):
+                        messages.error(request, 'Bu gruba izin daha önce eklenmiş.')
+                else:
+                    instance = form.save(commit=False)
+                    activity = AdminActivity()
+                    activity.activityTitle = form.cleaned_data.get("groupId")
+                    activity.activityCreator = request.user.username
+                    activity.activityMethod = "POST"
+                    activity.activityApplication = "Group Permission"
+                    activity.activityUpdatedDate = datetime.datetime.now()
+                    activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
+                    instance.save()
+                    activity.save()
+                    messages.success(request, 'Grup izni başarıyla eklendi.')
+                    return redirect("admin_add_group_permission")
             else:
-                instance = form.save(commit=False)
-                activity = AdminActivity()
-                activity.activityTitle = form.cleaned_data.get("groupId")
-                activity.activityCreator = request.user.username
-                activity.activityMethod = "POST"
-                activity.activityApplication = "Group Permission"
-                activity.activityUpdatedDate = datetime.datetime.now()
-                activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
-                instance.save()
-                activity.save()
-                messages.success(request, 'Grup izni başarıyla eklendi.')
+                messages.error(request, "Grup ya da İzin aktif değil. Lütfen kontrol edin.")
                 return redirect("admin_add_group_permission")
-        else:
-            messages.error(request, "Grup ya da İzin aktif değil. Lütfen kontrol edin.")
-            return redirect("admin_add_group_permission")
-    return render(request, "admin/groups/group-permission/add-group-perm.html", context)
+        return render(request, "admin/groups/group-permission/add-group-perm.html", context)
+    else:
+        messages.error(request, "Yetkiniz Yok !")
 
 
 @login_required(login_url="login_admin")
 def admin_edit_group_permission(request, id):
+    """
+    :param request:
+    :param id:
+    :return:
+    """
     instance = get_object_or_404(GroupPermission, id=id)
-    form = GroupPermissionForm(request.POST or None, instance=instance)
+    form = AdminGroupPermissionForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.updatedDate = datetime.datetime.now()
@@ -137,6 +179,10 @@ def admin_edit_group_permission(request, id):
 
 @login_required(login_url="login_admin")
 def admin_group_permission(request):
+    """
+    :param request:
+    :return:
+    """
     groupPermissions = GroupPermission.objects.all()
     context = {
         "groupPermissions": groupPermissions,
@@ -146,6 +192,11 @@ def admin_group_permission(request):
 
 @login_required(login_url="login_admin")
 def admin_delete_group_permission(request, id):
+    """
+    :param request:
+    :param id:
+    :return:
+    """
     instance = get_object_or_404(GroupPermission, id=id)
     if instance.isActive is False:
         activity = AdminActivity()
@@ -166,6 +217,11 @@ def admin_delete_group_permission(request, id):
 
 @login_required(login_url="login_admin")
 def admin_deactivate_group_permission(request, id):
+    """
+    :param request:
+    :param id:
+    :return:
+    """
     instance = get_object_or_404(GroupPermission, id=id)
     activity = AdminActivity()
     if instance.isActive is True:
@@ -193,6 +249,10 @@ def admin_deactivate_group_permission(request, id):
 # Hesap Grupları
 @login_required(login_url="login_admin")
 def admin_account_groups(request):
+    """
+    :param request:
+    :return:
+    """
     accountGroups = AccountGroup.objects.all()
     context = {"accountGroups": accountGroups}
     return render(request, "admin/account/group/account-groups.html", context)
@@ -200,6 +260,11 @@ def admin_account_groups(request):
 
 @login_required(login_url="login_admin")
 def admin_deactivate_account_group(request, id):
+    """
+    :param request:
+    :param id:
+    :return:
+    """
     instance = get_object_or_404(AccountGroup, id=id)
     activity = AdminActivity()
     if instance.isActive is True:
@@ -227,6 +292,11 @@ def admin_deactivate_account_group(request, id):
 
 @login_required(login_url="login_admin")
 def admin_delete_account_group(request, id):
+    """
+    :param request:
+    :param id:
+    :return:
+    """
     instance = get_object_or_404(AccountGroup, id=id)
     activity = AdminActivity()
     activity.activityTitle = "Kullanıcıdan Grup Silindi"
@@ -243,6 +313,11 @@ def admin_delete_account_group(request, id):
 
 @login_required(login_url="login_admin")
 def admin_activation_edit_group(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Group, slug=slug)
     activity = AdminActivity()
     if instance.isActive is False:

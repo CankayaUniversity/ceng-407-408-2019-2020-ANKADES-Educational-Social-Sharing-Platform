@@ -11,6 +11,15 @@
             <div class="card-body">
                 <h5 class="font-18 text-center">Ankades Admin Panel</h5>
                 {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                style="list-style: none"
+                                    {% if message.tags %} {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if messages %}
                     {% for message in messages %}
                         <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
                             <div class="fw-messages-wrap ls p-normal">

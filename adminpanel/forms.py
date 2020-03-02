@@ -2,7 +2,7 @@ from django import forms
 from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
 from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
-from exam.models import School, Department, Lecture, Term, Exam, ExamComment
+from exam.models import School, Department, Lecture, Exam, ExamComment, Term
 
 
 class AdminLoginForm(forms.Form):
@@ -22,93 +22,91 @@ class AdminEditProfileForm(forms.ModelForm):
         }
 
 
-class CourseForm(forms.ModelForm):
+class AdminCourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
 
 
-class CourseCategoryForm(forms.ModelForm):
+class AdminCourseCategoryForm(forms.ModelForm):
     class Meta:
         model = CourseCategory
         fields = ["parentId", "title", "slug", "description"]
 
 
-class PermissionForm(forms.ModelForm):
+class AdminPermissionForm(forms.ModelForm):
     class Meta:
         model = Permission
         fields = ["title", "slug", "isActive"]
 
 
-class GroupForm(forms.ModelForm):
+class AdminGroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ["title", "slug", "isActive"]
 
 
-class GroupPermissionForm(forms.ModelForm):
+class AdminGroupPermissionForm(forms.ModelForm):
     class Meta:
         model = GroupPermission
         fields = ["groupId", "permissionId", "isActive"]
 
 
-class AccountGroupForm(forms.ModelForm):
+class AdminAccountGroupForm(forms.ModelForm):
     class Meta:
         model = AccountGroup
         fields = ["userId", "groupId", "isActive"]
 
 
-class AccountPermissionForm(forms.ModelForm):
+class AdminAccountPermissionForm(forms.ModelForm):
     class Meta:
         model = AccountPermission
         fields = ["userId", "permissionId", "isActive"]
 
 
-class ArticleForm(forms.ModelForm):
+class AdminArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
 
 
-class ArticleCategoryForm(forms.ModelForm):
+class AdminArticleCategoryForm(forms.ModelForm):
     class Meta:
         model = ArticleCategory
         fields = ["parentId", "title", "slug", "description"]
 
 
-class SchoolForm(forms.ModelForm):
+class AdminSchoolForm(forms.ModelForm):
     class Meta:
         model = School
-        fields = ["title", "slug", "description", "isActive", "since", "media"]
+        fields = ['title', 'slug', 'description', 'media', 'isActive']
 
 
-class DepartmentForm(forms.ModelForm):
+class AdminDepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
-        fields = ["schoolId", "title", "slug", "description", "isActive", "media"]
+        fields = ['schoolId', 'title', 'slug', 'isActive']
 
 
-class TermForm(forms.ModelForm):
+class AdminTermForm(forms.ModelForm):
     class Meta:
         model = Term
-        fields = ["schoolId", "departmentId", "term", "slug", "isActive"]
+        fields = ['departmentId', 'title', 'slug', 'isActive']
 
 
-class LectureForm(forms.ModelForm):
+class AdminLectureForm(forms.ModelForm):
     class Meta:
         model = Lecture
-        fields = ["schoolId", "departmentId", "termId", "title", "slug", "description", "isActive"]
+        fields = ['termId', 'title', 'slug', 'description', 'isActive']
 
 
-class ExamForm(forms.ModelForm):
+class AdminExamForm(forms.ModelForm):
     class Meta:
         model = Exam
-        fields = ["schoolId", "departmentId", "termId", "lectureId", "title", "slug", "description", "isActive", "media"]
+        fields = ['lectureId', 'title', 'slug', 'description', 'isActive', 'media']
 
 
-class ExamCommentForm(forms.ModelForm):
+class AdminExamCommentForm(forms.ModelForm):
     class Meta:
         model = ExamComment
-        fields = ["content", "media"]
-
-
+        fields = '__all__'

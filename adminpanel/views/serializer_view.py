@@ -4,7 +4,9 @@ from rest_framework.permissions import AllowAny
 from account.models import Permission, Group, Account, AccountPermission, GroupPermission, AccountGroup, AccountActivity
 from adminpanel.models import AdminActivity
 from adminpanel.serializers import AccountSerializer, GroupSerializer, AccountGroupSerializer, PermissionSerializer, \
-    AccountPermissionSerializer, GroupPermissionSerializer, AccountActivitySerializer, AdminActivitySerializer
+    AccountPermissionSerializer, GroupPermissionSerializer, AccountActivitySerializer, AdminActivitySerializer, \
+    SchoolSerializer
+from exam.models import School
 
 
 class PermissionViewSet(viewsets.ModelViewSet):
@@ -45,6 +47,11 @@ class AccountActivityViewSet(viewsets.ModelViewSet):
 class AdminActivityViewSet(viewsets.ModelViewSet):
     queryset = AdminActivity.objects.all().order_by('-activityCreatedDate')
     serializer_class = AdminActivitySerializer
+
+
+class SchoolViewSet(viewsets.ModelViewSet):
+    queryset = School.objects.all().order_by('-createdDate')
+    serializer_class = SchoolSerializer
 
 
 # class IsLoggedInUserOrAdmin(permissions.BasePermission):

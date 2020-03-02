@@ -5,12 +5,18 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from adminpanel.forms import SchoolForm, DepartmentForm, TermForm, LectureForm, ExamForm
+from account.models import AccountGroup
+from adminpanel.forms import AdminSchoolForm, AdminDepartmentForm, AdminTermForm, AdminLectureForm, AdminExamForm
 from exam.models import School, Department, Term, Lecture, Exam
 
 
 # School
+@login_required(login_url="login_admin")
 def admin_schools(request):
+    """
+    :param request:
+    :return:
+    """
     schools = School.objects.all()
     context = {
         "schools": schools,
@@ -20,7 +26,11 @@ def admin_schools(request):
 
 @login_required(login_url="login_admin")
 def admin_add_school(request):
-    form = SchoolForm(request.POST or None)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminSchoolForm(request.POST or None)
     context = {
         "form": form
     }
@@ -35,9 +45,14 @@ def admin_add_school(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_school(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     if request.user.is_authenticated:
         instance = get_object_or_404(School, slug=slug)
-        form = SchoolForm(request.POST or None, request.FILES or None, instance=instance)
+        form = AdminSchoolForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
@@ -51,6 +66,11 @@ def admin_edit_school(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_school(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(School, slug=slug)
     instance.delete()
     messages.success(request, "Okul başarıyla silindi !")
@@ -58,7 +78,12 @@ def admin_delete_school(request, slug):
 
 
 # Department
+@login_required(login_url="login_admin")
 def admin_departments(request):
+    """
+    :param request:
+    :return:
+    """
     departments = Department.objects.all()
     context = {
         "departments": departments,
@@ -68,7 +93,11 @@ def admin_departments(request):
 
 @login_required(login_url="login_admin")
 def admin_add_department(request):
-    form = DepartmentForm(request.POST or None)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminDepartmentForm(request.POST or None)
     context = {
         "form": form
     }
@@ -83,9 +112,14 @@ def admin_add_department(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_department(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     if request.user.is_authenticated:
         instance = get_object_or_404(Department, slug=slug)
-        form = DepartmentForm(request.POST or None, request.FILES or None, instance=instance)
+        form = AdminDepartmentForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
@@ -99,14 +133,24 @@ def admin_edit_department(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_department(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Department, slug=slug)
     instance.delete()
     messages.success(request, "Bölüm başarıyla silindi !")
     return redirect("admin_schools")
 
 
-#Term
+# Term
+@login_required(login_url="login_admin")
 def admin_terms(request):
+    """
+    :param request:
+    :return:
+    """
     terms = Term.objects.all()
     context = {
         "terms": terms,
@@ -116,24 +160,32 @@ def admin_terms(request):
 
 @login_required(login_url="login_admin")
 def admin_add_term(request):
-    form = TermForm(request.POST or None)
-    context = {
-        "form": form
-    }
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.creator = request.user
-        instance.save()
-        messages.success(request, "Dönem başarıyla eklendi !")
-        return redirect("admin_terms")
-    return render(request, "admin/exam/term/add-term.html", context)
+    """
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        form = AdminTermForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form
+            messages.success(request, "Dönem başarıyla eklendi !")
+            return redirect("admin_terms")
+    else:
+        form = AdminTermForm(request.POST)
+    return render(request, "admin/exam/term/add-term.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
 def admin_edit_term(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     if request.user.is_authenticated:
         instance = get_object_or_404(Term, slug=slug)
-        form = TermForm(request.POST or None, request.FILES or None, instance=instance)
+        form = AdminTermForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
@@ -147,14 +199,24 @@ def admin_edit_term(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_term(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Term, slug=slug)
     instance.delete()
     messages.success(request, "Dönem başarıyla silindi !")
     return redirect("admin_terms")
 
 
-#Lecture
+# Lecture
+@login_required(login_url="login_admin")
 def admin_lectures(request):
+    """
+    :param request:
+    :return:
+    """
     lectures = Lecture.objects.all()
     context = {
         "lectures": lectures,
@@ -164,7 +226,11 @@ def admin_lectures(request):
 
 @login_required(login_url="login_admin")
 def admin_add_lecture(request):
-    form = LectureForm(request.POST or None)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminLectureForm(request.POST or None)
     context = {
         "form": form
     }
@@ -172,37 +238,55 @@ def admin_add_lecture(request):
         instance = form.save(commit=False)
         instance.creator = request.user
         instance.save()
-        messages.success(request, "Ders başarıyla eklendi !")
-        return redirect("admin_lectures")
-    return render(request, "admin/exam/lecture/add-lecture.html", context)
+        messages.success(request, "Dönem başarıyla eklendi !")
+        return redirect("admin_schools")
+    return render(request, "admin/exam/school/add-lecture.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_edit_lecture(request, slug):
-    if request.user.is_authenticated:
-        instance = get_object_or_404(Lecture, slug=slug)
-        form = LectureForm(request.POST or None, request.FILES or None, instance=instance)
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    instance = get_object_or_404(Lecture, slug=slug)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
+        form = AdminLectureForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.updatedDate = datetime.datetime.now()
-            instance.save()
             messages.success(request, "Ders başarıyla düzenlendi !")
             return redirect("admin_lectures")
-        return render(request, "admin/exam/lecture/edit-lecture.html", {"form": form})
-    else:
-        return redirect("login_admin")
+    return render(request, "admin/exam/lecture/edit-lecture.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
 def admin_delete_lecture(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     instance = get_object_or_404(Lecture, slug=slug)
-    instance.delete()
-    messages.success(request, "Ders başarıyla silindi !")
-    return redirect("admin_lectures")
+    if adminGroup:
+        instance.delete()
+        messages.success(request, "Ders başarıyla silindi !")
+        return redirect("admin_lectures")
+    else:
+        instance.isActive = False
+        messages.warning(request, "Ders başarıyla etkisizleştirildi !")
+        return redirect("admin_lectures")
 
 
-#Exam
+# Exam
+@login_required(login_url="login_admin")
 def admin_exams(request):
+    """
+    :param request:
+    :return:
+    """
     exams = Exam.objects.all()
     context = {
         "exams": exams,
@@ -212,7 +296,11 @@ def admin_exams(request):
 
 @login_required(login_url="login_admin")
 def admin_add_exam(request):
-    form = ExamForm(request.POST or None)
+    """
+    :param request:
+    :return:
+    """
+    form = AdminExamForm(request.POST or None)
     context = {
         "form": form
     }
@@ -227,9 +315,14 @@ def admin_add_exam(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_exam(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     if request.user.is_authenticated:
         instance = get_object_or_404(Exam, slug=slug)
-        form = ExamForm(request.POST or None, request.FILES or None, instance=instance)
+        form = AdminExamForm(request.POST or None, request.FILES or None, instance=instance)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
@@ -243,7 +336,18 @@ def admin_edit_exam(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_exam(request, slug):
-    instance = get_object_or_404(Exam, slug=slug)
-    instance.delete()
-    messages.success(request, "Sınav arşivi başarıyla silindi !")
-    return redirect("admin_exams")
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    instance = get_object_or_404(Lecture, slug=slug)
+    if adminGroup:
+        instance.delete()
+        messages.success(request, "Ders başarıyla silindi !")
+        return redirect("admin_lectures")
+    else:
+        instance.isActive = False
+        messages.warning(request, "Sınav başarıyla etkisizleştirildi !")
+        return redirect("admin_lectures")

@@ -15,16 +15,11 @@
 
         <!-- Top Bar Start -->
         {% include "admin/layout/navbar.html" %}
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
-        {% include "admin/layout/sidebar.html" %}
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
-        <div class="content-page">
+        {% if adminGroup  %}
+            {% include "admin/layout/sidebar.html" %}
+        {% else %}
+            {% include "admin/layout/sidebar-moderator.html" %}
+        {% endif %}
             <!-- Start content -->
             <!-- Start content -->
             <div class="content">

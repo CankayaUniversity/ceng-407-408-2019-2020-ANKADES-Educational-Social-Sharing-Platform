@@ -12,18 +12,13 @@
           href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
     <!-- Begin page -->
     <div id="wrapper">
-
-        <!-- Top Bar Start -->
-        {% include "admin/layout/navbar.html" %}
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
-        {% include "admin/layout/sidebar.html" %}
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
+        {% if adminGroup %}
+            {% include "admin/layout/navbar.html" %}
+            {% include "admin/layout/sidebar.html" %}
+        {% else %}
+            {% include "admin/layout/navbar-moderator.html" %}
+            {% include "admin/layout/sidebar-moderator.html" %}
+        {% endif %}
         <div class="content-page">
             <!-- Start content -->
             <!-- Start content -->
@@ -87,7 +82,9 @@
                                                            style="width: 70px; margin-left: 50px">Düzenle</a>
                                                         <a href="{% url 'admin_activation_edit_group' group.slug %}"
                                                            class="btn btn-primary btn-sm"
-                                                           style="width: 70px; margin-left: 50px">{% if group.isActive == True %}Etkisizleştir{% else %}Etkinleştir{% endif %}</a>
+                                                           style="width: 70px; margin-left: 50px">
+                                                            {% if group.isActive == True %}Etkisizleştir{% else %}
+                                                                Etkinleştir{% endif %}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{% url 'admin_delete_group' group.slug %}"
