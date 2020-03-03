@@ -47,30 +47,34 @@ def admin_index(request):
 
 # User View
 def login_admin(request):
-    form = AdminLoginForm(request.POST or None)
-    context = {"form": form}
-    if form.is_valid():
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password")
-        accountGroup = AccountGroup.objects.filter(
-            Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
-                userId__username=form.cleaned_data.get('username'), groupId__slug="admin"))
-        if accountGroup:
-            user = authenticate(username=username, password=password)
-            if user is None:
-                return render(request, "admin/login.html", {"form": form, "accountGroup": accountGroup})
-            else:
-                if user.is_active:
-                    login(request, user)
-                    messages.success(request, "Hoş geldiniz " + user.get_full_name())
-                    return redirect("admin_index")
+    if request.user.is_authenticated:
+        messages.error(request, "Zaten Giriş Yapılmış")
+        return redirect("admin_index")
+    else:
+        form = AdminLoginForm(request.POST or None)
+        context = {"form": form}
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            accountGroup = AccountGroup.objects.filter(
+                Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
+                    userId__username=form.cleaned_data.get('username'), groupId__slug="admin"))
+            if accountGroup:
+                user = authenticate(username=username, password=password)
+                if user is None:
+                    return render(request, "admin/login.html", {"form": form, "accountGroup": accountGroup})
                 else:
-                    messages.error(request, "Kullanıcı aktif değil !")
-                    return redirect("admin_index")
-        else:
-            messages.error(request,
-                           "Admin paneline giriş yetkiniz yok ya da böyle bir kullanıcı bulunamadı! Log alındı.")
-            return redirect("login_admin")
+                    if user.is_active:
+                        login(request, user)
+                        messages.success(request, "Hoş geldiniz " + user.get_full_name())
+                        return redirect("admin_index")
+                    else:
+                        messages.error(request, "Kullanıcı aktif değil !")
+                        return redirect("admin_index")
+            else:
+                messages.error(request,
+                               "Admin paneline giriş yetkiniz yok ya da böyle bir kullanıcı bulunamadı! Log alındı.")
+                return redirect("login_admin")
     return render(request, "admin/login.html", context)
 
 

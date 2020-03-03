@@ -78,8 +78,8 @@ def admin_edit_profile(request, username):
     instance = get_object_or_404(Account, username=username)
     form = AdminEditProfileForm(request.POST or None, request.FILES or None, instance=instance)
     accountGroup = AccountGroup.objects.filter(
-        Q(userId__username=request.user.username('username'), groupId__slug="moderator") | Q(
-            userId__username=request.user.username('username'), groupId__slug="admin"))
+        Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
+            userId__username=request.user.username, groupId__slug="admin"))
     if form.is_valid():
         if accountGroup:
             instance = form.save(commit=False)
