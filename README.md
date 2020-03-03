@@ -9,9 +9,6 @@ Nihan Nur AYDIN 201511005 nihannuraydin@gmail.com
 
 <snippet>Before Launch The Project</snippet>
 
-Do not activate the virtual environment with windowsenv and venv.
-Just activate it with wvenv
-
 </br>USE:</br>
 <code>python manage.py makemigrations</code></br>
 <code>python manage.py migrate</code> </br>
