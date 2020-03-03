@@ -1,8 +1,36 @@
-{% extends "admin/layout/layout.html" %}
-{% block title %}Ankades Admin Panel{% endblock %}
-{% block body %}
-    {% load crispy_forms_tags %}
-    {% load static %}
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="{% static "ankadeslogo.png" %}"/>
+    <link rel="stylesheet" href="{% static "admin/assets/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "admin/assets/css/metismenu.min.css" %}">
+    <link rel="stylesheet" href="{% static "admin/assets/css/icons.css" %}">
+    <link rel="stylesheet" href="{% static "admin/assets/css/style.css" %}">
+    <link rel="stylesheet" href="{% static "admin/assets/css/alert.css" %}">
+    <link rel="stylesheet" href="{% static "admin/assets/css/form.css " %}">
+
+
+    {% if request.path == '/ankades-admin-panel/' %}
+        <link rel="stylesheet" href="{% static "admin/plugins/morris/morris.css" %}">
+    {% endif %}
+
+    <link rel="stylesheet" href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css " %}">
+    <link rel="stylesheet" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css " %}">
+    <link rel="stylesheet" href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css " %}">
+
+</head>
+
+<body>
+<div class="preloader">
+    <div class="preloader_image"></div>
+</div>
 
     <!-- Begin page -->
     <div class="accountbg"></div>
@@ -49,4 +77,5 @@
         </div>
     </div>
     <!-- END wrapper -->
-{% endblock %}
+</body>
+</html>

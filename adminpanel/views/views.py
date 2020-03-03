@@ -52,19 +52,21 @@ def login_admin(request):
     if form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
-        if AccountGroup.objects.filter(
-                Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
-                        userId__username=form.cleaned_data.get('username'), groupId__slug="admin")):
+        accountGroup = AccountGroup.objects.filter(
+            Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
+                userId__username=form.cleaned_data.get('username'), groupId__slug="admin"))
+        if accountGroup:
             user = authenticate(username=username, password=password)
             if user is None:
-                return render(request, "admin/login.html", {"form": form})
+                return render(request, "admin/login.html", {"form": form, "accountGroup": accountGroup})
             else:
                 if user.is_active:
                     login(request, user)
                     messages.success(request, "Hoş geldiniz " + user.get_full_name())
                     return redirect("admin_index")
                 else:
-                    return render(request, "admin/login.html", {"form": form})
+                    messages.error(request, "Kullanıcı aktif değil !")
+                    return redirect("admin_index")
         else:
             messages.error(request,
                            "Admin paneline giriş yetkiniz yok ya da böyle bir kullanıcı bulunamadı! Log alındı.")

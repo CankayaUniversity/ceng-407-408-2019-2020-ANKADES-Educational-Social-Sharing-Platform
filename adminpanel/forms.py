@@ -1,4 +1,6 @@
 from django import forms
+from django.db.models import Q
+
 from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
 from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
@@ -70,10 +72,18 @@ class AdminArticleForm(forms.ModelForm):
         fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
 
 
-class AdminArticleCategoryForm(forms.ModelForm):
-    class Meta:
-        model = ArticleCategory
-        fields = ["parentId", "title", "slug", "description"]
+class AdminArticleCategoryForm(forms.Form):
+    parentId = forms.BooleanField(required=False, initial=True)
+    if parentId is True:
+        categoryId = forms.ModelChoiceField(queryset=ArticleCategory.objects.filter(Q(isCategory=True)))
+    else:
+        categoryId = forms.ModelChoiceField(
+            queryset=ArticleCategory.objects.filter(Q(isRoot=False) and Q(isCategory=False)),
+            label="Üst Kategorisi")
+    title = forms.CharField(max_length=254, label="Başlık")
+    slug = forms.SlugField(max_length=254, label="Slug")
+    isActive = forms.BooleanField(label="Aktiflik")
+    isCategory = forms.BooleanField(label="Üst Kategori mi")
 
 
 class AdminSchoolForm(forms.ModelForm):
@@ -82,10 +92,11 @@ class AdminSchoolForm(forms.ModelForm):
         fields = ['title', 'slug', 'description', 'media', 'isActive']
 
 
-class AdminDepartmentForm(forms.ModelForm):
-    class Meta:
-        model = Department
-        fields = ['schoolId', 'title', 'slug', 'isActive']
+class AdminDepartmentForm(forms.Form):
+    schoolId = forms.ModelChoiceField(queryset=School.objects.filter(Q(isActive=True)), label="Okul")
+    title = forms.CharField(max_length=254, label="Başlık")
+    slug = forms.SlugField(max_length=254, label="Slug")
+    isActive = forms.BooleanField(label="Aktiflik")
 
 
 class AdminTermForm(forms.ModelForm):

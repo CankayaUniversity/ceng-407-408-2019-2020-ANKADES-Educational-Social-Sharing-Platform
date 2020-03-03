@@ -184,15 +184,20 @@ def admin_edit_term(request, slug):
     :return:
     """
     if request.user.is_authenticated:
+        adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
         instance = get_object_or_404(Term, slug=slug)
         form = AdminTermForm(request.POST or None, request.FILES or None, instance=instance)
+        context = {
+            "form": form,
+            "adminGroup": adminGroup
+        }
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
             instance.save()
             messages.success(request, "Dönem başarıyla düzenlendi !")
             return redirect("admin_terms")
-        return render(request, "admin/exam/term/edit-term.html", {"form": form})
+        return render(request, "admin/exam/term/edit-term.html", context)
     else:
         return redirect("login_admin")
 
@@ -231,8 +236,10 @@ def admin_add_lecture(request):
     :return:
     """
     form = AdminLectureForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "form": form
+        "form": form,
+        "adminGroup": adminGroup
     }
     if form.is_valid():
         instance = form.save(commit=False)
@@ -240,7 +247,7 @@ def admin_add_lecture(request):
         instance.save()
         messages.success(request, "Dönem başarıyla eklendi !")
         return redirect("admin_schools")
-    return render(request, "admin/exam/school/add-lecture.html", context)
+    return render(request, "admin/exam/lecture/add-lecture.html", context)
 
 
 @login_required(login_url="login_admin")

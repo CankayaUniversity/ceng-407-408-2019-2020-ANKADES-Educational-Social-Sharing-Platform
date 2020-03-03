@@ -77,15 +77,22 @@ def admin_account_permission(request):
 def admin_edit_profile(request, username):
     instance = get_object_or_404(Account, username=username)
     form = AdminEditProfileForm(request.POST or None, request.FILES or None, instance=instance)
+    accountGroup = AccountGroup.objects.filter(
+        Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
+            userId__username=form.cleaned_data.get('username'), groupId__slug="admin"))
     if form.is_valid():
-        instance = form.save(commit=False)
-        instance.updatedDate = datetime.datetime.now()
-        instance.username = username
-        instance.save()
-        messages.success(request, "Profil başarıyla düzenlendi !")
-        return redirect("admin_all_users")
+        if accountGroup:
+            instance = form.save(commit=False)
+            instance.updatedDate = datetime.datetime.now()
+            instance.username = username
+            instance.save()
+            messages.success(request, "Profil başarıyla düzenlendi !")
+            return redirect("admin_all_users")
+        else:
+            messages.error(request, "Yetkiniz Yok")
     context = {
         "form": form,
+        "accountGroup": accountGroup
     }
     return render(request, "admin/account/edit-profile.html", context)
 
