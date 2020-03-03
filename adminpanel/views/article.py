@@ -100,11 +100,18 @@ def admin_add_article_category(request):
     :return:
     """
     form = AdminArticleCategoryForm(request.POST or None)
+
     context = {
         "form": form,
     }
     if form.is_valid():
-        instance = form.save(commit=False)
+        categoryId = forms.cleaned_data.get("categoryId")
+        isCategory = form.cleaned_data.get("isCategory")
+        title = form.cleaned_data.get("title")
+        slug = form.cleaned_data.get("slug")
+        isActive = form.cleaned_data.get("isActive")
+        instance = AdminArticleCategoryForm(categoryId=categoryId, isCategory=isCategory, isActive=isActive,
+                                            title=title, slug=slug)
         instance.creator = request.user
         instance.save()
         messages.success(request, "Makale kategorisi başarıyla eklendi !")

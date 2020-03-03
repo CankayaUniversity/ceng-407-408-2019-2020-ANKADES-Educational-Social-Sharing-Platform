@@ -20,6 +20,7 @@ class ArticleCategory(models.Model):
     tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
     view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+    isCategory = models.BooleanField(default=False, verbose_name="Üst Kategori mi?")
 
     def __str__(self):
         return self.title

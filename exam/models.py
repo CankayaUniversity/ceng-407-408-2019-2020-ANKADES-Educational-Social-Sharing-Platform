@@ -16,7 +16,6 @@ class School(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Okul Oluşturulma Tarihi")
     updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
-    since = models.DateTimeField(verbose_name="Okul Kurulduğu Tarih")
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Okul Oluşturan Kişi")
     media = models.FileField(null=True, blank=True, verbose_name="Dosya")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
