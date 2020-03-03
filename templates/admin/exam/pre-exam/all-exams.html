@@ -1,104 +1,95 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Dersler | {{ request.user.first_name|upper }}{% endblock %}
-    {% load static %}
-    {% load crispy_forms_tags %}
+{% block title %}Kurs Kategori Ekle{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% block body %}
     <link rel="stylesheet" type="text/css"
           href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css" %}"/>
     <link rel="stylesheet" type="text/css"
           href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
-    <div id="wrapper">
-         {% if adminGroup %}
-            {% include "admin/layout/navbar.html" %}
-            {% include "admin/layout/sidebar.html" %}
-        {% else %}
-            {% include "admin/layout/navbar-moderator.html" %}
-            {% include "admin/layout/sidebar-moderator.html" %}
-        {% endif %}
-        <div class="content-page">
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="page-title-box">
-                        <div class="row align-items-center">
-                            <div class="col-sm-12">
-                                <h4 class="page-title">Ders Listesi</h4>
-                            </div>
-                        </div> <!-- end row -->
-                    </div>
-                    {% if messages %}
-                        <ul class="messages">
-                            {% for message in messages %}
-                                <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
-                                    style="list-style: none"
-                                        {% if message.tags %} {% endif %}>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card m-b-30">
-                                <div class="card-body">
-                                    <h4 class="mt-0 header-title">Tüm Dersler</h4>
-                                    <p class="sub-title../plugins">
-                                        Aşağıdan dersleri görüntüleyebilir, düzenleyebilirsiniz.
-                                    </p>
-                                    <table id="datatable-buttons"
-                                           class="table table-striped table-bordered dt-responsive nowrap"
-                                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                        <thead>
-                                        <tr style="width: 90% !important;">
-                                            <th>Okul Adı</th>
-                                            <th>Bölüm Adı</th>
-                                            <th>Dönem</th>
-                                            <th>Ders Adı</th>
-                                            <th>Başlık</th>
-                                            <th>Oluşturulma</th>
-                                            <th>Güncelleme</th>
-                                            <th>PDF</th>
-                                            <th>View</th>
-                                            <th>Aktiflik</th>
-                                            <th>İşlemler</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% if exams %}
-                                            {% for exam in exams %}
-                                                <tr>
-                                                    <td>{{ exam.schoolId }}</td>
-                                                    <td>{{ exam.departmentId }}</td>
-                                                    <td>{{ exam.termId }}</td>
-                                                    <td>{{ exam.lectureId }}</td>
-                                                    <td>{{ exam.title }}</td>
-                                                    <td>{{ exam.createdDate }}</td>
-                                                    <td>{{ exam.updatedDate }}</td>
-                                                    <td><a href="{{ exam.media.url }}">PDF</a></td>
-                                                    <td>{{ exam.view }}</td>
-                                                    <td>{% if exam.isActive is True %}Aktif{% else %}
-                                                        Kapalı{% endif %}</td>
-                                                    <td>
-                                                        <a href="{% url 'admin_edit_exam' exam.slug %}"
-                                                           class="btn btn-success btn-sm">Düzenle</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{% url 'admin_delete_exam' exam.slug %}"
-                                                           class="btn btn-danger btn-sm">Sil</a>
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        {% endif %}
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div> <!-- end col -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="page-title-box">
+                    <div class="row align-items-center">
+                        <div class="col-sm-12">
+                            <h4 class="page-title">Ders Listesi</h4>
+                        </div>
                     </div> <!-- end row -->
                 </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                style="list-style: none"
+                                    {% if message.tags %} {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <h4 class="mt-0 header-title">Tüm Dersler</h4>
+                                <p class="sub-title../plugins">
+                                    Aşağıdan dersleri görüntüleyebilir, düzenleyebilirsiniz.
+                                </p>
+                                <table id="datatable-buttons"
+                                       class="table table-striped table-bordered dt-responsive nowrap"
+                                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                    <tr style="width: 90% !important;">
+                                        <th>Okul Adı</th>
+                                        <th>Bölüm Adı</th>
+                                        <th>Dönem</th>
+                                        <th>Ders Adı</th>
+                                        <th>Başlık</th>
+                                        <th>Oluşturulma</th>
+                                        <th>Güncelleme</th>
+                                        <th>PDF</th>
+                                        <th>View</th>
+                                        <th>Aktiflik</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if exams %}
+                                        {% for exam in exams %}
+                                            <tr>
+                                                <td>{{ exam.schoolId }}</td>
+                                                <td>{{ exam.departmentId }}</td>
+                                                <td>{{ exam.termId }}</td>
+                                                <td>{{ exam.lectureId }}</td>
+                                                <td>{{ exam.title }}</td>
+                                                <td>{{ exam.createdDate }}</td>
+                                                <td>{{ exam.updatedDate }}</td>
+                                                <td><a href="{{ exam.media.url }}">PDF</a></td>
+                                                <td>{{ exam.view }}</td>
+                                                <td>{% if exam.isActive is True %}Aktif{% else %}
+                                                    Kapalı{% endif %}</td>
+                                                <td>
+                                                    <a href="{% url 'admin_edit_exam' exam.slug %}"
+                                                       class="btn btn-success btn-sm">Düzenle</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'admin_delete_exam' exam.slug %}"
+                                                       class="btn btn-danger btn-sm">Sil</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
             </div>
-            <footer class="footer">
-                © 2019 - 2020 Tüm Hakları Saklıdır
-            </footer>
         </div>
+        <footer class="footer">
+            © 2019 - 2020 Tüm Hakları Saklıdır
+        </footer>
     </div>
 {% endblock body %}

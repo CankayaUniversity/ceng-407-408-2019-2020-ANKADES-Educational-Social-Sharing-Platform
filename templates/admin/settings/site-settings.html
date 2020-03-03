@@ -8,14 +8,6 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css" %}"/>
     <link rel="stylesheet" type="text/css"
           href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
-    <div id="wrapper">
-         {% if adminGroup %}
-            {% include "admin/layout/navbar.html" %}
-            {% include "admin/layout/sidebar.html" %}
-        {% else %}
-            {% include "admin/layout/navbar-moderator.html" %}
-            {% include "admin/layout/sidebar-moderator.html" %}
-        {% endif %}
         <div class="content-page">
             <!-- Start content -->
             <div class="content">
@@ -805,5 +797,4 @@
             </footer>
 
         </div>
-    </div>
 {% endblock body %}

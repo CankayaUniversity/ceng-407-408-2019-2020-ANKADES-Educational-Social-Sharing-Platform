@@ -2,32 +2,6 @@
 {% block title %}Dashboard{% endblock %}
 {% load static %}
 {% block body %}
-    <div class="preloader">
-        <div class="preloader_image"></div>
-    </div>
-    <!-- Unyson messages modal -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="messages_modal">
-        <div class="fw-messages-wrap ls p-normal">
-            <!-- Uncomment this UL with LI to show messages in modal popup to your user: -->
-            <!--
-        <ul class="list-unstyled">
-            <li>Message To User</li>
-        </ul>
-        -->
-
-        </div>
-    </div><!-- eof .modal -->
-    <!-- Begin page -->
-    <div id="wrapper">
-
-        <!-- Top Bar Start -->
-        {% if adminGroup %}
-            {% include "admin/layout/navbar.html" %}
-            {% include "admin/layout/sidebar.html" %}
-        {% else %}
-            {% include "admin/layout/navbar-moderator.html" %}
-            {% include "admin/layout/sidebar-moderator.html" %}
-        {% endif %}
         <div class="content-page">
             <!-- Start content -->
             <div class="content">
@@ -513,23 +487,11 @@
                         </div>
 
                     </div>
-                    <!-- END ROW -->
-
                 </div>
-                <!-- container-fluid -->
-
             </div>
-            <!-- content -->
-
             <footer class="footer">
                 © 2020 - Ankades <span class="d-none d-sm-inline-block"></span>
             </footer>
 
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
-
-    </div>
-    <!-- END wrapper -->
 {% endblock %}

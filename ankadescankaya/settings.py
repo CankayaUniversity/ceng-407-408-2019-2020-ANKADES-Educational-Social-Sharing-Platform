@@ -97,9 +97,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ankadesdb',
         'USER': 'postgres',
-        'PASSWORD': 'ankades.SharingPlatform2020',
+        'PASSWORD': 'bacaglar',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '5433', # can be 5432
     }
 }
 

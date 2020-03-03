@@ -1,31 +1,8 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}İzinler | {{ request.user.first_name|upper }}{% endblock %}
+{% block title %}Kurs Kategori Ekle{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% block body %}
-
-    {% load static %}
-    {% load crispy_forms_tags %}
-
-    <link rel="stylesheet" type="text/css"
-          href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css" %}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
-    <!-- Begin page -->
-    <div id="wrapper">
-
-        <!-- Top Bar Start -->
-         {% if adminGroup %}
-            {% include "admin/layout/navbar.html" %}
-            {% include "admin/layout/sidebar.html" %}
-        {% else %}
-            {% include "admin/layout/navbar-moderator.html" %}
-            {% include "admin/layout/sidebar-moderator.html" %}
-        {% endif %}
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
         <div class="content-page">
             <!-- Start content -->
             <!-- Start content -->
@@ -121,13 +98,4 @@
             </footer>
 
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
-
-    </div>
-    <!-- END wrapper -->
-
-
-    <!-- jQuery  -->
 {% endblock body %}

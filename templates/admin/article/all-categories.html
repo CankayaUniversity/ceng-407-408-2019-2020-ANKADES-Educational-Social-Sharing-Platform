@@ -1,19 +1,8 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Makale Kategori{% endblock %}
+{% block title %}Kurs Kategori Ekle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
-    <div id="wrapper">
-        <!-- Top Bar Start -->
-         {% if adminGroup %}
-            {% include "admin/layout/navbar.html" %}
-            {% include "admin/layout/sidebar.html" %}
-        {% else %}
-            {% include "admin/layout/navbar-moderator.html" %}
-            {% include "admin/layout/sidebar-moderator.html" %}
-        {% endif %}
-        <!-- Left Sidebar End -->
-
         <div class="content-page">
             <div class="content">
                 <div class="container-fluid">
@@ -87,5 +76,4 @@
                 </div>
             </div>
         </div>
-    </div>
 {% endblock %}

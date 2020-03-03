@@ -40,23 +40,20 @@ def admin_add_group(request):
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
         if form.is_valid():
-            accountGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-            if accountGroup:
-                instance = form.save(commit=False)
-                activity = AdminActivity()
-                activity.activityTitle = form.cleaned_data.get("title")
-                activity.activityCreator = request.user.username
-                activity.activityMethod = "POST"
-                activity.activityApplication = "Group"
-                activity.activityUpdatedDate = datetime.datetime.now()
-                activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
-                instance.save()
-                activity.save()
-                messages.success(request, "Grup başarıyla eklendi !")
-                return redirect("admin_add_group")
-            else:
-                messages.error(request, "Bu eylemi gerçekleştirmek için yetkiniz yok! Log alındı, geçmiş olsun.")
-                return render(request, "admin/groups/add-group.html", {"form": form, "adminGroup": adminGroup})
+            # accountGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+            # if accountGroup:
+            instance = form.save(commit=False)
+            activity = AdminActivity()
+            activity.activityTitle = form.cleaned_data.get("title")
+            activity.activityCreator = request.user.username
+            activity.activityMethod = "POST"
+            activity.activityApplication = "Group"
+            activity.activityUpdatedDate = datetime.datetime.now()
+            activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlemi yapan kişi: " + activity.activityCreator
+            instance.save()
+            activity.save()
+            messages.success(request, "Grup başarıyla eklendi !")
+            return redirect("admin_add_group")
         return render(request, "admin/groups/add-group.html", {"form": form, "adminGroup": adminGroup})
     else:
         messages.error(request, "Yetkiniz Yok !")

@@ -1,17 +1,8 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Dönem Düzenle{% endblock %}
+{% block title %}Kurs Kategori Ekle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
-    <div id="wrapper">
-        <!-- Top Bar Start -->
-         {% if adminGroup %}
-            {% include "admin/layout/navbar.html" %}
-            {% include "admin/layout/sidebar.html" %}
-        {% else %}
-            {% include "admin/layout/navbar-moderator.html" %}
-            {% include "admin/layout/sidebar-moderator.html" %}
-        {% endif %}
         <div class="content-page">
             <!-- Start content -->
             <div class="content">
@@ -64,8 +55,4 @@
 
 
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
-    </div>
 {% endblock %}

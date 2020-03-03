@@ -13,36 +13,36 @@ from course.models import CourseCategory, Course
 @login_required(login_url="login_admin")
 def admin_index(request):
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    if AccountGroup.objects.filter(
-            Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
-                userId__username=request.user.username, groupId__slug="admin")):
-        user = Account.objects.all()
-        admin = AccountGroup.objects.filter(groupId__slug__contains="admin")
-        moderator = AccountGroup.objects.filter(groupId__slug__contains="moderator")
-        ogretmen = AccountGroup.objects.filter(groupId__slug__contains="ogretmen")
-        ogrenci = AccountGroup.objects.filter(groupId__slug__contains="ogrenci")
-        user_count = Account.objects.all().count()
-        course_count = Course.objects.all().count()
-        course_category_count = CourseCategory.objects.all().count()
-        # activity = AdminActivity.objects.all()
-        # activity_limit = AdminActivity.objects.all().order_by("-activityCreatedDate")[:4]
-        context = {
-            "user": user,
-            "ogrenci": ogrenci,
-            "moderator": moderator,
-            "ogretmen": ogretmen,
-            "admin": admin,
-            "user_count": user_count,
-            "course_count": course_count,
-            "course_category_count": course_category_count,
-            "adminGroup": adminGroup,
-            # "activity": activity,
-            # "activity_limit": activity_limit,
-        }
-        return render(request, "admin/index.html", context)
-    else:
-        messages.error("Yetkiniz yok!")
-        return redirect("logout_admin")
+    # if AccountGroup.objects.filter(
+    #         Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
+    #             userId__username=request.user.username, groupId__slug="admin")):
+    user = Account.objects.all()
+    admin = AccountGroup.objects.filter(groupId__slug__contains="admin")
+    moderator = AccountGroup.objects.filter(groupId__slug__contains="moderator")
+    ogretmen = AccountGroup.objects.filter(groupId__slug__contains="ogretmen")
+    ogrenci = AccountGroup.objects.filter(groupId__slug__contains="ogrenci")
+    user_count = Account.objects.all().count()
+    course_count = Course.objects.all().count()
+    course_category_count = CourseCategory.objects.all().count()
+    # activity = AdminActivity.objects.all()
+    # activity_limit = AdminActivity.objects.all().order_by("-activityCreatedDate")[:4]
+    context = {
+        "user": user,
+        "ogrenci": ogrenci,
+        "moderator": moderator,
+        "ogretmen": ogretmen,
+        "admin": admin,
+        "user_count": user_count,
+        "course_count": course_count,
+        "course_category_count": course_category_count,
+        "adminGroup": adminGroup,
+        # "activity": activity,
+        # "activity_limit": activity_limit,
+    }
+    return render(request, "admin/index.html", context)
+    # else:
+    #     messages.error(request, "Yetkiniz yok!")
+    #     return redirect("logout_admin")
 
 
 # User View
