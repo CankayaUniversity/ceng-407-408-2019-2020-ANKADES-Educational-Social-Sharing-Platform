@@ -65,7 +65,6 @@
                                     <div class="woocommerce-MyAccount-content">
                                         <form class="form-horizontal" enctype="multipart/form-data" method="post">
                                             {% csrf_token %}
-                                            {{ form.media }}
                                             {{ form|crispy }}
                                             {{ form_as.p }}
                                             <br>

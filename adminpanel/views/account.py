@@ -18,11 +18,11 @@ group = Group()
 @login_required(login_url="login_admin")
 def admin_all_users(request):
     accounts = Account.objects.all()
-    accountGroups = AccountGroup.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     accountFiveLimitOrdered = Account.objects.all().order_by('-date_joined')[:5]
     context = {
         "accounts": accounts,
-        "accountGroups": accountGroups,
+        "adminGroup": adminGroup,
         "accountFiveLimitOrdered": accountFiveLimitOrdered,
     }
     return render(request, "admin/account/all-users.html", context)
@@ -30,27 +30,33 @@ def admin_all_users(request):
 
 @login_required(login_url="login_admin")
 def admin_students(request):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     accounts = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
         "accounts": accounts,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/students.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_teachers(request):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     accounts = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     context = {
         "accounts": accounts,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/teachers.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_moderators(request):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     accounts = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     context = {
         "accounts": accounts,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/moderators.html", context)
 
@@ -58,17 +64,21 @@ def admin_moderators(request):
 @login_required(login_url="login_admin")
 def admin_admins(request):
     accounts = AccountGroup.objects.filter(Q(groupId__slug="admin"))
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "accounts": accounts,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/admins.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_account_permission(request):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     permissions = AccountPermission.objects.all()
     context = {
         "permissions": permissions,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/account/permission/account-permission.html", context)
 
@@ -77,11 +87,11 @@ def admin_account_permission(request):
 def admin_edit_profile(request, username):
     instance = get_object_or_404(Account, username=username)
     form = AdminEditProfileForm(request.POST or None, request.FILES or None, instance=instance)
-    accountGroup = AccountGroup.objects.filter(
+    adminGroup = AccountGroup.objects.filter(
         Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
             userId__username=request.user.username, groupId__slug="admin"))
     if form.is_valid():
-        if accountGroup:
+        if adminGroup:
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
             instance.username = username
@@ -92,7 +102,7 @@ def admin_edit_profile(request, username):
             messages.error(request, "Yetkiniz Yok")
     context = {
         "form": form,
-        "accountGroup": accountGroup
+        "adminGroup": adminGroup
     }
     return render(request, "admin/account/edit-profile.html", context)
 
@@ -119,8 +129,10 @@ def admin_deactivate_profile(request, username):
 @login_required(login_url="login_admin")
 def admin_blocked_users(request):
     blockedUsers = Account.objects.filter(is_active=False)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "blockedUsers": blockedUsers
+        "blockedUsers": blockedUsers,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/account/blocked-user.html", context)
 

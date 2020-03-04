@@ -4,8 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm
-from article.models import Article, ArticleCategory
+from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminTagForm
+from adminpanel.models import Tag
+from article.models import Article, ArticleCategory, ArticleTag
 
 
 @login_required(login_url="login_admin")
@@ -19,6 +20,19 @@ def admin_articles(request):
         "articles": articles,
     }
     return render(request, "admin/article/all-articles.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_tags(request):
+    """
+    :param request:
+    :return:
+    """
+    tags = Tag.objects.all()
+    context = {
+        "tags": tags,
+    }
+    return render(request, "admin/tags/all-tags.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -38,6 +52,25 @@ def admin_add_article(request):
         messages.success(request, "Makale başarıyla eklendi !")
         return redirect("admin_articles")
     return render(request, "admin/article/add-article.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_add_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    form = AdminTagForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.creator = request.user
+        instance.save()
+        messages.success(request, "Etiket başarıyla eklendi !")
+        return redirect("admin_articles")
+    return render(request, "admin/article/add-tag.html", context)
 
 
 @login_required(login_url="login_admin")

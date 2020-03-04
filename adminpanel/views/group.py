@@ -24,8 +24,10 @@ def admin_all_groups(request):
     :return:
     """
     groups = Group.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "groups": groups,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/groups/groups.html", context)
 
@@ -251,7 +253,11 @@ def admin_account_groups(request):
     :return:
     """
     accountGroups = AccountGroup.objects.all()
-    context = {"accountGroups": accountGroups}
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {
+        "accountGroups": accountGroups,
+        "adminGroup": adminGroup
+    }
     return render(request, "admin/account/group/account-groups.html", context)
 
 

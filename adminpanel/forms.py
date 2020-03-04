@@ -1,7 +1,9 @@
+from ckeditor.fields import RichTextField
 from django import forms
 from django.db.models import Q
 
 from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
+from adminpanel.models import Tag
 from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
 from exam.models import School, Department, Lecture, Exam, ExamComment, Term
@@ -72,6 +74,19 @@ class AdminArticleForm(forms.ModelForm):
         fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
 
 
+class AdminTagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['title', 'slug', 'isActive']
+
+
+# class AdminArticleForm(forms.Form):
+#     title = forms.CharField(max_length=None, label="Başlık")
+#     slug = forms.SlugField(max_length=None, label="Slug")
+#     tag = forms.ModelChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket Seçin")
+#     description = RichTextField()
+
+
 class AdminArticleCategoryForm(forms.Form):
     parentId = forms.BooleanField(required=False, initial=True)
     if parentId is True:
@@ -121,3 +136,9 @@ class AdminExamCommentForm(forms.ModelForm):
     class Meta:
         model = ExamComment
         fields = '__all__'
+
+
+class AdminSocialMediaForm(forms.Form):
+    title = forms.CharField(label="Sosyal Medya Adı")
+    slug = forms.SlugField(max_length=None, label="Slug")
+    isActive = forms.BooleanField(label="Aktiflik", required=False)

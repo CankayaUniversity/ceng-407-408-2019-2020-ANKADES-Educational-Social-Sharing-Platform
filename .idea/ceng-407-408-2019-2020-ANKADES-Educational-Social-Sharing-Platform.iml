@@ -19,7 +19,7 @@
       <excludeFolder url="file://$MODULE_DIR$/windowsenv" />
       <excludeFolder url="file://$MODULE_DIR$/wvenv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (ANKADES) (5)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="ankadesInterpreter" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">

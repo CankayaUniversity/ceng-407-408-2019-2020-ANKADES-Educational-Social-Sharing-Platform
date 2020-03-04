@@ -79,6 +79,11 @@ class ArticleTag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Tag Id")
     articleId = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, verbose_name="Makale")
     tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
+    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
 
     def __str__(self):
         return self.articleId

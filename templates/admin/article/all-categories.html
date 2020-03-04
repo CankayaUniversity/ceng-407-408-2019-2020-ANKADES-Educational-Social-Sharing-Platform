@@ -1,79 +1,77 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Kurs Kategori Ekle{% endblock %}
+{% block title %}Makale Kategorileri{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
-        <div class="content-page">
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="page-title-box">
-                        <div class="row align-items-center">
-                            <div class="col-sm-6">
-                                <h4 class="page-title">Makale Kategori Listesi</h4>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-right">
-                                    <li class="breadcrumb-item"><a href="">Makale</a></li>
-                                    <li class="breadcrumb-item"><a href="">Makale Kategori Listesi</a></li>
-                                </ol>
-                            </div>
-                        </div> <!-- end row -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="page-title-box">
+                    <div class="row align-items-center">
+                        <div class="col-sm-6">
+                            <h4 class="page-title">Makale Kategori Listesi</h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="{% url 'admin_articles' %}">Makaleler</a></li>
+                                <li class="breadcrumb-item"><a href="">Makale Kategori Listesi</a></li>
+                            </ol>
+                        </div>
                     </div>
-                    {#Ana Kategori#}
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card m-b-30">
-                                <div class="card-body">
-
-                                    <h4 class="mt-0 header-title">Makale Listesi</h4>
-                                    <p class="sub-title../plugins">Aşağıdan ana kategorileri görüntüleyebilir,
-                                        düzenleyebilirsiniz.
-                                    </p>
-                                    <table id="datatable-buttons"
-                                           class="table table-striped table-bordered dt-responsive nowrap"
-                                           style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;">
-                                        <thead>
-                                        <tr>
-                                            <th>Kurs Kategori Başlığı</th>
-                                            <th>Kurs Kategori Oluşturan</th>
-                                            <th>Kurs Kategori Oluşturulma Tarihi</th>
-                                            <th>Kurs Kategori Güncellenme Tarihi</th>
-                                            <th>Aktiflik</th>
-                                            <th>Üst Kategorisi</th>
-                                            <th>Düzenle</th>
-                                            <th>Sil</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% if article_categories_list %}
-                                            {% for article_category in article_categories_list %}
-                                                <tr>
-                                                    <td>{{ article_category.title }}</td>
-                                                    <td>{{ course_category.creator.get_full_name }}</td>
-                                                    <td>{{ article_category.createdDate }}</td>
-                                                    <td>{{ article_category.updatedDate }}</td>
-                                                    <td>{% if article_category.isActive is True %}Aktif{% else %}
-                                                        Kapalı{% endif %}</td>
-                                                    <td>{{ article_category.parentId.title }}</td>
-                                                    <td>
-                                                        <a href="{% url 'admin_edit_course_category' article_category.slug %}"
-                                                           class="btn btn-success btn-sm">Düzenle</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{% url 'admin_delete_course_category' article_category.slug %}"
-                                                           class="btn btn-danger btn-sm">Sil</a>
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        {% endif %}
-                                        </tbody>
-                                    </table>
-
-                                </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <h4 class="mt-0 header-title">Makale Listesi</h4>
+                                <p class="sub-title../plugins">Aşağıdan makale kategorilerini görüntüleyebilir,
+                                    düzenleyebilirsiniz.
+                                </p>
+                                <table id="datatable-buttons"
+                                       class="table table-striped table-bordered dt-responsive nowrap"
+                                       style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;">
+                                    <thead>
+                                    <tr>
+                                        <th>Kurs Kategori Başlığı</th>
+                                        <th>Kurs Kategori Oluşturan</th>
+                                        <th>Kurs Kategori Oluşturulma Tarihi</th>
+                                        <th>Kurs Kategori Güncellenme Tarihi</th>
+                                        <th>Aktiflik</th>
+                                        <th>Üst Kategorisi</th>
+                                        <th>Düzenle</th>
+                                        <th>Sil</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if article_categories_list %}
+                                        {% for article_category in article_categories_list %}
+                                            <tr>
+                                                <td>{{ article_category.title }}</td>
+                                                <td>{{ course_category.creator.get_full_name }}</td>
+                                                <td>{{ article_category.createdDate }}</td>
+                                                <td>{{ article_category.updatedDate }}</td>
+                                                <td>{% if article_category.isActive is True %}Aktif{% else %}
+                                                    Kapalı{% endif %}</td>
+                                                <td>{{ article_category.parentId.title }}</td>
+                                                <td>
+                                                    <a href="{% url 'admin_edit_course_category' article_category.slug %}"
+                                                       class="btn btn-success btn-sm">Düzenle</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'admin_delete_course_category' article_category.slug %}"
+                                                       class="btn btn-danger btn-sm">Sil</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </tbody>
+                                </table>
                             </div>
-                        </div> <!-- end col -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        {% include 'admin/layout/footer.html' %}
+    </div>
 {% endblock %}

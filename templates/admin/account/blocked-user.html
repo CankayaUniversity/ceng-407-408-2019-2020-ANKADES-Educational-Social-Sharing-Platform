@@ -1,104 +1,86 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Kurs Kategori Ekle{% endblock %}
+{% block title %}Yasaklı Kullanıcılar{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
-        <div class="content-page">
-            <!-- Start content -->
-            <!-- Start content -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="page-title-box">
-                        <div class="row align-items-center">
-                            <div class="col-sm-12">
-                                <h4 class="page-title">Kullanıcı Listesi</h4>
-                            </div>
-                        </div> <!-- end row -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="page-title-box">
+                    <div class="row align-items-center">
+                        <div class="col-sm-12">
+                            <h4 class="page-title">Yasaklı Kullanıcı Listesi</h4>
+                        </div>
                     </div>
-                    <!-- end page-title -->
-
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card m-b-30">
-                                <div class="card-body">
-
-                                    <h4 class="mt-0 header-title">Yasaklı Kullanıcılar</h4>
-                                    <p class="sub-title../plugins">
-                                        Aşağıdan yasaklı kullanıcıları görüntüleyebilir, düzenleyebilirsiniz.
-                                    </p>
-
-                                    <table id="datatable-buttons"
-                                           class="table table-striped table-bordered dt-responsive nowrap"
-                                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                        <thead>
-                                        <tr>
-                                            <th>Kullanıcı Adı</th>
-                                            <th>İsim</th>
-                                            <th>Email</th>
-                                            <th>Aktiflik</th>
-                                            <th>Grup</th>
-                                            <th>Son Giriş</th>
-                                            <th>Düzenle</th>
-                                            <th>Sil</th>
-                                        </tr>
-                                        </thead>
-
-
-                                        <tbody>
-                                        <tr>
-                                            {% if blockedUsers %}
-                                                {% for blockedUser in blockedUsers %}
-                                                    {% if blockedUser.is_active is False %}
-                                                        <td>{{ blockedUser.username }}</td>
-                                                        <td>{{ blockedUser.get_full_name }}</td>
-                                                        <td>{{ blockedUser.email }}</td>
-                                                        <td>
-                                                            {% if blockedUser.is_active %} Aktif {% else %}
-                                                                Kapalı {% endif %}</td>
-                                                        <td>
-                                                            {% if user_groups %}
-                                                                {% for grp in user_groups %}
-                                                                    {% if grp.user_id and grp.group_id %}
-                                                                        {{ grp.group_id.name }}
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            {% else %}
-                                                                Group Yok !
-                                                            {% endif %}
-                                                        </td>
-                                                        <td>{{ users_count.last_login }}</td>
-                                                        <td>
-                                                            <a href="{% url 'admin_edit_profile' blocked.username %}"
-                                                               class="btn btn-success btn-sm">Düzenle</a>
-                                                        </td>
-                                                        <td>
-                                                            <a href="{% url 'admin_delete_profile' blocked.username %}"
-                                                               class="btn btn-danger btn-sm">Sil</a>
-                                                        </td>
-                                                    {% else %}
-                                                        <td>Yasaklı Kullanıcı Bulunmadı !</td>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                        </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
-                    <!-- end page-title -->
-
                 </div>
-                <!-- container-fluid -->
-
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <h4 class="mt-0 header-title">Yasaklı Kullanıcılar</h4>
+                                <p class="sub-title../plugins">
+                                    Aşağıdan yasaklı kullanıcıları görüntüleyebilir, düzenleyebilirsiniz.
+                                </p>
+                                <table id="datatable-buttons"
+                                       class="table table-striped table-bordered dt-responsive nowrap"
+                                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <th>Kullanıcı Adı</th>
+                                        <th>İsim</th>
+                                        <th>Email</th>
+                                        <th>Aktiflik</th>
+                                        <th>Grup</th>
+                                        <th>Son Giriş</th>
+                                        <th>Düzenle</th>
+                                        <th>Sil</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {% if blockedUsers %}
+                                            {% for blockedUser in blockedUsers %}
+                                                {% if blockedUser.is_active is False %}
+                                                    <td>{{ blockedUser.username }}</td>
+                                                    <td>{{ blockedUser.get_full_name }}</td>
+                                                    <td>{{ blockedUser.email }}</td>
+                                                    <td>
+                                                        {% if blockedUser.is_active %} Aktif {% else %}
+                                                            Kapalı {% endif %}</td>
+                                                    <td>
+                                                        {% if user_groups %}
+                                                            {% for grp in user_groups %}
+                                                                {% if grp.user_id and grp.group_id %}
+                                                                    {{ grp.group_id.name }}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            Group Yok !
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ users_count.last_login }}</td>
+                                                    <td>
+                                                        <a href="{% url 'admin_edit_profile' blocked.username %}"
+                                                           class="btn btn-success btn-sm">Düzenle</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{% url 'admin_delete_profile' blocked.username %}"
+                                                           class="btn btn-danger btn-sm">Sil</a>
+                                                    </td>
+                                                {% else %}
+                                                    <td>Yasaklı Kullanıcı Bulunmadı !</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- content -->
-
-            <footer class="footer">
-                © 2019 - 2020 Tüm Hakları Saklıdır
-            </footer>
-
         </div>
+        {% include 'admin/layout/footer.html' %}
+    </div>
 {% endblock body %}

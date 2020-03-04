@@ -10,7 +10,7 @@ from rest_framework.generics import get_object_or_404
 
 from account.models import AccountGroup, Account
 from article.forms import ArticleForm
-from article.models import Article, ArticleCategory, ArticleComment
+from article.models import Article, ArticleCategory, ArticleComment, ArticleTag
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 
 
@@ -33,7 +33,7 @@ def all_articles(request):
     keyword = request.GET.get("keyword")
     if keyword:
         article_pagination = Article.objects.filter(Q(article_title__contains=keyword) |
-                                                    Q(article_content__contains=keyword))
+                                                    Q(article_detail__contains=keyword) | Q(article_categories__contains=keyword))
         context = {
             "article_pagination": article_pagination,
         }
@@ -41,7 +41,8 @@ def all_articles(request):
 
     articles = Article.objects.all()
     articleComment = ArticleComment.objects.all()
-    articles_limit = Article.objects.all().order_by('-id')[:10]
+    articles_limit = Article.objects.all().order_by('-createdDate')[:5]
+    article_tags = ArticleTag.objects.all().order_by('-createdDate')[:5]
     articles_categories_lists = ArticleCategory.objects.all()
     page = request.GET.get('page', 1)
     paginator = Paginator(articles, 10)
@@ -56,6 +57,7 @@ def all_articles(request):
         "articles": articles,
         "articleComment": articleComment,
         "article_pagination": article_pagination,
+        "article_tags": article_tags,
         "articles_categories_lists": articles_categories_lists,
         "articles_limit": articles_limit,
     }

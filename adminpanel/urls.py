@@ -12,6 +12,7 @@ urlpatterns = [
     path('ayarlar/site', views.admin_settings, name="admin_settings"),
     path('ayarlar/hesap', views.admin_account_settings, name="admin_account_settings"),
     path('ayarlar/sosyal-medya', views.admin_social_media_settings, name="admin_social_media_settings"),
+    path('ayarlar/sosyal-medya/ekle', views.admin_add_social_media, name="admin_add_social_media"),
     path('ayarlar/grup', views.admin_group_settings, name="admin_group_settings"),
     path('ayarlar/izin', views.admin_permission_settings, name="admin_permission_settings"),
     path('ayarlar/yeni-kullanici-ekle', account.admin_register_account, name="admin_register_account"),
@@ -101,6 +102,8 @@ urlpatterns = [
     path('makaleler/ekle', article.admin_add_article, name="admin_add_article"),
     path('makaleler/duzenle/<slug:slug>', article.admin_edit_article, name="admin_edit_article"),
     path('makaleler/sil/<slug:slug>', article.admin_delete_article, name="admin_delete_article"),
+    path('makaleler/etiketler', article.admin_tags, name="admin_tags"),
+    path('makaleler/etiketler/ekle', article.admin_add_tag, name="admin_add_tag"),
 
     # Article Category
     path('makaleler/makale-kategorileri/', article.admin_article_category, name="admin_article_category"),

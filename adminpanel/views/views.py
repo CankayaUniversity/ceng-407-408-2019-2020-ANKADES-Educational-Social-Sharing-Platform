@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
-from account.models import Account, AccountGroup, Permission
-from adminpanel.forms import AdminLoginForm
+from account.models import Account, AccountGroup, Permission, SocialMedia
+from adminpanel.forms import AdminLoginForm, AdminSocialMediaForm
 from course.models import CourseCategory, Course
 
 
@@ -16,33 +16,35 @@ def admin_index(request):
     # if AccountGroup.objects.filter(
     #         Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
     #             userId__username=request.user.username, groupId__slug="admin")):
-    user = Account.objects.all()
-    admin = AccountGroup.objects.filter(groupId__slug__contains="admin")
-    moderator = AccountGroup.objects.filter(groupId__slug__contains="moderator")
-    ogretmen = AccountGroup.objects.filter(groupId__slug__contains="ogretmen")
-    ogrenci = AccountGroup.objects.filter(groupId__slug__contains="ogrenci")
-    user_count = Account.objects.all().count()
-    course_count = Course.objects.all().count()
-    course_category_count = CourseCategory.objects.all().count()
-    # activity = AdminActivity.objects.all()
-    # activity_limit = AdminActivity.objects.all().order_by("-activityCreatedDate")[:4]
-    context = {
-        "user": user,
-        "ogrenci": ogrenci,
-        "moderator": moderator,
-        "ogretmen": ogretmen,
-        "admin": admin,
-        "user_count": user_count,
-        "course_count": course_count,
-        "course_category_count": course_category_count,
-        "adminGroup": adminGroup,
-        # "activity": activity,
-        # "activity_limit": activity_limit,
-    }
+    if adminGroup:
+        user = Account.objects.all()
+        admin = AccountGroup.objects.filter(groupId__slug__contains="admin")
+        moderator = AccountGroup.objects.filter(groupId__slug__contains="moderator")
+        ogretmen = AccountGroup.objects.filter(groupId__slug__contains="ogretmen")
+        ogrenci = AccountGroup.objects.filter(groupId__slug__contains="ogrenci")
+        user_count = Account.objects.all().count()
+        course_count = Course.objects.all().count()
+        course_category_count = CourseCategory.objects.all().count()
+        # activity = AdminActivity.objects.all()
+        # activity_limit = AdminActivity.objects.all().order_by("-activityCreatedDate")[:4]
+        context = {
+            "user": user,
+            "ogrenci": ogrenci,
+            "moderator": moderator,
+            "ogretmen": ogretmen,
+            "admin": admin,
+            "user_count": user_count,
+            "course_count": course_count,
+            "course_category_count": course_category_count,
+            "adminGroup": adminGroup,
+            # "activity": activity,
+            # "activity_limit": activity_limit,
+        }
+        return render(request, "admin/index.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok!")
+        return redirect("index")
     return render(request, "admin/index.html", context)
-    # else:
-    #     messages.error(request, "Yetkiniz yok!")
-    #     return redirect("logout_admin")
 
 
 # User View
@@ -110,7 +112,34 @@ def admin_account_settings(request):
 # Social Media Settings
 @login_required(login_url="login_admin")
 def admin_social_media_settings(request):
-    return render(request, "admin/settings/social-media-settings.html")
+    socialMedias = SocialMedia.objects.all()
+    context = {
+        "socialMedias": socialMedias,
+    }
+    return render(request, "admin/settings/social-media-settings.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_add_social_media(request):
+    form = AdminSocialMediaForm(request.POST or None)
+    accountGroup = AccountGroup()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
+        if form.is_valid():
+            title = form.cleaned_data.get("title")
+            slug = form.cleaned_data.get("slug")
+            isActive = form.cleaned_data.get("isActive")
+            new_sm = SocialMedia(title=title, slug=slug, isActive=isActive)
+            new_sm.save()
+            messages.success(request, "Sosyal Medya kayıt işlemi başarıyla gerçekleştirildi.")
+            return redirect("admin_social_media_settings")
+        context = {
+            "form": form,
+            "adminGroup": adminGroup
+        }
+        return render(request, "admin/settings/add-social-media.html", context)
+    else:
+        messages.error(request, "Yetkiniz Yok !")
 
 
 # Group Settings

@@ -30,8 +30,9 @@
                 <div class="container">
                     <div class="row c-gutter-60">
                         <main class="col-lg-7 col-xl-8">
-                            {% if articles %}
-                                {% for article in articles %}
+                        {% if articles %}
+                            {% if article_pagination %}
+                                {% for article in article_pagination %}
                                     <article
                                             class="text-center text-md-left vertical-item content-padding hero-bg post type-post status-publish format-standard has-post-thumbnail sticky rounded rounded-image-top post-color1">
                                         {% if article.media %}
@@ -110,43 +111,45 @@
                                     {# makale ekleme linki eklenecek #}
                                 </div>
                             {% endif %}
-
-                            <nav class="navigation pagination " role="navigation">
-                                <h2 class="screen-reader-text">Posts navigation</h2>
-                                <div class="nav-links">
-                                    <a class="prev page-numbers" href="blog-right.html">
-                                        <i class="fa fa-angle-left"></i>
-                                        <span class="screen-reader-text">Previous page</span>
-                                    </a>
-                                    <a class="page-numbers current" href="blog-right.html">
-                                        <span class="meta-nav screen-reader-text">Page </span>
-                                        1
-                                    </a>
-                                    <span class="page-numbers">
+                            {% if articles %}
+                                {% endif %}
+                                <nav class="navigation pagination " role="navigation">
+                                    <h2 class="screen-reader-text">Posts navigation</h2>
+                                    <div class="nav-links">
+                                        <a class="prev page-numbers" href="blog-right.html">
+                                            <i class="fa fa-angle-left"></i>
+                                            <span class="screen-reader-text">Previous page</span>
+                                        </a>
+                                        <a class="page-numbers current" href="blog-right.html">
+                                            <span class="meta-nav screen-reader-text">Page </span>
+                                            1
+                                        </a>
+                                        <span class="page-numbers">
 										<span class="meta-nav screen-reader-text">Page </span>
 										2
 									</span>
-                                    <a class="page-numbers" href="blog-right.html">
-                                        <span class="meta-nav screen-reader-text">Page </span>
-                                        3
-                                    </a>
-                                    <a class="next page-numbers" href="blog-right.html">
-                                        <span class="screen-reader-text">Next page</span>
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </div>
-                            </nav>
+                                        <a class="page-numbers" href="blog-right.html">
+                                            <span class="meta-nav screen-reader-text">Page </span>
+                                            3
+                                        </a>
+                                        <a class="next page-numbers" href="blog-right.html">
+                                            <span class="screen-reader-text">Next page</span>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </nav>
+                            {% endif %}
                         </main>
 
                         <aside class="col-lg-5 col-xl-4">
                             <div class="widget widget_search">
-                                <h5 class="widget-title">Search</h5>
+                                <h5 class="widget-title">Makale Arama</h5>
                                 <form role="search" method="get" class="search-form" action="/">
                                     <label for="search-form-widget">
                                         <span class="screen-reader-text">Search for:</span>
                                     </label>
                                     <input type="search" id="search-form-widget" class="search-field"
-                                           placeholder="Search Keyword" value="" name="search">
+                                           placeholder="Başlık ya da içerik arayın" value="" name="search">
                                     <button type="submit" class="search-submit">
                                         <span class="screen-reader-text">Search</span>
                                     </button>
@@ -180,85 +183,52 @@
                                     {% endif %}
                                 </ul>
                             </div>
-
-                            <div class="widget widget_recent_posts">
-
-                                <h5 class="widget-title">Recent Posts</h5>
-                                <ul class="list-unstyled">
-                                    <li class="media">
-                                        <a class="media-image" href="blog-single-right.html">
-                                            <img src="images/recent_post1.jpg" alt="">
-                                        </a>
-                                        <div class="media-body">
-                                            <h4>
-                                                <a href="blog-single-right.html">Lorem ipsum dolor sit am consectetur
-                                                    tus.</a>
-                                            </h4>
-                                            <p class="item-meta">
-                                                September 01, 2018
-                                            </p>
-                                        </div>
-                                    </li>
-
-                                    <li class="media">
-                                        <a class="media-image" href="blog-single-right.html">
-                                            <img src="images/recent_post2.jpg" alt="">
-                                        </a>
-                                        <div class="media-body">
-                                            <h4>
-                                                <a href="blog-single-right.html">Phasellus at nisl lacus do necsem
-                                                    port.</a>
-                                            </h4>
-                                            <p class="item-meta">
-                                                September 03, 2018
-                                            </p>
-
-                                        </div>
-                                    </li>
-
-                                    <li class="media">
-                                        <a class="media-image" href="blog-single-right.html">
-                                            <img src="images/recent_post3.jpg" alt="">
-                                        </a>
-                                        <div class="media-body">
-                                            <h4>
-                                                <a href="blog-single-right.html">Nunc quis enim non est fi nugilla
-                                                    libero est.</a>
-                                            </h4>
-                                            <p class="item-meta">
-                                                September 09, 2018
-                                            </p>
-
-                                        </div>
-                                    </li>
-
-                                </ul>
-                            </div>
+                            {% if articles_limit %}
+                                {% for al in articles_limit %}
+                                    <div class="widget widget_recent_posts">
+                                        <h5 class="widget-title">Son Gönderiler</h5>
+                                        <ul class="list-unstyled">
+                                            <li class="media">
+                                                {% if al.media %}
+                                                    <a class="media-image" href="blog-single-right.html">
+                                                        <img src="{{ al.media.url }}" alt="">
+                                                    </a>{
+                                                {% endif %}
+                                                <div class="media-body">
+                                                    <h4>
+                                                        <a href="{% url 'article_detail' al.slug %}">
+                                                            {{ al.title }}
+                                                        </a>
+                                                    </h4>
+                                                    <p class="item-meta">
+                                                        {{ al.createdDate }}
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="alert alert-primary" role="alert">
+                                    Henüz bir makale bulunamadı.
+                                </div>
+                            {% endif %}
 
                             <div class="widget widget_tag_cloud">
 
                                 <h5 class="widget-title">Tags</h5>
-
                                 <div class="tagcloud">
-
-                                    <a href="blog-right.html" class="tag-cloud-link">
-                                        Cabel
-                                    </a>
-
-                                    <a href="blog-right.html" class="tag-cloud-link">
-                                        IPTV
-                                    </a>
-
-                                    <a href="blog-right.html" class="tag-cloud-link">
-                                        Internet
-                                    </a>
-
-                                    <a href="blog-right.html" class="tag-cloud-link">
-                                        Provider Services
-                                    </a>
-                                    <a href="blog-right.html" class="tag-cloud-link">
-                                        Router Setup
-                                    </a>
+                                    {% if article_tags %}
+                                        {% for tags in article_tags %}
+                                            <a href="blog-right.html" class="tag-cloud-link">
+                                                {{ tags.tagId }}
+                                            </a>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="alert alert-primary" role="alert">
+                                            Henüz makaleye ait bir etiket bulunamadı.
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 

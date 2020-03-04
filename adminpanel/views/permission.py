@@ -7,6 +7,7 @@ from rest_framework.generics import get_object_or_404
 from account.models import GroupPermission, Permission, AccountGroup
 from adminpanel.forms import AdminPermissionForm
 
+# Permissions Done
 
 @login_required(login_url="login_admin")
 def admin_all_permissions(request):
@@ -15,8 +16,10 @@ def admin_all_permissions(request):
     :return:
     """
     permissions = Permission.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "permissions": permissions,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/permissions/all-permissions.html", context)
 
@@ -33,7 +36,7 @@ def admin_add_permission(request):
         "form": form,
         "adminGroup": adminGroup,
     }
-    if AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin"):
+    if adminGroup:
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
@@ -52,7 +55,8 @@ def admin_delete_permission(request, slug):
     :param slug:
     :return:
     """
-    if AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin"):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
         instance = get_object_or_404(Permission, slug=slug)
         instance.isActive = False
         messages.success(request, "İzin başarıyla silindi.")
@@ -69,7 +73,8 @@ def admin_edit_permission(request, slug):
     :param slug:
     :return:
     """
-    if AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin"):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
         instance = get_object_or_404(Permission, slug=slug)
         form = AdminPermissionForm(request.POST or None, instance=instance)
         if form.is_valid():
@@ -92,8 +97,10 @@ def admin_site_admin_permission(request):
     :return:
     """
     admins = GroupPermission.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "admins": admins,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/groups/group-permission/admin-permission.html", context)
 
@@ -105,8 +112,10 @@ def admin_site_student_permission(request):
     :return:
     """
     students = GroupPermission.objects.filter(groupId__slug__contains="ogrenci")
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "students": students,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/groups/group-permission/student-permission.html", context)
 
@@ -118,8 +127,10 @@ def admin_site_teacher_permission(request):
     :return:
     """
     teachers = GroupPermission.objects.filter(groupId__slug__contains="ogretmen")
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "teachers": teachers,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/groups/group-permission/teacher-permission.html", context)
 
@@ -131,7 +142,9 @@ def admin_site_moderator_permission(request):
     :return:
     """
     moderators = GroupPermission.objects.filter(groupId__slug__contains="moderator")
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "moderators": moderators,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/groups/group-permission/moderator-permission.html", context)
