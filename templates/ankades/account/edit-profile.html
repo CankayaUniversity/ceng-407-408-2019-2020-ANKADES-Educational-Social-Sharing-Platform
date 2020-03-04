@@ -42,23 +42,23 @@
                                 <div class="woocommerce">
                                     <nav class="woocommerce-MyAccount-navigation hero-bg p-60">
                                         <ul>
-                                            <li>
-                                                <a href="{% url 'my_articles' request.user.username %}">Makalelerim</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-account-orders.html">Orders</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-account-downloads.html">Downloads</a>
-                                            </li>
                                             <li class="is-active">
-                                                <a href="shop-account-addresses.html">Addresses</a>
+                                                <a href="{% url 'edit_profile' request.user.username %}">Düzenle</a>
+                                            </li>
+                                            <li>
+                                                <a href="shop-account-orders.html">Sosyal Medya</a>
+                                            </li>
+                                            <li>
+                                                <a href="shop-account-downloads.html">Sorularım</a>
+                                            </li>
+                                            <li class="">
+                                                <a href="shop-account-addresses.html">Şifre Değiştir</a>
                                             </li>
                                             <li>
                                                 <a href="shop-account-details.html">Account details</a>
                                             </li>
                                             <li>
-                                                <a href="shop-account-login.html">Logout</a>
+                                                <a href="shop-account-login.html">Çıkış Yap</a>
                                             </li>
                                         </ul>
                                     </nav>

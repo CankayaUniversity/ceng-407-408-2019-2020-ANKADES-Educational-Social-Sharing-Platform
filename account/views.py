@@ -80,6 +80,7 @@ def register_account(request):
         messages.error(request, "Zaten giriş yapılmış.")
         return redirect("index")
 
+
 def account_detail(request, username):
     userDetail = get_object_or_404(Account, username=username)
     userOccupation = AccountGroup.objects.get(userId__username=username)
@@ -105,7 +106,7 @@ def edit_profile(request, username):
         instance.username = username
         instance.save()
         messages.success(request, "Profil başarıyla düzenlendi !")
-        return redirect("edit_profile")
+        return redirect("edit_profile", username)
     context = {
         "form": form,
     }

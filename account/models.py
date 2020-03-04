@@ -99,6 +99,39 @@ class AccountGroup(models.Model):
         ordering = ["-createdDate"]
 
 
+class SocialMedia(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sosyal Medya Id")
+    title = models.CharField(max_length=254, verbose_name="Sosyal Medya Adı")
+    slug = models.SlugField(verbose_name="Sosyal Medya Adı Slug")
+    isActive = models.BooleanField(default=True, null=True, blank=True, verbose_name="Aktiflik")
+    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
+    updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "SocialMedia"
+        ordering = ["-createdDate"]
+
+
+class AccountSocialMedia(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Account Social Media Id")
+    userId = models.ForeignKey(Account, verbose_name="Kullanıcı Adı", on_delete=models.SET_NULL, null=True)
+    url = models.URLField(verbose_name="Sosyal Medya URL")
+    isActive = models.BooleanField(default=True, null=True, blank=True, verbose_name="Görünürlük")
+    socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.SET_NULL, verbose_name="Sosyal Medya Adı", null=True)
+    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
+    updatedDate = models.DateTimeField(null=True, blank=True, verbose_name="Güncellendiği Tarih")
+
+    def __str__(self):
+        return self.socialMediaId
+
+    class Meta:
+        db_table = "AccountSocialMedia"
+        ordering = ["-createdDate"]
+
+
 class AccountActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Aktivite Id")
     activityCreator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
@@ -107,7 +140,6 @@ class AccountActivity(models.Model):
     activityDescription = models.CharField(max_length=254, verbose_name="Açıklama")
     activityMethod = models.CharField(max_length=254, verbose_name="Method Türü")
     activityCreatedDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
-    activityUpdatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
 
     def __str__(self):
         return self.activityCreator
