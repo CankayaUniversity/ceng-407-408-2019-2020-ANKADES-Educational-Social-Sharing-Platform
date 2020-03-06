@@ -1,6 +1,6 @@
-# ANKADES EDUCATIONAL SHARING PLATFORM
+# ANKADES EDUCATIONAL SOCIAL SHARING PLATFORM
 
-One Paragraph of project description goes here
+Welcome to Ankades Social Educational Sharing Platform
 
 ## Getting Started
 
