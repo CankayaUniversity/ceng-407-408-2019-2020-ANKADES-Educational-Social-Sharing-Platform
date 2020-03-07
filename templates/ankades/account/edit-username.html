@@ -42,10 +42,10 @@
                                 <div class="woocommerce">
                                     <nav class="woocommerce-MyAccount-navigation hero-bg p-60">
                                         <ul>
-                                            <li class="is-active">
+                                            <li>
                                                 <a href="{% url 'edit_profile' request.user.username %}">Düzenle</a>
                                             </li>
-                                            <li>
+                                            <li class="is-active">
                                                 <a href="{% url 'edit_username' request.user.username %}">Kullanıcı Adı</a>
                                             </li>
                                             <li style="list-style: none !important">
@@ -81,6 +81,6 @@
 
             {% include 'ankades/layout/footer.html' %}
 
-        </div><!-- eof #box_wrapper -->
-    </div><!-- eof #canvas -->
+        </div>
+    </div>
 {% endblock %}

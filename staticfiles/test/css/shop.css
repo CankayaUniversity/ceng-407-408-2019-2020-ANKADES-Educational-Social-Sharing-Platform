@@ -982,19 +982,6 @@ ul.products.owl-carousel .product h2 {
 	padding-top: 14px;
 }
 
-.woocommerce-MyAccount-navigation li:before,
-.widget_layered_nav li:before,
-.widget_layered_nav_filters li:before,
-.widget_product_categories li:before {
-	color: #c280bf;
-	content: "\f111";
-	font-family: "FontAwesome";
-	font-size: 5px;
-	padding-right: 12px;
-	position: relative;
-	top: 0;
-}
-
 .woocommerce-MyAccount-navigation li.is-active,
 .widget_layered_nav li.is-active,
 .widget_layered_nav_filters li.is-active,

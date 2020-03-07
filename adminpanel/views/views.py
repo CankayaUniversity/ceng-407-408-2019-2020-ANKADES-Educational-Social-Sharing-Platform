@@ -1,11 +1,14 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
+from rest_framework.generics import get_object_or_404
 
 from account.models import Account, AccountGroup, Permission, SocialMedia
-from adminpanel.forms import AdminLoginForm, AdminSocialMediaForm
+from adminpanel.forms import AdminLoginForm, AdminSocialMediaForm, AdminEditSocialMediaForm
 from course.models import CourseCategory, Course
 
 
@@ -92,7 +95,11 @@ def logout_admin(request):
 # Site Settings
 @login_required(login_url="login_admin")
 def admin_settings(request):
-    return render(request, "admin/settings/site-settings.html")
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {
+        "adminGroup": adminGroup,
+    }
+    return render(request, "admin/settings/site-settings.html", context)
 
 
 # Account Settings
@@ -100,11 +107,13 @@ def admin_settings(request):
 def admin_account_settings(request):
     accounts = Account.objects.all()
     accountGroups = AccountGroup.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     accountFiveLimitOrdered = Account.objects.all().order_by('-date_joined')[:5]
     context = {
         "accounts": accounts,
         "accountGroups": accountGroups,
         "accountFiveLimitOrdered": accountFiveLimitOrdered,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/settings/account-settings.html", context)
 
@@ -113,8 +122,10 @@ def admin_account_settings(request):
 @login_required(login_url="login_admin")
 def admin_social_media_settings(request):
     socialMedias = SocialMedia.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "socialMedias": socialMedias,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/settings/social-media-settings.html", context)
 
@@ -122,17 +133,21 @@ def admin_social_media_settings(request):
 @login_required(login_url="login_admin")
 def admin_add_social_media(request):
     form = AdminSocialMediaForm(request.POST or None)
-    accountGroup = AccountGroup()
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
         if form.is_valid():
             title = form.cleaned_data.get("title")
             slug = form.cleaned_data.get("slug")
             isActive = form.cleaned_data.get("isActive")
-            new_sm = SocialMedia(title=title, slug=slug, isActive=isActive)
-            new_sm.save()
-            messages.success(request, "Sosyal Medya kayıt işlemi başarıyla gerçekleştirildi.")
-            return redirect("admin_social_media_settings")
+            if SocialMedia.objects.filter(title=title) or SocialMedia.objects.filter(
+                    slug=slug):
+                messages.error(request, "Bu sosyal medya daha önce eklenmiş")
+                return redirect("admin_add_social_media")
+            else:
+                new_sm = SocialMedia(title=title, slug=slug, isActive=isActive)
+                new_sm.save()
+                messages.success(request, "Sosyal Medya kayıt işlemi başarıyla gerçekleştirildi.")
+                return redirect("admin_social_media_settings")
         context = {
             "form": form,
             "adminGroup": adminGroup
@@ -142,17 +157,48 @@ def admin_add_social_media(request):
         messages.error(request, "Yetkiniz Yok !")
 
 
+@login_required(login_url="login_admin")
+def admin_edit_social_media(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    instance = get_object_or_404(SocialMedia, slug=slug)
+    form = AdminEditSocialMediaForm(request.POST or None, instance=instance)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {
+        "form": form,
+        "adminGroup": adminGroup,
+    }
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.title = form.cleaned_data.get("title")
+        instance.slug = form.cleaned_data.get("slug")
+        instance.updatedDate = datetime.datetime.now()
+        instance.save()
+        messages.success(request, "Sosyal medya başarıyla düzenlendi !")
+        return redirect("admin_social_media_settings")
+    return render(request, "admin/settings/edit-social-media.html", context)
+
+
 # Group Settings
 @login_required(login_url="login_admin")
 def admin_group_settings(request):
-    return render(request, "admin/settings/group-settings.html")
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {
+        "adminGroup": adminGroup,
+    }
+    return render(request, "admin/settings/group-settings.html", context)
 
 
 # Permission Settings
 @login_required(login_url="login_admin")
 def admin_permission_settings(request):
     permissions = Permission.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "permissions": permissions
+        "permissions": permissions,
+        "adminGroup": adminGroup,
     }
     return render(request, "admin/settings/permission-settings.html", context)

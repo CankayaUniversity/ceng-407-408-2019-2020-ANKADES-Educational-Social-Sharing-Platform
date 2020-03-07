@@ -60,47 +60,49 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="message-list">
-                                    {% if socialMedias %}
-                                        <li>
-                                            <div class="col-mail col-mail-1">
-                                                <div class="checkbox-wrapper-mail">
-                                                    <input type="checkbox" id="chk1">
-                                                    <label for="chk1" class="toggle"></label>
-                                                </div>
-                                                <a href="#" class="title">
-                                                    <img class="mr-3 rounded-circle float-left mt-2"
-                                                         src="assets/images/users/user-1.jpg" alt="" height="40">
-                                                    <h6 class="mb-0">Whitney Gordon <span class="font-12"> (2)</span>
-                                                    </h6>
-                                                    <p class="text-muted mt-1 mb-0">Des 16, 2019</p>
-                                                </a>
-                                                <span class="star-toggle far fa-star"></span>
-                                            </div>
-                                            <div class="col-mail col-mail-2">
-                                                <a href="#" class="subject">
-                                                    <h6 class="mb-0"><span
-                                                            class="badge-warning badge mr-2">Freelance</span> Wolombo
-                                                        has been arranged, then Jenna will come get </h6>
-                                                    <p class="text-muted mt-1 mb-0"> Hello – <span class="teaser">Trip home from Colombo has been arranged, then Jenna will come get me from Stockholm. :)
-                                                </span></p>
-                                                </a>
-                                                <div class="date">
-
-                                                    <a href="">
-                                                        <i class="mdi mdi-link-variant mr-2 font-16 "></i> 7:25 AM
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    {% else %}
-                                        <div class="col-mail col-mail-1">
-                                            <li class="alert alert-error fade show alert-dismissible"
-                                                style="list-style: none"><h6>Sosyal Medya Bulunamadı</h6>
-                                            </li>
+                                <div class="card-body">
+                                    <h4 class="mt-0 header-title">Example</h4>
+                                    <p class="sub-title font-14">This is an experimental awesome solution for
+                                        responsive tables with complex data.</p>
+                                    <div class="table-rep-plugin">
+                                        <div class="table-responsive b-0" data-pattern="priority-columns">
+                                            <table id="tech-companies-1" class="table  table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th data-priority="1">Id</th>
+                                                    <th data-priority="1">Sosyal Medya Adı</th>
+                                                    <th data-priority="3">Slug</th>
+                                                    <th data-priority="3">Oluşturulma</th>
+                                                    <th data-priority="3">Güncellenme</th>
+                                                    <th data-priority="3">Aktiflik</th>
+                                                    <th data-priority="3">İşlemler</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% if socialMedias %}
+                                                    {% for sm in socialMedias %}
+                                                        <tr>
+                                                            <td>{{ sm.id }}</td>
+                                                            <td>{{ sm.title }}</td>
+                                                            <td>{{ sm.slug }}</td>
+                                                            <td>{{ sm.createdDate }}</td>
+                                                            <td>{{ sm.updatedDate }}</td>
+                                                            <td>{% if sm.isActive == True %}Evet{% else %}Hayır{% endif %}</td>
+                                                            <td>
+                                                                <a href="{% url 'admin_edit_social_media' sm.slug %}"
+                                                                   type="button"
+                                                                   class="btn btn-primary waves-light waves-effect">
+                                                                    <span style="color: #fff">Düzenle</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    {% endif %}
-                                </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

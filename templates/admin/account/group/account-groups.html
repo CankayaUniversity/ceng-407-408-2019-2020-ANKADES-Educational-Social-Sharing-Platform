@@ -54,10 +54,6 @@
                                                 <td>
                                                     <a href="{% url 'admin_edit_account_group' accountGroup.id %}"
                                                        class="btn btn-success btn-sm">Düzenle</a>
-                                                    <a href="{% url 'admin_deactivate_account_group' accountGroup.id %}"
-                                                       class="btn btn-primary btn-sm">
-                                                        {% if accountGroup.isActive == False %}
-                                                            Etkinleştir{% else %}Etkisizleştir{% endif %}</a>
                                                 </td>
                                                 <td>
                                                     <a href="{% url 'admin_delete_account_group' accountGroup.id %}"

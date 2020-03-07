@@ -1,5 +1,5 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Makale Kategori Düzenle{% endblock %}
+{% block title %}Sosyal Medya Duzenle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -9,12 +9,13 @@
                 <div class="page-title-box">
                     <div class="row align-items-center">
                         <div class="col-sm-6">
-                            <h4 class="page-title">Makale Kategori Düzenleme</h4>
+                            <h4 class="page-title">Sosyal Medya Duzenle</h4>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-right">
-                                <li class="breadcrumb-item"><a href="{% url 'admin_articles' %}">Makaleler</a></li>
-                                <li class="breadcrumb-item"><a href="">Makale Kategori Düzenle</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'admin_social_media_settings' %}">Sosyal
+                                    Medya</a></li>
+                                <li class="breadcrumb-item"><a href="">Sosyal Medya Duzenle</a></li>
                             </ol>
                         </div>
                     </div>
@@ -37,17 +38,8 @@
                                     {{ form|crispy }}
                                     {{ form_as.p }}
                                     <br>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <button type="submit" class="btn btn-success btn-user btn-block">
-                                                Düzenle
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <a class="btn btn-danger btn-block"
-                                               style="color: #fff" href="{% url 'admin_article_category' %}">Geri Dön</a>
-                                        </div>
-                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
+                                    </button>
                                 </form>
                             </div>
                         </div>

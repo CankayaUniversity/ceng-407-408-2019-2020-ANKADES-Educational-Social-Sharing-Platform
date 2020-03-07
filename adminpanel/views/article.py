@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminTagForm
+from account.models import AccountGroup
+from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminTagForm, AdminEditArticleCategoryForm
 from adminpanel.models import Tag
 from article.models import Article, ArticleCategory, ArticleTag
 
@@ -45,13 +46,49 @@ def admin_add_article(request):
     context = {
         "form": form
     }
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.creator = request.user
-        instance.save()
-        messages.success(request, "Makale başarıyla eklendi !")
-        return redirect("admin_articles")
-    return render(request, "admin/article/add-article.html", context)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
+        if form.is_valid():
+            form_username = form.cleaned_data.get("userId")
+            instance = form.save(commit=False)
+            instance.creator = request.user
+            instance.save()
+            messages.success(request, "Makale başarıyla eklendi !")
+            return redirect("admin_articles")
+        return render(request, "admin/article/add-article.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok!")
+        return redirect("admin_index")
+
+
+@login_required(login_url="login_admin")
+def admin_add_article_category(request):
+    """
+    :param request:
+    :return:
+    """
+    form = AdminArticleCategoryForm(request.POST or None)
+
+    context = {
+        "form": form,
+    }
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    if adminGroup:
+        if form.is_valid():
+            parentId = form.cleaned_data.get("parentId")
+            isCategory = form.cleaned_data.get("isCategory")
+            title = form.cleaned_data.get("title")
+            slug = form.cleaned_data.get("slug")
+            isActive = form.cleaned_data.get("isActive")
+            instance = ArticleCategory(parentId=parentId, isCategory=isCategory, isActive=isActive, title=title, slug=slug)
+            instance.creator = request.user
+            instance.save()
+            messages.success(request, "Makale kategorisi başarıyla eklendi !")
+            return redirect("admin_add_article_category")
+        return render(request, "admin/article/add-category.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok!")
+        return redirect("admin_index")
 
 
 @login_required(login_url="login_admin")
@@ -86,7 +123,6 @@ def admin_edit_article(request, slug):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
-            instance.view += 5
             instance.save()
             messages.success(request, "Makale başarıyla düzenlendi !")
             context = {
@@ -127,32 +163,6 @@ def admin_article_category(request):
 
 
 @login_required(login_url="login_admin")
-def admin_add_article_category(request):
-    """
-    :param request:
-    :return:
-    """
-    form = AdminArticleCategoryForm(request.POST or None)
-
-    context = {
-        "form": form,
-    }
-    if form.is_valid():
-        categoryId = forms.cleaned_data.get("categoryId")
-        isCategory = form.cleaned_data.get("isCategory")
-        title = form.cleaned_data.get("title")
-        slug = form.cleaned_data.get("slug")
-        isActive = form.cleaned_data.get("isActive")
-        instance = AdminArticleCategoryForm(categoryId=categoryId, isCategory=isCategory, isActive=isActive,
-                                            title=title, slug=slug)
-        instance.creator = request.user
-        instance.save()
-        messages.success(request, "Makale kategorisi başarıyla eklendi !")
-        return redirect("admin_add_article_category")
-    return render(request, "admin/article/add-category.html", context)
-
-
-@login_required(login_url="login_admin")
 def admin_edit_article_category(request, slug):
     """
     :param request:
@@ -160,13 +170,13 @@ def admin_edit_article_category(request, slug):
     :return:
     """
     instance = get_object_or_404(ArticleCategory, slug=slug)
-    form = AdminArticleCategoryForm(request.POST or None, instance=instance)
+    form = AdminEditArticleCategoryForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Kurs kategorisi başarıyla düzenlendi !")
-        return redirect("admin_edit_article_category")
+        return redirect("admin_edit_article_category", slug)
     return render(request, "admin/article/edit-category.html", {"form": form})
 
 
@@ -178,6 +188,10 @@ def admin_delete_article_category(request, slug):
     :return:
     """
     instance = get_object_or_404(ArticleCategory, slug=slug)
-    instance.delete()
-    messages.success(request, "Makale kategorisi başarıyla silindi !")
-    return redirect("admin_articles")
+    if instance.isActive is True:
+        instance.isActive = False
+        messages.success(request, "Kurs kategorisi başarıyla etkisizleştirildi !")
+        return redirect("admin_article_category")
+    else:
+        messages.error(request, "Kurs kategorisi zaten aktif değil!")
+        return redirect("admin_article_category")

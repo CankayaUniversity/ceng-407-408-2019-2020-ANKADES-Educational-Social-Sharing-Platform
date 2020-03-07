@@ -66,18 +66,6 @@
                                                 </div>
                                             </div>
                                             <div class="btn-group ml-1 mo-mb-2">
-                                                <button type="button"
-                                                        class="btn btn-primary waves-light waves-effect dropdown-toggle"
-                                                        data-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa fa-tag"></i>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Updates</a>
-                                                    <a class="dropdown-item" href="#">Social</a>
-                                                    <a class="dropdown-item" href="#">Team Manage</a>
-                                                </div>
-                                            </div>
-                                            <div class="btn-group ml-1 mo-mb-2">
                                                 <a href="{% url 'admin_register_account' %}" type="button"
                                                    class="btn btn-primary waves-light waves-effect">
                                                         <span style="color: #fff">Yeni Ekle <i
@@ -105,7 +93,6 @@
                                                     <th data-priority="3">Güncellenme</th>
                                                     <th data-priority="3">Aktiflik</th>
                                                     <th data-priority="3">Düzenle</th>
-                                                    <th data-priority="3">Sil</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -126,12 +113,10 @@
                                                                    class="btn btn-primary waves-light waves-effect">
                                                                     <span style="color: #fff">Düzenle</span>
                                                                 </a>
-                                                            </td>
-                                                            <td>
-                                                                <a href="{% url 'admin_deactivate_profile' account.userId %}"
+                                                                <a href="{% url 'admin_edit_account_group' account.id %}"
                                                                    type="button"
                                                                    class="btn btn-warning waves-light waves-effect">
-                                                                    <span style="color: #fff">Block</span>
+                                                                    <span style="color: #fff">Grup</span>
                                                                 </a>
                                                             </td>
                                                         </tr>

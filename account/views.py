@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
-from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm
+from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm
 from account.models import Account, AccountGroup, Group
 
 
@@ -98,19 +98,48 @@ def edit_profile(request, username):
     :param username:
     :return:
     """
-    instance = get_object_or_404(Account, username=username)
-    form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.updatedDate = datetime.datetime.now()
-        instance.username = username
-        instance.save()
-        messages.success(request, "Profil başarıyla düzenlendi !")
-        return redirect("edit_profile", username)
-    context = {
-        "form": form,
-    }
-    return render(request, "ankades/account/edit-profile.html", context)
+    getUser = request.user.username
+    if getUser == username:
+        instance = get_object_or_404(Account, username=username)
+        form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.updatedDate = datetime.datetime.now()
+            instance.save()
+            messages.success(request, "Profil başarıyla düzenlendi !")
+            return redirect("edit_profile", username)
+        context = {
+            "form": form,
+        }
+        return render(request, "ankades/account/edit-profile.html", context)
+    else:
+        return redirect("edit_profile", getUser)
+
+
+@login_required(login_url="login_account")
+def edit_username(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
+    getUser = request.user.username
+    if getUser == username:
+        instance = get_object_or_404(Account, username=username)
+        form = EditUsernameForm(request.POST or None, instance=instance)
+        if form.is_valid():
+            instance.username = username
+            instance.updatedDate = datetime.datetime.now()
+            instance.save
+            messages.success(request, "Kullanıcı adınız başarıyla güncellendi")
+            return redirect("edit_username", getUser)
+        context = {
+            "form": form
+        }
+        return render(request, "ankades/account/edit-username.html", context)
+    else:
+        return redirect("edit_username", getUser)
+
 
 
 def index(request):

@@ -13,6 +13,5 @@ from article.models import Article
 
 class ArticleForm(forms.Form):
     title = forms.CharField(max_length=None, label="Başlık")
-    slug = forms.SlugField(max_length=None, label="Slug")
     tag = forms.ModelChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket Seçin")
     description = RichTextField()

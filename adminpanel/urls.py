@@ -13,6 +13,7 @@ urlpatterns = [
     path('ayarlar/hesap', views.admin_account_settings, name="admin_account_settings"),
     path('ayarlar/sosyal-medya', views.admin_social_media_settings, name="admin_social_media_settings"),
     path('ayarlar/sosyal-medya/ekle', views.admin_add_social_media, name="admin_add_social_media"),
+    path('ayarlar/sosyal-medya/duzenle/<slug:slug>', views.admin_edit_social_media, name="admin_edit_social_media"),
     path('ayarlar/grup', views.admin_group_settings, name="admin_group_settings"),
     path('ayarlar/izin', views.admin_permission_settings, name="admin_permission_settings"),
     path('ayarlar/yeni-kullanici-ekle', account.admin_register_account, name="admin_register_account"),
@@ -33,19 +34,14 @@ urlpatterns = [
          name="admin_add_account_permission"),
     path('kullanicilar/kullanici-izinleri/duzenle/<uuid:id>', account.admin_edit_account_permission,
          name="admin_edit_account_permission"),
-    path('kullanicilar/kullanici-izinleri/etkisizlestir/<uuid:id>', account.admin_deactivate_account_permission,
-         name="admin_deactivate_account_permission"),
     path('kullanicilar/kullanici-izinleri/sil/<uuid:id>', account.admin_delete_account_permission,
          name="admin_delete_account_permission"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
-    url(r'^profil-sil/(?P<username>\w+)/$', account.admin_deactivate_profile, name="admin_deactivate_profile"),
 
     # User Group
     path('kullanicilar/grup/', group.admin_account_groups, name="admin_account_groups"),
     path('kullanicilar/grup/ekle/', account.admin_add_account_group, name="admin_add_account_group"),
     path('kullanicilar/grup/duzenle/<uuid:id>', account.admin_edit_account_group, name="admin_edit_account_group"),
-    path('kullanicilar/grup/etkinlestirme/<uuid:id>', group.admin_deactivate_account_group,
-         name="admin_deactivate_account_group"),
     path('kullanicilar/grup/sil/<uuid:id>', group.admin_delete_account_group, name="admin_delete_account_group"),
 
     # Group
@@ -65,8 +61,6 @@ urlpatterns = [
          name="admin_delete_group_permission"),
     path('gruplar/grup-izinleri/duzenle/<uuid:id>', group.admin_edit_group_permission,
          name="admin_edit_group_permission"),
-    path('gruplar/grup-izinleri/duzenle/<uuid:id>', group.admin_deactivate_group_permission,
-         name="admin_deactivate_group_permission"),
 
     # Permission
     path('izinler/', permission.admin_all_permissions, name="admin_all_permissions"),
@@ -108,7 +102,7 @@ urlpatterns = [
     # Article Category
     path('makaleler/makale-kategorileri/', article.admin_article_category, name="admin_article_category"),
     path('makaleler/makale-kategorileri/ekle/', article.admin_add_article_category, name="admin_add_article_category"),
-    path('makaleler/makale-kategorileri/düzenle/<slug:slug>', article.admin_edit_article_category,
+    path('makaleler/makale-kategorileri/duzenle/<slug:slug>', article.admin_edit_article_category,
          name="admin_edit_article_category"),
     path('makaleler/makale-kategorileri/sil/<slug:slug>', article.admin_delete_article_category,
          name="admin_delete_article_category"),

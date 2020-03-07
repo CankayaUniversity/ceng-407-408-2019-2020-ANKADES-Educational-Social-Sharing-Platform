@@ -214,37 +214,6 @@ def admin_delete_group_permission(request, id):
     return redirect("admin_group_permission")
 
 
-@login_required(login_url="login_admin")
-def admin_deactivate_group_permission(request, id):
-    """
-    :param request:
-    :param id:
-    :return:
-    """
-    instance = get_object_or_404(GroupPermission, id=id)
-    activity = AdminActivity()
-    if instance.isActive is True:
-        instance.isActive = False
-        instance.updatedDate = datetime.datetime.utcnow()
-        activity.activityTitle = "Grup izni etkisizleştirildi"
-        activity.activityCreator = request.user.username
-        activity.activityMethod = "DELETE"
-        activity.activityApplication = "Group"
-        activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Grup izni artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        instance.save()
-        activity.save()
-        messages.success(request, "Grup izni başarıyla etkisizleştirildi.")
-    else:
-        instance.isActive = True
-        instance.updatedDate = datetime.datetime.now()
-        activity.activityUpdatedDate = datetime.datetime.utcnow()
-        instance.save()
-        activity.save()
-        messages.error(request, "Grup izni aktifleştirildi.")
-    return redirect("admin_group_permission")
-
-
 # Hesap Grupları
 @login_required(login_url="login_admin")
 def admin_account_groups(request):
@@ -259,38 +228,6 @@ def admin_account_groups(request):
         "adminGroup": adminGroup
     }
     return render(request, "admin/account/group/account-groups.html", context)
-
-
-@login_required(login_url="login_admin")
-def admin_deactivate_account_group(request, id):
-    """
-    :param request:
-    :param id:
-    :return:
-    """
-    instance = get_object_or_404(AccountGroup, id=id)
-    activity = AdminActivity()
-    if instance.isActive is True:
-        instance.updatedDate = datetime.datetime.utcnow()
-        instance.isActive = False
-        activity.activityTitle = "Kullanıcı Grubu Etkinleştirildi."
-        activity.activityCreator = request.user.username
-        activity.activityMethod = "UPDATE"
-        activity.activityApplication = "Account Group"
-        activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Kullanıcı grubu etkinleştirildi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        instance.save()
-        activity.save()
-        messages.success(request, 'Başarıyla etkinleştirildi.')
-        return redirect("admin_account_groups")
-    else:
-        instance.isActive = True
-        instance.updatedDate = datetime.datetime.utcnow()
-        instance.save()
-        activity.updatedDate = datetime.datetime.utcnow()
-        activity.save()
-        messages.success(request, "Hesabın grubu başarıyla etkisizleştirildi")
-        return redirect("admin_account_groups")
 
 
 @login_required(login_url="login_admin")

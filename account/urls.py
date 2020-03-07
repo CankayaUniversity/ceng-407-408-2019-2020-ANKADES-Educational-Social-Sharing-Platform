@@ -12,6 +12,7 @@ urlpatterns = [
     path('kayit-ol/', views.register_account, name="register_account"),
     url(r'^kullanicilar/(?P<username>\w+)/$', views.account_detail, name="account_detail"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', views.edit_profile, name="edit_profile"),
+    url(r'^kullaniciadi-duzenle/(?P<username>\w+)/$', views.edit_username, name="edit_username"),
 
 ]
 

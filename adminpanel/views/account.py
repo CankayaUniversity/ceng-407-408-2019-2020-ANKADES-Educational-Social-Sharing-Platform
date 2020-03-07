@@ -108,25 +108,6 @@ def admin_edit_profile(request, username):
 
 
 @login_required(login_url="login_admin")
-def admin_deactivate_profile(request, username):
-    instance = get_object_or_404(Account, username=username)
-    if instance.is_active is True:
-        instance.is_active = False
-        activity = AdminActivity()
-        activity.activityTitle = "Kullanıcı Etkisizleştirildi."
-        activity.activityCreator = request.user.username
-        activity.activityMethod = "DELETE"
-        activity.activityApplication = "Account"
-        activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Kullanıcı artık aktif değil. İşlemi gerçekleştiren kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        activity.save()
-        instance.save()
-        messages.success(request, "Profil başarıyla etkisizleştirildi.")
-        return redirect("admin_all_users")
-    messages.error(request, "Kullanıcı zaten aktif değil.")
-
-
-@login_required(login_url="login_admin")
 def admin_blocked_users(request):
     blockedUsers = Account.objects.filter(is_active=False)
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
@@ -263,42 +244,6 @@ def admin_edit_account_permission(request, id):
         return render(request, "admin/account/permission/edit-account-permission.html", {"form": form, "adminGroup": adminGroup})
     else:
         messages.error(request, "Yetkiniz Yok!")
-
-
-@login_required(login_url="login_admin")
-def admin_deactivate_account_permission(request, id):
-    """
-    :param request:
-    :param id:
-    :return:
-    """
-    instance = get_object_or_404(AccountPermission, id=id)
-    activity = AdminActivity()
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    if adminGroup:
-        if instance.isActive is False:
-            instance.updatedDate = datetime.datetime.now()
-            instance.isActive = True
-            activity.activityTitle = "Kullanıcı izni etkisizleştirildi"
-            activity.activityCreator = request.user.username
-            activity.activityMethod = "DELETE"
-            activity.activityApplication = "Account Permission"
-            activity.activityUpdatedDate = datetime.datetime.utcnow()
-            activity.activityDescription = "Kullanıcı izni artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-            activity.save()
-            instance.save()
-            messages.success(request, "Kullanıcı izni başarıyla etkisizleştirildi.")
-            return redirect("admin_account_permission")
-        else:
-            instance.isActive = False
-            instance.updatedDate = datetime.datetime.now()
-            activity.activityUpdatedDate = datetime.datetime.utcnow()
-            instance.save()
-            messages.success(request, "Başarıyla etkisizleştirildi.")
-            return redirect("admin_account_permission")
-    else:
-        messages.error(request, "Yetkiniz Yok!")
-        return redirect("admin_index")
 
 
 @login_required(login_url="login_admin")

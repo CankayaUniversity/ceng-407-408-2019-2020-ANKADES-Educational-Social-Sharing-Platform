@@ -47,12 +47,16 @@ class AccountLoginForm(forms.Form):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ["username", "first_name", "last_name", "email", "image", "description"]
+        fields = ["first_name", "last_name", "email", "image", "description"]
         help_texts = {
-            'username': None,
             'first_name': None,
             'last_name': None,
             'email': None,
             'description': None
         }
 
+
+class EditUsernameForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['username',]

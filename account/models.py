@@ -2,6 +2,24 @@ import uuid
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import pre_save
+
+from ankadescankaya.slug import slug_save
+
+
+class Account(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    description = RichTextField(verbose_name="Biyografi", null=True, blank=True)
+    image = models.FileField(default='default-user-image.png', verbose_name="Profil Resmi")
+    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi", null=True, blank=True)
+    updatedDate = models.DateTimeField(verbose_name="Hesap Güncellendiği Tarih", null=True, blank=True)
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        db_table = "Account"
+        ordering = ["-date_joined"]
 
 
 class Permission(models.Model):
@@ -34,21 +52,6 @@ class Group(models.Model):
     class Meta:
         db_table = "Group"
         ordering = ["-createdDate"]
-
-
-class Account(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    description = RichTextField(verbose_name="Biyografi", null=True, blank=True)
-    image = models.FileField(default='default-user-image.png', verbose_name="Profil Resmi")
-    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi", null=True, blank=True)
-    updatedDate = models.DateTimeField(verbose_name="Hesap Güncellendiği Tarih", null=True, blank=True)
-
-    def __str__(self):
-        return self.username
-
-    class Meta:
-        db_table = "Account"
-        ordering = ["-date_joined"]
 
 
 class AccountPermission(models.Model):
@@ -101,8 +104,8 @@ class AccountGroup(models.Model):
 
 class SocialMedia(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sosyal Medya Id")
-    title = models.CharField(max_length=254, verbose_name="Sosyal Medya Adı")
-    slug = models.SlugField(verbose_name="Sosyal Medya Adı Slug")
+    title = models.CharField(max_length=254, verbose_name="Sosyal Medya Adı", unique=True)
+    slug = models.SlugField(verbose_name="Sosyal Medya Adı Slug", unique=True)
     isActive = models.BooleanField(default=True, null=True, blank=True, verbose_name="Aktiflik")
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
@@ -147,4 +150,9 @@ class AccountActivity(models.Model):
     class Meta:
         db_table = "AccountActivity"
         ordering = ['-activityCreatedDate']
+
+
+pre_save.connect(slug_save, sender=SocialMedia)
+pre_save.connect(slug_save, sender=Group)
+pre_save.connect(slug_save, sender=Permission)
 

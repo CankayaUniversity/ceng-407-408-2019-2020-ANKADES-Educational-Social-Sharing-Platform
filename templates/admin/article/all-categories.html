@@ -19,6 +19,15 @@
                         </div>
                     </div>
                 </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                style="list-style: none"
+                                    {% if message.tags %} {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <div class="row">
                     <div class="col-12">
                         <div class="card m-b-30">
@@ -32,14 +41,14 @@
                                        style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;">
                                     <thead>
                                     <tr>
-                                        <th>Kurs Kategori Başlığı</th>
-                                        <th>Kurs Kategori Oluşturan</th>
-                                        <th>Kurs Kategori Oluşturulma Tarihi</th>
-                                        <th>Kurs Kategori Güncellenme Tarihi</th>
-                                        <th>Aktiflik</th>
+                                        <th>Kategori Adı</th>
+                                        <th>Slug</th>
                                         <th>Üst Kategorisi</th>
-                                        <th>Düzenle</th>
-                                        <th>Sil</th>
+                                        <th>Oluşturan</th>
+                                        <th>Oluşturulma Tarihi</th>
+                                        <th>Son Güncelleme</th>
+                                        <th>Aktiflik</th>
+                                        <th>İşlemler</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -47,19 +56,18 @@
                                         {% for article_category in article_categories_list %}
                                             <tr>
                                                 <td>{{ article_category.title }}</td>
-                                                <td>{{ course_category.creator.get_full_name }}</td>
+                                                <td>{{ article_category.slug }}</td>
+                                                <td>{{ article_category.parentId.title }}</td>
+                                                <td>{{ article_category.creator.username }}</td>
                                                 <td>{{ article_category.createdDate }}</td>
                                                 <td>{{ article_category.updatedDate }}</td>
-                                                <td>{% if article_category.isActive is True %}Aktif{% else %}
+                                                <td>{% if article_category.isActive == True %}Aktif{% else %}
                                                     Kapalı{% endif %}</td>
-                                                <td>{{ article_category.parentId.title }}</td>
                                                 <td>
-                                                    <a href="{% url 'admin_edit_course_category' article_category.slug %}"
+                                                    <a href="{% url 'admin_edit_article_category' article_category.slug %}"
                                                        class="btn btn-success btn-sm">Düzenle</a>
-                                                </td>
-                                                <td>
-                                                    <a href="{% url 'admin_delete_course_category' article_category.slug %}"
-                                                       class="btn btn-danger btn-sm">Sil</a>
+                                                    <a href="{% url 'admin_delete_article_category' article_category.slug %}"
+                                                       class="btn btn-danger btn-sm">Aktiflik</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

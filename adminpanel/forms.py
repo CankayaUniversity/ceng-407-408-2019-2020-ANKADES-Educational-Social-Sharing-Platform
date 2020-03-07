@@ -2,7 +2,7 @@ from ckeditor.fields import RichTextField
 from django import forms
 from django.db.models import Q
 
-from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission
+from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission, SocialMedia
 from adminpanel.models import Tag
 from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
@@ -26,119 +26,131 @@ class AdminEditProfileForm(forms.ModelForm):
         }
 
 
-class AdminCourseForm(forms.ModelForm):
-    class Meta:
-        model = Course
-        fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
+class AdminCourseForm(forms.Form):
+    categoryId = forms.ModelChoiceField(queryset=CourseCategory.objects.filter(Q(isRoot=False) and Q()),
+                                        label="Kategori Adı")
+    title = forms.CharField(max_length=None, label="Başlık")
+    description = RichTextField()
+    media = forms.FileField(required=False, allow_empty_file=True)
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
+    isPrivate = forms.BooleanField(required=False, label="Özellik")
 
 
-class AdminCourseCategoryForm(forms.ModelForm):
-    class Meta:
-        model = CourseCategory
-        fields = ["parentId", "title", "slug", "description"]
+class AdminCourseCategoryForm(forms.Form):
+    parentId = forms.ModelChoiceField(queryset=CourseCategory.objects.all(), label="Kategorisi")
+    title = forms.CharField(max_length=None, label="Başlık")
+    description = RichTextField()
 
 
-class AdminPermissionForm(forms.ModelForm):
-    class Meta:
-        model = Permission
-        fields = ["title", "slug", "isActive"]
+class AdminPermissionForm(forms.Form):
+    title = forms.CharField(max_length=None, label="Başlık")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
-class AdminGroupForm(forms.ModelForm):
-    class Meta:
-        model = Group
-        fields = ["title", "slug", "isActive"]
+class AdminGroupForm(forms.Form):
+    title = forms.CharField(max_length=None, label="Başlık")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
-class AdminGroupPermissionForm(forms.ModelForm):
-    class Meta:
-        model = GroupPermission
-        fields = ["groupId", "permissionId", "isActive"]
+class AdminGroupPermissionForm(forms.Form):
+    groupId = forms.ModelChoiceField(queryset=Group.objects.all(), label="Grup Adı")
+    permissionId = forms.ModelChoiceField(queryset=Permission.objects.all(), label="İzin Adı")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
 class AdminAccountGroupForm(forms.ModelForm):
     class Meta:
         model = AccountGroup
-        fields = ["userId", "groupId", "isActive"]
+        fields = ['userId', 'groupId', 'isActive']
 
 
-class AdminAccountPermissionForm(forms.ModelForm):
-    class Meta:
-        model = AccountPermission
-        fields = ["userId", "permissionId", "isActive"]
+class AdminAccountPermissionForm(forms.Form):
+    userId = forms.ModelChoiceField(queryset=Account.objects.all(), label="Kullanıcı Adı")
+    permissionId = forms.ModelChoiceField(queryset=Permission.objects.all(), label="İzin Adı")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
-class AdminArticleForm(forms.ModelForm):
-    class Meta:
-        model = Article
-        fields = ["title", "slug", "categoryId", "isActive", "isPrivate", "media", "description"]
+class AdminArticleForm(forms.Form):
+    categoryId = forms.ModelChoiceField(queryset=ArticleCategory.objects.filter(Q(isRoot=False) and Q()),
+                                        label="Kategori Adı")
+    title = forms.CharField(max_length=None, label="Başlık")
+    description = RichTextField()
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
+    isPrivate = forms.BooleanField(required=False, label="Özellik")
+    media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
 
 
 class AdminTagForm(forms.ModelForm):
-    class Meta:
-        model = Tag
-        fields = ['title', 'slug', 'isActive']
-
-
-# class AdminArticleForm(forms.Form):
-#     title = forms.CharField(max_length=None, label="Başlık")
-#     slug = forms.SlugField(max_length=None, label="Slug")
-#     tag = forms.ModelChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket Seçin")
-#     description = RichTextField()
+    title = forms.CharField(max_length=None, label="Başlık")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
 class AdminArticleCategoryForm(forms.Form):
-    parentId = forms.BooleanField(required=False, initial=True)
-    if parentId is True:
-        categoryId = forms.ModelChoiceField(queryset=ArticleCategory.objects.filter(Q(isCategory=True)))
-    else:
-        categoryId = forms.ModelChoiceField(
-            queryset=ArticleCategory.objects.filter(Q(isRoot=False) and Q(isCategory=False)),
-            label="Üst Kategorisi")
+    parentId = forms.ModelChoiceField(
+        queryset=ArticleCategory.objects.filter(Q(isRoot=False) and Q(isCategory=True)),
+        label="Üst Kategorisi")
     title = forms.CharField(max_length=254, label="Başlık")
-    slug = forms.SlugField(max_length=254, label="Slug")
     isActive = forms.BooleanField(label="Aktiflik")
     isCategory = forms.BooleanField(label="Üst Kategori mi")
 
 
-class AdminSchoolForm(forms.ModelForm):
+class AdminEditArticleCategoryForm(forms.ModelForm):
     class Meta:
-        model = School
-        fields = ['title', 'slug', 'description', 'media', 'isActive']
+        model = ArticleCategory
+        fields = ['parentId', 'title', 'description', 'isCategory', 'isRoot', 'isActive']
+
+
+class AdminSchoolForm(forms.ModelForm):
+    title = forms.CharField(max_length=None, label="Okul Adı")
+    description = RichTextField()
+    media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
 class AdminDepartmentForm(forms.Form):
     schoolId = forms.ModelChoiceField(queryset=School.objects.filter(Q(isActive=True)), label="Okul")
-    title = forms.CharField(max_length=254, label="Başlık")
-    slug = forms.SlugField(max_length=254, label="Slug")
-    isActive = forms.BooleanField(label="Aktiflik")
+    title = forms.CharField(max_length=None, label="Başlık")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
-class AdminTermForm(forms.ModelForm):
-    class Meta:
-        model = Term
-        fields = ['departmentId', 'title', 'slug', 'isActive']
+class AdminTermForm(forms.Form):
+    departmentId = forms.ModelChoiceField(queryset=Department.objects.filter(isActive=True))
+    title = forms.CharField(max_length=None, label="Dönem")
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
-class AdminLectureForm(forms.ModelForm):
-    class Meta:
-        model = Lecture
-        fields = ['termId', 'title', 'slug', 'description', 'isActive']
+class AdminLectureForm(forms.Form):
+    termId = forms.ModelChoiceField(queryset=Term.objects.filter(isActive=True))
+    title = forms.CharField(max_length=None, label="Ders Adı")
+    description = RichTextField()
+    isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
-class AdminExamForm(forms.ModelForm):
-    class Meta:
-        model = Exam
-        fields = ['lectureId', 'title', 'slug', 'description', 'isActive', 'media']
+class AdminExamForm(forms.Form):
+    school = forms.ModelChoiceField(queryset=School.objects.filter(isActive=True), label="Okul")
 
 
 class AdminExamCommentForm(forms.ModelForm):
-    class Meta:
-        model = ExamComment
-        fields = '__all__'
+    content = RichTextField()
+    media = forms.FileField(max_length=None, allow_empty_file=True)
 
 
 class AdminSocialMediaForm(forms.Form):
     title = forms.CharField(label="Sosyal Medya Adı")
-    slug = forms.SlugField(max_length=None, label="Slug")
     isActive = forms.BooleanField(label="Aktiflik", required=False)
+
+    def clean(self):
+        title = self.cleaned_data.get("title")
+        isActive = self.cleaned_data.get("isActive")
+
+        values = {
+            "title": title,
+            "isActive": isActive,
+        }
+        return values
+
+
+class AdminEditSocialMediaForm(forms.ModelForm):
+    class Meta:
+        model = SocialMedia
+        fields = ['title', 'slug', 'isActive']

@@ -9,7 +9,6 @@ input[type="number"],
 textarea,
 select,
 .form-control {
-	background-color: transparent;
 	border: 1px solid #ededed;
 	border-radius: 15px;
 	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.05);
@@ -26,4 +25,14 @@ select,
 
 .selectmultiple {
 	height: 120px !important;
+}
+
+input[type="checkbox"],
+input[type="radio"],
+.form-control{
+	margin-top: 1rem;
+}
+
+label {
+	margin-top:1rem !important;
 }

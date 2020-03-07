@@ -1,28 +1,28 @@
 import uuid
-
-from ckeditor.fields import RichTextField
 from django.contrib.auth.models import Group, Permission
 from django.db import models
-
+from django.db.models.signals import pre_save
 from account.models import Account
+from ankadescankaya.slug import slug_save
 
 
 class AdminActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Id")
-    activityCreator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
-    activityTitle = models.CharField(max_length=254, verbose_name="Başlık")
-    activityApplication = models.CharField(max_length=254, verbose_name="Uygulama")
-    activityDescription = models.CharField(max_length=254, verbose_name="Açıklama")
-    activityMethod = models.CharField(max_length=254, verbose_name="Method Türü")
-    activityCreatedDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
-    activityUpdatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
+    slug = models.SlugField(unique=True, verbose_name="Kurs Id")
+    creator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
+    title = models.CharField(max_length=254, verbose_name="Başlık")
+    application = models.CharField(max_length=254, verbose_name="Uygulama")
+    description = models.CharField(max_length=254, verbose_name="Açıklama")
+    method = models.CharField(max_length=254, verbose_name="Method Türü")
+    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
+    updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
 
     def __str__(self):
-        return self.activityCreator
+        return self.title
 
     class Meta:
         db_table = "AdminActivity"
-        ordering = ['-activityCreatedDate']
+        ordering = ['-createdDate']
 
 
 class Tag(models.Model):
@@ -40,3 +40,7 @@ class Tag(models.Model):
     class Meta:
         db_table = "Tag"
         ordering = ['-createdDate']
+
+
+pre_save.connect(slug_save, sender=Tag)
+pre_save.connect(slug_save, sender=AdminActivity)

@@ -62,10 +62,6 @@
                                                 <td>
                                                     <a href="{% url 'admin_edit_account_permission' permission.id %}"
                                                        class="btn btn-success btn-sm">Düzenle</a>
-                                                    <a href="{% url 'admin_deactivate_account_permission' permission.id %}"
-                                                       class="btn btn-primary btn-sm">
-                                                        {% if permission.isActive == False %}Etkinleştir{% else %}
-                                                            Etkisizleştir{% endif %} </a>
                                                 </td>
                                                 <td>
                                                     <a href="{% url 'admin_delete_account_permission' permission.id %}"

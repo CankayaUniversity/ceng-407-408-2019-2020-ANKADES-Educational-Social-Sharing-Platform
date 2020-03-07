@@ -34,20 +34,30 @@ def admin_add_course(request):
     :return:
     """
     form = AdminCourseForm(request.POST or None)
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    adminGroup = AccountGroup.objects.filter(
+        Q(userId__username=request.user.username, groupId__slug="admin"))
     context = {
         "form": form,
         "adminGroup": adminGroup
     }
     if form.is_valid():
-        instance = form.save(commit=False)
-        instance.creator = request.user
-        instance.save()
+        categoryId = form.cleaned_data.get("categoryId")
+        title = form.cleaned_data.get("title")
+        slug = form.cleaned_data.get("slug")
+        description = form.cleaned_data.get("description")
+        media = form.cleaned_data.get("media")
+        isActive = form.cleaned_data.get("isActive")
+        isPrivate = form.cleaned_data.get("isPrivate")
+        adminAddedCourse = Course(categoryId=categoryId, title=title, slug=slug, description=description, media=media,
+                                  isActive=isActive, isPrivate=isPrivate)
+        adminAddedCourse.creator = request.user.username
+        adminAddedCourse.save()
         messages.success(request, "Kurs başarıyla eklendi !")
         return redirect("admin_courses")
     return render(request, "admin/course/add-course.html", context)
 
 
+#Yeni Form yapısı ile yapılacak
 @login_required(login_url="login_admin")
 def admin_edit_course(request, slug):
     """
@@ -82,11 +92,16 @@ def admin_delete_course(request, slug):
     :return:
     """
     instance = get_object_or_404(Course, slug=slug)
-    instance.delete()
-    messages.success(request, "Kurs başarıyla silindi !")
-    return redirect("admin_courses")
+    if instance.isActive is True:
+        instance.isActive = False
+        messages.success(request, "Kurs başarıyla silindi !")
+        return redirect("admin_courses")
+    else:
+        messages.error(request, "Kurs zaten aktif değil!")
+        return redirect("admin_courses")
 
 
+#Yeni Form yapısı ile yapılacak
 @login_required(login_url="login_admin")
 def admin_course_category(request):
     """
@@ -104,6 +119,7 @@ def admin_course_category(request):
     return render(request, "admin/course/all-categories.html", context)
 
 
+#Yeni Form yapısı ile yapılacak
 @login_required(login_url="login_admin")
 def admin_add_course_category(request):
     """
@@ -125,6 +141,7 @@ def admin_add_course_category(request):
     return render(request, "admin/course/add-category.html", context)
 
 
+#Yeni Form yapısı ile yapılacak
 @login_required(login_url="login_admin")
 def admin_edit_course_category(request, slug):
     """
@@ -144,7 +161,7 @@ def admin_edit_course_category(request, slug):
         instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Kurs kategorisi başarıyla düzenlendi !")
-        return redirect("admin_index")
+        return redirect("admin_edit_course_category")
     return render(request, "admin/course/edit-category.html", context)
 
 
@@ -156,6 +173,10 @@ def admin_delete_course_category(request, slug):
     :return:
     """
     instance = get_object_or_404(CourseCategory, slug=slug)
-    instance.delete()
-    messages.success(request, "Kurs kategorisi başarıyla silindi !")
-    return redirect("admin_index")
+    if instance.isActive is True:
+        instance.isActive = False
+        messages.success(request, "Kurs kategorisi başarıyla etkisizleştirildi !")
+        return redirect("admin_course_category")
+    else:
+        messages.error(request, "Kurs kategorisi zaten aktif değil!")
+        return redirect("admin_course_category")

@@ -2,8 +2,11 @@ import uuid
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
+from django.db.models.signals import pre_save
+
 from account.models import Account
 from adminpanel.models import Tag
+from ankadescankaya.slug import slug_save
 
 
 class ArticleCategory(models.Model):
@@ -90,3 +93,7 @@ class ArticleTag(models.Model):
 
     class Meta:
         db_table = "ArticleTag"
+
+
+pre_save.connect(slug_save, sender=Article)
+pre_save.connect(slug_save, sender=ArticleCategory)

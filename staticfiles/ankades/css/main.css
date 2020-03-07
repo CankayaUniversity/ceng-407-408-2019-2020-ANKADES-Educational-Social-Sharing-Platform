@@ -1207,7 +1207,6 @@ form .has-placeholder.textarea label + [class*="fa-"] {
 	font-size: inherit;
 	line-height: 1.5;
 	margin-top: 0;
-	padding: 40px;
 	z-index: 1001;
 }
 
@@ -14772,7 +14771,7 @@ a img.aligncenter {
 }
 
 .page_header a {
-	display: inline-block;
+	display: block;
 }
 
 .page_header .btn {
