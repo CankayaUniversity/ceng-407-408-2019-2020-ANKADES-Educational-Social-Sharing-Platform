@@ -7,8 +7,8 @@ from ankadescankaya.slug import slug_save
 
 
 class AdminActivity(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Id")
-    slug = models.SlugField(unique=True, verbose_name="Kurs Id")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Id")
+    slug = models.SlugField(unique=True, verbose_name="Slug", allow_unicode=True)
     creator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
     title = models.CharField(max_length=254, verbose_name="Başlık")
     application = models.CharField(max_length=254, verbose_name="Uygulama")
@@ -29,10 +29,11 @@ class Tag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Tag Id")
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Oluşturan Kişi")
     title = models.CharField(max_length=254, verbose_name="Tag Adı", unique=True)
-    slug = models.SlugField(max_length=254, verbose_name="Slug")
+    slug = models.SlugField(max_length=254, verbose_name="Slug", allow_unicode=True)
     view = models.PositiveIntegerField(default=0, verbose_name="Tag Görüntülenme")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
+    updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
 
     def __str__(self):
         return self.title

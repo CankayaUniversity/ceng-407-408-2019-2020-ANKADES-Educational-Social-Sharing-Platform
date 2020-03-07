@@ -24,40 +24,31 @@
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i
-                            class="icon-profile"></i><span> Kullanıcılar <span
+                            class="fa fa-address-book"></i><span> Kullanıcılar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li>
-                            <a href="javascript:void(0)"><i
-                                    class="far fa-address-book"></i> Liste<span class="float-right menu-arrow"><i
+                            <a href="javascript:void(0)"> Liste<span class="float-right menu-arrow"><i
                                     class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
-                                <li><a href="{% url 'admin_all_users' %}"><i
-                                        class="fas fa-address-book"></i> Tüm Kullanıcılar</a></li>
-                                <li><a href="{% url 'admin_students' %}"><i
-                                        class="fas fa-user-graduate"></i> Öğrenci</a></li>
-                                <li><a href="{% url 'admin_teachers' %}"><i
-                                        class="fas fa-user-check"></i> Öğretmen</a></li>
-                                <li><a href="{% url 'admin_moderators' %}"><i
-                                        class="fas fa-user-tag"></i> Moderatör</a></li>
-                                <li><a href="{% url 'admin_admins' %}"><i class="fas fa-user-lock"></i>
-                                    Admin</a></li>
+                                <li><a href="{% url 'admin_all_users' %}"> Tüm Kullanıcılar</a></li>
+                                <li><a href="{% url 'admin_students' %}"> Öğrenci</a></li>
+                                <li><a href="{% url 'admin_teachers' %}"> Öğretmen</a></li>
+                                <li><a href="{% url 'admin_moderators' %}"> Moderatör</a></li>
+                                <li><a href="{% url 'admin_admins' %}"> Admin</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="javascript:void(0)"><i
-                                    class="far fa-address-book"></i> Kullanıcı Grupları<span
+                            <a href="javascript:void(0)"> Kullanıcı Grupları<span
                                     class="float-right menu-arrow"><i
                                     class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
-                                <li><a href="{% url 'admin_account_groups' %}"><i class="fas fa-user-graduate"></i>
-                                    Kullanıcı Grupları</a></li>
+                                <li><a href="{% url 'admin_account_groups' %}"> Kullanıcı Grupları</a></li>
                                 <li><a href="{% url 'admin_add_account_group' %}">Kullanıcıya Grup Ekle</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="javascript:void(0)"><i
-                                    class="far fa-address-book"></i> Kullanıcı İzinleri<span
+                            <a href="javascript:void(0)"> Kullanıcı İzinleri<span
                                     class="float-right menu-arrow"><i
                                     class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="submenu">
@@ -65,7 +56,7 @@
                                 <li><a href="{% url 'admin_add_account_permission' %}">Kullanıcıya İzin Ekle</a></li>
                             </ul>
                         </li>
-                        <li><a href="{% url 'admin_blocked_users' %}"><i class="fas fa-user-alt-slash"></i> Yasaklı
+                        <li><a href="{% url 'admin_blocked_users' %}"> Yasaklı
                             Kullanıcılar</a></li>
                     </ul>
                 </li>
@@ -74,7 +65,7 @@
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i
-                            class="icon-spread"></i><span> Gruplar <span
+                            class="fa fa-users"></i><span> Gruplar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li>
@@ -97,8 +88,7 @@
                 </li>
 
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i
-                            class="icon-spread"></i><span> İzinler <span
+                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-user-tag"></i><span> İzinler <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="{% url 'admin_all_permissions' %}">İzin Listesi</a></li>
@@ -113,7 +103,7 @@
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="{% url 'admin_articles' %}">Tüm Makaleler</a></li>
-                        <li><a href="{% url 'admin_article_category' %}">Ana Kategori Listesi</a></li>
+                        <li><a href="{% url 'admin_article_category' %}">Kategori Listesi</a></li>
                         <li><a href="{% url 'admin_add_article' %}">Makale Ekle</a></li>
                         <li><a href="{% url 'admin_add_article_category' %}">Kategori Ekle</a></li>
                     </ul>
@@ -121,11 +111,11 @@
                 {# End Article #}
                 {# Course #}
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Kurslar <span
+                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-video"></i><span> Kurslar <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="{% url 'admin_courses' %}">Tüm Kurslar</a></li>
-                        <li><a href="{% url 'admin_course_category' %}">Ana Kategori Listesi</a></li>
+                        <li><a href="{% url 'admin_course_category' %}">Kategori Listesi</a></li>
                         <li><a href="{% url 'admin_add_course' %}">Kurs Ekle</a></li>
                         <li><a href="{% url 'admin_add_course_category' %}">Kategori Ekle</a></li>
                     </ul>
@@ -133,7 +123,7 @@
                 {# End Course #}
                 {# Exam #}
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Sınav Soruları <span
+                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-archive"></i><span> Sınav Soruları <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li>
@@ -181,22 +171,27 @@
                 </li>
                 {# End School #}
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="icon-spread"></i><span> Sorular <span
+                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-question"></i><span> Sorular <span
                             class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="#">Soru Listesi</a></li>
                         <li><a href="#">Kategori Ekle</a></li>
-                        <li><a href="#">Alt Kategori Ekle</a></li>
                         <li><a href="#">Soru Ekle</a></li>
                     </ul>
                 </li>
+                {# Tags #}
+                <li>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-tags"></i><span> Etiketler <span
+                            class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="submenu">
+                        <li><a href="{% url 'admin_tags' %}">Etiketler</a></li>
+                        <li><a href="{% url 'admin_add_tag' %}">Etiket Ekle</a></li>
+                    </ul>
+                </li>
+                {# End Tags #}
             </ul>
 
         </div>
-        <!-- Sidebar -->
         <div class="clearfix"></div>
-
     </div>
-    <!-- Sidebar -left -->
-
 </div>

@@ -1,11 +1,13 @@
 import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from account.models import AccountGroup
-from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminTagForm, AdminEditArticleCategoryForm
+from account.models import AccountGroup, Account
+from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminEditArticleCategoryForm, \
+    AdminEditArticleForm, AdminEditArticleTagForm, AddArticleTag
 from adminpanel.models import Tag
 from article.models import Article, ArticleCategory, ArticleTag
 
@@ -24,19 +26,6 @@ def admin_articles(request):
 
 
 @login_required(login_url="login_admin")
-def admin_tags(request):
-    """
-    :param request:
-    :return:
-    """
-    tags = Tag.objects.all()
-    context = {
-        "tags": tags,
-    }
-    return render(request, "admin/tags/all-tags.html", context)
-
-
-@login_required(login_url="login_admin")
 def admin_add_article(request):
     """
     :param request:
@@ -49,8 +38,13 @@ def admin_add_article(request):
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
         if form.is_valid():
-            form_username = form.cleaned_data.get("userId")
-            instance = form.save(commit=False)
+            categoryId = form.cleaned_data.get("categoryId")
+            title = form.cleaned_data.get("title")
+            description = form.cleaned_data.get("description")
+            isActive = form.cleaned_data.get("isActive")
+            isPrivate = form.cleaned_data.get("isPrivate")
+            media = form.cleaned_data.get("media")
+            instance = Article(categoryId=categoryId, title=title, description=description, isActive=isActive, isPrivate=isPrivate, media=media)
             instance.creator = request.user
             instance.save()
             messages.success(request, "Makale başarıyla eklendi !")
@@ -68,7 +62,6 @@ def admin_add_article_category(request):
     :return:
     """
     form = AdminArticleCategoryForm(request.POST or None)
-
     context = {
         "form": form,
     }
@@ -92,22 +85,29 @@ def admin_add_article_category(request):
 
 
 @login_required(login_url="login_admin")
-def admin_add_tag(request):
+def admin_add_article_tag(request, slug):
     """
+    :param slug:
     :param request:
     :return:
     """
-    form = AdminTagForm(request.POST or None)
+    getArticle = get_object_or_404(Article, slug=slug)
+    form = AddArticleTag(request.POST or None)
     context = {
-        "form": form
+        "form": form,
     }
     if form.is_valid():
-        instance = form.save(commit=False)
-        instance.creator = request.user
+        tagId = form.cleaned_data.get("tagId")
+        isActive = form.cleaned_data.get("isActive")
+        instance = ArticleTag()
+        getTag = Tag.objects.get(Q(title=tagId))
+        instance.tagId_id = getTag.id
+        instance.isActive = isActive
+        instance.articleId_id = getArticle.id
         instance.save()
-        messages.success(request, "Etiket başarıyla eklendi !")
-        return redirect("admin_articles")
-    return render(request, "admin/article/add-tag.html", context)
+        messages.success(request, "Makale başarıyla düzenlendi !")
+        return render(request, "admin/tags/add-article-tag.html", context)
+    return render(request, "admin/tags/add-article-tag.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -117,21 +117,19 @@ def admin_edit_article(request, slug):
     :param slug:
     :return:
     """
-    if request.user.is_authenticated:
-        instance = get_object_or_404(Article, slug=slug)
-        form = AdminArticleForm(request.POST or None, request.FILES or None, instance=instance)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.updatedDate = datetime.datetime.now()
-            instance.save()
-            messages.success(request, "Makale başarıyla düzenlendi !")
-            context = {
-                "form": form,
-            }
-            return render(request, "admin/article/edit-article.html", context)
-        return render(request, "admin/article/edit-article.html", {"form": form})
-    else:
-        return redirect("login_admin")
+    instance = get_object_or_404(Article, slug=slug)
+    form = AdminEditArticleForm(request.POST or None, request.FILES or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.creator = request.user
+        instance.updatedDate = datetime.datetime.now()
+        instance.save()
+        messages.success(request, "Makale başarıyla düzenlendi !")
+        context = {
+            "form": form,
+        }
+        return render(request, "admin/article/edit-article.html", context)
+    return render(request, "admin/article/edit-article.html", {"form": form})
 
 
 @login_required(login_url="login_admin")
@@ -195,3 +193,11 @@ def admin_delete_article_category(request, slug):
     else:
         messages.error(request, "Kurs kategorisi zaten aktif değil!")
         return redirect("admin_article_category")
+
+
+def admin_edit_tag(request, slug):
+    return None
+
+
+def admin_delete_tag(request):
+    return None

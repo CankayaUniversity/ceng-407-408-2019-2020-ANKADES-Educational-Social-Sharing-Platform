@@ -90,6 +90,18 @@
                                 <a class="dropdown-item" href="{% url 'logout_account' %}">Çıkış Yap</a>
                             </div>
                         </div>
+{#                        Kategoriler#}
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="javascript:void(0)" role="button" id="dropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa fa-user color-main3"></i>Hesabım
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'account_detail' request.user.username %}">Profilim</a>
+                                <a class="dropdown-item" href="{% url 'edit_profile' request.user.username %}">Düzenle</a>
+                                <a class="dropdown-item" href="{% url 'logout_account' %}">Çıkış Yap</a>
+                            </div>
+                        </div>
                     </ul>
                 </div>
             {% else %}

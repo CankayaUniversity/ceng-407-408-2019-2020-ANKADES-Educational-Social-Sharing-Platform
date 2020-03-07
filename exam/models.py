@@ -2,8 +2,6 @@ import uuid
 from ckeditor.fields import RichTextField
 from django.db import models
 from django.db.models.signals import pre_save
-from rest_framework.fields import FileField
-
 from account.models import Account
 from adminpanel.models import Tag
 from ankadescankaya.slug import slug_save
@@ -12,7 +10,7 @@ from ankadescankaya.slug import slug_save
 class School(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sınav Soruları Id")
     title = models.CharField(max_length=254, verbose_name="Okul Adı")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Okul Adı Slug")
+    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = RichTextField(verbose_name="Okul Açıklama", null=True,
                                 blank=True)
     createdDate = models.DateTimeField(auto_now_add=True,
@@ -34,8 +32,8 @@ class School(models.Model):
 class Department(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Bölüm Id")
     title = models.CharField(max_length=254, verbose_name="Bölüm Adı")
-    slug = models.SlugField(unique=True, max_length=254,
-                            verbose_name="Bölüm Adı Slug")
+    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True,
+                            verbose_name="Slug")
     description = models.TextField(verbose_name="Bölüm Açıklama ", null=True,
                                    blank=True)
     createdDate = models.DateTimeField(auto_now_add=True,
@@ -61,7 +59,7 @@ class Lecture(models.Model):
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, verbose_name="Sınav Sorusu Oluşturan", null=True)
     title = models.CharField(max_length=254, verbose_name="Sınav Sorusu Başlık")
     description = RichTextField(null=True, blank=True)
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Sınav Sorusu Slug")
+    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Sınav Sorusu Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Sınav Sorusu Güncellendiği Tarih", null=True, blank=True)
@@ -80,7 +78,7 @@ class Lecture(models.Model):
 class Term(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Id")
     title = models.CharField(max_length=254, verbose_name="Dönem (Bahar-Kış-Yaz)")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Dönem Slug")
+    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Dönem Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Dönem Güncellendiği Tarih", null=True, blank=True)
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
@@ -103,7 +101,7 @@ class Exam(models.Model):
     termId = models.ForeignKey(Term, verbose_name="Dönem", on_delete=models.SET_NULL, null=True)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, verbose_name="Sınav Sorusu Oluşturan", null=True)
     title = models.CharField(max_length=254, verbose_name="Sınav Sorusu Başlık")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Sınav Sorusu Slug")
+    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = RichTextField()
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Sınav Sorusu Oluşturulduğu Tarih")
@@ -143,12 +141,16 @@ class ExamComment(models.Model):
 
 class ExamTag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Tag Id")
-    examId = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, verbose_name="Makale")
-    tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
-    view = models.PositiveIntegerField(default=0, verbose_name="Sınav Tag Görüntülenme Tarihi")
+    tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, verbose_name="Etiket")
+    examId = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, verbose_name="Sınav")
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
+    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
 
     def __str__(self):
-        return self.examId
+        return self.tagId
 
     class Meta:
         db_table = "ExamTag"

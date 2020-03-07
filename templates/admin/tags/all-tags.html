@@ -40,13 +40,12 @@
                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                     <tr>
-                                        <th>Kurs Başlığı</th>
-                                        <th>Kurs Sahibi</th>
-                                        <th>Kurs Kategorisi</th>
-                                        <th>Kurs Oluşturulduğu Tarih</th>
-                                        <th>Kurs Güncellendiği Tarih</th>
+                                        <th>Etiket</th>
+                                        <th>Slug</th>
+                                        <th>Oluşturan</th>
+                                        <th>Oluşturulduğu Tarih</th>
+                                        <th>Güncellendiği Tarih</th>
                                         <th>Aktiflik</th>
-                                        <th>Özellik</th>
                                         <th>Görüntülenme</th>
                                         <th>İşlemler</th>
                                     </tr>
@@ -56,23 +55,20 @@
                                         {% for tag in tags %}
                                             <tr>
                                                 <td>{{ tag.title }}</td>
-                                                <td>{{ tag.creator.get_full_name }}</td>
-                                                <td>{{ tag.categoryId }}</td>
+                                                <td>{{ tag.slug }}</td>
+                                                <td>{{ tag.creator.username }}</td>
                                                 <td>{{ tag.createdDate }}</td>
                                                 <td>{{ tag.updatedDate }}</td>
                                                 <td>{% if tag.isActive is True %}Aktif{% else %}
                                                     Kapalı{% endif %}</td>
-                                                <td>{% if tag.isPrivate is True %}Özel{% else %}
-                                                    Açık{% endif %}</td>
                                                 <td>{{ tag.view }}</td>
-                                                {#                                                    <td>#}
-                                                {#                                                        <a href="{% url 'admin_edit_tag' tag.slug %}"#}
-                                                {#                                                           class="btn btn-success btn-sm">Düzenle</a>#}
-                                                {#                                                    </td>#}
-                                                {#                                                    <td>#}
-                                                {#                                                        <a href="{% url 'admin_delete_tag' tag.slug %}"#}
-                                                {#                                                           class="btn btn-danger btn-sm">Sil</a>#}
-                                                {#                                                    </td>#}
+                                                <td>
+                                                    <a href="{% url 'admin_edit_tag' tag.slug %}"
+                                                       class="btn btn-success btn-sm">Düzenle</a>
+                                                    <a href="{% url 'admin_delete_tag' tag.slug %}"
+                                                       class="btn btn-danger btn-sm">
+                                                        {% if tag.isActive == True %}Etkisizleştir{% else %}Etkinleştir{% endif %}</a>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     {% endif %}

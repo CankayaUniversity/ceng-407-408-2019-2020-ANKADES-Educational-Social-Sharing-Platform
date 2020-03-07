@@ -13,7 +13,7 @@ class CourseCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Kategori Id")
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Oluşturan Kişi")
     title = models.CharField(max_length=254, verbose_name="Kurs Kategori Başlığı")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Kurs Kategori Slug")
+    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = RichTextField(verbose_name="Kurs Kategori Açıklama", null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Kurs Kategori Oluşturulduğu Tarih")
@@ -38,7 +38,7 @@ class Course(models.Model):
     categoryId = models.ForeignKey(CourseCategory, verbose_name="Kurs Kategori",
                                    on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, verbose_name="Kurs Başlığı")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Kurs Slug")
+    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = RichTextField(verbose_name="Kurs Açıklaması")
     media = models.FileField(null=True, blank=True, verbose_name="Kurs Dosya Yükleme")
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Kurs Oluşturulduğu Tarih")
@@ -115,11 +115,16 @@ class CourseComment(models.Model):
 
 class CourseTag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Tag Id")
-    courseId = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, verbose_name="Makale")
-    tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
+    tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, verbose_name="Etiket")
+    courseId = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, verbose_name="Kurs")
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
+    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
+    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
 
     def __str__(self):
-        return self.courseId
+        return self.tagId
 
     class Meta:
         db_table = "CourseTag"

@@ -134,7 +134,7 @@ def admin_add_course_category(request):
     }
     if form.is_valid():
         instance = form.save(commit=False)
-        instance.creator = request.user
+        instance.creator = request.user.username
         instance.save()
         messages.success(request, "Kurs kategorisi başarıyla eklendi !")
         return redirect("admin_index")

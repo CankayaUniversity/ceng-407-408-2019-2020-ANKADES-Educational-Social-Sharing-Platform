@@ -68,8 +68,8 @@
                                                 <td>
                                                     <a href="{% url 'admin_edit_article' article.slug %}"
                                                        class="btn btn-success btn-sm">Düzenle</a>
-                                                </td>
-                                                <td>
+                                                    <a href="{% url 'admin_add_article_tag' article.slug %}"
+                                                       class="btn btn-primary btn-sm">Etiketler</a>
                                                     <a href="{% url 'admin_delete_article' article.slug %}"
                                                        class="btn btn-danger btn-sm">Sil</a>
                                                 </td>

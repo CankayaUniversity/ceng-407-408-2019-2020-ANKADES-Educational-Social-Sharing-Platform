@@ -1,3 +1,4 @@
+unidecode
 article==0.1.1
 asgiref==3.2.3
 attrs==19.3.0

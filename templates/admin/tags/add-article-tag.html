@@ -1,5 +1,5 @@
 {% extends "admin/layout/layout.html" %}
-{% block title %}Makale Etiket Ekle{% endblock %}
+{% block title %}Makaleye Etiket Ekle{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -9,12 +9,14 @@
                 <div class="page-title-box">
                     <div class="row align-items-center">
                         <div class="col-sm-6">
-                            <h4 class="page-title">Makale Etiket Ekleme</h4>
+                            <h4 class="page-title">Makale Etiket Ekle</h4>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-right">
-                                <li class="breadcrumb-item"><a href="{% url 'admin_articles' %}">Makale</a></li>
-                                <li class="breadcrumb-item"><a href="">Makale Etiket Ekle</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Makaleler</a></li>
+                                <li class="breadcrumb-item">Makale
+                                    Düzenle
+                                </li>
                             </ol>
                         </div>
                     </div>
@@ -48,4 +50,4 @@
         </div>
         {% include 'admin/layout/footer.html' %}
     </div>
-{% endblock %}
+{% endblock body %}

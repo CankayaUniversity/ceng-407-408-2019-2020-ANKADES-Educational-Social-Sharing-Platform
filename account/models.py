@@ -105,7 +105,7 @@ class AccountGroup(models.Model):
 class SocialMedia(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sosyal Medya Id")
     title = models.CharField(max_length=254, verbose_name="Sosyal Medya Adı", unique=True)
-    slug = models.SlugField(verbose_name="Sosyal Medya Adı Slug", unique=True)
+    slug = models.SlugField(verbose_name="Slug", unique=True, allow_unicode=True)
     isActive = models.BooleanField(default=True, null=True, blank=True, verbose_name="Aktiflik")
     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
     updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)

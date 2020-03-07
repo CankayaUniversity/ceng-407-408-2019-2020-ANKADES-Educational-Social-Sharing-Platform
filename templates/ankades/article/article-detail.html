@@ -33,7 +33,6 @@
                         <main class="col-lg-7 col-xl-8">
                             <article
                                     class="vertical-item content-padding post type-post status-publish format-standard has-post-thumbnail single-post">
-
                                 {% if articleDetail.media %}
                                     <div class="item-media post-thumbnail rounded-image-top">
                                         <img src="{{ articleDetail.media.url }}" alt="">
@@ -42,6 +41,13 @@
                                 <div class="item-content hero-bg">
                                     <header class="entry-header">
                                         <div class="entry-meta small-text color-darkgrey">
+                                            <div class="row">
+                                                <h2>
+                                                    python ile django web framework kodlama
+                                                    {{ articleDetail.title }}
+                                                </h2>
+                                            </div>
+                                            <div class="row mt-5">
 											<span class="byline">
 												<span class="posted-on">
 													<a href="#">
@@ -69,6 +75,7 @@
 													</a>
 												</span>
 											</span>
+                                            </div>
                                         </div><!-- .entry-meta -->
                                     </header>
                                     <hr>
@@ -99,20 +106,20 @@
                                     <!-- .entry-footer -->
                                 </div>
                                 <!-- User's social media urls which has that article -->
-{#                                <div class="share_buttons social_part">#}
-{#                                    <a href="https://www.facebook.com" class="color-bg-icon fa fa-facebook"#}
-{#                                       target="_blank"></a>#}
-{#                                    <a href="https://twitter.com" class="color-bg-icon fa fa-twitter"#}
-{#                                       target="_blank"></a>#}
-{#                                    <a href="https://plus.google.com" class="color-bg-icon fa fa-google-plus"#}
-{#                                       target="_blank"></a>#}
-{#                                    <a href="https://instagram.com" class="color-bg-icon fa fa-instagram"#}
-{#                                       target="_blank"></a>#}
-{#                                    <a href="https://www.youtube.com" class="color-bg-icon fa fa-youtube-play"#}
-{#                                       target="_blank"></a>#}
-{#                                    <a href="https://www.dribbble.com" class="color-bg-icon fa fa-dribbble"#}
-{#                                       target="_blank"></a>#}
-{#                                </div>#}
+                                {#                                <div class="share_buttons social_part">#}
+                                {#                                    <a href="https://www.facebook.com" class="color-bg-icon fa fa-facebook"#}
+                                {#                                       target="_blank"></a>#}
+                                {#                                    <a href="https://twitter.com" class="color-bg-icon fa fa-twitter"#}
+                                {#                                       target="_blank"></a>#}
+                                {#                                    <a href="https://plus.google.com" class="color-bg-icon fa fa-google-plus"#}
+                                {#                                       target="_blank"></a>#}
+                                {#                                    <a href="https://instagram.com" class="color-bg-icon fa fa-instagram"#}
+                                {#                                       target="_blank"></a>#}
+                                {#                                    <a href="https://www.youtube.com" class="color-bg-icon fa fa-youtube-play"#}
+                                {#                                       target="_blank"></a>#}
+                                {#                                    <a href="https://www.dribbble.com" class="color-bg-icon fa fa-dribbble"#}
+                                {#                                       target="_blank"></a>#}
+                                {#                                </div>#}
                             </article>
 
                             <div class="author-bio side-item content-padding text-center text-md-left text-lg-center text-xl-left">
@@ -453,15 +460,6 @@
                                         <span class="screen-reader-text">Search</span>
                                     </button>
                                 </form>
-                            </div>
-
-                            <div class="widget widget_text">
-                                <h5 class="widget-title">About Us</h5>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam
-                                    diam dolore dolores duo eirmos.
-                                </p>
-                                <a href="about.html" class="btn btn-maincolor"><span>Read More</span></a>
                             </div>
 
                             <div class="widget widget_categories">
