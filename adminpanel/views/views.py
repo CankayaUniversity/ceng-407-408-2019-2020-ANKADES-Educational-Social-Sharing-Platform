@@ -211,9 +211,13 @@ def admin_tags(request):
     :param request:
     :return:
     """
+
+
     tags = Tag.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "tags": tags,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/tags/all-tags.html", context)
 
@@ -225,8 +229,10 @@ def admin_add_tag(request):
     :return:
     """
     form = AdminTagForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "form": form
+        "form": form,
+        "adminGroup": adminGroup
     }
     if form.is_valid():
         title = form.cleaned_data.get("title")

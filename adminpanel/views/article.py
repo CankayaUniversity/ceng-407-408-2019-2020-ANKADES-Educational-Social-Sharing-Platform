@@ -19,8 +19,10 @@ def admin_articles(request):
     :return:
     """
     articles = Article.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "articles": articles,
+        "adminGroup" : adminGroup
     }
     return render(request, "admin/article/all-articles.html", context)
 
@@ -31,9 +33,11 @@ def admin_add_article(request):
     :param request:
     :return:
     """
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     form = AdminArticleForm(request.POST or None)
     context = {
-        "form": form
+        "form": form,
+        "adminGroup": adminGroup
     }
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
@@ -62,8 +66,10 @@ def admin_add_article_category(request):
     :return:
     """
     form = AdminArticleCategoryForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "form": form,
+        "adminGroup": adminGroup
     }
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
@@ -92,9 +98,12 @@ def admin_add_article_tag(request, slug):
     :return:
     """
     getArticle = get_object_or_404(Article, slug=slug)
+
     form = AddArticleTag(request.POST or None)
+
     context = {
         "form": form,
+
     }
     if form.is_valid():
         tagId = form.cleaned_data.get("tagId")
@@ -153,9 +162,11 @@ def admin_article_category(request):
     """
     article_categories_list = ArticleCategory.objects.all()
     article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "article_categories_list": article_categories_list,
         "article_categories_limit": article_categories_limit,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/article/all-categories.html", context)
 

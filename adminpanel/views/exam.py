@@ -18,8 +18,10 @@ def admin_schools(request):
     :return:
     """
     schools = School.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "schools": schools,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/exam/school/all-schools.html", context)
 
@@ -31,8 +33,10 @@ def admin_add_school(request):
     :return:
     """
     form = AdminSchoolForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "form": form
+        "form": form,
+        "adminGroup": adminGroup
     }
     if form.is_valid():
         instance = form.save(commit=False)
@@ -85,8 +89,10 @@ def admin_departments(request):
     :return:
     """
     departments = Department.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "departments": departments,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/exam/department/all-departments.html", context)
 
@@ -98,8 +104,10 @@ def admin_add_department(request):
     :return:
     """
     form = AdminDepartmentForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "form": form
+        "form": form,
+        "adminGroup": adminGroup
     }
     if form.is_valid():
         instance = form.save(commit=False)
@@ -152,8 +160,10 @@ def admin_terms(request):
     :return:
     """
     terms = Term.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "terms": terms,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/exam/term/all-terms.html", context)
 
@@ -164,11 +174,16 @@ def admin_add_term(request):
     :param request:
     :return:
     """
+
     if request.method == 'POST':
+        adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
         form = AdminTermForm(request.POST)
+        context = {
+
+            "adminGroup": adminGroup
+        }
         if form.is_valid():
             form.save(commit=False)
-            form
             messages.success(request, "Dönem başarıyla eklendi !")
             return redirect("admin_terms")
     else:
@@ -223,8 +238,10 @@ def admin_lectures(request):
     :return:
     """
     lectures = Lecture.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "lectures": lectures,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/exam/lecture/all-lectures.html", context)
 
@@ -295,8 +312,10 @@ def admin_exams(request):
     :return:
     """
     exams = Exam.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "exams": exams,
+        "adminGroup": adminGroup
     }
     return render(request, "admin/exam/pre-exam/all-exams.html", context)
 
@@ -308,8 +327,10 @@ def admin_add_exam(request):
     :return:
     """
     form = AdminExamForm(request.POST or None)
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "form": form
+        "form": form,
+        "adminGroup": adminGroup
     }
     if form.is_valid():
         instance = form.save(commit=False)
