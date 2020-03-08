@@ -2,7 +2,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.db.models import Q
 from adminpanel.models import Tag
-from article.models import ArticleCategory
+from article.models import ArticleCategory, Article
 
 
 class ArticleForm(forms.Form):
@@ -14,3 +14,9 @@ class ArticleForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget(), label="Yazı")
     isPrivate = forms.BooleanField(required=False, label="Özel olacak ise kutucuğu işaretleyin")
     media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
+
+
+class EditArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['categoryId', 'title', 'description', 'isPrivate', 'isActive', 'media']

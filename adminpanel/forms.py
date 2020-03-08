@@ -93,6 +93,7 @@ class AddArticleTag(forms.Form):
     tagId = forms.ModelChoiceField(required=True, queryset=Tag.objects.filter(isActive=True), label="Etiket")
     isActive = forms.BooleanField(required=False, label="Aktif")
 
+
 class AdminEditArticleForm(forms.ModelForm):
     class Meta:
         model = Article

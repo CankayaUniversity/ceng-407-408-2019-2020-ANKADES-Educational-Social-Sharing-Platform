@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
 from account.models import AccountGroup, Account
-from article.forms import ArticleForm
+from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment, ArticleTag
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 
@@ -99,6 +99,40 @@ def add_article(request):
         return redirect("index")
 
 
+@login_required(login_url="login_admin")
+def edit_article(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    accountGroup = AccountGroup.objects.filter(
+        Q(userId__username=request.user.username, groupId__slug="admin") |
+        Q(userId__username=request.user.username, groupId__slug="moderator") |
+        Q(userId__username=request.user.username, groupId__slug="ogretmen"))
+    currentUser = request.user.username
+    instance = get_object_or_404(Article, slug=slug)
+    if accountGroup:
+        if instance.creator.username == currentUser:
+            form = EditArticleForm(request.POST or None, request.FILES or None, instance=instance)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.creator = request.user
+                instance.updatedDate = datetime.datetime.now()
+                instance.save()
+                messages.success(request, "Makale başarıyla düzenlendi !")
+                context = {
+                    "form": form,
+                }
+                return render(request, "ankades/article/edit-article.html", context)
+            return render(request, "ankades/article/edit-article.html", {"form": form})
+        else:
+            messages.error(request, "Sizin makaleniz değil")
+            return redirect("index")
+    else:
+        messages.error(request, "Yetkiniz yok")
+        return redirect("index")
+
 def article_categories(request):
     keyword = request.GET.get("keyword")
     if keyword:
@@ -126,29 +160,16 @@ def article_detail(request, slug):
 
 
 @login_required(login_url="login_account")
-def article_delete(request, slug):
+def delete_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
-    instance.delete()
-    messages.success(request, "Makale başarıyla silindi.")
-    return redirect(request, "all_articles")
-
-
-@login_required(login_url="login_account")
-def article_edit(request, slug):
-    instance = get_object_or_404(Article, slug=slug)
-    articleDetail = Article.objects.get(slug=slug)
-    form = ArticleForm(request.POST or None, instance=instance)
-    context = {
-        "form": form,
-        "articleDetail": articleDetail
-    }
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.updatedDate = datetime.datetime.now()
+    if instance.isActive == True:
+        instance.isActive = False
         instance.save()
-        messages.success(request, "Kurs kategorisi başarıyla düzenlendi !")
-        return redirect("all_articles")
-    return render(request, "ankades/article/edit-article.html", context)
+        messages.success(request, "Makale başarıyla silindi.")
+        return redirect("my_articles")
+    else:
+        messages.error(request, "Makale zaten silinmiş.")
+        return redirect(my_articles)
 
 
 @login_required(login_url="login_account")
