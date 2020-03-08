@@ -1,17 +1,16 @@
-from ckeditor.fields import RichTextField
+from ckeditor.widgets import CKEditorWidget
 from django import forms
-
+from django.db.models import Q
 from adminpanel.models import Tag
-from article.models import Article
-
-
-# class ArticleForm(forms.ModelForm):
-#     class Meta:
-#         model = Article
-#         fields = ["media", "title", "slug", "categoryId", "description"]
+from article.models import ArticleCategory
 
 
 class ArticleForm(forms.Form):
+    categoryId = forms.ModelChoiceField(
+        queryset=ArticleCategory.objects.filter(Q(isRoot=False), Q(isActive=True), Q(isCategory=False)),
+        label="Kategori Adı")
+    tagId = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket", required=False)
     title = forms.CharField(max_length=None, label="Başlık")
-    tag = forms.ModelChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket Seçin")
-    description = RichTextField()
+    description = forms.CharField(widget=CKEditorWidget(), label="Yazı")
+    isPrivate = forms.BooleanField(required=False, label="Özel olacak ise kutucuğu işaretleyin")
+    media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")

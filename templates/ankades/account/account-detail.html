@@ -27,7 +27,6 @@
     </div>
     <div id="canvas">
         <div id="box_wrapper">
-
             {% include 'ankades/layout/header.html' %}
             <section class="ls s-py-80 s-py-lg-120 s-py-xl-160 team-single">
                 <div class="container">
@@ -79,6 +78,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="entry-content">
+                                        {{ userDetail.description|safe }}
                                         <h5>Biography:</h5>
                                         <p>
                                             Doloremque quam. Exercitation totam or cupidatat culpa but autem. In labore

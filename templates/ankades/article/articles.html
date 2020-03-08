@@ -61,32 +61,31 @@
                                                         </a>
                                                     </span>
                                                         <h3 class="entry-title">
-                                                            <a href="blog-single-right.html" rel="bookmark">
+                                                            <a href="{% url 'article_detail' article.slug %}"
+                                                               rel="bookmark">
                                                                 {{ article.title }}
                                                             </a>
                                                         </h3>
                                                     </div>
                                                 </header>
-                                                <!-- .entry-header -->
-
                                                 <div class="entry-content">
                                                     {{ article.description|safe|truncatewords:10 }}
                                                     <div class="post-footer d-md-flex align-items-center justify-content-between">
                                                         <a href="{% url 'article_detail' article.slug %}"
                                                            class="read-more btn btn-primary"><span>Devamı</span></a>
                                                         <div class="entry-meta color-darkgrey post-meta">
-                                                    <span class="post-tags">
-                                                        <i class="fa fa-calendar fs-14"></i>
-                                                        <a href="#">
-                                                            {{ article.createdDate }}
-                                                        </a>
-                                                    </span>
+                                                            <span class="post-tags">
+                                                                <i class="fa fa-calendar fs-14"></i>
+                                                                <a href="#">
+                                                                    {{ article.createdDate }}
+                                                                </a>
+                                                            </span>
                                                             <span class="comment-count">
-                                                            <a href="#">
-                                                                <i class="color-main fa fa-comments fs-14"></i>
-                                                                {{ articleComment.count }} Yorum
+                                                                <a href="#">
+                                                                    <i class="color-main fa fa-comments fs-14"></i>
+                                                                    {{ articleComment.count }} Yorum
                                                             </a>
-                                                        </span>
+                                                            </span>
                                                             <span class="like-count">
                                                             <a href="#">
                                                                 <i class="color-main fa fa-heart fs-14"></i>
@@ -118,12 +117,12 @@
                                         {% if article_pagination.has_other_pages %}
                                             {% if article_pagination.has_previous %}
                                                 <a class="prev page-numbers"
-                                                    href="?page={{ article_pagination.previous_page_number }}">
+                                                   href="?page={{ article_pagination.previous_page_number }}">
                                                     <i class="fa fa-angle-left"></i>
                                                 </a>
                                                 <a class="prev page-numbers"
-                                                    href="?page={{ article_pagination.previous_page_number }}">
-                                                    <span>{{article_pagination.previous_page_number}}</span>
+                                                   href="?page={{ article_pagination.previous_page_number }}">
+                                                    <span>{{ article_pagination.previous_page_number }}</span>
                                                 </a>
                                             {% else %}
                                                 <span class="page-numbers current">
@@ -141,8 +140,8 @@
                                             {% endfor %}
                                             {% if article_pagination.has_next %}
                                                 <a class="prev page-numbers"
-                                                    href="javascript:void(0)">
-                                                    <span>{{article_pagination.next_page_number}}</span>
+                                                   href="javascript:void(0)">
+                                                    <span>{{ article_pagination.next_page_number }}</span>
                                                 </a>
                                                 <a class="next page-numbers"
                                                    href="?page={{ article_pagination.next_page_number }}">

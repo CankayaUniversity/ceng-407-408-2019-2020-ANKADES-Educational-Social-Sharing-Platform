@@ -30,16 +30,14 @@ class ArticleCategoryViewSet(viewsets.ModelViewSet):
 
 
 def all_articles(request):
-    keyword = request.GET.get("keyword")
     article_tags = ArticleTag.objects.all().order_by('-createdDate')[:5]
     articles_categories_lists = ArticleCategory.objects.all()
     articles_limit = Article.objects.all().order_by('-createdDate')[:5]
     articleComment = ArticleComment.objects.all()
     page = request.GET.get('page', 1)
+    keyword = request.GET.get("keyword")
     if keyword:
-        articles = Article.objects.filter(Q(title__contains=keyword) |
-                                        Q(description__in=keyword) |
-                                        Q(categoryId__title__contains=keyword))
+        articles = Article.objects.filter(title__contains=keyword)
         context = {
             "articles": articles,
             "article_tags": article_tags,
@@ -65,6 +63,40 @@ def all_articles(request):
             "articles_limit": articles_limit,
         }
         return render(request, "ankades/article/articles.html", context)
+
+
+@login_required(login_url="login_account")
+def add_article(request):
+    """
+    :param request:
+    :return:
+    """
+    form = ArticleForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    adminGroup = AccountGroup.objects.filter(
+        Q(userId__username=request.user.username, groupId__slug="admin") |
+        Q(userId__username=request.user.username, groupId__slug="moderator") |
+        Q(userId__username=request.user.username, groupId__slug="ogretmen"))
+    if adminGroup:
+        if form.is_valid():
+            categoryId = form.cleaned_data.get("categoryId")
+            title = form.cleaned_data.get("title")
+            description = form.cleaned_data.get("description")
+            isActive = form.cleaned_data.get("isActive")
+            isPrivate = form.cleaned_data.get("isPrivate")
+            media = form.cleaned_data.get("media")
+            instance = Article(categoryId=categoryId, title=title, description=description, isActive=isActive,
+                               isPrivate=isPrivate, media=media)
+            instance.creator = request.user
+            instance.save()
+            messages.success(request, "Makale başarıyla eklendi !")
+            return redirect("my_articles")
+        return render(request, "ankades/article/add-article.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok!")
+        return redirect("index")
 
 
 def article_categories(request):
