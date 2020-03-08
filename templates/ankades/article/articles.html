@@ -30,22 +30,22 @@
                 <div class="container">
                     <div class="row c-gutter-60">
                         <main class="col-lg-7 col-xl-8">
-                        {% if articles %}
-                            {% if article_pagination %}
-                                {% for article in article_pagination %}
-                                    <article
-                                            class="text-center text-md-left vertical-item content-padding hero-bg post type-post status-publish format-standard has-post-thumbnail sticky rounded rounded-image-top post-color1">
-                                        {% if article.media %}
-                                            <div class="item-media post-thumbnail">
-                                                <img src="{{ article.media.url }}" alt="">
-                                                <div class="media-links">
-                                                    <a class="abs-link" title="" href="blog-single-right.html"></a>
+                            {% if articles %}
+                                {% if article_pagination %}
+                                    {% for article in article_pagination %}
+                                        <article
+                                                class="text-center text-md-left vertical-item content-padding hero-bg post type-post status-publish format-standard has-post-thumbnail sticky rounded rounded-image-top post-color1">
+                                            {% if article.media %}
+                                                <div class="item-media post-thumbnail">
+                                                    <img src="{{ article.media.url }}" alt="">
+                                                    <div class="media-links">
+                                                        <a class="abs-link" title="" href="blog-single-right.html"></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        {% endif %}
-                                        <div class="item-content">
-                                            <header class="entry-header">
-                                                <div class="header-content">
+                                            {% endif %}
+                                            <div class="item-content">
+                                                <header class="entry-header">
+                                                    <div class="header-content">
                                                     <span class="post-tags">
                                                         <i class="fa fa-tags fs-14"></i>
                                                         <span class="screen-reader-text">Kategori</span>
@@ -53,89 +53,109 @@
                                                             {{ article.categoryId.title }}
                                                         </a>
                                                     </span>
-                                                    <span class="post-tags float-right">
+                                                        <span class="post-tags float-right">
                                                         <i class="fa fa-user fs-14"></i>
                                                         <span class="screen-reader-text">{{ article.creator.get_full_name }}</span>
                                                         <a href="blog-right.html" rel="category tag">
                                                             {{ article.creator.get_full_name }}
                                                         </a>
                                                     </span>
-                                                    <h3 class="entry-title">
-                                                        <a href="blog-single-right.html" rel="bookmark">
-                                                            {{ article.title }}
-                                                        </a>
-                                                    </h3>
-                                                </div>
-                                            </header>
-                                            <!-- .entry-header -->
+                                                        <h3 class="entry-title">
+                                                            <a href="blog-single-right.html" rel="bookmark">
+                                                                {{ article.title }}
+                                                            </a>
+                                                        </h3>
+                                                    </div>
+                                                </header>
+                                                <!-- .entry-header -->
 
-                                            <div class="entry-content">
-                                                {{ article.description|safe|truncatewords:10 }}
-                                                <div class="post-footer d-md-flex align-items-center justify-content-between">
-                                                    <a href="{% url 'article_detail' article.slug %}"
-                                                       class="read-more btn btn-primary"><span>Devamı</span></a>
-                                                    <div class="entry-meta color-darkgrey post-meta">
+                                                <div class="entry-content">
+                                                    {{ article.description|safe|truncatewords:10 }}
+                                                    <div class="post-footer d-md-flex align-items-center justify-content-between">
+                                                        <a href="{% url 'article_detail' article.slug %}"
+                                                           class="read-more btn btn-primary"><span>Devamı</span></a>
+                                                        <div class="entry-meta color-darkgrey post-meta">
                                                     <span class="post-tags">
                                                         <i class="fa fa-calendar fs-14"></i>
                                                         <a href="#">
                                                             {{ article.createdDate }}
                                                         </a>
                                                     </span>
-                                                        <span class="comment-count">
+                                                            <span class="comment-count">
                                                             <a href="#">
                                                                 <i class="color-main fa fa-comments fs-14"></i>
                                                                 {{ articleComment.count }} Yorum
                                                             </a>
                                                         </span>
-                                                        <span class="like-count">
+                                                            <span class="like-count">
                                                             <a href="#">
                                                                 <i class="color-main fa fa-heart fs-14"></i>
                                                                 {{ article.like }}
                                                             </a>
                                                         </span>
-                                                        <span class="views-count">
+                                                            <span class="views-count">
                                                             <a href="#">
                                                                 <i class="color-main fa fa-eye fs-14"></i>
                                                                 {{ article.view }} Gösterim
                                                             </a>
                                                         </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div><!-- .entry-content -->
-                                        </div>
-                                    </article>
-                                {% endfor %}
-                            {% else %}
-                                <div class="alert alert-primary" role="alert">
-                                    Henüz bir makale yüklenmemiş :(. İlk makaleyi yükleyen sen olmak ister misin?
-                                    {# makale ekleme linki eklenecek #}
-                                </div>
-                            {% endif %}
-                            {% if articles %}
+                                                </div><!-- .entry-content -->
+                                            </div>
+                                        </article>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-primary" role="alert">
+                                        Henüz bir makale yüklenmemiş :(. İlk makaleyi yükleyen sen olmak ister misin?
+                                        {# makale ekleme linki eklenecek #}
+                                    </div>
+                                {% endif %}
+                                {% if articles %}
                                 {% endif %}
                                 <nav class="navigation pagination " role="navigation">
-                                    <h2 class="screen-reader-text">Posts navigation</h2>
                                     <div class="nav-links">
-                                        <a class="prev page-numbers" href="blog-right.html">
-                                            <i class="fa fa-angle-left"></i>
-                                            <span class="screen-reader-text">Previous page</span>
-                                        </a>
-                                        <a class="page-numbers current" href="blog-right.html">
-                                            <span class="meta-nav screen-reader-text">Page </span>
-                                            1
-                                        </a>
-                                        <span class="page-numbers">
-										<span class="meta-nav screen-reader-text">Page </span>
-										2
-									</span>
-                                        <a class="page-numbers" href="blog-right.html">
-                                            <span class="meta-nav screen-reader-text">Page </span>
-                                            3
-                                        </a>
-                                        <a class="next page-numbers" href="blog-right.html">
-                                            <span class="screen-reader-text">Next page</span>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
+                                        {% if article_pagination.has_other_pages %}
+                                            {% if article_pagination.has_previous %}
+                                                <a class="prev page-numbers"
+                                                    href="?page={{ article_pagination.previous_page_number }}">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </a>
+                                                <a class="prev page-numbers"
+                                                    href="?page={{ article_pagination.previous_page_number }}">
+                                                    <span>{{article_pagination.previous_page_number}}</span>
+                                                </a>
+                                            {% else %}
+                                                <span class="page-numbers current">
+                                                    <span class="meta-nav screen-reader-text"></span>
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            {% endif %}
+                                            {% for page in article_pagination.paginator.page_range %}
+                                                {% if article_pagination.number == page %}
+                                                    <span class="page-numbers current">
+                                                        <span class="meta-nav screen-reader-text"></span>
+                                                        {{ page }}
+                                                    </span>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if article_pagination.has_next %}
+                                                <a class="prev page-numbers"
+                                                    href="javascript:void(0)">
+                                                    <span>{{article_pagination.next_page_number}}</span>
+                                                </a>
+                                                <a class="next page-numbers"
+                                                   href="?page={{ article_pagination.next_page_number }}">
+                                                    <span class="screen-reader-text">Next page</span>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            {% else %}
+                                                <span class="page-numbers current">
+                                                    <span class="meta-nav screen-reader-text"></span>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            {% endif %}
+                                        {% endif %}
                                     </div>
                                 </nav>
                             {% endif %}
@@ -144,75 +164,48 @@
                         <aside class="col-lg-5 col-xl-4">
                             <div class="widget widget_search">
                                 <h5 class="widget-title">Makale Arama</h5>
-                                <form role="search" method="get" class="search-form" action="/">
+                                {% csrf_token %}
+                                <form method="get" class="">
                                     <label for="search-form-widget">
-                                        <span class="screen-reader-text">Search for:</span>
+                                        <span class="screen-reader-text"></span>
                                     </label>
-                                    <input type="search" id="search-form-widget" class="search-field"
-                                           placeholder="Başlık ya da içerik arayın" value="" name="search">
-                                    <button type="submit" class="search-submit">
-                                        <span class="screen-reader-text">Search</span>
+                                    <input type="text" name="keyword" class="search-field"
+                                           placeholder="Ne aramak istedin?" value="">
+                                    <button type="submit" class="">
+                                        <span class="screen-reader-text">Ara</span>
                                     </button>
                                 </form>
                             </div>
-
-                            <div class="widget widget_categories">
-
-                                <h5 class="widget-title categories-tilte">Categories</h5>
-                                <ul>
-
-                                    {% if articles_categories_lists %}
-                                        {% for category in articles_categories_lists %}
-                                            {% if category.title != "Home" %}
-                                                <li class="cat-item">
-                                                    <a href="javascript:void(0)">{{ category.title }}</a>
-                                                    <span class="color-main2">(10)</span>
-                                                </li>
-                                            {% endif %}
-                                            {% if category.parentId.title != "Home" %}
-                                                <li class="cat-item">
-                                                    <a href="javascript:void(0)">{{ category.parentId.title }}</a>
-                                                    <span class="color-main2">(10)</span>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        <div class="alert alert-primary" role="alert">
-                                            Henüz bir kategori bulunamadı.
-                                        </div>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                            {% if articles_limit %}
-                                {% for al in articles_limit %}
-                                    <div class="widget widget_recent_posts">
-                                        <h5 class="widget-title">Son Gönderiler</h5>
+                            <div class="widget widget_recent_posts">
+                                <h5 class="widget-title">Son Paylaşılanlar</h5>
+                                {% if articles_limit %}
+                                    {% for al in articles_limit %}
                                         <ul class="list-unstyled">
                                             <li class="media">
                                                 {% if al.media %}
                                                     <a class="media-image" href="blog-single-right.html">
                                                         <img src="{{ al.media.url }}" alt="">
-                                                    </a>{
+                                                    </a>
                                                 {% endif %}
                                                 <div class="media-body">
-                                                    <h4>
+                                                    <p style="font-size: 15px">
                                                         <a href="{% url 'article_detail' al.slug %}">
                                                             {{ al.title }}
                                                         </a>
-                                                    </h4>
+                                                    </p>
                                                     <p class="item-meta">
                                                         {{ al.createdDate }}
                                                     </p>
                                                 </div>
                                             </li>
                                         </ul>
+                                    {% endfor %}
                                     </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="alert alert-primary" role="alert">
-                                    Henüz bir makale bulunamadı.
-                                </div>
-                            {% endif %}
+                                {% else %}
+                                    <div class="alert alert-primary" role="alert">
+                                        Henüz bir makale bulunamadı.
+                                    </div>
+                                {% endif %}
 
                             <div class="widget widget_tag_cloud">
 
@@ -220,9 +213,11 @@
                                 <div class="tagcloud">
                                     {% if article_tags %}
                                         {% for tags in article_tags %}
-                                            <a href="blog-right.html" class="tag-cloud-link">
-                                                {{ tags.tagId }}
-                                            </a>
+                                            {% if tags.isActive == True %}
+                                                <a href="javascript:void(0)" class="tag-cloud-link">
+                                                    {{ tags.tagId }}
+                                                </a>
+                                            {% endif %}
                                         {% endfor %}
                                     {% else %}
                                         <div class="alert alert-primary" role="alert">
