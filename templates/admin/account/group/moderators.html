@@ -41,24 +41,24 @@
                                         <th>Aktiflik</th>
                                         <th>Grup</th>
                                         <th>Son Giriş</th>
-                                        <th>Güncellendiği Tarih</th>
+                                        <th>Son Güncelleme</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% if accounts %}
-                                        {% for account in accounts %}
+                                    {% if moderators %}
+                                        {% for moderator in moderators %}
                                             <tr>
-                                                <td>{{ account.userId.username }}</td>
-                                                <td>{{ account.userId.get_full_name }}</td>
-                                                <td>{{ account.userId.email }}</td>
+                                                <td>{{ moderator.userId.username }}</td>
+                                                <td>{{ moderator.userId.get_full_name }}</td>
+                                                <td>{{ moderator.userId.email }}</td>
                                                 <td>
-                                                    {% if account.userId.is_active %} Aktif {% else %}
+                                                    {% if moderator.userId.is_active %} Aktif {% else %}
                                                         Yasaklı {% endif %}</td>
                                                 <td>
-                                                    {{ account.groupId.title }}
+                                                    {{ moderator.groupId.title }}
                                                 </td>
-                                                <td>{{ account.userId.last_login }}</td>
-                                                <td>{{ account.userId.updatedDate }}</td>
+                                                <td>{{ moderator.userId.last_login }}</td>
+                                                <td>{{ moderator.userId.updatedDate }}</td>
                                             </tr>
                                         {% endfor %}
                                     {% endif %}

@@ -41,24 +41,24 @@
                                         <th>Aktiflik</th>
                                         <th>Grup</th>
                                         <th>Son Giriş</th>
-                                        <th>Güncellendiği Tarih</th>
+                                        <th>Son Güncelleme</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% if accounts %}
-                                        {% for account in accounts %}
+                                    {% if students %}
+                                        {% for student in students %}
                                             <tr>
-                                                <td>{{ account.userId.username }}</td>
-                                                <td>{{ account.userId.get_full_name }}</td>
-                                                <td>{{ account.userId.email }}</td>
+                                                <td>{{ student.userId.username }}</td>
+                                                <td>{{ student.userId.get_full_name }}</td>
+                                                <td>{{ student.userId.email }}</td>
                                                 <td>
-                                                    {% if account.userId.is_active %} Aktif {% else %}
+                                                    {% if student.userId.is_active %} Aktif {% else %}
                                                         Yasaklı {% endif %}</td>
                                                 <td>
-                                                    {{ account.groupId.title }}
+                                                    {{ student.groupId.title }}
                                                 </td>
-                                                <td>{{ account.userId.last_login }}</td>
-                                                <td>{{ account.userId.updatedDate }}</td>
+                                                <td>{{ student.userId.last_login }}</td>
+                                                <td>{{ student.userId.updatedDate }}</td>
                                             </tr>
                                         {% endfor %}
                                     {% endif %}

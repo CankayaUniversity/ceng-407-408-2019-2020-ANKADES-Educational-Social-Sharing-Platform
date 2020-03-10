@@ -47,27 +47,27 @@
                                         <th>Grup</th>
                                         <th>Kayıt Tarihi</th>
                                         <th>Son Giriş</th>
-                                        <th>Güncellendiği Tarih</th>
+                                        <th>Son Güncelleme</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% if accounts %}
-                                        {% for account in accounts %}
+                                    {% if admins %}
+                                        {% for admin in admins %}
                                             <tr>
-                                                <td>{{ account.userId.username }}</td>
-                                                <td>{{ account.userId.get_full_name }}</td>
-                                                <td>{{ account.userId.email }}</td>
+                                                <td>{{ admin.userId.username }}</td>
+                                                <td>{{ admin.userId.get_full_name }}</td>
+                                                <td>{{ admin.userId.email }}</td>
                                                 <td>
-                                                    {% if account.userId.is_active %} Aktif {% else %}
+                                                    {% if admin.userId.is_active %} Aktif {% else %}
                                                         Yasaklı {% endif %}</td>
                                                 <td>
-                                                    {{ account.groupId.title }}
+                                                    {{ admin.groupId.title }}
                                                 </td>
                                                 <td>
-                                                    {{ account.userId.date_joined }}
+                                                    {{ admin.userId.date_joined }}
                                                 </td>
-                                                <td>{{ account.userId.last_login }}</td>
-                                                <td>{{ account.userId.updatedDate }}</td>
+                                                <td>{{ admin.userId.last_login }}</td>
+                                                <td>{{ admin.userId.updatedDate }}</td>
                                             </tr>
                                         {% endfor %}
                                     {% endif %}

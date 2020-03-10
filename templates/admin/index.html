@@ -8,7 +8,7 @@
                 <div class="page-title-box">
                     <div class="row align-items-center">
                         <div class="col-sm-6">
-                            <h4 class="page-title">Dashboard</h4>
+                            <h4 class="page-title">Kullanıcı</h4>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-right">
@@ -41,15 +41,15 @@
                                     {% if ogrenci %}
                                         {{ ogrenci.count }}
                                     {% else %}
-                                        Öğrenci Bulunamadı
+                                        0
                                     {% endif %}
                                 </h3>
-                                {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                {#                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"#}
-                                {#                                             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                {#                                    </div>#}
-                                {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">75%</span>#}
-                                {#                                    </p>#}
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"
+                                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">75%</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -66,15 +66,15 @@
                                     {% if ogretmen %}
                                         {{ ogretmen.count }}
                                     {% else %}
-                                        Öğretmen Bulunamadı
+                                        0
                                     {% endif %}
                                 </h3>
-                                {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                {#                                        <div class="progress-bar bg-success" role="progressbar" style="width: 88%"#}
-                                {#                                             aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                {#                                    </div>#}
-                                {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">88%</span>#}
-                                {#                                    </p>#}
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 88%"
+                                         aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">88%</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -91,15 +91,15 @@
                                     {% if moderator %}
                                         {{ moderator.count }}
                                     {% else %}
-                                        Moderator Bulunamadı
+                                        0
                                     {% endif %}
                                 </h3>
-                                {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                {#                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 68%"#}
-                                {#                                             aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                {#                                    </div>#}
-                                {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">68%</span>#}
-                                {#                                    </p>#}
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 68%"
+                                         aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">68%</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -116,33 +116,193 @@
                                     {% if admin %}
                                         {{ admin.count }}
                                     {% else %}
-                                        Admin Bulunamadı
+                                        0
                                     {% endif %}
                                 </h3>
-                                {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                {#                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 82%"#}
-                                {#                                             aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                {#                                    </div>#}
-                                {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">82%</span>#}
-                                {#                                    </p>#}
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 82%"
+                                         aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">82%</span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="page-title-box">
+                            <div class="row align-items-center">
+                                <div class="col-sm-6">
+                                    <h4 class="page-title">Makale</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ol class="breadcrumb float-right">
+                                        <li class="breadcrumb-item"><a href="javascript:void(0);">Ankades</a></li>
+                                        <li class="breadcrumb-item active">Makaleler</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-xl-6">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div class="mini-stat-icon float-right">
+                                            <i class="mdi mdi-cube-outline bg-primary  text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-16">Makale Sayısı</h5>
+                                        </div>
+                                        <h3 class="mt-4">{{ articleCount }}</h3>
+                                        <div class="progress mt-4" style="height: 4px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"
+                                                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <p class="text-muted mt-2 mb-0">Previous period<span
+                                                class="float-right">75%</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-xl-6">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div class="mini-stat-icon float-right">
+                                            <i class="mdi mdi-briefcase-check bg-success text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-16">Makale Kategori Sayısı</h5>
+                                        </div>
+                                        <h3 class="mt-4">{{ articleCategoryCount }}</h3>
+                                        <div class="progress mt-4" style="height: 4px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 88%"
+                                                 aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <p class="text-muted mt-2 mb-0">Previous period<span
+                                                class="float-right">88%</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="page-title-box">
+                            <div class="row align-items-center">
+                                <div class="col-sm-6">
+                                    <h4 class="page-title">Kurs</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ol class="breadcrumb float-right">
+                                        <li class="breadcrumb-item"><a href="javascript:void(0);">Ankades</a></li>
+                                        <li class="breadcrumb-item active">Kurs</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xl-6">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div class="mini-stat-icon float-right">
+                                            <i class="mdi mdi-cube-outline bg-primary  text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-16">Kurs Sayısı</h5>
+                                        </div>
+                                        <h3 class="mt-4">{{ courseCount }}</h3>
+                                        <div class="progress mt-4" style="height: 4px;">
+                                            <div class="progress-bar bg-primary"
+                                                 role="progressbar" style="width: 75%"
+                                                 aria-valuenow="75" aria-valuemin="0"
+                                                 aria-valuemax="100"></div>
+                                        </div>
+                                        <p class="text-muted mt-2 mb-0">Previous period<span
+                                                class="float-right">75%</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xl-6">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div class="mini-stat-icon float-right">
+                                            <i class="mdi mdi-briefcase-check bg-success text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-16">Kurs Kategori Sayısı</h5>
+                                        </div>
+                                        <h3 class="mt-4">{{ courseCategoryCount }}</h3>
+                                        <div class="progress mt-4" style="height: 4px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 88%"
+                                                 aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <p class="text-muted mt-2 mb-0">Previous period<span
+                                                class="float-right">88%</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="page-title-box">
                     <div class="row align-items-center">
                         <div class="col-sm-6">
-                            <h4 class="page-title">Kurs</h4>
+                            <h4 class="page-title">Sınav Soruları</h4>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-right">
                                 <li class="breadcrumb-item"><a href="javascript:void(0);">Ankades</a></li>
-                                <li class="breadcrumb-item active">Kurs</li>
+                                <li class="breadcrumb-item active">Sınavlar</li>
                             </ol>
                         </div>
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-sm-12 col-xl-3">
+                        <div class="card">
+                            <div class="card-heading p-4">
+                                <div class="mini-stat-icon float-right">
+                                    <i class="mdi mdi-cube-outline bg-primary  text-white"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-16">Okul Sayısı</h5>
+                                </div>
+                                <h3 class="mt-4">{{ school }}</h3>
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"
+                                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span
+                                        class="float-right">75%</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-3">
+                        <div class="card">
+                            <div class="card-heading p-4">
+                                <div class="mini-stat-icon float-right">
+                                    <i class="mdi mdi-briefcase-check bg-success text-white"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-16">Bölüm Sayısı</h5>
+                                </div>
+                                <h3 class="mt-4">{{ department }}</h3>
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 88%"
+                                         aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span
+                                        class="float-right">88%</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-sm-6 col-xl-3">
                         <div class="card">
                             <div class="card-heading p-4">
@@ -150,15 +310,18 @@
                                     <i class="mdi mdi-cube-outline bg-primary  text-white"></i>
                                 </div>
                                 <div>
-                                    <h5 class="font-16">Kurs Sayısı</h5>
+                                    <h5 class="font-16">Ders Sayısı</h5>
                                 </div>
-                                <h3 class="mt-4">{{ course_count }}</h3>
-                                {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                {#                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"#}
-                                {#                                             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                {#                                    </div>#}
-                                {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">75%</span>#}
-                                {#                                    </p>#}
+                                <h3 class="mt-4">{{ lecture }}</h3>
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-primary"
+                                         role="progressbar" style="width: 75%"
+                                         aria-valuenow="75" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span
+                                        class="float-right">75%</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -169,19 +332,71 @@
                                     <i class="mdi mdi-briefcase-check bg-success text-white"></i>
                                 </div>
                                 <div>
-                                    <h5 class="font-16">Kurs Kategori Sayısı</h5>
+                                    <h5 class="font-16">Sınav Sayısı</h5>
                                 </div>
-                                <h3 class="mt-4">{{ course_category_count }}</h3>
-                                {#                                    <div class="progress mt-4" style="height: 4px;">#}
-                                {#                                        <div class="progress-bar bg-success" role="progressbar" style="width: 88%"#}
-                                {#                                             aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>#}
-                                {#                                    </div>#}
-                                {#                                    <p class="text-muted mt-2 mb-0">Previous period<span class="float-right">88%</span>#}
-                                {#                                    </p>#}
+                                <h3 class="mt-4">{{ exam }}</h3>
+                                <div class="progress mt-4" style="height: 4px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 88%"
+                                         aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Previous period<span
+                                        class="float-right">88%</span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <h4 class="mt-0 header-title mb-4">Son Etkinlikler</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Oluşturan</th>
+                                            <th scope="col">Uygulama</th>
+                                            <th scope="col">Başlık</th>
+                                            <th scope="col">Method</th>
+                                            <th scope="col">IP</th>
+                                            <th scope="col" colspan="2">Oluşturulma</th>
+                                            <th scope="col" colspan="2">Güncellenme</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if activityLimit %}
+                                            {% for act in activityLimit %}
+                                                <tr>
+                                                    <td>
+                                                        {{ act.creator }}
+                                                    </td>
+                                                    <td>{{ act.application }}</td>
+                                                    <td>{{ act.title }}</td>
+                                                    <td>{{ act.method }}</td>
+                                                    <td>127.0.0.1</td>
+                                                    <td>{{ act.createdDate }}</td>
+                                                    <td>{{ act.updatedDate }}</td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
                 <div class="row">
                     <div class="col-xl-8">
                         <div class="card m-b-30">
@@ -305,148 +520,30 @@
                             <div class="card-body">
                                 <h4 class="mt-0 header-title mb-4">Son Etkinlikler</h4>
                                 <ol class="activity-feed mb-0">
-                                    {#                                        {% if activity_limit %}#}
-                                    {#                                            {% for act in activity_limit %}#}
-                                    {#                                                <li class="feed-item">#}
-                                    {#                                                    <div class="feed-item-list">#}
-                                    {#                                                        <p class="text-muted mb-1">{{ act.act_created_date }}</p>#}
-                                    {#                                                        <p class="font-15 mt-0 mb-0">{{ act.act_method }}: {{ act.act_title }}#}
-                                    {#                                                            <b class="text-primary">{{ act.act_app }}</b>#}
-                                    {#                                                        </p>#}
-                                    {#                                                    </div>#}
-                                    {#                                                </li>#}
-                                    {#                                            {% endfor %}#}
-                                    {#                                        {% else %}#}
-                                    {#                                            <li class="feed-item">#}
-                                    {#                                                <div class="feed-item-list">#}
-                                    {#                                                    <p class="text-muted mb-1">-</p>#}
-                                    {#                                                    <p class="font-15 mt-0 mb-0">Veri Bulunamadı !</p>#}
-                                    {#                                                </div>#}
-                                    {#                                            </li>#}
-                                    {#                                        {% endif %}#}
+                                    {% if activityLimit %}
+                                        {% for act in activityLimit %}
+                                            <li class="feed-item">
+                                                <div class="feed-item-list">
+                                                    <p class="text-muted mb-1">{{ act.createdDate }}</p>
+                                                    <p class="font-15 mt-0 mb-0">{{ act.method }}: {{ act.title }}
+                                                        <b class="text-primary">{{ act.application }}</b>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li class="feed-item">
+                                            <div class="feed-item-list">
+                                                <p class="text-muted mb-1">-</p>
+                                                <p class="font-15 mt-0 mb-0">Veri Bulunamadı !</p>
+                                            </div>
+                                        </li>
+                                    {% endif %}
                                 </ol>
 
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title mb-4">Active Deals</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Contact</th>
-                                            <th scope="col">Location</th>
-                                            <th scope="col" colspan="2">Date</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>Philip Smead</td>
-                                            <td><span class="badge badge-success">Delivered</span></td>
-                                            <td>$9,420,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="" alt=""
-                                                         class="thumb-md rounded-circle mr-2"> Philip Smead
-                                                </div>
-                                            </td>
-                                            <td>Houston, TX 77074</td>
-                                            <td>15/1/2018</td>
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brent Shipley</td>
-                                            <td><span class="badge badge-warning">Pending</span></td>
-                                            <td>$3,120,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="" alt=""
-                                                         class="thumb-md rounded-circle mr-2"> Brent Shipley
-                                                </div>
-                                            </td>
-                                            <td>Oakland, CA 94612</td>
-                                            <td>16/1/2019</td>
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Robert Sitton</td>
-                                            <td><span class="badge badge-success">Delivered</span></td>
-                                            <td>$6,360,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="" alt=""
-                                                         class="thumb-md rounded-circle mr-2"> Robert Sitton
-                                                </div>
-                                            </td>
-                                            <td>Hebron, ME 04238</td>
-                                            <td>17/1/2019</td>
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alberto Jackson</td>
-                                            <td><span class="badge badge-danger">Cancel</span></td>
-                                            <td>$5,200,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="" alt=""
-                                                         class="thumb-md rounded-circle mr-2"> Alberto Jackson
-                                                </div>
-                                            </td>
-                                            <td>Salinas, CA 93901</td>
-                                            <td>18/1/2019</td>
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>David Sanchez</td>
-                                            <td><span class="badge badge-success">Delivered</span></td>
-                                            <td>$7,250,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="" alt=""
-                                                         class="thumb-md rounded-circle mr-2"> David Sanchez
-                                                </div>
-                                            </td>
-                                            <td>Cincinnati, OH 45202</td>
-                                            <td>19/1/2019</td>
-
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
