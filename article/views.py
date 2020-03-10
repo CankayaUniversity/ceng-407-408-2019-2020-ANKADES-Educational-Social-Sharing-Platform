@@ -1,4 +1,5 @@
 import datetime
+from tokenize import Token
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -65,6 +66,7 @@ def all_articles(request):
         return render(request, "ankades/article/articles.html", context)
 
 
+
 @login_required(login_url="login_account")
 def add_article(request):
     """
@@ -75,24 +77,24 @@ def add_article(request):
     context = {
         "form": form
     }
-    adminGroup = AccountGroup.objects.filter(
+    accountGroup = AccountGroup.objects.filter(
         Q(userId__username=request.user.username, groupId__slug="admin") |
         Q(userId__username=request.user.username, groupId__slug="moderator") |
         Q(userId__username=request.user.username, groupId__slug="ogretmen"))
-    if adminGroup:
+    if accountGroup:
         if form.is_valid():
             categoryId = form.cleaned_data.get("categoryId")
             title = form.cleaned_data.get("title")
             description = form.cleaned_data.get("description")
-            isActive = form.cleaned_data.get("isActive")
             isPrivate = form.cleaned_data.get("isPrivate")
             media = form.cleaned_data.get("media")
-            instance = Article(categoryId=categoryId, title=title, description=description, isActive=isActive,
+            instance = Article(categoryId=categoryId, title=title, description=description,
                                isPrivate=isPrivate, media=media)
+            instance.isActive = True
             instance.creator = request.user
             instance.save()
             messages.success(request, "Makale başarıyla eklendi !")
-            return redirect("my_articles")
+            return redirect("index")
         return render(request, "ankades/article/add-article.html", context)
     else:
         messages.error(request, "Yetkiniz yok!")
@@ -132,6 +134,7 @@ def edit_article(request, slug):
     else:
         messages.error(request, "Yetkiniz yok")
         return redirect("index")
+
 
 def article_categories(request):
     keyword = request.GET.get("keyword")
