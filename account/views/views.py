@@ -3,9 +3,15 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from rest_framework.generics import get_object_or_404
+from rest_framework import status
+from rest_framework.generics import get_object_or_404, CreateAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+
 from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm
 from account.models import Account, AccountGroup, Group
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer
 
 
 def login_account(request):
@@ -141,10 +147,10 @@ def edit_username(request, username):
         return redirect("edit_username", getUser)
 
 
-
 def index(request):
     """
     :param request:
     :return:
     """
     return render(request, "ankades/index.html")
+

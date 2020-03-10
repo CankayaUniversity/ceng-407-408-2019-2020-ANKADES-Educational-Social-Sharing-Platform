@@ -19,13 +19,7 @@ router.register('AccountActivity', AccountActivityViewSet, "accountActivity")
 router.register('AdminActivity', AdminActivityViewSet, "adminActivity")
 router.register('School', SchoolViewSet, "school")
 
-#Permission API
 
-
-#Account Permission API
-
-
-#Group Permission API
 schema_view = get_schema_view(
    openapi.Info(
       title="Ankades",
@@ -45,6 +39,7 @@ urlpatterns = [
     path('', include("course.urls")), #include ankades account
     path('', include("article.urls")), #include ankades article
     path('', include("exam.urls")),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
     # swagger
     url(r'^ankades-api/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

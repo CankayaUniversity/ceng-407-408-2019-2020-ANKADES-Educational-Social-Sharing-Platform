@@ -3,7 +3,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from account import views
+from account.views import views, restview
+from account.views.restview import UserProfileView, UserRegistrationView, UserLoginView
 
 urlpatterns = [
     path('giris-yap/', views.login_account, name="login_account"),
@@ -13,6 +14,11 @@ urlpatterns = [
     url(r'^kullanicilar/(?P<username>\w+)/$', views.account_detail, name="account_detail"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', views.edit_profile, name="edit_profile"),
     url(r'^kullaniciadi-duzenle/(?P<username>\w+)/$', views.edit_username, name="edit_username"),
+
+    #rest view
+    url(r'^Account/Profile/', UserProfileView.as_view()),
+    url(r'^Account/Register/', UserRegistrationView.as_view()),
+    url(r'^Account/Login/', UserLoginView.as_view()),
 
 ]
 
