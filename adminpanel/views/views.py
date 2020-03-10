@@ -1,54 +1,50 @@
 import datetime
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
-
 from account.models import Account, AccountGroup, Permission, SocialMedia
 from adminpanel.forms import AdminLoginForm, AdminSocialMediaForm, AdminEditSocialMediaForm, AdminTagForm
-from adminpanel.models import Tag
+from adminpanel.models import Tag, AdminActivity
+from article.models import ArticleCategory, Article
 from course.models import CourseCategory, Course
+from exam.models import Exam, School, Lecture, Department
 
 
-# Dashboard View
 @login_required(login_url="login_admin")
 def admin_index(request):
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    # if AccountGroup.objects.filter(
-    #         Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
-    #             userId__username=request.user.username, groupId__slug="admin")):
-    if adminGroup:
+    adminGroup = AccountGroup.objects.filter(Q(userId__username=request.user.username, groupId__slug="admin"))
+    moderatorGroup = AccountGroup.objects.filter(Q(userId__username=request.user.username, groupId__slug="moderator"))
+    if adminGroup or moderatorGroup:
         user = Account.objects.all()
         admin = AccountGroup.objects.filter(groupId__slug__contains="admin")
         moderator = AccountGroup.objects.filter(groupId__slug__contains="moderator")
-        ogretmen = AccountGroup.objects.filter(groupId__slug__contains="ogretmen")
-        ogrenci = AccountGroup.objects.filter(groupId__slug__contains="ogrenci")
-        user_count = Account.objects.all().count()
-        course_count = Course.objects.all().count()
-        course_category_count = CourseCategory.objects.all().count()
-        # activity = AdminActivity.objects.all()
-        # activity_limit = AdminActivity.objects.all().order_by("-activityCreatedDate")[:4]
+        teacher = AccountGroup.objects.filter(groupId__slug__contains="ogretmen")
+        student = AccountGroup.objects.filter(groupId__slug__contains="ogrenci")
+        userCount = Account.objects.all().count()
+        articleCount = Article.objects.all().count()
+        articleCategoryCount = ArticleCategory.objects.all().count()
+        courseCount = Course.objects.all().count()
+        courseCategoryCount = CourseCategory.objects.all().count()
+        school = School.objects.all().count()
+        department = Department.objects.all().count()
+        lecture = Lecture.objects.all().count()
+        exam = Exam.objects.all().count()
+        activity = AdminActivity.objects.all()
+        activityLimit = AdminActivity.objects.all().order_by("-createdDate")[:5]
         context = {
-            "user": user,
-            "ogrenci": ogrenci,
-            "moderator": moderator,
-            "ogretmen": ogretmen,
-            "admin": admin,
-            "user_count": user_count,
-            "course_count": course_count,
-            "course_category_count": course_category_count,
-            "adminGroup": adminGroup,
-            # "activity": activity,
-            # "activity_limit": activity_limit,
+            "user": user, "admin": admin, "moderator": moderator, "teacher": teacher, "student": student,
+            "userCount": userCount, "articleCount": articleCount, "articleCategoryCount": articleCategoryCount,
+            "courseCount": courseCount, "courseCategoryCount": courseCategoryCount, "school": school,
+            "department": department, "lecture": lecture, "exam": exam, "activity": activity,
+            "activityLimit": activityLimit, "adminGroup": adminGroup, "moderatorGroup": moderatorGroup
         }
         return render(request, "admin/index.html", context)
     else:
         messages.error(request, "Yetkiniz yok!")
         return redirect("index")
-    return render(request, "admin/index.html", context)
 
 
 # User View
@@ -114,9 +110,13 @@ def admin_account_settings(request):
         "accounts": accounts,
         "accountGroups": accountGroups,
         "accountFiveLimitOrdered": accountFiveLimitOrdered,
-        "adminGroup": adminGroup
+        "adminGroup": adminGroup,
     }
-    return render(request, "admin/settings/account-settings.html", context)
+    if adminGroup:
+        return render(request, "admin/settings/account-settings.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok")
+        return redirect("admin_index")
 
 
 # Social Media Settings

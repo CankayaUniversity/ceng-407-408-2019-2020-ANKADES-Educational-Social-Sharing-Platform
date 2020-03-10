@@ -10,7 +10,7 @@ from exam.models import School
 
 
 class PermissionViewSet(viewsets.ModelViewSet):
-    queryset = Permission.objects.all().order_by('-date_joined')
+    queryset = Permission.objects.all().order_by('-createdDate')
     serializer_class = PermissionSerializer
 
 
@@ -40,12 +40,12 @@ class AccountGroupViewSet(viewsets.ModelViewSet):
 
 
 class AccountActivityViewSet(viewsets.ModelViewSet):
-    queryset = AccountActivity.objects.all().order_by('-activityCreatedDate')
+    queryset = AccountActivity.objects.all().order_by('-createdDate')
     serializer_class = AccountActivitySerializer
 
 
 class AdminActivityViewSet(viewsets.ModelViewSet):
-    queryset = AdminActivity.objects.all().order_by('-activityCreatedDate')
+    queryset = AdminActivity.objects.all().order_by('-createdDate')
     serializer_class = AdminActivitySerializer
 
 

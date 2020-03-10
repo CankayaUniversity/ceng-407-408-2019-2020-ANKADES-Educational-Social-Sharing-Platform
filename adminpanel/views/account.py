@@ -18,10 +18,12 @@ group = Group()
 @login_required(login_url="login_admin")
 def admin_all_users(request):
     accounts = Account.objects.all()
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    accountGroups = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    adminGroup = AccountGroup.objects.all()
     accountFiveLimitOrdered = Account.objects.all().order_by('-date_joined')[:5]
     context = {
         "accounts": accounts,
+        "accountGroups": accountGroups,
         "adminGroup": adminGroup,
         "accountFiveLimitOrdered": accountFiveLimitOrdered,
     }
@@ -31,9 +33,9 @@ def admin_all_users(request):
 @login_required(login_url="login_admin")
 def admin_students(request):
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    accounts = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
+    students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
-        "accounts": accounts,
+        "students": students,
         "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/students.html", context)
@@ -42,9 +44,9 @@ def admin_students(request):
 @login_required(login_url="login_admin")
 def admin_teachers(request):
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    accounts = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
+    teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     context = {
-        "accounts": accounts,
+        "teachers": teachers,
         "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/teachers.html", context)
@@ -53,9 +55,9 @@ def admin_teachers(request):
 @login_required(login_url="login_admin")
 def admin_moderators(request):
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    accounts = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
+    moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     context = {
-        "accounts": accounts,
+        "moderators": moderators,
         "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/moderators.html", context)
@@ -63,10 +65,10 @@ def admin_moderators(request):
 
 @login_required(login_url="login_admin")
 def admin_admins(request):
-    accounts = AccountGroup.objects.filter(Q(groupId__slug="admin"))
+    admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
-        "accounts": accounts,
+        "admins": admins,
         "adminGroup": adminGroup,
     }
     return render(request, "admin/account/group/admins.html", context)
@@ -87,6 +89,7 @@ def admin_account_permission(request):
 def admin_edit_profile(request, username):
     instance = get_object_or_404(Account, username=username)
     form = AdminEditProfileForm(request.POST or None, request.FILES or None, instance=instance)
+    activity = AdminActivity()
     adminGroup = AccountGroup.objects.filter(
         Q(userId__username=request.user.username, groupId__slug="moderator") | Q(
             userId__username=request.user.username, groupId__slug="admin"))
@@ -95,6 +98,13 @@ def admin_edit_profile(request, username):
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
             instance.username = username
+            activity.title = "Kullanıcı profili güncellendi"
+            activity.creator = request.user.username
+            activity.method = "PUT"
+            activity.application = "Account"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Kullanıcı düzenlendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+            activity.save()
             instance.save()
             messages.success(request, "Profil başarıyla düzenlendi !")
             return redirect("admin_all_users")
@@ -129,19 +139,19 @@ def admin_add_account_permission(request):
     }
     if adminGroup:
         if form.is_valid():
-            form_username = form.cleaned_data.get("userId")
-            form_permissionname = form.cleaned_data.get("permissionId")
-            if AccountPermission.objects.filter(Q(permissionId=form_permissionname) and Q(userId=form_username)):
+            userId = form.cleaned_data.get("userId")
+            permissionId = form.cleaned_data.get("permissionId")
+            if AccountPermission.objects.filter(Q(permissionId=permissionId) and Q(userId=userId)):
                 messages.error(request, 'Bu kullanıcıya izin daha önce eklenmiş.')
             else:
                 instance = form.save(commit=False)
                 activity = AdminActivity()
-                activity.activityTitle = "Kullanıcıya izin Ekleme"
-                activity.activityCreator = request.user.username
-                activity.activityMethod = "POST"
-                activity.activityApplication = "Account Permission"
-                activity.activityUpdatedDate = datetime.datetime.now()
-                activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. Oluşturan kişi: " + activity.activityCreator
+                activity.title = "Kullanıcıya izin ekleme"
+                activity.creator = request.user.username
+                activity.method = "POST"
+                activity.application = "Account Permission"
+                activity.updatedDate = datetime.datetime.now()
+                activity.description = "Yeni " + activity.application + " oluşturuldu. Oluşturan kişi: " + activity.creator
                 activity.save()
                 instance.save()
                 messages.success(request, "Kullanıcıya başarıyla izin eklendi.")
@@ -163,19 +173,19 @@ def admin_add_account_group(request):
     context = {"form": form, "adminGroup": adminGroup}
     if adminGroup:
         if form.is_valid():
-            form_username = form.cleaned_data.get("userId")
-            form_groupname = form.cleaned_data.get("groupId")
-            if AccountGroup.objects.filter(Q(groupId=form_groupname) and Q(userId=form_username)):
+            userId = form.cleaned_data.get("userId")
+            groupId = form.cleaned_data.get("groupId")
+            if AccountGroup.objects.filter(Q(groupId=groupId) and Q(userId=userId)):
                 messages.error(request, 'Bu kullanıcıya izin daha önce eklenmiş.')
             else:
                 instance = form.save(commit=False)
                 activity = AdminActivity()
-                activity.activityTitle = "Kullanıcıya Grup Ekleme"
-                activity.activityCreator = request.user.username
-                activity.activityMethod = "POST"
-                activity.activityApplication = "Account Group"
-                activity.activityUpdatedDate = datetime.datetime.now()
-                activity.activityDescription = "Yeni " + activity.activityApplication + " oluşturuldu. İşlem yapılan kullanıcı: x. İşlemi yapan kişi: " + activity.activityCreator
+                activity.title = "Kullanıcıya grup ekleme"
+                activity.creator = request.user.username
+                activity.method = "POST"
+                activity.application = "Account Group"
+                activity.updatedDate = datetime.datetime.now()
+                activity.description = "Yeni " + activity.application + " oluşturuldu. İşlemi yapan kişi" + activity.creator
                 instance.save()
                 activity.save()
                 messages.success(request, "Kullanıcıya başarıyla grup eklendi.")
@@ -201,12 +211,12 @@ def admin_edit_account_group(request, id):
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
             activity = AdminActivity()
-            activity.activityTitle = "Kullanıcı Grubu Düzenlendi"
-            activity.activityCreator = request.user.username
-            activity.activityMethod = "UPDATE"
-            activity.activityApplication = "Account Group"
-            activity.activityUpdatedDate = datetime.datetime.now()
-            activity.activityDescription = "Kullanıcı grubu düzenlendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+            activity.title = "Kullanıcı grubu düzenlendi"
+            activity.creator = request.user.username
+            activity.method = "UPDATE"
+            activity.application = "Account Group"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Kullanıcı grubu düzenlendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
             activity.save()
             instance.save()
             messages.success(request, "Kullanıcı grubu başarıyla güncellendi.")
@@ -231,14 +241,14 @@ def admin_edit_account_permission(request, id):
             instance = form.save(commit=False)
             instance.updatedDate = datetime.datetime.now()
             activity = AdminActivity()
-            activity.activityTitle = "Kullanıcı İzni Silindi"
-            activity.activityCreator = request.user.username
-            activity.activityMethod = "UPDATE"
-            activity.activityApplication = "Account Permission"
-            activity.activityUpdatedDate = datetime.datetime.now()
-            activity.activityDescription = "Kullanıcı izni başarıyla güncellendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-            instance.save()
+            activity.title = "Kullanıcı izni silindi"
+            activity.creator = request.user.username
+            activity.me = "UPDATE"
+            activity.application = "Account Permission"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Kullanıcı izni başarıyla güncellendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
             activity.save()
+            instance.save()
             messages.success(request, "Kullanıcı izni başarıyla düzenlendi !")
             return redirect("admin_account_permission")
         return render(request, "admin/account/permission/edit-account-permission.html", {"form": form, "adminGroup": adminGroup})
@@ -259,13 +269,14 @@ def admin_delete_account_permission(request, id):
     if adminGroup:
         if instance.isActive is False:
             instance.delete()
-            activity.activityTitle = "Kullanıcı izni silindi"
-            activity.activityCreator = request.user.username
-            activity.activityMethod = "DELETE"
-            activity.activityApplication = "Account Permission"
-            activity.activityUpdatedDate = datetime.datetime.now()
-            activity.activityDescription = "Kullanıcı izni artık aktif değil. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
+            activity.title = "Kullanıcı izni silindi"
+            activity.creator = request.user.username
+            activity.method = "DELETE"
+            activity.application = "Account Permission"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Kullanıcı izni artık aktif değil. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
             activity.save()
+            instance.save()
             messages.success(request, "Kullanıcı izni başarıyla silindi.")
             return redirect("admin_account_permission")
         else:
@@ -278,6 +289,7 @@ def admin_delete_account_permission(request, id):
 @login_required(login_url="login_admin")
 def admin_register_account(request):
     form = AccountRegisterForm(request.POST or None)
+    activity = AdminActivity()
     getGroup = Group.objects.get(slug="ogrenci")
     accountGroup = AccountGroup()
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
@@ -295,6 +307,13 @@ def admin_register_account(request):
             accountGroup.userId_id = new_user.id
             accountGroup.groupId_id = getGroup.id
             accountGroup.save()
+            activity.title = "Kullanıcı oluşturuldu"
+            activity.creator = request.user.username
+            activity.method = "POST"
+            activity.application = "Register Account"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Yeni kullanıcı oluşturuldu. Oluşturan kişi: " + activity.creator + "Uygulama adı: " + activity.application
+            activity.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("admin_account_settings")
         context = {
@@ -304,3 +323,4 @@ def admin_register_account(request):
         return render(request, "admin/settings/add-account.html", context)
     else:
         messages.error(request, "Yetkiniz Yok !")
+        return redirect("admin_index")

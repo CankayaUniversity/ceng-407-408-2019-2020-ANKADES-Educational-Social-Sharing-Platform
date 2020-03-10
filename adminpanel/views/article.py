@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from account.models import AccountGroup, Account
 from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminEditArticleCategoryForm, \
     AdminEditArticleForm, AdminEditArticleTagForm, AddArticleTag
-from adminpanel.models import Tag
+from adminpanel.models import Tag, AdminActivity
 from article.models import Article, ArticleCategory, ArticleTag
 
 
@@ -34,12 +34,12 @@ def admin_add_article(request):
     :return:
     """
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    activity = AdminActivity()
     form = AdminArticleForm(request.POST or None)
     context = {
         "form": form,
         "adminGroup": adminGroup
     }
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
         if form.is_valid():
             categoryId = form.cleaned_data.get("categoryId")
@@ -50,6 +50,13 @@ def admin_add_article(request):
             media = form.cleaned_data.get("media")
             instance = Article(categoryId=categoryId, title=title, description=description, isActive=isActive, isPrivate=isPrivate, media=media)
             instance.creator = request.user
+            activity.title = "Makale eklendi"
+            activity.creator = request.user.username
+            activity.method = "POST"
+            activity.application = "Article"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Makale eklendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+            activity.save()
             instance.save()
             messages.success(request, "Makale başarıyla eklendi !")
             return redirect("admin_articles")
@@ -67,6 +74,7 @@ def admin_add_article_category(request):
     """
     form = AdminArticleCategoryForm(request.POST or None)
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    activity = AdminActivity()
     context = {
         "form": form,
         "adminGroup": adminGroup
@@ -81,6 +89,13 @@ def admin_add_article_category(request):
             isActive = form.cleaned_data.get("isActive")
             instance = ArticleCategory(parentId=parentId, isCategory=isCategory, isActive=isActive, title=title, slug=slug)
             instance.creator = request.user
+            activity.title = "Makale eklendi"
+            activity.creator = request.user.username
+            activity.method = "PUT"
+            activity.application = "Article Category"
+            activity.updatedDate = datetime.datetime.now()
+            activity.description = "Makale eklendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+            activity.save()
             instance.save()
             messages.success(request, "Makale kategorisi başarıyla eklendi !")
             return redirect("admin_add_article_category")
@@ -98,12 +113,10 @@ def admin_add_article_tag(request, slug):
     :return:
     """
     getArticle = get_object_or_404(Article, slug=slug)
-
+    activity = AdminActivity()
     form = AddArticleTag(request.POST or None)
-
     context = {
         "form": form,
-
     }
     if form.is_valid():
         tagId = form.cleaned_data.get("tagId")
@@ -113,6 +126,13 @@ def admin_add_article_tag(request, slug):
         instance.tagId_id = getTag.id
         instance.isActive = isActive
         instance.articleId_id = getArticle.id
+        activity.title = "Makale tag eklendi"
+        activity.creator = request.user.username
+        activity.method = "POST"
+        activity.application = "Article Tag"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale tag eklendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
         instance.save()
         messages.success(request, "Makale başarıyla düzenlendi !")
         return render(request, "admin/tags/add-article-tag.html", context)
@@ -127,11 +147,19 @@ def admin_edit_article(request, slug):
     :return:
     """
     instance = get_object_or_404(Article, slug=slug)
+    activity = AdminActivity()
     form = AdminEditArticleForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.creator = request.user
         instance.updatedDate = datetime.datetime.now()
+        activity.title = "Makale düzenlendi"
+        activity.creator = request.user.username
+        activity.method = "PUT"
+        activity.application = "Article"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale düzenlendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
         instance.save()
         messages.success(request, "Makale başarıyla düzenlendi !")
         context = {
@@ -149,9 +177,29 @@ def admin_delete_article(request, slug):
     :return:
     """
     instance = get_object_or_404(Article, slug=slug)
-    instance.delete()
-    messages.success(request, "Makale başarıyla silindi !")
-    return redirect("admin_courses")
+    activity = AdminActivity()
+    if instance.isActive is True:
+        instance.isActive = False
+        activity.title = "Makale etkisizleştirildi"
+        activity.creator = request.user.username
+        activity.method = "PUT"
+        activity.application = "Article"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale etkisizleştirildi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
+        instance.save()
+        messages.success(request, "Makale başarıyla silindi !")
+        return redirect("admin_articles")
+    else:
+        messages.error(request, "Makale aktif değil")
+        activity.title = "Makale etkisizleştirilmedi"
+        activity.creator = request.user.username
+        activity.method = "PUT"
+        activity.application = "Article"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale etkisizleştirilmedi(zaten aktif değil). İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
+        return redirect("admin_articles")
 
 
 @login_required(login_url="login_admin")
@@ -179,12 +227,20 @@ def admin_edit_article_category(request, slug):
     :return:
     """
     instance = get_object_or_404(ArticleCategory, slug=slug)
+    activity = AdminActivity()
     form = AdminEditArticleCategoryForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.updatedDate = datetime.datetime.now()
+        activity.title = "Makale kategori güncelleme"
+        activity.creator = request.user.username
+        activity.method = "PUT"
+        activity.application = "Article Category"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale kategori düzenlendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
         instance.save()
-        messages.success(request, "Kurs kategorisi başarıyla düzenlendi !")
+        messages.success(request, "Makale kategorisi başarıyla düzenlendi !")
         return redirect("admin_edit_article_category", slug)
     return render(request, "admin/article/edit-category.html", {"form": form})
 
@@ -197,12 +253,28 @@ def admin_delete_article_category(request, slug):
     :return:
     """
     instance = get_object_or_404(ArticleCategory, slug=slug)
+    activity = AdminActivity()
     if instance.isActive is True:
         instance.isActive = False
-        messages.success(request, "Kurs kategorisi başarıyla etkisizleştirildi !")
+        activity.title = "Makale etkisizleştirildi"
+        activity.creator = request.user.username
+        activity.method = "PUT"
+        activity.application = "Article Category"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale kategori etkisizleştirildi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
+        instance.save()
+        messages.success(request, "Makale kategorisi başarıyla etkisizleştirildi !")
         return redirect("admin_article_category")
     else:
-        messages.error(request, "Kurs kategorisi zaten aktif değil!")
+        messages.error(request, "Makale kategorisi zaten aktif değil!")
+        activity.title = "Makale kategori etkisizleştirilmedi"
+        activity.creator = request.user.username
+        activity.method = "PUT"
+        activity.application = "Article"
+        activity.updatedDate = datetime.datetime.now()
+        activity.description = "Makale kategori etkisizleştirilmedi(zaten aktif değil). İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
+        activity.save()
         return redirect("admin_article_category")
 
 

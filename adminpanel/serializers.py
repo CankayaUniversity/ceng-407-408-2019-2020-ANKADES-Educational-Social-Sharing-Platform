@@ -47,13 +47,13 @@ class AccountGroupSerializer(serializers.ModelSerializer):
 class AccountActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountActivity
-        fields = ['activityCreator', 'activityTitle', 'activityApplication', 'activityDescription', 'activityMethod', 'activityCreatedDate', 'activityUpdatedDate']
+        fields = '__all__'
 
 
 class AdminActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminActivity
-        fields = ['activityCreator', 'activityTitle', 'activityApplication', 'activityDescription', 'activityMethod', 'activityCreatedDate', 'activityUpdatedDate']
+        fields = '__all__'
 
 
 class SchoolSerializer(serializers.ModelSerializer):
