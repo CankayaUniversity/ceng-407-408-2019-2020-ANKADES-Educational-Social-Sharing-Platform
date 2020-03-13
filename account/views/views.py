@@ -1,6 +1,6 @@
 import datetime
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from rest_framework import status
@@ -9,7 +9,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm
+from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm, \
+    AccountUpdatePasswordForm
 from account.models import Account, AccountGroup, Group
 from account.serializers import UserRegistrationSerializer, UserLoginSerializer
 
@@ -154,3 +155,24 @@ def index(request):
     """
     return render(request, "ankades/index.html")
 
+
+@login_required(login_url="login_account")
+def edit_password(request, username):
+    if request.user.is_authenticated:
+        user = get_object_or_404(Account, username=username)
+        form = AccountUpdatePasswordForm(request.POST or None, request.user, instance=request.user)
+        if form.is_valid():
+            password = form.cleaned_data.get("password")
+            user = form.save(commit=False)
+            update_session_auth_hash(request, username)
+            user = request.user
+            user.set_password(password)
+            user.save()
+            login_user = authenticate(username=username, password=password)
+            login(request, login_user)
+            messages.success(request, "Şifreniz başarıyla güncellendi.")
+            return redirect("edit_profile")
+        return render(request, "ankades/account/edit-password.html", {"form": form})
+    else:
+        messages.error(request, "Bir sorun var, lütfen daha sonra tekrar deneyin")
+        return redirect("login_account")
