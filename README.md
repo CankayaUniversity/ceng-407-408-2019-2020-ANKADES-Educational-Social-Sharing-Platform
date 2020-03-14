@@ -76,7 +76,7 @@ python manage.py runserver
 
 ## Authors
 
-* **Buğra Ahmet Çağlar** - *Github* - [bacaglar](https://github.com/bacaglar) - *Email* - [bugraahmetcaglar@gmail.com]()
+* **Buğra Ahmet Çağlar** - *Github* - [bugraahmetcaglar](https://github.com/bacaglar) - *Email* - [bugraahmetcaglar@gmail.com]()
 * **Furkan Anıl Erdem** - *Github* - [fanilerdem](https://github.com/fanilerdem) - *Email* - [blackspike06@gmail.com]()
 * **Nihan Nur Aydın** - *Github* - [ninanaydin](https://github.com/nihanaydin) - *Email* - [nihannuraydin@gmail.com]()
 
