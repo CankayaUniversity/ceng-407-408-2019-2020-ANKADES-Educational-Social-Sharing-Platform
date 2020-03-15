@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render
@@ -5,6 +6,7 @@ from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
 from account.models import AccountGroup
+from course.forms import AddArticleComment
 from course.models import Course, CourseCategory, CourseComment
 
 

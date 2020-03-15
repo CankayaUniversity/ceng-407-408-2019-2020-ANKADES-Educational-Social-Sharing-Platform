@@ -159,238 +159,163 @@
                             <div class="related-posts">
                                 <div class="row justify-content-center c-gutter-30">
                                     <div class="col-12">
-                                        <h3 class="entry-title">Related Posts</h3>
+                                        <h3 class="entry-title">Son Gönderilerim</h3>
                                     </div>
-                                    <div class="col-md-6">
-                                        <article
-                                                class="vertical-item post type-post status-publish format-standard has-post-thumbnail">
-                                            <div class="item-media post-thumbnail rounded">
-                                                <a href="blog-single-right.html">
-                                                    <img src="images/related-post02.jpg" alt="">
-                                                </a>
-                                            </div><!-- .post-thumbnail -->
-                                            <div class="item-content">
-                                                <header class="entry-header">
-                                                    <p>
-                                                        <a href="blog-single-right.html" rel="bookmark">
-                                                            Lorem Ipsum Dolor Sit Amet Consectetur Adi Piscing Elitures
-                                                            Popinus
-                                                        </a>
-                                                    </p>
-                                                    <div class="entry-meta">
-                                                        <span class="screen-reader-text">Posted on</span>
-                                                        <a href="blog-single-right.html" rel="bookmark">
-                                                            <time class="entry-date published updated"
-                                                                  datetime="2018-03-11T15:15:12+00:00">March 11,
-                                                                2018
-                                                            </time>
-                                                        </a>
-                                                    </div>
-                                                    <!-- .entry-meta -->
-                                                </header>
-                                                <!-- .entry-header -->
-                                            </div><!-- .item-content -->
-                                        </article><!-- #post-## -->
-                                    </div>
-                                    <div class="d-block d-md-none divider-30"></div>
-                                    <div class="col-md-6">
-                                        <article
-                                                class="vertical-item post type-post status-publish format-standard has-post-thumbnail">
-                                            <div class="item-media post-thumbnail rounded">
-                                                <a href="blog-single-right.html">
-                                                    <img src="images/related-post01.jpg" alt="">
-                                                </a>
-                                            </div><!-- .post-thumbnail -->
-                                            <div class="item-content">
-                                                <header class="entry-header">
-                                                    <p>
-                                                        <a href="blog-single-right.html" rel="bookmark">
-                                                            Integer Facilisis Accumsan Ullamcorper Inte Germanius Novus
-                                                            At
-                                                        </a>
-                                                    </p>
-                                                    <div class="entry-meta">
-                                                        <span class="screen-reader-text">Posted on</span>
-                                                        <a href="blog-single-right.html" rel="bookmark">
-                                                            <time class="entry-date published updated"
-                                                                  datetime="2018-03-15T15:15:12+00:00">March 15,
-                                                                2018
-                                                            </time>
-                                                        </a>
-                                                    </div>
-                                                    <!-- .entry-meta -->
-                                                </header>
-                                                <!-- .entry-header -->
-                                            </div><!-- .item-content -->
-                                        </article><!-- #post-## -->
-                                    </div>
+                                    {% if relatedPosts %}
+                                        {% for related in relatedPosts %}
+                                            {% if related.creator.username == articleDetail.creator.username %}
+                                                <div class="col-md-3">
+                                                    <article
+                                                            class="vertical-item post type-post status-publish format-standard has-post-thumbnail">
+                                                        {% if related.media %}
+                                                            <div class="item-media post-thumbnail rounded">
+                                                                <a href="{% url 'article_detail' related.slug %}">
+                                                                    <img src="{{ related.media.url }}" alt="">
+                                                                </a>
+                                                            </div><!-- .post-thumbnail -->
+                                                        {% endif %}
+                                                        <div class="item-content">
+                                                            <header class="entry-header">
+                                                                <p>
+                                                                    <a href="{% url 'article_detail' related.slug %}"
+                                                                       rel="bookmark">
+                                                                        {{ related.title|truncatewords:5 }}
+                                                                    </a>
+                                                                </p>
+                                                                <div class="entry-meta">
+                                                                    <span class="screen-reader-text">Posted on</span>
+                                                                    <a href="blog-single-right.html" rel="bookmark">
+                                                                        <time class="entry-date published updated"
+                                                                              datetime="2018-03-11T15:15:12+00:00">
+                                                                            {{ related.createdDate }}
+                                                                        </time>
+                                                                    </a>
+                                                                </div>
+                                                                <!-- .entry-meta -->
+                                                            </header>
+                                                            <!-- .entry-header -->
+                                                        </div><!-- .item-content -->
+                                                    </article><!-- #post-## -->
+                                                    <div class="d-block d-md-none divider-30"></div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
 
                             {% if articleComments %}
                                 <div id="comments" class="comments-area hero-bg rounded">
                                     <h4 class="comments-title">
-                                        Comments
+                                        Yorumlar
                                     </h4>
                                     <ol class="comment-list">
-                                        <li class="comment">
-                                            <article class="comment-body">
-                                                <footer class="comment-meta">
-                                                    <div class="comment-author vcard">
-                                                        <img alt="" src="images/team/comment-01.jpg">
-                                                        <b class="fn">
-                                                            <a href="#" rel="nofollow" class="url fw-500">Chloe
-                                                                Denverou</a>
-                                                            <span class="comment-metadata">
+                                        {% for articleComment in articleComments %}
+                                            <li class="comment">
+                                                <article class="comment-body">
+                                                    <footer class="comment-meta">
+                                                        <div class="comment-author vcard">
+                                                            <img alt="" src="images/team/comment-01.jpg">
+                                                            <b class="fn">
+                                                                <a href="#" rel="nofollow"
+                                                                   class="url fw-500">{{ articleComment.creator.get_full_name }}</a>
+                                                                <span class="comment-metadata">
 															<a href="#">
 																<time datetime="2018-03-14T07:57:01+00:00">
-																	March 14, 2018
+																	{{ articleComment.createdDate }}
 																</time>
 															</a>
 														</span>
-                                                        </b>
-                                                        <div class="float-right reply">
-                                                            <a href="#respond">
-                                                                <i class="color-darkgrey fa fa-mail-reply"
-                                                                   aria-hidden="true"></i>
-                                                            </a>
+                                                            </b>
+                                                            <div class="float-right reply">
+                                                                <a href="#respond">
+                                                                    <i class="color-darkgrey fa fa-mail-reply"
+                                                                       aria-hidden="true"></i>
+                                                                </a>
+                                                            </div>
                                                         </div>
+                                                        <!-- .comment-author -->
+                                                    </footer>
+                                                    <!-- .comment-meta -->
+                                                    <div class="comment-content">
+                                                        {{ articleComment.content }}
                                                     </div>
-                                                    <!-- .comment-author -->
-                                                </footer>
-                                                <!-- .comment-meta -->
-                                                <div class="comment-content">
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                                                        diam
-                                                        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                        erat, sed diam voluptua.
-                                                    </p>
-                                                </div>
-                                                <!-- .comment-content -->
-                                            </article>
-                                            <!-- .comment-body -->
-                                            <ol class="children">
-                                                <li class="comment">
-                                                    <article class="comment-body">
-                                                        <footer class="comment-meta">
-                                                            <div class="comment-author vcard">
-                                                                <img alt="" src="images/team/comment-02.jpg">
-                                                                <b class="fn">
-                                                                    <a href="#" rel="nofollow" class="url fw-500">Patric
-                                                                        Knowles</a>
-                                                                    <span class="comment-metadata">
+                                                    <!-- .comment-content -->
+                                                </article>
+                                                <!-- .comment-body -->
+                                                <ol class="children">
+                                                    <li class="comment">
+                                                        <article class="comment-body">
+                                                            <footer class="comment-meta">
+                                                                <div class="comment-author vcard">
+                                                                    <img alt="" src="images/team/comment-02.jpg">
+                                                                    <b class="fn">
+                                                                        <a href="#" rel="nofollow"
+                                                                           class="url fw-500">Patric
+                                                                            Knowles</a>
+                                                                        <span class="comment-metadata">
 																	<a href="#">
 																		<time datetime="2018-03-14T07:57:01+00:00">
 																			March 14, 2018
 																		</time>
 																	</a>
 																</span>
-                                                                </b>
-                                                                <div class="float-right reply">
-                                                                    <a href="#respond">
-                                                                        <i class="color-darkgrey fa fa-mail-reply"
-                                                                           aria-hidden="true"></i>
-                                                                    </a>
+                                                                    </b>
+                                                                    <div class="float-right reply">
+                                                                        <a href="#respond">
+                                                                            <i class="color-darkgrey fa fa-mail-reply"
+                                                                               aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
+                                                                <!-- .comment-author -->
+                                                            </footer>
+                                                            <!-- .comment-meta -->
+                                                            <div class="comment-content">
+                                                                <p>
+                                                                    Lorem ipsum dolor sit amet, consectetur
+                                                                    adipiscing
+                                                                    elit.
+                                                                    Proin volutpat quis nisl sed rhoncus.
+                                                                </p>
                                                             </div>
-                                                            <!-- .comment-author -->
-                                                        </footer>
-                                                        <!-- .comment-meta -->
-                                                        <div class="comment-content">
-                                                            <p>
-                                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                Proin volutpat quis nisl sed rhoncus.
-                                                            </p>
-                                                        </div>
-                                                        <!-- .comment-content -->
-                                                    </article>
-                                                    <!-- .comment-body -->
-                                                </li>
-                                                <!-- #comment-## -->
-                                            </ol>
-                                            <!-- .children -->
-                                        </li>
-                                        <!-- #comment-## -->
-
-                                        <li class="comment">
-                                            <article class="comment-body">
-                                                <footer class="comment-meta">
-                                                    <div class="comment-author vcard">
-                                                        <img alt="" src="images/team/comment-03.jpg">
-                                                        <b class="fn">
-                                                            <a href="#" rel="nofollow" class="url fw-500">Macie
-                                                                Williams</a>
-                                                            <span class="comment-metadata">
-															<a href="#">
-																<time datetime="2018-03-14T07:57:01+00:00">
-																	March 14, 2018
-																</time>
-															</a>
-														</span>
-                                                        </b>
-                                                        <div class="float-right reply">
-                                                            <a href="#respond">
-                                                                <i class="color-darkgrey fa fa-mail-reply"
-                                                                   aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <!-- .comment-author -->
-                                                </footer>
-                                                <!-- .comment-meta -->
-                                                <div class="comment-content">
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-                                                        volutpat quis nisl sed rhoncus. Nunc fringilla ac turpis id
-                                                        vehicula. Nam egestas ipsum eu tellus vulputate ullamcorper.
-                                                    </p>
-                                                </div>
-                                                <!-- .comment-content -->
-                                            </article>
-                                            <!-- .comment-body -->
-                                        </li>
-                                        <!-- #comment-## -->
+                                                            <!-- .comment-content -->
+                                                        </article>
+                                                        <!-- .comment-body -->
+                                                    </li>
+                                                    <!-- #comment-## -->
+                                                </ol>
+                                                <!-- .children -->
+                                            </li>
+                                        {% endfor %}
                                     </ol>
-                                    <!-- .comment-list -->
 
-                                    <h4 id="reply-title" class="comment-reply-title">Leave Your Comment</h4>
+                                    <h6 id="reply-title" class="comment-reply-title">Yorum Yapın</h6>
 
                                     <div id="respond" class="comment-respond ls ms">
-                                        <form action="/" method="post" id="commentform" class="comment-form"
-                                              novalidate="">
-                                            <div class="comment-form-author form-group has-placeholder">
-
-                                                <label for="author">Name</label>
-                                                <i class="fa fa-user color-main"></i>
-                                                <input class="form-control" id="author" name="author" type="text"
-                                                       value=""
-                                                       size="30" maxlength="245" aria-required="true"
-                                                       required="required"
-                                                       placeholder="Full Name">
+                                        {% if request.user.is_authenticated %}
+                                            <form method="post" id="commentform" class="comment-form"
+                                                  action="{% url 'add_article_comment' articleDetail.slug %}">
+                                                {% csrf_token %}
+                                                <p class="comment-form-comment form-group has-placeholder">
+                                                    <label for="comment">Comment</label>
+                                                    <i class="fa fa-edit color-main"></i>
+                                                    <textarea class="form-control" id="comment" name="content"
+                                                              cols="45"
+                                                              rows="8" maxlength="65525" aria-required="true"
+                                                              required="required" placeholder=""></textarea>
+                                                </p>
+                                                <p class="form-submit">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <span>Gönder</span>
+                                                    </button>
+                                                </p>
+                                            </form>
+                                        {% else %}
+                                            <div class="alert alert-primary" role="alert">
+                                                Yorum yapabilmeniz için, giriş yapmanız gerekmektedir.
                                             </div>
-                                            <p class="comment-form-email form-group has-placeholder">
-                                                <label for="email">Email </label>
-                                                <i class="fa fa-envelope color-main"></i>
-                                                <input class="form-control" id="email" name="email" type="email"
-                                                       value=""
-                                                       size="30" maxlength="100" aria-required="true"
-                                                       required="required"
-                                                       placeholder="E-mail">
-                                            </p>
-
-                                            <p class="comment-form-comment form-group has-placeholder">
-                                                <label for="comment">Comment</label>
-                                                <i class="fa fa-edit color-main"></i>
-                                                <textarea class="form-control" id="comment" name="comment" cols="45"
-                                                          rows="8" maxlength="65525" aria-required="true"
-                                                          required="required" placeholder="Your Comment"></textarea>
-                                            </p>
-                                            <p class="form-submit">
-                                                <button type="button" class="btn btn-maincolor"><span>Submit</span>
-                                                </button>
-                                            </p>
-                                        </form>
+                                        {% endif %}
                                     </div>
                                     <!-- #respond -->
 
@@ -403,37 +328,21 @@
                                     <h6 id="reply-title" class="comment-reply-title">İlk yorumu yapan sen ol</h6>
                                     <div id="respond" class="comment-respond ls ms">
                                         {% if request.user.is_authenticated %}
-                                            <form action="/" method="post" id="commentform" class="comment-form"
-                                                  novalidate="">
-                                                <div class="comment-form-author form-group has-placeholder">
-
-                                                    <label for="author">Name</label>
-                                                    <i class="fa fa-user color-main"></i>
-                                                    <input class="form-control" id="author" name="author" type="text"
-                                                           value=""
-                                                           size="30" maxlength="245" aria-required="true"
-                                                           required="required"
-                                                           placeholder="Full Name">
-                                                </div>
-                                                <p class="comment-form-email form-group has-placeholder">
-                                                    <label for="email">Email </label>
-                                                    <i class="fa fa-envelope color-main"></i>
-                                                    <input class="form-control" id="email" name="email" type="email"
-                                                           value=""
-                                                           size="30" maxlength="100" aria-required="true"
-                                                           required="required"
-                                                           placeholder="E-mail">
-                                                </p>
-
+                                            <form method="post" id="commentform" class="comment-form"
+                                                  action="{% url 'add_article_comment' articleDetail.slug %}">
+                                                {% csrf_token %}
                                                 <p class="comment-form-comment form-group has-placeholder">
                                                     <label for="comment">Comment</label>
                                                     <i class="fa fa-edit color-main"></i>
-                                                    <textarea class="form-control" id="comment" name="comment" cols="45"
-                                                              rows="8" maxlength="65525" aria-required="true"
-                                                              required="required" placeholder="Your Comment"></textarea>
+                                                    <textarea class="form-control ckeditor" id="comment"
+                                                              name="content"
+                                                              cols="45"
+                                                              rows="8" aria-required="true"
+                                                              required="required" placeholder=""></textarea>
                                                 </p>
                                                 <p class="form-submit">
-                                                    <button type="button" class="btn btn-primary"><span>Gönder</span>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <span>Gönder</span>
                                                     </button>
                                                 </p>
                                             </form>
@@ -492,93 +401,31 @@
 
                             <div class="widget widget_recent_posts">
 
-                                <h5 class="widget-title">Recent Posts</h5>
+                                <h5 class="widget-title">Son Paylaşılanlar</h5>
                                 <ul class="list-unstyled">
-                                    <li class="media">
-                                        <a class="media-image" href="blog-single-right.html">
-                                            <img src="images/recent_post1.jpg" alt="">
-                                        </a>
-                                        <div class="media-body">
-                                            <h4>
-                                                <a href="blog-single-right.html">Lorem ipsum dolor sit am consectetur
-                                                    tus.</a>
-                                            </h4>
-                                            <p class="item-meta">
-                                                September 01, 2018
-                                            </p>
-                                        </div>
-                                    </li>
+                                    {% if relatedPosts %}
+                                        {% for relatedPost in relatedPosts %}
+                                            <li class="media">
+                                                {% if relatedPost.media %}
+                                                    <a class="media-image" href="{% url 'article_detail' relatedPost.slug %}">
+                                                        <img src="{{ relatedPost.media.url }}" alt="">
+                                                    </a>
+                                                {% endif %}
+                                                <div class="media-body">
+                                                    <h4>
+                                                        <a href="{% url 'article_detail' relatedPost.slug %}">{{ relatedPost.title }}</a>
+                                                    </h4>
+                                                    <p class="item-meta">
+                                                        {{ relatedPost.createdDate }}
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
 
-                                    <li class="media">
-                                        <a class="media-image" href="blog-single-right.html">
-                                            <img src="images/recent_post2.jpg" alt="">
-                                        </a>
-                                        <div class="media-body">
-                                            <h4>
-                                                <a href="blog-single-right.html">Phasellus at nisl lacus do necsem
-                                                    port.</a>
-                                            </h4>
-                                            <p class="item-meta">
-                                                September 03, 2018
-                                            </p>
-
-                                        </div>
-                                    </li>
-
-                                    <li class="media">
-                                        <a class="media-image" href="blog-single-right.html">
-                                            <img src="images/recent_post3.jpg" alt="">
-                                        </a>
-                                        <div class="media-body">
-                                            <h4>
-                                                <a href="blog-single-right.html">Nunc quis enim non est fi nugilla
-                                                    libero est.</a>
-                                            </h4>
-                                            <p class="item-meta">
-                                                September 09, 2018
-                                            </p>
-
-                                        </div>
-                                    </li>
 
                                 </ul>
                             </div>
-
-
-                            <div class="widget widget_portfolio">
-                                <h5 class="widget-title">Recent Portfolio</h5>
-                                <div class="photo">
-                                    <a href="#">
-                                        <img src="images/square/03.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="photo">
-                                    <a href="#">
-                                        <img src="images/square/01.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="photo">
-                                    <a href="#">
-                                        <img src="images/square/07.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="photo">
-                                    <a href="#">
-                                        <img src="images/square/05.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="photo">
-                                    <a href="#">
-                                        <img src="images/square/09.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="photo">
-                                    <a href="#">
-                                        <img src="images/square/06.jpg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-
 
                             <div class="widget widget_tag_cloud">
 

@@ -53,7 +53,7 @@ class Question(models.Model):
 class QuestionComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
     questionId = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, verbose_name="Makale Yorumcusu")
-    creator = models.CharField(max_length=50, verbose_name="Kullanıcı Adı", null=False, blank=False)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
     content = RichTextField(verbose_name="Yorum", blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)

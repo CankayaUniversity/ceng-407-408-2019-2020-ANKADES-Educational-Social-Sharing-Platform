@@ -60,3 +60,24 @@ class EditUsernameForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['username',]
+
+
+class AccountUpdatePasswordForm(forms.ModelForm):
+    password = forms.CharField(min_length=6, max_length=50, label="Şifre", widget=forms.PasswordInput())
+    confirm_password = forms.CharField(min_length=6, max_length=50, label="Şifre Tekrar", widget=forms.PasswordInput())
+
+    def clean(self):
+        password = self.cleaned_data.get("password")
+        confirm_password = self.cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Girilen şifreler uyuşmuyor! Lütfen tekrar deneyin.")
+
+        values = {
+            "password": password,
+        }
+        return values
+
+    class Meta:
+        model = Account
+        fields = ["password", "confirm_password"]

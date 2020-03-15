@@ -141,10 +141,11 @@ def admin_add_account_permission(request):
         if form.is_valid():
             userId = form.cleaned_data.get("userId")
             permissionId = form.cleaned_data.get("permissionId")
-            if AccountPermission.objects.filter(Q(permissionId=permissionId) and Q(userId=userId)):
+            isActive = form.cleaned_data.get("isActive")
+            if AccountPermission.objects.filter(Q(permissionId=permissionId, userId=userId)):
                 messages.error(request, 'Bu kullanıcıya izin daha önce eklenmiş.')
             else:
-                instance = form.save(commit=False)
+                instance = AccountPermission(userId=userId, permissionId=permissionId, isActive=isActive)
                 activity = AdminActivity()
                 activity.title = "Kullanıcıya izin ekleme"
                 activity.creator = request.user.username
@@ -257,9 +258,14 @@ def admin_edit_account_permission(request, id):
 
 
 @login_required(login_url="login_admin")
-def admin_delete_account_permission(request, id):
+def admin_deactivate_account_permission(request, id):
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_deactivate_account_permission(request, id):
     """
-    :param request:
+    :param request:ku
     :param id:
     :return:
     """
@@ -267,19 +273,20 @@ def admin_delete_account_permission(request, id):
     activity = AdminActivity()
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     if adminGroup:
-        if instance.isActive is False:
-            instance.delete()
-            activity.title = "Kullanıcı izni silindi"
+        if instance.isActive is True:
+            instance.isActive = False
+            activity.title = "Kullanıcı izni etkisizleştirildi"
             activity.creator = request.user.username
-            activity.method = "DELETE"
+            activity.method = "UPDATE"
             activity.application = "Account Permission"
             activity.updatedDate = datetime.datetime.now()
             activity.description = "Kullanıcı izni artık aktif değil. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
             activity.save()
             instance.save()
-            messages.success(request, "Kullanıcı izni başarıyla silindi.")
+            messages.success(request, "Kullanıcı izni başarıyla etkisizleştirildi.")
             return redirect("admin_account_permission")
         else:
+            instance.isActive = False
             messages.error(request, "Kullanıcı izni aktif.")
             return redirect("admin_account_permission")
     else:

@@ -7,6 +7,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 from adminpanel.views.serializer_view import PermissionViewSet, GroupViewSet, AccountViewSet, AccountPermissionViewSet, \
     GroupPermissionViewSet, AccountGroupViewSet, AccountActivityViewSet, AdminActivityViewSet, SchoolViewSet
+from django.contrib.auth import views as auth_views
 
 router = routers.SimpleRouter()
 router.register('Permission', PermissionViewSet, "permission")
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'^ankades-api/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include(router.urls)),
+
 ]
 
 if settings.DEBUG:

@@ -3,16 +3,11 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from rest_framework import status
-from rest_framework.generics import get_object_or_404, CreateAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.generics import get_object_or_404
 
 from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm, \
     AccountUpdatePasswordForm
 from account.models import Account, AccountGroup, Group
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer
 
 
 def login_account(request):
@@ -137,7 +132,7 @@ def edit_username(request, username):
         if form.is_valid():
             instance.username = username
             instance.updatedDate = datetime.datetime.now()
-            instance.save
+            instance.save()
             messages.success(request, "Kullanıcı adınız başarıyla güncellendi")
             return redirect("edit_username", getUser)
         context = {

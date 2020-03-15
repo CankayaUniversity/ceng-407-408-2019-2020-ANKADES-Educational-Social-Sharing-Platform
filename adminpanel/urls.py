@@ -33,8 +33,8 @@ urlpatterns = [
          name="admin_add_account_permission"),
     path('kullanicilar/kullanici-izinleri/duzenle/<uuid:id>', account.admin_edit_account_permission,
          name="admin_edit_account_permission"),
-    path('kullanicilar/kullanici-izinleri/sil/<uuid:id>', account.admin_delete_account_permission,
-         name="admin_delete_account_permission"),
+    path('kullanicilar/kullanici-izinleri/sil/<uuid:id>', account.admin_deactivate_account_permission,
+         name="admin_deactivate_account_permission"),
     url(r'^profil-duzenle/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
 
     # User Group

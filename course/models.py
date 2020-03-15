@@ -11,7 +11,7 @@ from ankadescankaya.slug import slug_save
 
 class CourseCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Kurs Kategori Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Oluşturan Kişi")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
     title = models.CharField(max_length=254, verbose_name="Kurs Kategori Başlığı")
     slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = RichTextField(verbose_name="Kurs Kategori Açıklama", null=True, blank=True)
@@ -95,7 +95,7 @@ class CourseLecture(models.Model):
 class CourseComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
     courseId = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, verbose_name="Makale Yorumcusu")
-    creator = models.CharField(max_length=50, verbose_name="Kullanıcı Adı", null=False, blank=False)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
     content = RichTextField(verbose_name="Yorum", blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)

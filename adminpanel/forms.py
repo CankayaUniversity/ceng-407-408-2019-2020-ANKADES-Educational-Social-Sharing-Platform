@@ -44,9 +44,11 @@ class AdminCourseCategoryForm(forms.Form):
     description = RichTextField()
 
 
-class AdminPermissionForm(forms.Form):
-    title = forms.CharField(max_length=None, label="Başlık")
-    isActive = forms.BooleanField(required=False, label="Aktif")
+class AdminPermissionForm(forms.ModelForm):
+    class Meta:
+        model = Permission
+        fields = ['title', 'isActive']
+
 
 
 class AdminGroupForm(forms.Form):
@@ -66,10 +68,10 @@ class AdminAccountGroupForm(forms.ModelForm):
         fields = ['userId', 'groupId', 'isActive']
 
 
-class AdminAccountPermissionForm(forms.Form):
-    userId = forms.ModelChoiceField(queryset=Account.objects.all(), label="Kullanıcı Adı")
-    permissionId = forms.ModelChoiceField(queryset=Permission.objects.all(), label="İzin Adı")
-    isActive = forms.BooleanField(required=False, label="Aktif")
+class AdminAccountPermissionForm(forms.ModelForm):
+    class Meta:
+        model = AccountPermission
+        fields = ['userId', 'permissionId', 'isActive']
 
 
 class AdminArticleForm(forms.Form):

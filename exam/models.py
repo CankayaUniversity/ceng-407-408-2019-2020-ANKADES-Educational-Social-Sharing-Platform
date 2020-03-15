@@ -16,7 +16,7 @@ class School(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True,
                                        verbose_name="Okul Oluşturulma Tarihi")
     updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Okul Oluşturan Kişi")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
     media = models.FileField(null=True, blank=True, verbose_name="Dosya")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
@@ -41,7 +41,7 @@ class Department(models.Model):
     updatedDate = models.DateTimeField(verbose_name="Bölüm Güncellendiği Tarih", null=True, blank=True)
     schoolId = models.ForeignKey(School, verbose_name="Okul Adı",
                                  on_delete=models.SET_NULL, null=True)
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Bölüm Oluşturan Kişi")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
     media = models.FileField(null=True, blank=True, verbose_name="Dosya")
     view = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
@@ -56,7 +56,7 @@ class Department(models.Model):
 
 class Lecture(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sınav Sorusu Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, verbose_name="Sınav Sorusu Oluşturan", null=True)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True)
     title = models.CharField(max_length=254, verbose_name="Sınav Sorusu Başlık")
     description = RichTextField(null=True, blank=True)
     slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
@@ -99,7 +99,7 @@ class Exam(models.Model):
     departmentId = models.ForeignKey(Department, verbose_name="Bölüm", on_delete=models.SET_NULL, null=True)
     lectureId = models.ForeignKey(Lecture, verbose_name="Ders", on_delete=models.SET_NULL, null=True)
     termId = models.ForeignKey(Term, verbose_name="Dönem", on_delete=models.SET_NULL, null=True)
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, verbose_name="Sınav Sorusu Oluşturan", null=True)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True)
     title = models.CharField(max_length=254, verbose_name="Sınav Sorusu Başlık")
     slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = RichTextField()
@@ -121,7 +121,7 @@ class Exam(models.Model):
 class ExamComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
     examId = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, verbose_name="Makale Yorumcusu")
-    creator = models.CharField(max_length=50, verbose_name="Kullanıcı Adı", null=False, blank=False)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
     content = RichTextField(verbose_name="Yorum", blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)

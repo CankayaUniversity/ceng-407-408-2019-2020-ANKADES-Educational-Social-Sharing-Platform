@@ -11,7 +11,7 @@ from ankadescankaya.slug import slug_save
 
 class ArticleCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Kategori Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Oluşturan Kişi")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
     title = models.CharField(max_length=254, verbose_name="Makale Kategori Başlığı")
     slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
     description = models.TextField(verbose_name="Makale Kategori Açıklama", null=True, blank=True)
@@ -35,7 +35,7 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Makale Oluşturan")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
     categoryId = models.ForeignKey(ArticleCategory, verbose_name="Makale Kategori",
                                    on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, verbose_name="Makale Başlığı")
@@ -60,7 +60,7 @@ class Article(models.Model):
 class ArticleComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
     articleId = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, verbose_name="Makale Yorumcusu")
-    creator = models.CharField(max_length=50, verbose_name="Kullanıcı Adı", null=False, blank=False)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
     content = RichTextField(verbose_name="Yorum", blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)

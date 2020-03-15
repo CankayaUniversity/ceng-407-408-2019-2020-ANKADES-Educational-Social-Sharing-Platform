@@ -64,8 +64,8 @@
                                                        class="btn btn-success btn-sm">Düzenle</a>
                                                 </td>
                                                 <td>
-                                                    <a href="{% url 'admin_delete_account_permission' permission.id %}"
-                                                       class="btn btn-danger btn-sm">Sil</a>
+                                                    <a href="{% url 'admin_deactivate_account_permission' permission.id %}"
+                                                       class="btn btn-danger btn-sm">{% if permission.isActive == False %}Etkisizleştir{% else %}Etkinleştir{% endif %}</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

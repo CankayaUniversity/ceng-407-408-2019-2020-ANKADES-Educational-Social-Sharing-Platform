@@ -9,7 +9,7 @@ from ankadescankaya.slug import slug_save
 class AdminActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Id")
     slug = models.SlugField(unique=True, verbose_name="Slug", allow_unicode=True)
-    creator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
     title = models.CharField(max_length=254, verbose_name="Başlık")
     application = models.CharField(max_length=254, verbose_name="Uygulama")
     description = models.CharField(max_length=254, verbose_name="Açıklama")
@@ -27,7 +27,7 @@ class AdminActivity(models.Model):
 
 class Tag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Tag Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Oluşturan Kişi")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
     title = models.CharField(max_length=254, verbose_name="Tag Adı", unique=True)
     slug = models.SlugField(max_length=254, verbose_name="Slug", allow_unicode=True)
     view = models.PositiveIntegerField(default=0, verbose_name="Tag Görüntülenme")

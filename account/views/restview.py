@@ -1,20 +1,21 @@
+from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework import status, viewsets
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from account.models import Account
+from account.models import Account, AccountGroup
 from account.serializers import UserRegistrationSerializer, UserLoginSerializer
+from adminpanel.serializers import AccountGroupSerializer
 
 
 class UserRegistrationView(CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
 
-    @swagger_auto_schema(operation_summary="Registration Account")
+    @swagger_auto_schema(operation_summary="Registration a new user")
     def post(self, request, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -23,7 +24,7 @@ class UserRegistrationView(CreateAPIView):
         response = {
             'success': 'True',
             'status code': status_code,
-            'message': 'User registered  successfully',
+            'message': None,
         }
 
         return Response(response, status=status_code)
@@ -33,19 +34,43 @@ class UserLoginView(RetrieveAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserLoginSerializer
 
-    @swagger_auto_schema(operation_summary="Login Account", method="POST")
-    @api_view(['POST'])
+    @swagger_auto_schema(operation_summary="Login account")
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = {
             'success': 'True',
             'status code': status.HTTP_200_OK,
-            'message': 'User logged in  successfully',
+            'message': None,
             'token': serializer.data['token'],
-            }
+        }
         status_code = status.HTTP_200_OK
 
+        return Response(response, status=status_code)
+
+
+class AccountGroupView(RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = AccountGroupSerializer
+
+    def get(self, request):
+        try:
+            user_profile = Account.objects.filter(Q(is_active=True))
+            status_code = status.HTTP_200_OK
+            response = {
+                'data': [{
+                    'first_name': user_profile.username
+                }]
+            }
+
+        except Exception as e:
+            status_code = status.HTTP_400_BAD_REQUEST
+            response = {
+                'success': 'false',
+                'status code': status.HTTP_400_BAD_REQUEST,
+                'message': 'User does not exists',
+                'error': str(e)
+            }
         return Response(response, status=status_code)
 
 
@@ -69,8 +94,8 @@ class UserProfileView(RetrieveAPIView):
                     'is_active': user_profile.is_active,
                     'image': user_profile.image,
                     'description': user_profile.description,
-                    }]
-                }
+                }]
+            }
 
         except Exception as e:
             status_code = status.HTTP_400_BAD_REQUEST
@@ -79,5 +104,40 @@ class UserProfileView(RetrieveAPIView):
                 'status code': status.HTTP_400_BAD_REQUEST,
                 'message': 'User does not exists',
                 'error': str(e)
-                }
+            }
         return Response(response, status=status_code)
+
+
+class AccountGroupViewSet(viewsets.ModelViewSet):
+    queryset = AccountGroup.objects.all()
+    serializer_class = AccountGroupSerializer
+
+    # @swagger_auto_schema(operation_summary="Get account group")
+    # def get(self, request):
+    #     try:
+    #         user_profile = Account.objects.all()
+    #         group_profile = Group.objects.all()
+    #         status_code = status.HTTP_200_OK
+    #         response = {
+    #             'success': 'true',
+    #             'status code': status_code,
+    #             'message': None,
+    #             'data': [{
+    #                 'first_name': user_profile,
+    #                 'last_name': user_profile.last_name,
+    #                 'date_joined': user_profile.date_joined,
+    #                 'is_active': user_profile.is_active,
+    #                 'image': user_profile.image,
+    #                 'description': user_profile.description,
+    #                 }]
+    #             }
+    #
+    #     except Exception as e:
+    #         status_code = status.HTTP_400_BAD_REQUEST
+    #         response = {
+    #             'success': 'false',
+    #             'status code': status.HTTP_400_BAD_REQUEST,
+    #             'message': 'Kullanıcı bulunamadı',
+    #             'error': str(e)
+    #             }
+    #     return Response(response, status=status_code)

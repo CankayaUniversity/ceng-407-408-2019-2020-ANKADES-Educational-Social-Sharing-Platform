@@ -41,7 +41,7 @@ def admin_add_permission(request):
             instance = form.save(commit=False)
             instance.save()
             messages.success(request, "İzin başarıyla eklendi")
-            return redirect("admin_add_permission")
+            return redirect("admin_all_permissions")
         return render(request, "admin/permissions/add-permission.html", context)
     else:
         messages.error(request, "Yetkiniz Yok !")
