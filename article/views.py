@@ -5,10 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from rest_framework import viewsets
+from django.views.generic import RedirectView
+from rest_framework import viewsets, authentication, permissions
 from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from account.models import AccountGroup, Account
 from article.forms import ArticleForm, EditArticleForm
@@ -148,20 +152,23 @@ def article_categories(request):
 
 
 def article_detail(request, slug):
-    articleDetail = get_object_or_404(Article, slug=slug)
+    instance = get_object_or_404(Article, slug=slug)
     articles = Article.objects.all()
     relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
-    accountGroup = AccountGroup.objects.get(userId__article__slug=slug)
+    accountGroup = AccountGroup.objects.get(userId__creator__slug=slug)
     articleComments = ArticleComment.objects.filter(articleId__slug=slug)
     articleCategories = ArticleCategory.objects.all()
-    articleDetail.view += 1
+    instance.view += 1
     context = {
-        "articleDetail": articleDetail,
         "articles": articles,
         "relatedPosts": relatedPosts,
         "accountGroup": accountGroup,
         "articleComments": articleComments,
         "articleCategories": articleCategories,
+        "instance": instance,
+        "title": instance.title,
+        "description": instance.description,
+        "media": instance.media
     }
     return render(request, "ankades/article/article-detail.html", context)
 
@@ -210,3 +217,40 @@ def add_article_comment(request, slug):
     return redirect(reverse("article_detail", kwargs={"slug": slug}))
 
 
+class ArticleLikeToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get("slug")
+        obj = get_object_or_404(Article, slug=slug)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                obj.likes.remove(user)
+            else:
+                obj.likes.add(user)
+        return url_
+
+
+class ArticleLikeAPIToggle(APIView):
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, slug=None, format=None):
+        slug = self.kwargs.get("slug")
+        obj = get_object_or_404(Article, slug=slug)
+        user = self.request.user
+        updated = False
+        liked = False
+        if user.is_authenticated():
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)

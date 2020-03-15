@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.db.models.signals import pre_save
+from rest_framework.reverse import reverse
 
 from account.models import Account
 from adminpanel.models import Tag
@@ -35,7 +36,7 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, related_name="creator", null=True, verbose_name="Kullanıcı Adı")
     categoryId = models.ForeignKey(ArticleCategory, verbose_name="Makale Kategori",
                                    on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, verbose_name="Makale Başlığı")
@@ -47,10 +48,23 @@ class Article(models.Model):
     view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
     isPrivate = models.BooleanField(default=False, verbose_name="Özellik")
-    like = models.PositiveIntegerField(default=0, verbose_name="Makale Beğeni Sayısı")
+    likes = models.ManyToManyField(Account, related_name="post_likes", default=0, blank=True)
+    readTime = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
+
+    def __unicode__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("article_detail", kwargs={"slug": self.slug})
+
+    def get_like_url(self):
+        return reverse("like-toggle", kwargs={"slug": self.slug})
+
+    def get_api_like_url(self):
+        return reverse("like-api-toggle", kwargs={"slug": self.slug})
 
     class Meta:
         db_table = "Article"

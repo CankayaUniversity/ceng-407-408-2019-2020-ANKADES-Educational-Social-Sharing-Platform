@@ -33,9 +33,9 @@
                         <main class="col-lg-7 col-xl-8">
                             <article
                                     class="vertical-item content-padding post type-post status-publish format-standard has-post-thumbnail single-post">
-                                {% if articleDetail.media %}
+                                {% if media %}
                                     <div class="item-media post-thumbnail rounded-image-top">
-                                        <img src="{{ articleDetail.media.url }}" alt="">
+                                        <img src="{{ media.url }}" alt="">
                                     </div>
                                 {% endif %}
                                 <div class="item-content hero-bg">
@@ -43,7 +43,7 @@
                                         <div class="entry-meta small-text color-darkgrey">
                                             <div class="row">
                                                 <h2>
-                                                    {{ articleDetail.title }}
+                                                    {{ title }}
                                                 </h2>
                                             </div>
                                             <div class="row mt-5">
@@ -52,13 +52,13 @@
 													<a href="#">
 														<i class="color-main fa fa-calendar"></i>
 														<time class="entry-date published updated"
-                                                              datetime="2018-01-03T10:11:37+00:00">{{ articleDetail.createdDate|date:"d.m.Y" }}</time>
+                                                              datetime="2018-01-03T10:11:37+00:00">{{ instance.createdDate|date:"d.m.Y" }}</time>
 													</a>
 												</span>
 												<span class="author vcard">
-													<a href="{% url 'account_detail' articleDetail.creator.username %}">
+													<a href="{% url 'account_detail' instance.creator.username %}">
 														<i class="color-main fa fa-user"></i>
-														{{ articleDetail.creator.first_name }}
+														{{ instance.creator.get_full_name }}
 													</a>
 												</span>
 												<span class="comment-count">
@@ -68,9 +68,9 @@
 													</a>
 												</span>
 												<span class="like-count">
-													<a href="#">
+													<a href="">
 														<i class="color-main fa fa-heart"></i>
-														{{ articleDetail.like }} Beğeni
+														{{ instance.likes.count }} Beğeni
 													</a>
 												</span>
 											</span>
@@ -80,7 +80,7 @@
                                     <hr>
 
                                     <div class="entry-content">
-                                        {{ articleDetail.description|safe }}
+                                        {{ description|safe }}
                                     </div>
                                     <!-- .entry-content -->
                                     <footer class="entry-footer">
@@ -93,12 +93,13 @@
 											</span>
 										</span>
                                         <div class="float-right">
-                                            <a href="#">
+                                            <a href="{% url 'like-toggle' instance.slug %}">
                                                 <i class="fa fa-heart color-main3"></i>Beğen
                                             </a>
+                                            <p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'></a></p>
                                             <a href="javascript:void(0)">
                                                 <i class="fa fa-eye color-main3"></i>
-                                                {{ articleDetail.view }}Gösterim
+                                                {{ instance.view }}Gösterim
                                             </a>
                                         </div>
                                     </footer>
@@ -125,8 +126,8 @@
                                 <div class="row align-items-center">
                                     <div class="col-xl-4 col-lg-12 col-md-6 col-xs-12">
                                         <div class="item-media">
-                                            <img src="{{ articleDetail.creator.image.url }}"
-                                                 alt="{{ articleDetail.creator.get_full_name }}">
+                                            <img src="{{ instance.creator.image.url }}"
+                                                 alt="{{ instance.creator.get_full_name }}">
                                         </div>
                                     </div>
 
@@ -136,12 +137,12 @@
                                                 {{ accountGroup.groupId.title }}
                                             </p>
                                             <h5 class="fw-500">
-                                                <a href="{% url 'account_detail' articleDetail.creator.username %}">
-                                                    {{ articleDetail.creator.get_full_name }}
+                                                <a href="{% url 'account_detail' instance.creator.username %}">
+                                                    {{ instance.creator.get_full_name }}
                                                 </a>
                                             </h5>
-                                            {% if articleDetail.creator.description %}
-                                                {{ articleDetail.creator.description|safe }}
+                                            {% if instance.creator.description %}
+                                                {{ instance.creator.description|safe }}
                                             {% endif %}
                                             <div class="author-social fs-14">
                                                 <a href="#" class="fa fa-facebook color-icon"></a>
@@ -163,7 +164,7 @@
                                     </div>
                                     {% if relatedPosts %}
                                         {% for related in relatedPosts %}
-                                            {% if related.creator.username == articleDetail.creator.username %}
+                                            {% if related.creator.username == instance.creator.username %}
                                                 <div class="col-md-3">
                                                     <article
                                                             class="vertical-item post type-post status-publish format-standard has-post-thumbnail">
@@ -295,7 +296,7 @@
                                     <div id="respond" class="comment-respond ls ms">
                                         {% if request.user.is_authenticated %}
                                             <form method="post" id="commentform" class="comment-form"
-                                                  action="{% url 'add_article_comment' articleDetail.slug %}">
+                                                  action="{% url 'add_article_comment' instance.slug %}">
                                                 {% csrf_token %}
                                                 <p class="comment-form-comment form-group has-placeholder">
                                                     <label for="comment">Comment</label>
@@ -329,7 +330,7 @@
                                     <div id="respond" class="comment-respond ls ms">
                                         {% if request.user.is_authenticated %}
                                             <form method="post" id="commentform" class="comment-form"
-                                                  action="{% url 'add_article_comment' articleDetail.slug %}">
+                                                  action="{% url 'add_article_comment' instance.slug %}">
                                                 {% csrf_token %}
                                                 <p class="comment-form-comment form-group has-placeholder">
                                                     <label for="comment">Comment</label>
