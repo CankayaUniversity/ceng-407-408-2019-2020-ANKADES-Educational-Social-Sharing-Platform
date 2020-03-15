@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'course',
     'exam',
     'question',
+    'directmessage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,0 +1,137 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static "ankades/css/shop.css" %}" class="color-switcher-link">
+    <div class="preloader">
+        <div class="preloader_image"></div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" aria-labelledby="search_modal" id="search_modal">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="widget widget_search">
+            <a href="./" class="logo">
+                <span class="logo-text py-20"><strong>Maxi</strong>com</span>
+            </a>
+            <form method="get" class="searchform search-form" action="/">
+                <div class="form-group">
+                    <input type="text" value="" name="search" class="form-control" placeholder="Search keyword"
+                           id="modal-search-input">
+                </div>
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </div>
+    </div>
+    <div id="canvas">
+        <div id="box_wrapper">
+
+            {% include 'ankades/layout/header.html' %}
+
+            <section class="ls s-pt-80 s-pb-70 s-py-lg-120 s-py-xl-160">
+                <div class="container">
+                    <div class="row">
+                        <main class="col-lg-12">
+                            <article id="post-1708" class="post-1708 page type-page status-publish hentry">
+                                <header class="entry-header mb-30">
+                                    <h1 class="entry-title">Orders</h1> <span class="edit-link"><a
+                                        class="post-edit-link" href="#">Edit<span class="screen-reader-text"> "My account"</span></a></span>
+                                </header><!-- .entry-header -->
+                                <div class="entry-content">
+                                    <div class="woocommerce">
+                                        <nav class="woocommerce-MyAccount-navigation hero-bg p-60">
+                                            <ul>
+                                                <li>
+                                                    <a href="shop-account-dashboard.html">Dashboard</a>
+                                                </li>
+                                                <li class="is-active">
+                                                    <a href="shop-account-orders.html">Orders</a>
+                                                </li>
+                                                <li>
+                                                    <a href="shop-account-downloads.html">Downloads</a>
+                                                </li>
+                                                <li>
+                                                    <a href="shop-account-addresses.html">Addresses</a>
+                                                </li>
+                                                <li>
+                                                    <a href="shop-account-details.html">Account details</a>
+                                                </li>
+                                                <li>
+                                                    <a href="shop-account-login.html">Logout</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+
+
+                                        <div class="woocommerce-MyAccount-content">
+
+                                            {% if not getMessages %}
+                                                <div class="woocommerce-message woocommerce-message--info woocommerce-Message woocommerce-Message--info woocommerce-info">
+                                                    Herhangi bir mesajınız bulunmuyor.
+                                                </div>
+                                            {% else %}
+                                                <table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-number">
+                                                            <span class="nobr">Gönderen</span></th>
+                                                        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-date">
+                                                            <span class="nobr">Zaman</span></th>
+                                                        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-status">
+                                                            <span class="nobr">Okundu</span></th>
+                                                        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-total">
+                                                            <span class="nobr">Mesaj</span></th>
+                                                        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-actions text-center">
+                                                            <span class="nobr">Actions</span></th>
+                                                    </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                    {% for message in getMessages %}
+                                                        <tr class="woocommerce-orders-table__row woocommerce-orders-table__row--status-processing order">
+                                                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-number"
+                                                                data-title="Order">
+                                                                <a href="shop-account-order-single.html">{{ message.creator }}</a>
+
+                                                            </td>
+                                                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-date"
+                                                                data-title="Date">
+                                                                <time datetime="2018-03-06T08:55:39+00:00">{{ message.updatedDate }}
+                                                                </time>
+
+                                                            </td>
+                                                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-status"
+                                                                data-title="Status">
+                                                                {% if message.isRead %}<p>Okundu</p>{% else %}<p>Okunmamış</p>{% endif %}
+                                                            </td>
+                                                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-total"
+                                                                data-title="Total">{{ message.message|safe|truncatechars:10 }}
+                                                            </td>
+                                                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions with-btn"
+                                                                data-title="Actions">
+                                                                <a href="{% url 'direct_message_detail' message.user %}"
+                                                                   class="woocommerce-button btn btn-maincolor small-btn view"><span>Görüntüle</span></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div><!-- .entry-content -->
+                            </article>
+
+                        </main>
+                    </div>
+
+                </div>
+            </section>
+
+            {% include 'ankades/layout/footer.html' %}
+
+
+        </div><!-- eof #box_wrapper -->
+    </div><!-- eof #canvas -->
+{% endblock %}

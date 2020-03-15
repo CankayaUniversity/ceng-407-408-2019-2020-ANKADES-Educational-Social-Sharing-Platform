@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm, \
@@ -148,7 +149,8 @@ def index(request):
     :param request:
     :return:
     """
-    return render(request, "ankades/index.html")
+    account = Account.objects.filter(username="test")
+    return render(request, "ankades/index.html", {"account": account})
 
 
 @login_required(login_url="login_account")

@@ -72,7 +72,6 @@ def all_articles(request):
         return render(request, "ankades/article/articles.html", context)
 
 
-
 @login_required(login_url="login_account")
 def add_article(request):
     """
@@ -229,28 +228,3 @@ class ArticleLikeToggle(RedirectView):
             else:
                 obj.likes.add(user)
         return url_
-
-
-class ArticleLikeAPIToggle(APIView):
-    authentication_classes = (authentication.TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request, slug=None, format=None):
-        slug = self.kwargs.get("slug")
-        obj = get_object_or_404(Article, slug=slug)
-        user = self.request.user
-        updated = False
-        liked = False
-        if user.is_authenticated():
-            if user in obj.likes.all():
-                liked = False
-                obj.likes.remove(user)
-            else:
-                liked = True
-                obj.likes.add(user)
-            updated = True
-        data = {
-            "updated": updated,
-            "liked": liked
-        }
-        return Response(data)

@@ -7,7 +7,6 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 from adminpanel.views.serializer_view import PermissionViewSet, GroupViewSet, AccountViewSet, AccountPermissionViewSet, \
     GroupPermissionViewSet, AccountGroupViewSet, AccountActivityViewSet, AdminActivityViewSet, SchoolViewSet
-from django.contrib.auth import views as auth_views
 
 router = routers.SimpleRouter()
 router.register('Permission', PermissionViewSet, "permission")
@@ -35,11 +34,12 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('ankades-admin-panel/', include("adminpanel.urls")), #include ankades admin panel applications url
-    path('', include("account.urls")), #include ankades account
-    path('', include("course.urls")), #include ankades account
-    path('', include("article.urls")), #include ankades article
+    path('ankades-admin-panel/', include("adminpanel.urls")),
+    path('', include("account.urls")),
+    path('', include("course.urls")),
+    path('', include("article.urls")),
     path('', include("exam.urls")),
+    path('', include("directmessage.urls")),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
     # swagger

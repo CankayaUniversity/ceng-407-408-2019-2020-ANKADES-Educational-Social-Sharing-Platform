@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from article import views
-from article.views import ArticleLikeToggle, ArticleLikeAPIToggle
+from article.api_view import ArticleLikeAPIToggle
+from article.views import ArticleLikeToggle
 
 urlpatterns = [
     path('makaleler/', views.all_articles, name="all_articles"),
