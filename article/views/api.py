@@ -1,3 +1,4 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import authentication, permissions
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ class ArticleLikeAPIToggle(APIView):
     authentication_classes = (authentication.BasicAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
+    @swagger_auto_schema(operation_summary="Like an article by given a slug")
     def get(self, request, slug=None, format=None):
         slug = self.kwargs.get("slug")
         obj = get_object_or_404(Article, slug=slug)

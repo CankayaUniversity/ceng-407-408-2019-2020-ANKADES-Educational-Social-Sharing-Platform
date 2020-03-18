@@ -34,7 +34,7 @@
                             <div class="col-12">
                                 <div class="card {% if message.tags == "error" %}bg-danger{% endif %}">
                                     <div class="card-header">
-                                        <h3 class="card-title">Hata !</h3>
+                                        <h3 class="card-title">{% if message.tags == "error" %}HATA !{% else %}BAŞARILI !{% endif %}</h3>
                                         <div class="card-tools">
                                             <button type="button" class="btn btn-tool" data-card-widget="remove"><i
                                                     class="fas fa-times"></i>

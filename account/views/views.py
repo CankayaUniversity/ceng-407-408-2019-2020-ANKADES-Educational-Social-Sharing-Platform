@@ -60,7 +60,6 @@ def register_account(request):
     :param request:
     :return:
     """
-    getGroup = Group.objects.get(slug="ogrenci")
     if not request.user.is_authenticated:
         if request.method == "POST":
             first_name = request.POST.get("first_name")
@@ -84,6 +83,9 @@ def register_account(request):
                 new_user.save()
                 new_user.set_password(password)
                 new_user.save()
+                getGroup = Group.objects.get(slug="ogrenci")
+                new_group = AccountGroup(userId=new_user, groupId=getGroup)
+                new_group.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("login_account")
         return render(request, "ankades/registration/register.html")
