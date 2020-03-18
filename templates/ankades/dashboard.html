@@ -1,0 +1,106 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ion ion-clipboard mr-1"></i>
+                                To Do List
+                            </h3>
+
+                            <div class="card-tools">
+                                <ul class="pagination pagination-sm">
+                                    <li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
+                                    <li class="page-item"><a href="#" class="page-link">1</a></li>
+                                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                    <li class="page-item"><a href="#" class="page-link">3</a></li>
+                                    <li class="page-item"><a href="#" class="page-link">&raquo;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="todo-list" data-widget="todo-list">
+                                <li>
+                                    <!-- checkbox -->
+                                    <div class="icheck-primary d-inline ml-2">
+                                        <input type="checkbox" value="" name="todo1" id="todoCheck1">
+                                        <label for="todoCheck1"></label>
+                                    </div>
+                                    <!-- todo text -->
+                                    <span class="text">Design a nice theme</span>
+                                    <!-- Emphasis label -->
+                                    <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
+                                    <!-- General tools such as edit or delete-->
+                                    <div class="tools">
+                                        <i class="fas fa-edit"></i>
+                                        <i class="fas fa-trash"></i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="icheck-primary d-inline ml-2">
+                                        <input type="checkbox" value="" name="todo2" id="todoCheck2" checked>
+                                        <label for="todoCheck2"></label>
+                                    </div>
+                                    <span class="text">Make the theme responsive</span>
+                                    <small class="badge badge-info"><i class="far fa-clock"></i> 4 hours</small>
+                                    <div class="tools">
+                                        <i class="fas fa-edit"></i>
+                                        <i class="fas fa-trash"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+
+                            <button type="button" class="btn btn-success float-right" data-toggle="modal"
+                                    data-target="#modal-xl">
+                                <i class="fas fa-plus"></i> Yeni Ekle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="modal-xl">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">TO DO List Ekle</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="title">Başlık</label>
+                                <input type="text" class="form-control" id="title" name="title"
+                                       placeholder="Başlık">
+                            </div>
+                            <div class="form-group">
+                                <label>Açıklama</label>
+                                <textarea class="form-control" rows="3" name="description"
+                                          placeholder="Açıklama"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}

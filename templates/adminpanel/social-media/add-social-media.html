@@ -1,0 +1,48 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Grup Ekle</h3>
+                    </div>
+                    <form role="form" enctype="multipart/form-data" action="{% url 'admin_add_social_media' %}" method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="title">Sosyal Medya Adı</label>
+                                <input type="text" name="title" class="form-control" id="title"
+                                       placeholder="Sosyal Medya Adı">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Dosya Seçin</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="media" id="exampleInputFile">
+                                        <label class="custom-file-label" for="exampleInputFile">Dosya seçin</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="">Yükle</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="isActive" class="custom-control-input"
+                                           id="exampleCheck1">
+                                    <label class="custom-control-label" for="exampleCheck1">Aktiflik</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+{% endblock %}

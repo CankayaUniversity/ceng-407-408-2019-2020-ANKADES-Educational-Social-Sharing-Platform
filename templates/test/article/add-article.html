@@ -1,0 +1,46 @@
+{% extends 'ankades/layout/../layout/layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block body %}
+    {# CSS FILES FOR THIS PAGE #}
+    <link rel="stylesheet" href="{% static "ankades/css/shop.css" %}" class="color-switcher-link">
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    {# END #}
+    <div class="preloader">
+        <div class="preloader_image"></div>
+    </div>
+    <div id="canvas">
+        <div id="box_wrapper">
+            {% include 'ankades/layout/../layout/header.html' %}
+            <section class="ls s-pt-0 s-pb-0 s-py-lg-60 s-py-xl-60">
+                <div class="container">
+                    <main class="col-lg-12">
+                        <article>
+                            <header class="entry-header">
+                                <h1 class="entry-title">{{ form.get_full_name }}</h1>
+                            </header>
+                            <div class="entry-content">
+                                <div class="woocommerce">
+                                    <div class="woocommerce-MyAccount-content">
+                                        <form class="form-horizontal" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{ form|crispy }}
+                                            {{ form_as.p }}
+                                            <br>
+                                            <button class="btn text-left btn-primary waves-effect waves-light"
+                                                    type="submit">
+                                                Paylaş
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </main>
+                </div>
+            </section>
+            {% include 'ankades/layout/../layout/footer.html' %}
+        </div>
+    </div>
+{% endblock %}

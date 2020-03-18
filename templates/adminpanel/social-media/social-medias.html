@@ -1,0 +1,67 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Default box -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Gruplar</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Ad</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>Resim</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if socialMedias %}
+                                    {% for sm in socialMedias %}
+                                        <tr>
+                                            <td>{{ sm.id }}</td>
+                                            <td>{{ sm.title }}</td>
+                                            <td>{{ sm.slug }}</td>
+                                            <td>{{ sm.createdDate }}</td>
+                                            <td>{{ sm.updatedDate }}</td>
+                                            <td>{{ sm.isActive }}</td>
+                                            <td>{% if sm.media %}
+                                                <a target="_blank" href="{{ sm.media.url }}">Resme Bak</a>
+                                            {% else %}
+                                                Resim Yok
+                                            {% endif %}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Ad</th>
+                                    <th>Email</th>
+                                    <th>Kayıt Tarihi</th>
+                                    <th>Son Giriş</th>
+                                    <th>Takipçi</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}

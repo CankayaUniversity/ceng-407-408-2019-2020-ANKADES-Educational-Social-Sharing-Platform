@@ -4,11 +4,11 @@ from django import forms
 from django.db.models import Q
 from django.forms import ModelChoiceField
 
-from account.models import Account, Permission, Group, GroupPermission, AccountGroup, AccountPermission, SocialMedia
+from account.models import Account, Permission, Group, SocialMedia
 from adminpanel.models import Tag
-from article.models import Article, ArticleCategory, ArticleTag
+from article.models import Article, ArticleCategory
 from course.models import Course, CourseCategory
-from exam.models import School, Department, Lecture, Exam, ExamComment, Term
+from exam.models import School
 
 
 class AdminLoginForm(forms.Form):
@@ -50,28 +50,10 @@ class AdminPermissionForm(forms.ModelForm):
         fields = ['title', 'isActive']
 
 
-
-class AdminGroupForm(forms.Form):
-    title = forms.CharField(max_length=None, label="Başlık")
-    isActive = forms.BooleanField(required=False, label="Aktif")
-
-
 class AdminGroupPermissionForm(forms.Form):
     groupId = forms.ModelChoiceField(queryset=Group.objects.all(), label="Grup Adı")
     permissionId = forms.ModelChoiceField(queryset=Permission.objects.all(), label="İzin Adı")
     isActive = forms.BooleanField(required=False, label="Aktif")
-
-
-class AdminAccountGroupForm(forms.ModelForm):
-    class Meta:
-        model = AccountGroup
-        fields = ['userId', 'groupId', 'isActive']
-
-
-class AdminAccountPermissionForm(forms.ModelForm):
-    class Meta:
-        model = AccountPermission
-        fields = ['userId', 'permissionId', 'isActive']
 
 
 class AdminArticleForm(forms.Form):
@@ -83,17 +65,6 @@ class AdminArticleForm(forms.Form):
     isPrivate = forms.BooleanField(required=False, label="Özel olacak ise kutucuğu işaretleyin")
     media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
     tagId = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket", required=False)
-
-
-class AdminEditArticleTagForm(forms.Form):
-    class Meta:
-        model = ArticleTag
-        fields = ['tagId', ]
-
-
-class AddArticleTag(forms.Form):
-    tagId = forms.ModelChoiceField(required=True, queryset=Tag.objects.filter(isActive=True), label="Etiket")
-    isActive = forms.BooleanField(required=False, label="Aktif")
 
 
 class AdminEditArticleForm(forms.ModelForm):
@@ -126,25 +97,6 @@ class AdminSchoolForm(forms.Form):
     title = forms.CharField(max_length=None, label="Okul Adı")
     description = RichTextField()
     media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
-    isActive = forms.BooleanField(required=False, label="Aktif")
-
-
-class AdminDepartmentForm(forms.Form):
-    schoolId = forms.ModelChoiceField(queryset=School.objects.filter(Q(isActive=True)), label="Okul")
-    title = forms.CharField(max_length=None, label="Başlık")
-    isActive = forms.BooleanField(required=False, label="Aktif")
-
-
-class AdminTermForm(forms.Form):
-    departmentId = forms.ModelChoiceField(queryset=Department.objects.filter(isActive=True))
-    title = forms.CharField(max_length=None, label="Dönem")
-    isActive = forms.BooleanField(required=False, label="Aktif")
-
-
-class AdminLectureForm(forms.Form):
-    termId = forms.ModelChoiceField(queryset=Term.objects.filter(isActive=True))
-    title = forms.CharField(max_length=None, label="Ders Adı")
-    description = RichTextField()
     isActive = forms.BooleanField(required=False, label="Aktif")
 
 

@@ -44,22 +44,22 @@ class AccountLoginForm(forms.Form):
         return values
 
 
-class EditProfileForm(forms.ModelForm):
-    class Meta:
-        model = Account
-        fields = ["first_name", "last_name", "email", "image", "description"]
-        help_texts = {
-            'first_name': None,
-            'last_name': None,
-            'email': None,
-            'description': None
-        }
+# class EditProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = Account
+#         fields = ["first_name", "last_name", "email", "image", "description"]
+#         help_texts = {
+#             'first_name': None,
+#             'last_name': None,
+#             'email': None,
+#             'description': None
+#         }
 
 
-class EditUsernameForm(forms.ModelForm):
-    class Meta:
-        model = Account
-        fields = ['username',]
+# class EditUsernameForm(forms.ModelForm):
+#     class Meta:
+#         model = Account
+#         fields = ['username',]
 
 
 class AccountUpdatePasswordForm(forms.ModelForm):

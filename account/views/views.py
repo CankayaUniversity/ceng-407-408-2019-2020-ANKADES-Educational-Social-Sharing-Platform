@@ -2,13 +2,15 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.utils.functional import SimpleLazyObject
+from django.views.generic import RedirectView
 from rest_framework.generics import get_object_or_404
 
-from account.forms import AccountRegisterForm, EditProfileForm, AccountLoginForm, EditUsernameForm, \
-    AccountUpdatePasswordForm
-from account.models import Account, AccountGroup, Group
+from account.forms import AccountUpdatePasswordForm
+from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission
 
 
 def login_account(request):
@@ -17,23 +19,25 @@ def login_account(request):
     :return:
     """
     if not request.user.is_authenticated:
-        form = AccountLoginForm(request.POST or None)
-        context = {
-            "form": form
-        }
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
+        if request.method == "POST":
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            remember = request.POST.get("remember")
             user = authenticate(username=username, password=password)
             if user is None:
-                return render(request, "ankades/account/login.html", context)
+                messages.error(request, "Kullanıcı adı veya şifre hatalı.")
+                return render(request, "ankades/registration/login.html")
             else:
                 login(request, user)
+                if remember:
+                    request.session.set_expiry(1209600)
+                else:
+                    request.session.set_expiry(0)
                 messages.success(request, "Başarıyla giriş yapıldı.")
                 return redirect("index")
-        else:
-            return render(request, "ankades/account/login.html", context)
+        return render(request, "ankades/registration/login.html")
     else:
+        messages.warning(request, "Zaten giriş yapılmış.")
         return redirect("index")
 
 
@@ -56,29 +60,33 @@ def register_account(request):
     :param request:
     :return:
     """
+    getGroup = Group.objects.get(slug="ogrenci")
     if not request.user.is_authenticated:
-        getGroup = Group.objects.get(slug="ogrenci")
-        accountGroup = AccountGroup()
-        form = AccountRegisterForm(request.POST or None)
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            new_user = Account(username=username, email=email)
-            new_user.is_active = True
-            new_user.is_admin = False
-            new_user.save()
-            new_user.set_password(password)
-            new_user.save()
-            accountGroup.userId_id = new_user.id
-            accountGroup.groupId_id = getGroup.id
-            accountGroup.save()
+        if request.method == "POST":
+            first_name = request.POST.get("first_name")
+            last_name = request.POST.get("last_name")
+            username = request.POST.get("username")
+            email = request.POST.get("email")
+            password = request.POST.get("password")
+            confirm_password = request.POST.get("confirm_password")
+            if password and confirm_password and password != confirm_password:
+                messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
+                return render(request, "ankades/registration/register.html")
+            elif Account.objects.filter(email=email):
+                messages.error(request, "Bu email adresinde kullanıcı mevcut")
+                return render(request, "ankades/registration/register.html")
+            elif Account.objects.filter(username=username):
+                messages.error(request, "Bu kullanıcı adı sistemimizde mevcut")
+                return render(request, "ankades/registration/register.html")
+            else:
+                new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email)
+                new_user.is_active = True
+                new_user.save()
+                new_user.set_password(password)
+                new_user.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("login_account")
-        context = {
-            "form": form
-        }
-        return render(request, "ankades/account/register.html", context)
+        return render(request, "ankades/registration/register.html")
     else:
         messages.error(request, "Zaten giriş yapılmış.")
         return redirect("index")
@@ -86,12 +94,18 @@ def register_account(request):
 
 def account_detail(request, username):
     userDetail = get_object_or_404(Account, username=username)
-    userOccupation = AccountGroup.objects.get(userId__username=username)
     context = {
         "userDetail": userDetail,
-        "userOccupation": userOccupation,
     }
-    return render(request, "ankades/account/account-detail.html", context)
+    return render(request, "ankades/account/my-profile.html", context)
+
+
+def my_account(request, username):
+    userDetail = get_object_or_404(Account, username=username)
+    context = {
+        "userDetail": userDetail,
+    }
+    return render(request, "ankades/account/my-profile.html", context)
 
 
 @login_required(login_url="login_account")
@@ -101,22 +115,25 @@ def edit_profile(request, username):
     :param username:
     :return:
     """
-    getUser = request.user.username
-    if getUser == username:
-        instance = get_object_or_404(Account, username=username)
-        form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.updatedDate = datetime.datetime.now()
-            instance.save()
-            messages.success(request, "Profil başarıyla düzenlendi !")
-            return redirect("edit_profile", username)
-        context = {
-            "form": form,
-        }
-        return render(request, "ankades/account/edit-profile.html", context)
-    else:
-        return redirect("edit_profile", getUser)
+    # getUser = request.user.username
+    # userOccupation = AccountGroup.objects.get(userId__username=username)
+    # if getUser == username:
+    #     instance = get_object_or_404(Account, username=username)
+    #     form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
+    #     if form.is_valid():
+    #         instance = form.save(commit=False)
+    #         instance.updatedDate = datetime.datetime.now()
+    #         instance.save()
+    #         messages.success(request, "Profil başarıyla düzenlendi !")
+    #         return redirect("edit_profile", username)
+    #     context = {
+    #         "form": form,
+    #         "userOccupation": userOccupation,
+    #     }
+    #     return render(request, "ankades/account/edit-profile.html", context)
+    # else:
+    #     return redirect("edit_profile", getUser)
+    return render(request, "ankades/account/edit-profile.html")
 
 
 @login_required(login_url="login_account")
@@ -126,31 +143,23 @@ def edit_username(request, username):
     :param username:
     :return:
     """
-    getUser = request.user.username
-    if getUser == username:
-        instance = get_object_or_404(Account, username=username)
-        form = EditUsernameForm(request.POST or None, instance=instance)
-        if form.is_valid():
-            instance.username = username
-            instance.updatedDate = datetime.datetime.now()
-            instance.save()
-            messages.success(request, "Kullanıcı adınız başarıyla güncellendi")
-            return redirect("edit_username", getUser)
-        context = {
-            "form": form
-        }
-        return render(request, "ankades/account/edit-username.html", context)
-    else:
-        return redirect("edit_username", getUser)
-
-
-def index(request):
-    """
-    :param request:
-    :return:
-    """
-    account = Account.objects.filter(username="test")
-    return render(request, "ankades/index.html", {"account": account})
+    # getUser = request.user.username
+    # if getUser == username:
+    #     instance = get_object_or_404(Account, username=username)
+    #     form = EditUsernameForm(request.POST or None, instance=instance)
+    #     if form.is_valid():
+    #         instance.username = username
+    #         instance.updatedDate = datetime.datetime.now()
+    #         instance.save()
+    #         messages.success(request, "Kullanıcı adınız başarıyla güncellendi")
+    #         return redirect("edit_username", getUser)
+    #     context = {
+    #         "form": form
+    #     }
+    #     return render(request, "ankades/../../templates/test/account/edit-username.html", context)
+    # else:
+    #     return redirect("edit_username", getUser)
+    return None
 
 
 @login_required(login_url="login_account")
@@ -169,7 +178,41 @@ def edit_password(request, username):
             login(request, login_user)
             messages.success(request, "Şifreniz başarıyla güncellendi.")
             return redirect("edit_profile")
-        return render(request, "ankades/account/edit-password.html", {"form": form})
+        return render(request, "ankades/../../templates/test/account/edit-password.html", {"form": form})
     else:
         messages.error(request, "Bir sorun var, lütfen daha sonra tekrar deneyin")
         return redirect("login_account")
+
+
+class FollowAccountToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        username = self.kwargs.get("username")
+        obj = get_object_or_404(Account, username=username)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            if user in obj.follower.all():
+                obj.follower.remove(user)
+            else:
+                obj.follower.add(user)
+        return url_
+
+
+def current_user_group(self, username):
+    group = AccountGroup.objects.get(userId__username=username)
+    return str(group.groupId)
+
+
+def user_group(self, username):
+    group = AccountGroup.objects.get(userId__username=username)
+    return group.groupId
+
+
+def current_user_permission(self, username):
+    userPermission = AccountPermission.objects.get(userId__username=username)
+    return str(userPermission.permissionId)
+
+
+def user_social_media(self, username):
+    usm = AccountSocialMedia.objects.get(userId__username=username)
+    return str(usm)

@@ -5,19 +5,17 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
-from adminpanel.views.serializer_view import PermissionViewSet, GroupViewSet, AccountViewSet, AccountPermissionViewSet, \
-    GroupPermissionViewSet, AccountGroupViewSet, AccountActivityViewSet, AdminActivityViewSet, SchoolViewSet
 
 router = routers.SimpleRouter()
-router.register('Permission', PermissionViewSet, "permission")
-router.register('Group', GroupViewSet, "group")
-router.register('Account', AccountViewSet, "account")
-router.register('AccountPermission', AccountPermissionViewSet, "accountPermission")
-router.register('GroupPermission', GroupPermissionViewSet, "groupPermission")
-router.register('AccountGroup', AccountGroupViewSet, "accountGroup")
-router.register('AccountActivity', AccountActivityViewSet, "accountActivity")
-router.register('AdminActivity', AdminActivityViewSet, "adminActivity")
-router.register('School', SchoolViewSet, "school")
+# router.register('Permission', PermissionViewSet, "permission")
+# router.register('Group', GroupViewSet, "group")
+# router.register('Account', AccountViewSet, "account")
+# router.register('AccountPermission', AccountPermissionViewSet, "accountPermission")
+# router.register('GroupPermission', GroupPermissionViewSet, "groupPermission")
+# router.register('AccountGroup', AccountGroupViewSet, "accountGroup")
+# router.register('AccountActivity', AccountActivityViewSet, "accountActivity")
+# router.register('AdminActivity', AdminActivityViewSet, "adminActivity")
+# router.register('School', SchoolViewSet, "school")
 
 
 schema_view = get_schema_view(
@@ -34,7 +32,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('ankades-admin-panel/', include("adminpanel.urls")),
+    path('admin/', include("adminpanel.urls")),
     path('', include("account.urls")),
     path('', include("course.urls")),
     path('', include("article.urls")),

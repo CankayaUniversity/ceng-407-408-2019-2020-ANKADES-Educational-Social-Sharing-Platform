@@ -11,20 +11,19 @@ from ankadescankaya.slug import slug_save
 
 
 class ArticleCategory(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Kategori Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Kullanıcı Adı")
-    title = models.CharField(max_length=254, verbose_name="Makale Kategori Başlığı")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
-    description = models.TextField(verbose_name="Makale Kategori Açıklama", null=True, blank=True)
-    createdDate = models.DateTimeField(auto_now_add=True,
-                                       verbose_name="Makale Kategori Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Makale Kategori Güncellendiği Tarih", null=True, blank=True)
-    parentId = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, verbose_name="Üst Kategorisi")
-    isRoot = models.BooleanField(default=False, verbose_name="Root Durumu")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=254)
+    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    description = models.TextField(null=True, blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    parentId = models.ForeignKey('self', on_delete=models.SET_NULL, null=True)
+    isRoot = models.BooleanField(default=False)
     tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
-    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-    isCategory = models.BooleanField(default=False, verbose_name="Üst Kategori mi?")
+    view = models.PositiveIntegerField(default=0)
+    isActive = models.BooleanField(default=True)
+    isCategory = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -35,20 +34,19 @@ class ArticleCategory(models.Model):
 
 
 class Article(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, related_name="creator", null=True, verbose_name="Kullanıcı Adı")
-    categoryId = models.ForeignKey(ArticleCategory, verbose_name="Makale Kategori",
-                                   on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=254, verbose_name="Makale Başlığı")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
-    description = RichTextField(verbose_name="Makale Açıklaması")
-    media = models.FileField(null=True, blank=True, verbose_name="Makale Dosya Yükleme")
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Makale Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Makale Güncellendiği Tarih", null=True, blank=True)
-    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-    isPrivate = models.BooleanField(default=False, verbose_name="Özellik")
-    likes = models.ManyToManyField(Account, related_name="post_likes", default=0, blank=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    creator = models.ForeignKey(Account, on_delete=models.PROTECT)
+    categoryId = models.ForeignKey(ArticleCategory, on_delete=models.PROTECT, null=False)
+    title = models.CharField(max_length=254, null=False, blank=False)
+    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    description = RichTextField(null=False, blank=False)
+    media = models.FileField(null=True, blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    view = models.PositiveIntegerField(default=0)
+    isActive = models.BooleanField(default=True)
+    isPrivate = models.BooleanField(default=False, null=True, blank=True)
+    likes = models.ManyToManyField(Account, related_name="articleLikes", default=0, blank=True, db_table="AccountLikedArticle")
     readTime = models.IntegerField(default=0)
 
     def __str__(self):
@@ -72,17 +70,17 @@ class Article(models.Model):
 
 
 class ArticleComment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
-    articleId = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, verbose_name="Makale Yorumcusu")
-    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
-    content = RichTextField(verbose_name="Yorum", blank=False, null=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    articleId = models.ForeignKey(Article, on_delete=models.PROTECT)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.PROTECT)
+    content = RichTextField(blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    parentId = models.ForeignKey('self', null=True, related_name="Cevap", on_delete=models.SET_NULL)
-    isRoot = models.BooleanField(default=False, verbose_name="Root Durumu")
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
-    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
+    parentId = models.ForeignKey('self', null=True, related_name="articleCommentId", on_delete=models.PROTECT)
+    isRoot = models.BooleanField(default=False)
+    isActive = models.BooleanField(default=True)
+    view = models.PositiveIntegerField(default=0)
+    like = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.creator
@@ -93,17 +91,12 @@ class ArticleComment(models.Model):
 
 
 class ArticleTag(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Tag Id")
-    tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, verbose_name="Etiket")
-    articleId = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, verbose_name="Makale Adı")
-    createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(null=True, blank=True)
-    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
-    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-
-    def __str__(self):
-        return self.tagId
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tagId = models.ForeignKey(Tag, on_delete=models.PROTECT)
+    articleId = models.ForeignKey(Article, on_delete=models.PROTECT)
+    view = models.PositiveIntegerField(default=0)
+    like = models.PositiveIntegerField(default=0)
+    isActive = models.BooleanField(default=True)
 
     class Meta:
         db_table = "ArticleTag"

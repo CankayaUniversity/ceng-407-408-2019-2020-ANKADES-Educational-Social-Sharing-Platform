@@ -1,0 +1,114 @@
+{% extends "admin/layout/../layout/layout.html" %}
+{% block title %}Sosyal Medya Ayarları{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static "admin/plugins/datatables/dataTables.bootstrap4.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/plugins/datatables/buttons.bootstrap4.min.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "admin/plugins/datatables/responsive.bootstrap4.min.css" %}"/>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="page-title-box">
+                    <div class="row align-items-center">
+                        <div class="col-sm-6">
+                            <h4 class="page-title">Inbox</h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Stexo</a></li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Email</a></li>
+                                <li class="breadcrumb-item active">Inbox</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                style="list-style: none"
+                                    {% if message.tags %} {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
+                        {% include 'admin/layout/../layout/setting-left-side-bar.html' %}
+                        <div class="email-rightbar mb-3">
+                            <div class="card">
+                                <div class="row p-3">
+                                    <div class="col-lg-12">
+                                        <div class="btn-toolbar float-lg-right" role="toolbar">
+                                            <div class="btn-group mo-mb-2">
+                                                <a type="button" class="btn btn-primary  waves-effect">
+                                                    <i class="fa fa-table"></i>
+                                                    Liste</a>
+                                                <button type="button"
+                                                        class="btn btn-primary waves-light waves-effect"><i
+                                                        class="far fa-trash-alt"></i></button>
+                                            </div>
+                                            <div class="btn-group ml-1 mo-mb-2">
+                                                <a type="button" href="{% url 'admin_add_social_media' %}"
+                                                   class="btn btn-primary waves-light waves-effect">
+                                                        <span style="color: #fff">Yeni Ekle <i
+                                                                class="fa fa-plus"></i></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="mt-0 header-title">Example</h4>
+                                    <p class="sub-title font-14">This is an experimental awesome solution for
+                                        responsive tables with complex data.</p>
+                                    <div class="table-rep-plugin">
+                                        <div class="table-responsive b-0" data-pattern="priority-columns">
+                                            <table id="tech-companies-1" class="table  table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th data-priority="1">Id</th>
+                                                    <th data-priority="1">Sosyal Medya Adı</th>
+                                                    <th data-priority="3">Slug</th>
+                                                    <th data-priority="3">Oluşturulma</th>
+                                                    <th data-priority="3">Güncellenme</th>
+                                                    <th data-priority="3">Aktiflik</th>
+                                                    <th data-priority="3">İşlemler</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% if socialMedias %}
+                                                    {% for sm in socialMedias %}
+                                                        <tr>
+                                                            <td>{{ sm.id }}</td>
+                                                            <td>{{ sm.title }}</td>
+                                                            <td>{{ sm.slug }}</td>
+                                                            <td>{{ sm.createdDate }}</td>
+                                                            <td>{{ sm.updatedDate }}</td>
+                                                            <td>{% if sm.isActive == True %}Evet{% else %}Hayır{% endif %}</td>
+                                                            <td>
+                                                                <a href="{% url 'admin_edit_social_media' sm.slug %}"
+                                                                   type="button"
+                                                                   class="btn btn-primary waves-light waves-effect">
+                                                                    <span style="color: #fff">Düzenle</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'admin/layout/../layout/footer.html' %}
+    </div>
+{% endblock body %}

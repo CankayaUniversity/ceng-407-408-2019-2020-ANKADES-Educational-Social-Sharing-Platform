@@ -1,34 +1,20 @@
 import uuid
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.db.models.signals import pre_save
-
+from django.urls import reverse
 from ankadescankaya.slug import slug_save
 
 
-class Account(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    description = RichTextField(verbose_name="Biyografi", null=True, blank=True)
-    image = models.FileField(default='default-user-image.png', verbose_name="Profil Resmi")
-    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi", null=True, blank=True)
-    updatedDate = models.DateTimeField(verbose_name="Hesap Güncellendiği Tarih", null=True, blank=True)
-
-    def __str__(self):
-        return self.username
-
-    class Meta:
-        db_table = "Account"
-        ordering = ["-date_joined"]
-
-
 class Permission(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="İzin Id")
-    title = models.CharField(null=False, blank=False, max_length=100, verbose_name="İzin Adı")
-    slug = models.CharField(unique=True, blank=False, null=False, max_length=254, verbose_name="Unique İzin Adı")
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="İzin Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="İzin Güncellendiği Tarih", null=True, blank=True)
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(null=False, blank=False, max_length=100)
+    slug = models.CharField(unique=True, blank=False, null=False, max_length=254)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.slug
@@ -39,76 +25,98 @@ class Permission(models.Model):
 
 
 class Group(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Grup Id")
-    title = models.CharField(null=False, blank=False, max_length=100, verbose_name="Grup Adı")
-    slug = models.CharField(unique=True, blank=False, null=False, max_length=254, verbose_name="Unique Grup Adı")
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Grup Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Grup Güncellendiği Tarih", null=True, blank=True)
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(null=False, blank=False, max_length=100)
+    slug = models.CharField(unique=True, blank=False, null=False, max_length=254)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.slug
+
+    def __unicode__(self):
+        return self.slug
+
+    def get_absolute_url(self):
+        return reverse("admin_all_groups")
+
+    def get_active_url(self):
+        return reverse("active-toggle", kwargs={"slug": self.slug})
+
+    def get_active_api_url(self):
+        return reverse("active-api-toggle", kwargs={"slug": self.slug})
 
     class Meta:
         db_table = "Group"
         ordering = ["-createdDate"]
 
 
-class AccountPermission(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Hesap İzin Id")
-    userId = models.ForeignKey(Account, verbose_name="Bağlı Olduğu Hesap", on_delete=models.SET_NULL, null=True)
-    permissionId = models.ForeignKey(Permission, verbose_name="Bağlı Olduğu İzin", on_delete=models.SET_NULL, null=True)
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Hesap İzni Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Hesap İzni Güncellendiği Tarih", null=True, blank=True)
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
+class Account(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    bio = RichTextField(null=True, blank=True)
+    image = models.FileField(default='default-user-image.png')
+    backgroundImage = models.FileField(default='photo1.png')
+    view = models.PositiveIntegerField(default=0, null=True, blank=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    follower = models.ManyToManyField('self', related_name="follower", default=0, db_table="AccountFollower")
+    email = models.EmailField(unique=True, null=False, blank=True)
 
     def __str__(self):
-        return self.userId
+        return self.username
+
+    def __unicode__(self):
+        return self.username
+
+    def get_absolute_url(self):
+        return reverse("account_detail", kwargs={"username": self.username})
+
+    def get_like_url(self):
+        return reverse("follower-toggle", kwargs={"username": self.username})
+
+    def get_api_like_url(self):
+        return reverse("follower-api-toggle", kwargs={"username": self.username})
 
     class Meta:
-        db_table = "AccountPermission"
-        ordering = ["-createdDate"]
+        db_table = "Account"
+        ordering = ["-date_joined"]
 
 
 class GroupPermission(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Account Group Permission Id")
-    permissionId = models.ForeignKey(Permission, verbose_name="İzin Adı", on_delete=models.SET_NULL, null=True)
-    groupId = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, verbose_name="Grup Adı")
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Grup İzni Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Grup İzni Güncellendiği Tarih", null=True, blank=True)
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-
-    def __str__(self):
-        return self.permissionId
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    groupId = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
+    permissionId = models.ForeignKey(Permission, on_delete=models.PROTECT)
 
     class Meta:
         db_table = "GroupPermission"
-        ordering = ["-createdDate"]
+
+
+class AccountPermission(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    groupId = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
+    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "AccountPermission"
 
 
 class AccountGroup(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Account Group Id")
-    userId = models.ForeignKey(Account, verbose_name="Kullanıcı Adı", on_delete=models.SET_NULL, null=True)
-    groupId = models.ForeignKey(Group, verbose_name="Grup Adı", on_delete=models.SET_NULL, null=True)
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Hesap Grup Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Hesap Grup Oluşturulduğu Tarih", null=True, blank=True)
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-
-    def __str__(self):
-        return self.userId
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
+    groupId = models.ForeignKey(Group, on_delete=models.PROTECT)
+    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
 
     class Meta:
         db_table = "AccountGroup"
-        ordering = ["-createdDate"]
 
 
 class SocialMedia(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Sosyal Medya Id")
-    title = models.CharField(max_length=254, verbose_name="Sosyal Medya Adı", unique=True)
-    slug = models.SlugField(verbose_name="Slug", unique=True, allow_unicode=True)
-    isActive = models.BooleanField(default=True, null=True, blank=True, verbose_name="Aktiflik")
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Güncellendiği Tarih", null=True, blank=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=254, unique=True)
+    slug = models.SlugField(unique=True, allow_unicode=True)
+    isActive = models.BooleanField(default=True, null=True, blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    media = models.FileField(null=True, blank=True, default=None, upload_to='socialmedia/')
 
     def __str__(self):
         return self.title
@@ -119,30 +127,51 @@ class SocialMedia(models.Model):
 
 
 class AccountSocialMedia(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Account Social Media Id")
-    userId = models.ForeignKey(Account, verbose_name="Kullanıcı Adı", on_delete=models.SET_NULL, null=True)
-    url = models.URLField(verbose_name="Sosyal Medya URL")
-    isActive = models.BooleanField(default=True, null=True, blank=True, verbose_name="Görünürlük")
-    socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.SET_NULL, verbose_name="Sosyal Medya Adı", null=True)
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(null=True, blank=True, verbose_name="Güncellendiği Tarih")
-
-    def __str__(self):
-        return self.socialMediaId
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
+    socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.PROTECT)
 
     class Meta:
         db_table = "AccountSocialMedia"
-        ordering = ["-createdDate"]
+
+
+class Zones(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=254)
+    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    parentId = models.ForeignKey('self', on_delete=models.PROTECT)
+    isCountry = models.BooleanField(default=False)
+    isCity = models.BooleanField(default=False)
+    tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
+    isActive = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "Zones"
+        ordering = ['-createdDate']
+
+
+class AccountZones(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
+    zoneId = models.ForeignKey(Zones, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "AccountZones"
 
 
 class AccountActivity(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Aktivite Id")
-    activityCreator = models.CharField(max_length=254, verbose_name="Oluşturan Kişi")
-    activityTitle = models.CharField(max_length=254, verbose_name="Başlık")
-    activityApplication = models.CharField(max_length=254, verbose_name="Uygulama")
-    activityDescription = models.CharField(max_length=254, verbose_name="Açıklama")
-    activityMethod = models.CharField(max_length=254, verbose_name="Method Türü")
-    activityCreatedDate = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulduğu Tarih")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    activityCreator = models.ForeignKey(Account, on_delete=models.PROTECT)
+    activityTitle = models.CharField(max_length=254)
+    activityApplication = models.CharField(max_length=254)
+    activityDescription = models.CharField(max_length=254)
+    activityMethod = models.CharField(max_length=254)
+    activityCreatedDate = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.activityCreator
@@ -155,4 +184,3 @@ class AccountActivity(models.Model):
 pre_save.connect(slug_save, sender=SocialMedia)
 pre_save.connect(slug_save, sender=Group)
 pre_save.connect(slug_save, sender=Permission)
-

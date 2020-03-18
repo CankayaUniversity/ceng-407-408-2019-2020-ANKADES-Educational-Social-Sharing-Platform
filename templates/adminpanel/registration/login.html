@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="tr">
+{% load static %}
+{% load crispy_forms_tags %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ankades | Giriş Yap</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="{% url 'index' %}"><b>ANKADES</b></a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card {% if message.tags == "error" %}bg-danger{% endif %}">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Hata !</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                                    class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ message }}
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </p>
+
+            <form method="post" action="{% url 'login_account' %}">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" name="username" class="form-control" placeholder="Kullanıcı Adı" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" name="password" placeholder="Şifre" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" name="remember" id="remember">
+                            <label for="remember">
+                                Beni Hatırla
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block toastsDefault">
+                            Giriş Yap
+                        </button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+            <div class="social-auth-links text-center mb-3">
+                <p>- VEYA -</p>
+                <a href="#" class="btn btn-block btn-primary">
+                    <i class="fab fa-facebook mr-2"></i> Facebook ile giriş yap
+                </a>
+                <a href="#" class="btn btn-block btn-danger">
+                    <i class="fab fa-google mr-2"></i> Google ile giriş yap
+                </a>
+            </div>
+                <p class="text-center">- VEYA -</p>
+            <!-- /.social-auth-links -->
+
+            <div class="row">
+                <div class="col-9">
+                    <a href="javascript:void(0)" class="text-left">Şifremi unuttum</a>
+                </div>
+                <!-- /.col -->
+                <div class="col-3 align-left">
+                    <a href="{% url 'register_account' %}" class="text-right">Kayıt ol</a>
+                </div>
+                <!-- /.col -->
+            </div>
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+</body>
+</html>

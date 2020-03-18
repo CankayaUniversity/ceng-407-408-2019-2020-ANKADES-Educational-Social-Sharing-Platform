@@ -1,0 +1,73 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load static %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- jquery validation -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Makale Paylaşma</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" method="post" id="quickForm" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Kategori*</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
+                                            required>
+                                        <option disabled>Lütfen bir kategori seçiniz</option>
+                                        {% if articleCategory %}
+                                            {% for category in articleCategory %}
+                                                <option value="{{ category.title }}">{{ category.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Başlık*</label>
+                                    <input type="text" class="form-control" name="title" placeholder="Başlık">
+                                </div>
+                                {{ form.description|as_crispy_field }}
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        {{ form.isPrivate }}
+                                        <label class="custom-control-label" for="exampleCheck1">Özel</label>
+                                    </div>
+                                </div>
+                                <div class="input-group mt-2">
+                                    <div class="custom-file">
+                                        <input type="file" name="media" class="custom-file-input" id="inputGroupFile01"
+                                               aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label" for="inputGroupFile01">Bir resim
+                                            seçin</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Gönder</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!--/.col (left) -->
+                <!-- right column -->
+                <div class="col-md-6">
+
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
