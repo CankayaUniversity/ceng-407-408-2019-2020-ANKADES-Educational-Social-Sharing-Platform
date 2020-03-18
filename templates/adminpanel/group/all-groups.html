@@ -34,42 +34,46 @@
                                             <td>{{ group.updatedDate }}</td>
                                             <td>{{ group.isActive }}</td>
                                             <td>
-                                                <a type="button" id="#{{ group.get_active_url }}" data-href='{{ group.get_active_api_url }}' href='{{ group.get_active_url }}'
+                                                <a type="button" id="#{{ group.get_active_url }}"
+                                                   data-href='{{ group.get_active_api_url }}'
+                                                   href='{{ group.get_active_url }}'
                                                    class="btn btn-warning">
                                                     {% if group.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
-{#                                            <p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'></a></p>#}
+                                                {#                                            <p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'></a></p>#}
                                             </td>
                                         </tr>
+                                        <div class="modal fade" id="{{ group.slug }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Uyarı ! </h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            data-toggle="modal" data-target="#modal-default"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bu işlemi yapmak istediğinize emin misiniz ?</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-danger"
+                                                            data-dismiss="modal">
+                                                        İptal
+                                                    </button>
+                                                    <a type="button" href=""
+                                                       class="btn btn-primary">
+                                                        Evet
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
                                     {% endfor %}
                                 {% endif %}
-                                <div class="modal fade" id="{{ group.slug }}">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Uyarı ! </h4>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Bu işlemi yapmak istediğinize emin misiniz ?</p>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-danger"
-                                                        data-dismiss="modal">
-                                                    İptal
-                                                </button>
-                                                <a type="button" href=""
-                                                   class="btn btn-primary">
-                                                    Evet
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
+
                                 </div>
                                 <tfoot>
                                 <tr>
@@ -92,7 +96,4 @@
         </div>
     </section>
     <!-- /.content -->
-    <script>
-    x = document.getElementById('{{ groups. }}')
-    </script>
 {% endblock %}
