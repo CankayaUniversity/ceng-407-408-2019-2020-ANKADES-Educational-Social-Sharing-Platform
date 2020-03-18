@@ -1,25 +1,18 @@
 import datetime
-from tokenize import Token
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import RedirectView
-from rest_framework import viewsets, authentication, permissions
+from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from account.models import Account
 from account.views.views import current_user_group
 from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
-from course.forms import AddArticleComment
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
