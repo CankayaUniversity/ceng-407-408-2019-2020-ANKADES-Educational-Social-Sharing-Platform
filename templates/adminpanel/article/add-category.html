@@ -3,39 +3,55 @@
 {% load crispy_forms_field %}
 {% load static %}
 {% block content %}
-    <!-- Main content -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <!-- left column -->
                 <div class="col-md-12">
-                    <!-- jquery validation -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Makale Paylaşma</h3>
+                            <h3 class="card-title">Makale Kategori Ekleme</h3>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form method="post" enctype="multipart/form-data" class="form-control-user">
-                                    {% csrf_token %}
-                                    {{ form|crispy }}
-                                    {{ form_as.p }}
-                                    <br>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
-                                    </button>
-                                </form>
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data" class="form-control-user">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>Üst Kategorisi*</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
+                                            required>
+                                        <option disabled>Lütfen üst kategori seçiniz</option>
+                                        {% if articleCategory %}
+                                            {% for category in articleCategory %}
+                                                <option value="{{ category.title }}">{{ category.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Başlık</label>
+                                    <input type="text" class="form-control" name="title" placeholder="Kategori Adı">
+                                </div>
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="isActive" class="custom-control-input"
+                                               id="isActive">
+                                        <label class="custom-control-label" for="isActive">Aktiflik</label>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="isCategory" class="custom-control-input"
+                                               id="isCategory">
+                                        <label class="custom-control-label" for="isCategory">Üst Kategori mi ?</label>
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!--/.col (left) -->
-                <!-- right column -->
-                <div class="col-md-6">
-
-                </div>
-                <!--/.col (right) -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

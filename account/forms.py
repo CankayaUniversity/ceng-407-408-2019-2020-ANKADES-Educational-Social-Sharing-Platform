@@ -1,3 +1,4 @@
+from ckeditor.widgets import CKEditorWidget
 from django import forms
 
 
@@ -44,16 +45,9 @@ class AccountLoginForm(forms.Form):
         return values
 
 
-# class EditProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Account
-#         fields = ["first_name", "last_name", "email", "image", "description"]
-#         help_texts = {
-#             'first_name': None,
-#             'last_name': None,
-#             'email': None,
-#             'description': None
-#         }
+class EditProfileForm(forms.ModelForm):
+    model = Account
+    fields = ['bio', '']
 
 
 # class EditUsernameForm(forms.ModelForm):

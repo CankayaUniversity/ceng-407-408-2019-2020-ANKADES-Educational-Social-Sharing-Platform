@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-image: url({% static 'breadcrumb.png' %})">
     {#url kontrolleri yapılıp ona göre aramalar yapılacak#}
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3">
@@ -111,17 +111,13 @@
                     <span class="badge badge-warning navbar-badge"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ request.user.get_full_name }}</span>
+                    <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ request.user.get_full_name }} !</span>
                     <div class="dropdown-divider"></div>
-                    <a href="{% url 'my_account' request.user.username %}" class="dropdown-item">
+                    <a href="{% url 'account_detail' request.user.username %}" class="dropdown-item">
                         <i class="fas fa-user-edit mr-2" style="align-content: center"></i> Profilim
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> 8 takip isteği
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="" class="dropdown-item">
+                    <a href="{% url 'edit_profile' currentUser %}" class="dropdown-item">
                         <i class="fas fa-cog mr-2"></i> Ayarlar
                     </a>
                     <div class="dropdown-divider"></div>

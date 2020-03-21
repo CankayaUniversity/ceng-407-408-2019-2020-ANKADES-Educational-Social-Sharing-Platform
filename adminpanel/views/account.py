@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
@@ -11,6 +12,7 @@ from account.models import Account, Group, AccountGroup
 from account.views.views import current_user_group
 from adminpanel.forms import AdminEditProfileForm
 from adminpanel.models import AdminActivity
+from exam.models import School
 
 
 @login_required(login_url="login_admin")
@@ -25,9 +27,31 @@ def admin_all_users(request):
     return render(request, "adminpanel/account/all-users.html", context)
 
 
+@login_required(login_url="login_admin")
+def admin_all_user_groups(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+
+    admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
+    moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
+    teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
+    students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
+    accounts = Account.objects.all().order_by('-date_joined')[:5]
+    context = {
+        "userGroup": userGroup,
+        "admins": admins,
+        "moderators": moderators,
+        "teachers": teachers,
+        "students": students,
+    }
+    return render(request, "adminpanel/account/group/user-groups.html", context)
+
+
+@login_required(login_url="login_admin")
 def admin_my_account(request, username):
+    currentUser = request.user
     userDetail = get_object_or_404(Account, username=username)
-    userGroup = current_user_group(request, username)
+    userGroup = current_user_group(request, currentUser)
     context = {
         "userDetail": userDetail,
         "userGroup": userGroup,
@@ -35,105 +59,205 @@ def admin_my_account(request, username):
     return render(request, "adminpanel/account/my-profile.html", context)
 
 
-# @login_required(login_url="login_admin")
-# def admin_students(request):
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
-#     context = {
-#         "students": students,
-#         "adminGroup": adminGroup,
-#     }
-#     return render(request, "admin/account/group/students.html", context)
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_teachers(request):
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
-#     context = {
-#         "teachers": teachers,
-#         "adminGroup": adminGroup,
-#     }
-#     return render(request, "admin/account/group/teachers.html", context)
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_moderators(request):
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
-#     context = {
-#         "moderators": moderators,
-#         "adminGroup": adminGroup,
-#     }
-#     return render(request, "admin/account/group/moderators.html", context)
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_admins(request):
-#     admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     context = {
-#         "admins": admins,
-#         "adminGroup": adminGroup,
-#     }
-#     return render(request, "admin/account/group/admins.html", context)
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_account_permission(request):
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     permissions = AccountPermission.objects.all()
-#     context = {
-#         "permissions": permissions,
-#         "adminGroup": adminGroup,
-#     }
-#     return render(request, "admin/account/permission/account-permission.html", context)
+@login_required(login_url="login_admin")
+def admin_students(request):
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
+    context = {
+        "students": students,
+        "adminGroup": adminGroup,
+    }
+    return render(request, "adminpanel/account/group/students.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_teachers(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
+    context = {
+        "teachers": teachers,
+        "userGroup": userGroup,
+        "currentUser": currentUser,
+    }
+    return render(request, "adminpanel/account/group/teachers.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_moderators(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
+    context = {
+        "moderators": moderators,
+        "userGroup": userGroup,
+        "currentUser": currentUser,
+    }
+    return render(request, "adminpanel/account/group/moderators.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_admins(request):
+    admins = AccountGroup.objects.filter(groupId__slug="admin")
+    moderators = AccountGroup.objects.filter(groupId__slug="moderator")
+    teachers = AccountGroup.objects.filter(groupId__slug="ogretmen")
+    students = AccountGroup.objects.filter(groupId__slug="ogrenci")
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    context = {
+        "admins": admins,
+        "moderators": moderators,
+        "teachers": teachers,
+        "students": students,
+        "userGroup": userGroup,
+    }
+    return render(request, "adminpanel/account/group/user-groups.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_edit_profile(request, username):
     instance = get_object_or_404(Account, username=username)
-    form = AdminEditProfileForm(request.POST or None, request.FILES or None, instance=instance)
-    activity = AdminActivity()
-    isAdmin = False
     currentUser = request.user
-    if currentUser.is_superuser or currentUser.is_staff:
-        isAdmin = True
-    if form.is_valid():
-        if isAdmin:
-            instance = form.save(commit=False)
-            instance.updatedDate = datetime.datetime.now()
-            instance.username = username
-            activity.title = "Kullanıcı profili güncellendi"
-            activity.creator = request.user.username
-            activity.method = "PUT"
-            activity.application = "Account"
-            activity.updatedDate = datetime.datetime.now()
-            activity.description = "Kullanıcı düzenlendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
-            activity.save()
-            instance.save()
-            messages.success(request, "Profil başarıyla düzenlendi !")
-            return redirect("admin_all_users")
-        else:
-            messages.error(request, "Yetkiniz Yok")
+    userGroup = current_user_group(request, currentUser)
+    schools = School.objects.filter(Q(isActive=False, isCategory=False))
     context = {
         "currentUser": currentUser,
-        "isAdmin": isAdmin
+        "userGroup": userGroup,
+        "schools": schools,
     }
-    return render(request, "ankades/account/edit-profile.html", context)
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_blocked_users(request):
-#     blockedUsers = Account.objects.filter(is_active=False)
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     context = {
-#         "blockedUsers": blockedUsers,
-#         "adminGroup": adminGroup
-#     }
-#     return render(request, "admin/account/blocked-user.html", context)
-#
-#
+    return render(request, "adminpanel/account/edit-profile.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_edit_username(request, username):
+    userGroup = current_user_group(request, username)
+    instance = get_object_or_404(Account, username=username)
+    context = {
+        "userGroup": userGroup,
+        "instance": instance
+    }
+    if request.method == "POST":
+        username = request.POST.get('username')
+        instance = Account(username=username)
+        instance.save()
+        messages.success(request, "Kullanıcı adınız başarıyla güncellendi.")
+        return redirect("admin_edit_profile")
+    return render(request, "adminpanel/account/edit-username.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_edit_email(request, username):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    instance = get_object_or_404(Account, username=username)
+    context = {
+        "userGroup": userGroup,
+        "instance": instance
+    }
+    if request.method == "POST":
+        email = request.POST.get('email')
+        confirm_email = request.POST.get('confirm_email')
+        context = {
+            "email": email,
+            "confirm_email": confirm_email,
+            "userGroup": userGroup,
+            "instance": instance
+        }
+        if email != confirm_email:
+            messages.error(request, "Email adresleri uyuşmuyor. Lütfen tekrar deneyin")
+            return render(request, "adminpanel/account/edit-email.html", context)
+        else:
+            instance = Account(email=email)
+            instance.save()
+            messages.success(request, "Email adresiniz başarıyla güncellendi.")
+            return redirect("admin_edit_profile")
+    return render(request, "adminpanel/account/edit-email.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_blocked_users(request):
+    blockedUsers = Account.objects.filter(is_active=False)
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    context = {
+        "users": blockedUsers,
+        "userGroup": userGroup,
+    }
+    if userGroup == 'admin':
+        return render(request, "adminpanel/account/blocked-user.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok.")
+        return redirect("admin_dashboard")
+
+
+@login_required(login_url="login_admin")
+def admin_block_account(request, username):
+    user = get_object_or_404(Account, username=username)
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    if userGroup == 'admin' or userGroup == 'moderator':
+        if user.is_active is True:
+            user.is_active = False
+            user.save()
+            messages.success(request, "Kullanıcı başarıyla engellendi.")
+            return redirect("admin_all_users")
+        else:
+            user.is_active = True
+            user.save()
+            messages.success(request, "Kullanıcı başarıyla aktifleştirildi.")
+            return redirect("admin_all_users")
+    else:
+        messages.error(request, "Yetkiniz yok.")
+        return redirect("admin_all_users")
+
+
+@login_required(login_url="login_admin")
+def admin_register_account(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    getGroup = Group.objects.get(slug="ogrenci")
+    accountGroup = AccountGroup()
+    context = {
+        "userGroup": userGroup,
+        "currentUser": currentUser
+    }
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        form = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "username": username,
+            "email": email,
+            "password": password,
+            "confirm_password": confirm_password,
+            "userGroup": userGroup,
+            "currentUser": currentUser,
+        }
+        if password and confirm_password and password != confirm_password:
+            messages.error(request, "Girilen şifreler uyuşmuyor. Lütfen tekrar deneyin.")
+            return render(request, "adminpanel/account/add-account.html", form)
+        else:
+            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email)
+            new_user.is_active = True
+            new_user.is_admin = False
+            new_user.is_staff = False
+            new_user.save()
+            new_user.set_password(password)
+            new_user.save()
+            accountGroup.userId_id = new_user.id
+            accountGroup.groupId_id = getGroup.id
+            accountGroup.save()
+            messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
+            return redirect("admin_all_users")
+    else:
+        messages.error(request, "Yetkiniz Yok !")
+        return redirect("admin_dashboard")
+
 # # Kullanıcı izinleri
 # @login_required(login_url="login_admin")
 # def admin_add_account_permission(request):
@@ -265,11 +389,6 @@ def admin_edit_profile(request, username):
 #
 # @login_required(login_url="login_admin")
 # def admin_deactivate_account_permission(request, id):
-#     return None
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_deactivate_account_permission(request, id):
 #     """
 #     :param request:ku
 #     :param id:
@@ -299,41 +418,4 @@ def admin_edit_profile(request, username):
 #         messages.error(request, "Yetkiniz Yok!")
 #
 #
-# @login_required(login_url="login_admin")
-# def admin_register_account(request):
-#     form = AccountRegisterForm(request.POST or None)
-#     activity = AdminActivity()
-#     getGroup = Group.objects.get(slug="ogrenci")
-#     accountGroup = AccountGroup()
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     if adminGroup:
-#         if form.is_valid():
-#             username = form.cleaned_data.get("username")
-#             email = form.cleaned_data.get("email")
-#             password = form.cleaned_data.get("password")
-#             new_user = Account(username=username, email=email)
-#             new_user.is_active = True
-#             new_user.is_admin = False
-#             new_user.save()
-#             new_user.set_password(password)
-#             new_user.save()
-#             accountGroup.userId_id = new_user.id
-#             accountGroup.groupId_id = getGroup.id
-#             accountGroup.save()
-#             activity.title = "Kullanıcı oluşturuldu"
-#             activity.creator = request.user.username
-#             activity.method = "POST"
-#             activity.application = "Register Account"
-#             activity.updatedDate = datetime.datetime.now()
-#             activity.description = "Yeni kullanıcı oluşturuldu. Oluşturan kişi: " + activity.creator + "Uygulama adı: " + activity.application
-#             activity.save()
-#             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
-#             return redirect("admin_account_settings")
-#         context = {
-#             "form": form,
-#             "adminGroup": adminGroup
-#         }
-#         return render(request, "admin/settings/add-account.html", context)
-#     else:
-#         messages.error(request, "Yetkiniz Yok !")
-#         return redirect("admin_dashboard")
+

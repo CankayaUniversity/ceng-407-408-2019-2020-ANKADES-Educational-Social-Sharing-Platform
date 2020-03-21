@@ -2,8 +2,6 @@ from ckeditor.fields import RichTextField
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.db.models import Q
-from django.forms import ModelChoiceField
-
 from account.models import Account, Permission, Group, SocialMedia
 from adminpanel.models import Tag
 from article.models import Article, ArticleCategory
@@ -28,10 +26,16 @@ class AdminEditProfileForm(forms.ModelForm):
         }
 
 
+class AdminEditGroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['title', 'isActive']
+
+
 class AdminCourseForm(forms.Form):
     categoryId = forms.ModelChoiceField(queryset=CourseCategory.objects.filter(Q(isRoot=False) and Q()),
                                         label="Kategori Adı")
-    title = forms.CharField(max_length=None, label="Başlık")
+    title = forms.CharField(label="Başlık")
     description = RichTextField()
     media = forms.FileField(required=False, allow_empty_file=True)
     isActive = forms.BooleanField(required=False, label="Aktif")
@@ -40,7 +44,7 @@ class AdminCourseForm(forms.Form):
 
 class AdminCourseCategoryForm(forms.Form):
     parentId = forms.ModelChoiceField(queryset=CourseCategory.objects.all(), label="Kategorisi")
-    title = forms.CharField(max_length=None, label="Başlık")
+    title = forms.CharField(label="Başlık")
     description = RichTextField()
 
 
@@ -59,12 +63,16 @@ class AdminGroupPermissionForm(forms.Form):
 class AdminArticleForm(forms.Form):
     categoryId = forms.ModelChoiceField(queryset=ArticleCategory.objects.filter(Q(isRoot=False), Q(isActive=True), Q(isCategory=False)),
                                         label="Kategori Adı")
-    title = forms.CharField(max_length=None, label="Başlık")
+    title = forms.CharField(label="Başlık")
     description = forms.CharField(widget=CKEditorWidget())
     isActive = forms.BooleanField(required=False, label="Aktif olacak ise kutucuğu işaretleyin")
     isPrivate = forms.BooleanField(required=False, label="Özel olacak ise kutucuğu işaretleyin")
     media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
     tagId = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(isActive=True), label="Etiket", required=False)
+
+
+class AddArticleForm(forms.Form):
+    description = forms.CharField(widget=CKEditorWidget())
 
 
 class AdminEditArticleForm(forms.ModelForm):
@@ -74,7 +82,7 @@ class AdminEditArticleForm(forms.ModelForm):
 
 
 class AdminTagForm(forms.Form):
-    title = forms.CharField(max_length=None, label="Başlık")
+    title = forms.CharField(label="Başlık")
     isActive = forms.BooleanField(required=False, label="Aktiflik")
 
 
@@ -94,7 +102,7 @@ class AdminEditArticleCategoryForm(forms.ModelForm):
 
 
 class AdminSchoolForm(forms.Form):
-    title = forms.CharField(max_length=None, label="Okul Adı")
+    title = forms.CharField(label="Okul Adı")
     description = RichTextField()
     media = forms.FileField(allow_empty_file=True, required=False, label="Dosya")
     isActive = forms.BooleanField(required=False, label="Aktif")
@@ -106,7 +114,7 @@ class AdminExamForm(forms.Form):
 
 class AdminExamCommentForm(forms.ModelForm):
     content = RichTextField()
-    media = forms.FileField(max_length=None, allow_empty_file=True)
+    media = forms.FileField(allow_empty_file=True)
 
 
 class AdminSocialMediaForm(forms.Form):

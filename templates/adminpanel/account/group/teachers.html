@@ -1,0 +1,53 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Öğretmenler</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if teachers %}
+                                    {% for teacher in teachers %}
+                                        <tr>
+                                            <td>{{ teacher.id }}</td>
+                                            <td>{{ teacher.userId.id }}</td>
+                                            <td>{{ teacher.groupId.id }}</td>
+                                            <td>{{ teacher.userId.username }}</td>
+                                            <td>{{ teacher.groupId.title }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

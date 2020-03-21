@@ -28,8 +28,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% if accounts %}
-                                    {% for account in accounts %}
+                                {% if users %}
+                                    {% for account in users %}
                                         <tr>
                                             <td>{{ account.id }}</td>
                                             <td>{{ account.username }}</td>
@@ -39,7 +39,7 @@
                                             <td>{{ account.last_login }}</td>
                                             <td>{{ account.follower.count }}</td>
                                             <td>{% if account.is_active %}Aktif{% else %}Engelli{% endif %}</td>
-                                            <td><a type="button" class="btn btn-sm btn-warning" href="{% url 'admin_block_account' account.username %}">{% if account.is_active %}Engelle{% else %}Aktifleştir{% endif %}</a></td>
+                                            <td><a type="button" class="btn btn-sm btn-warning" href="{% url 'admin_block_account' account.username %}">Aktifleştir</a></td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}

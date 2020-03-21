@@ -6,6 +6,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
+from ankadescankaya import views
+
 router = routers.SimpleRouter()
 # router.register('Permission', PermissionViewSet, "permission")
 # router.register('Group', GroupViewSet, "group")
@@ -32,7 +34,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', include("adminpanel.urls")),
+    path('', include("adminpanel.urls")),
     path('', include("account.urls")),
     path('', include("course.urls")),
     path('', include("article.urls")),

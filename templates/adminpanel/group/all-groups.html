@@ -1,17 +1,19 @@
 {% extends 'adminpanel/layout/layout.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <!-- Default box -->
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Gruplar</h3>
                         </div>
-                        <!-- /.card-header -->
+                        <button type="button" class="btn btn-success m-3" data-toggle="modal"
+                                data-target="#modal-default">
+                            Yeni Grup Ekle
+                        </button>
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
@@ -22,6 +24,7 @@
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
                                     <th>İşlemler</th>
+                                    <th>Sil</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -40,41 +43,15 @@
                                                    class="btn btn-warning">
                                                     {% if group.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
-                                                {#                                            <p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'></a></p>#}
+                                            </td>
+                                            <td>
+                                                <a type="button" href="{% url 'admin_delete_group' group.slug %}"
+                                                   class="btn btn-danger">Sil
+                                                </a>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="{{ group.slug }}">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Uyarı ! </h4>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            data-toggle="modal" data-target="#modal-default"
-                                                            aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Bu işlemi yapmak istediğinize emin misiniz ?</p>
-                                                </div>
-                                                <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-danger"
-                                                            data-dismiss="modal">
-                                                        İptal
-                                                    </button>
-                                                    <a type="button" href=""
-                                                       class="btn btn-primary">
-                                                        Evet
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <!-- /.modal-content -->
-                                        </div>
-                                        <!-- /.modal-dialog -->
                                     {% endfor %}
                                 {% endif %}
-
-                                </div>
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
@@ -87,13 +64,45 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.modal -->
-                    <!-- /.card -->
+                    <div class="modal fade" id="modal-default">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Yeni Grup Ekle</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form" action="{% url 'admin_add_group' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="title">Grup Adı</label>
+                                                <input type="text" name="title" class="form-control" id="title"
+                                                       placeholder="Grup Adı">
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="isActive" class="custom-control-input"
+                                                           id="exampleCheck1">
+                                                    <label class="custom-control-label"
+                                                           for="exampleCheck1">Aktiflik</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        {% include 'adminpanel/group/edit-group2.html' %}
     </section>
-    <!-- /.content -->
 {% endblock %}

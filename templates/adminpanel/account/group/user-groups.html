@@ -1,0 +1,195 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Default box -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Adminler</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="admin" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if admins %}
+                                    {% for admin in admins %}
+                                        <tr>
+                                            <td>{{ admin.id }}</td>
+                                            <td>{{ admin.userId.id }}</td>
+                                            <td>{{ admin.groupId.id }}</td>
+                                            <td>{{ admin.userId.username }}</td>
+                                            <td>{{ admin.groupId.title }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- Default box -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Moderatörler</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="moderator" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if moderators %}
+                                    {% for moderator in moderators %}
+                                        <tr>
+                                            <td>{{ moderator.id }}</td>
+                                            <td>{{ moderator.userId.id }}</td>
+                                            <td>{{ moderator.groupId.id }}</td>
+                                            <td>{{ moderator.userId.username }}</td>
+                                            <td>{{ moderator.groupId.title }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- Default box -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Öğretmenler</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="teacher" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if teachers %}
+                                    {% for teacher in teachers %}
+                                        <tr>
+                                            <td>{{ teacher.id }}</td>
+                                            <td>{{ teacher.userId.id }}</td>
+                                            <td>{{ teacher.groupId.id }}</td>
+                                            <td>{{ teacher.userId.username }}</td>
+                                            <td>{{ teacher.groupId.title }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Öğrenciler</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="student" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if students %}
+                                    {% for student in students %}
+                                        <tr>
+                                            <td>{{ student.id }}</td>
+                                            <td>{{ student.userId.id }}</td>
+                                            <td>{{ student.groupId.id }}</td>
+                                            <td>{{ student.userId.username }}</td>
+                                            <td>{{ student.groupId.title }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}

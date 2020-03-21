@@ -2,26 +2,24 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.generic import RedirectView
-from rest_framework import authentication
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from account.models import Group, GroupPermission, Permission, Account
+from account.models import Group
 from account.views.views import current_user_group
-from adminpanel.models import AdminActivity
+from adminpanel.forms import AdminEditGroupForm
 
 
-@login_required(login_url="login_admin")
-def admin_all_groups(request):
+def admin_all_groups(request, slug=None):
     """
+    :param slug:
     :param request:
     :return:
     """
-    group = None
     currentUser = request.user
     userGroup = 'Kullanıcı'
     if request.user.is_authenticated:
@@ -31,7 +29,42 @@ def admin_all_groups(request):
         "groups": groups,
         "userGroup": userGroup,
     }
-    return render(request, "adminpanel/group/all-groups.html", context)
+    if userGroup == 'admin':
+        if request.method == "POST":
+            title = request.POST.get("title")
+            isActive = request.POST.get("isActive") == 'on'
+            new_group = Group(title=title, isActive=isActive)
+            new_group.save()
+            messages.success(request, "Grup başarıyla oluşturuldu.")
+            return redirect("admin_add_group")
+        context = {
+            "userGroup": userGroup,
+            "groups": groups,
+        }
+        return render(request, "adminpanel/group/all-groups.html", context)
+    else:
+        messages.error(request, "Yetkiniz yok.")
+        return redirect("admin_all_groups")
+
+
+@login_required(login_url="login_account")
+def admin_edit_group(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    instance = get_object_or_404(Group, slug=slug)
+    form = AdminEditGroupForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        title = form.cleaned_data.get("title")
+
+    if request.method == "POST":
+        instance.updatedDate = datetime.datetime.now()
+        instance.save()
+        messages.success(request, "Grup başarıyla düzenlendi.")
+        return render(request, "adminpanel/group/edit-group.html", {'form': form})
+    return redirect("admin_edit_group")
 
 
 @login_required(login_url="login_admin")
@@ -60,49 +93,22 @@ def admin_add_group(request):
 
 
 @login_required(login_url="login_admin")
-def admin_edit_group(request, slug):
-    """
-    :param request:
-    :param slug:
-    :return:
-    """
-    instance = get_object_or_404(Group, slug=slug)
-    form = AdminEditGroupForm(request.POST or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.updatedDate = datetime.datetime.now()
-        activity = AdminActivity()
-        activity.activityTitle = "Group Güncellendi."
-        activity.activityCreator = request.user.username
-        activity.activityMethod = "UPDATE"
-        activity.activityApplication = "Group"
-        activity.activityUpdatedDate = datetime.datetime.now()
-        activity.activityDescription = "Güncellendi. İşlemi yapan kişi: " + activity.activityCreator + " Uygulama adı: " + activity.activityApplication
-        instance.save()
-        activity.save()
-        messages.success(request, "Grup başarıyla düzenlendi.")
-        return redirect("admin_all_groups")
-    return render(request, "admin/groups/edit-main-group.html", {"form": form})
-
-
-@login_required(login_url="login_admin")
 def admin_delete_group(request, slug):
     """
     :param request:
     :param slug:
     :return:
     """
+    instance = get_object_or_404(Group, slug=slug)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     if userGroup == 'admin':
-        instance = get_object_or_404(Group, slug=slug)
         instance.delete()
-        instance.save()
         messages.success(request, "Grup başarıyla silindi.")
         return redirect("admin_all_groups")
     else:
         messages.error(request, "Yetkiniz yok.")
-        return redirect("admin_all_groups")
+        return redirect("admin_dashboard")
 
 
 # Grup İzinleri
@@ -289,6 +295,7 @@ class IsActiveGroupToggle(RedirectView):
 
 class IsActiveGroupAPIToggle(APIView):
 
+    @swagger_auto_schema(operation_summary="Admin activate or deactivate the groups")
     def get(self, request, slug=None, format=None):
         slug = self.kwargs.get("slug")
         obj = get_object_or_404(Group, slug=slug)
@@ -311,3 +318,24 @@ class IsActiveGroupAPIToggle(APIView):
             "isActivated": isActivated
         }
         return Response(data)
+
+# class ItemListView(ListView):
+#     model = Group
+#     template_name = 'adminpanel/group/all-groups.html'
+#
+#     def get_queryset(self):
+#         return Group.objects.all()
+#
+#
+# class ItemUpdateView(UpdateView):
+#     model = Group
+#     template_name = 'adminpanel/group/edit-group.html'
+#
+#     def dispatch(self, *args, **kwargs):
+#         self.slug = kwargs['slug']
+#         return super(ItemUpdateView, self).dispatch(*args, **kwargs)
+#
+#     def form_valid(self, form):
+#         form.save()
+#         item = Item.objects.get(id=self.item_id)
+#         return HttpResponse(render_to_string('myapp/item_edit_form_success.html', {'item': item}))

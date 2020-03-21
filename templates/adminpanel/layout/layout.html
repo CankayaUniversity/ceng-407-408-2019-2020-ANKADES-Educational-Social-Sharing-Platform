@@ -17,37 +17,22 @@
     <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed">
-<!-- Site wrapper -->
 <div class="wrapper">
     {% include 'adminpanel/layout/navbar.html' %}
     {% include 'adminpanel/layout/sidebar.html' %}
 
     <div class="content-wrapper">
-        <!-- Main content -->
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags == "success" %}class="alert alert-success alert-dismissible"
-                     {% else %}class="alert alert-danger alert-dismissible"{% endif %}>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h5><i class="icon fas {% if message.tags == "error" %}fa-ban{% else %}fa-check{% endif %}"></i>
-                        {% if message.tags == "error" %}Hata !{% else %}Başarılı{% endif %}</h5>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
         {% block content %}
         {% endblock %}
     </div>
-    <!-- /.content-wrapper -->
     {% include 'ankades/layout/footer.html' %}
 </div>
-<!-- ./wrapper -->
-
 <!-- jQuery -->
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 <!-- Bootstrap 4 -->
@@ -62,41 +47,51 @@
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
 <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+<script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
 <script>
     $(function () {
-        //Initialize Select2 Elements
         $('.select2').select2();
 
-        //Initialize Select2 Elements
         $('.select2bs4').select2({
             theme: 'bootstrap4'
-        });
-    })
-</script>
-<script>
-    $(function () {
-        $("#example1").DataTable();
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
         });
     });
 </script>
 <script>
-// Add active class to the current button (highlight it)
-var header = document.getElementById("sidebar");
-var btns = header.getElementsByClassName("nav-item");
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function() {
-  var current = document.getElementsByClassName("active");
-  current[0].className = current[0].className.replace(" active", "");
-  this.className += " active";
-  });
-}
+    $(function () {
+        $("#admin").DataTable();
+        $('#moderator').DataTable();
+        $('#teacher').DataTable();
+        $('#student').DataTable();
+    });
 </script>
+<script>
+    let header = document.getElementById("sidebar");
+    let btns = header.getElementsByClassName("nav-item");
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            let current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+</script>
+{% if messages %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            {% if message.tags == "success" %}
+                toastr.success("{{ message }}");
+            {% elif message.tags == 'error' %}
+                toastr.error('{{ message }}');
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
 </body>
 </html>

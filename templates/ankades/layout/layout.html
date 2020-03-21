@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
@@ -27,18 +28,6 @@
     {% include 'ankades/layout/navbar.html' %}
 
     <div class="content-wrapper">
-        <!-- Main content -->
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags == "success" %}class="alert alert-success alert-dismissible"
-                     {% else %}class="alert alert-danger alert-dismissible"{% endif %}>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h5><i class="icon fas {% if message.tags == "error" %}fa-ban{% else %}fa-check{% endif %}"></i>
-                        {% if message.tags == "error" %}Hata !{% else %}Başarılı{% endif %}</h5>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
         {% block content %}
         {% endblock %}
     </div>
@@ -59,6 +48,7 @@
 <script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
 <script>
     $(function () {
         //Initialize Select2 Elements
@@ -70,5 +60,16 @@
         });
     })
 </script>
+{% if messages %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            {% if message.tags == "success" %}
+                toastr.success("{{ message }}");
+            {% elif message.tags == 'error' %}
+                toastr.error('{{ message }}');
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
 </body>
 </html>

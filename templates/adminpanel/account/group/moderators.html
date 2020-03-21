@@ -9,7 +9,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Kullanıcılar</h3>
+                            <h3 class="card-title">Moderatörler</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -28,8 +28,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% if accounts %}
-                                    {% for account in accounts %}
+                                {% if moderators %}
+                                    {% for account in moderators %}
                                         <tr>
                                             <td>{{ account.id }}</td>
                                             <td>{{ account.username }}</td>

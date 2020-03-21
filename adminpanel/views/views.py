@@ -22,8 +22,16 @@ def admin_dashboard(request):
     userGroup = current_user_group(request, currentUser)
     user_activity_objects = OnlineUserActivity.get_user_activities(datetime.timedelta(minutes=2))
     number_of_active_users = user_activity_objects.count()
+    userCount = Account.objects.all().count()
+    articleCount = Article.objects.all().count()
+    courseCount = Course.objects.all().count()
+    sum = articleCount + courseCount
     context = {
         "userGroup": userGroup,
+        "userCount": userCount,
+        "articleCount": articleCount,
+        "courseCount": courseCount,
+        "sum": sum,
         "currentUser": currentUser,
         "user_activity_objects": user_activity_objects,
         "number_of_active_users": number_of_active_users,

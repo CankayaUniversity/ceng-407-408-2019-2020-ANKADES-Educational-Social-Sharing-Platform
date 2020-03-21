@@ -2,34 +2,38 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
+
 from adminpanel.views import group
-from adminpanel.views import views, permission, course, account, article, exam
+from adminpanel.views import views, account, article
 from adminpanel.views.group import IsActiveGroupToggle, IsActiveGroupAPIToggle
 
 urlpatterns = [
     # Main Url
-    path('', views.admin_dashboard, name="admin_dashboard"),
-    path('ayarlar/site', views.admin_settings, name="admin_settings"),
-    path('ayarlar/hesap', views.admin_account_settings, name="admin_account_settings"),
-    path('sosyal-medya/', views.admin_all_social_medias, name="admin_all_social_medias"),
-    path('sosyal-medya/ekle', views.admin_add_social_media, name="admin_add_social_media"),
-    path('ayarlar/sosyal-medya/duzenle/<slug:slug>', views.admin_edit_social_media, name="admin_edit_social_media"),
-    path('ayarlar/grup', views.admin_group_settings, name="admin_group_settings"),
-    path('ayarlar/izin', views.admin_permission_settings, name="admin_permission_settings"),
+    path('admin/', views.admin_dashboard, name="admin_dashboard"),
+    path('admin/ayarlar/site', views.admin_settings, name="admin_settings"),
+    path('admin/ayarlar/hesap', views.admin_account_settings, name="admin_account_settings"),
+    path('admin/sosyal-medya/', views.admin_all_social_medias, name="admin_all_social_medias"),
+    path('admin/sosyal-medya/ekle', views.admin_add_social_media, name="admin_add_social_media"),
+    path('admin/ayarlar/sosyal-medya/duzenle/<slug:slug>', views.admin_edit_social_media,
+         name="admin_edit_social_media"),
+    path('admin/ayarlar/grup', views.admin_group_settings, name="admin_group_settings"),
+    path('admin/ayarlar/izin', views.admin_permission_settings, name="admin_permission_settings"),
     # path('ayarlar/yeni-kullanici-ekle', account.admin_register_account, name="admin_register_account"),
-    path('giris-yap/', views.login_admin, name="login_admin"),
-    path('cikis/', views.logout_admin, name="logout_admin"),
+    path('admin/giris-yap/', views.login_admin, name="login_admin"),
+    path('admin/cikis/', views.logout_admin, name="logout_admin"),
 
     # User
-    path('kullanicilar/', account.admin_all_users, name="admin_all_users"),
-    url(r'^/(?P<username>[\w-]+)/$', account.admin_my_account, name="admin_my_account"),
-    # path('kullanicilar/ogrenciler/', account.admin_students, name="admin_students"),
-    # path('kullanicilar/ogretmenler/', account.admin_teachers, name="admin_teachers"),
-    # path('kullanicilar/moderatorler', account.admin_moderators, name="admin_moderators"),
-    # path('kullanicilar/adminler', account.admin_admins, name="admin_admins"),
-    # path('kullanicilar/yasakli', account.admin_blocked_users, name="admin_blocked_users"),
-    #
-    # # User Permission
+    path('admin/kullanicilar/', account.admin_all_users, name="admin_all_users"),
+    path('admin/kullanicilar/gruplari', account.admin_all_user_groups, name="admin_all_user_groups"),
+    path('admin/kullanicilar/engelliler', account.admin_blocked_users, name="admin_blocked_users"),
+    url(r'^admin/profil/(?P<username>[\w-]+)/$', account.admin_my_account, name="admin_my_account"),
+    url(r'^admin/kullanicilar/engelle/(?P<username>\w+)/$', account.admin_block_account, name="admin_block_account"),
+    url(r'^admin/kullanicilar/ogrenciler/', account.admin_students, name="admin_students"),
+    url(r'^admin/kullanicilar/ogretmenler/', account.admin_teachers, name="admin_teachers"),
+    url(r'^admin/kullanicilar/moderatorler', account.admin_moderators, name="admin_moderators"),
+    url(r'^admin/kullanicilar/adminler', account.admin_admins, name="admin_admins"),
+
+    # User Permission
     # path('kullanicilar/kullanici-izinleri/', account.admin_account_permission, name="admin_account_permission"),
     # path('kullanicilar/kullanici-izinleri/ekle/', account.admin_add_account_permission,
     #      name="admin_add_account_permission"),
@@ -37,7 +41,8 @@ urlpatterns = [
     #      name="admin_edit_account_permission"),
     # path('kullanicilar/kullanici-izinleri/sil/<uuid:id>', account.admin_deactivate_account_permission,
     #      name="admin_deactivate_account_permission"),
-    url(r'^profil-duzenle/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
+    url(r'^admin/profil-duzenle/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
+    # url(r'^admin/profil-duzenle/resim/(?P<username>\w+)/$', account.edit_profile_photo, name="edit_profile_photo"),
     #
     # # User Group
     # path('kullanicilar/grup/', group.admin_account_groups, name="admin_account_groups"),
@@ -46,15 +51,17 @@ urlpatterns = [
     # path('kullanicilar/grup/sil/<uuid:id>', group.admin_delete_account_group, name="admin_delete_account_group"),
 
     # Group
-    path('gruplar/', group.admin_all_groups, name="admin_all_groups"),
-    path('gruplar/ekle/', group.admin_add_group, name="admin_add_group"),
-    path('gruplar/<slug:slug>/duzenle', group.admin_edit_group, name="admin_edit_group"),
-    path('gruplar/<slug:slug>/sil/', group.admin_delete_group,
-         name="admin_delete_group"),
+    url(r'^admin/gruplar/', group.admin_all_groups, name="admin_all_groups"),
+    # url(r'^admin/(?P<slug>[\w-]+)/isactive/$', IsActiveGroupToggle.as_view(), name="active-toggle"),
+
+    url(r'^admin/gruplar/ekle/', group.admin_add_group, name="admin_add_group"),
+    path('admin/gruplar/<slug:slug>/duzenle', group.admin_edit_group, name="admin_edit_group"),
+    url(r'^admin/grup/sil/(?P<slug>\w+)/$', group.admin_delete_group,
+        name="admin_delete_group"),
     url(r'^(?P<slug>[\w-]+)/isactive/$', IsActiveGroupToggle.as_view(), name="active-toggle"),
-    url(r'^Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="active-api-toggle"),
-    path('gruplar/aktiflik/<slug:slug>', group.admin_isactive_group,
-         name="admin_isactive_group"),
+    url(r'^AdminPanel/Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="active-api-toggle"),
+    url(r'^admin/gruplar/aktiflik/<slug:slug>', group.admin_isactive_group,
+        name="admin_isactive_group"),
     #
     # # Group Permission
     # path('gruplar/grup-izinleri/', group.admin_group_permission, name="admin_group_permission"),
@@ -95,7 +102,7 @@ urlpatterns = [
 
     # Article
     # path('makaleler/', article.admin_articles, name="admin_articles"),
-    path('makaleler/ekle', article.admin_add_article, name="admin_add_article"),
+    path('admin/makaleler/ekle', article.admin_add_article, name="admin_add_article"),
     # path('makaleler/duzenle/<slug:slug>', article.admin_edit_article, name="admin_edit_article"),
     # path('makaleler/sil/<slug:slug>', article.admin_delete_article, name="admin_delete_article"),
     #
@@ -107,7 +114,8 @@ urlpatterns = [
     #
     # # Article Category
     # path('makaleler/makale-kategorileri/', article.admin_article_category, name="admin_article_category"),
-    path('makaleler/makale-kategorileri/ekle/', article.admin_add_article_category, name="admin_add_article_category"),
+    path('admin/makaleler/makale-kategorileri/ekle/', article.admin_add_article_category,
+         name="admin_add_article_category"),
     # path('makaleler/makale-kategorileri/duzenle/<slug:slug>', article.admin_edit_article_category,
     #      name="admin_edit_article_category"),
     # path('makaleler/makale-kategorileri/sil/<slug:slug>', article.admin_delete_article_category,

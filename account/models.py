@@ -39,7 +39,7 @@ class Group(models.Model):
         return self.slug
 
     def get_absolute_url(self):
-        return reverse("admin_all_groups")
+        return reverse("admin_edit_group", kwargs={"slug": self.slug})
 
     def get_active_url(self):
         return reverse("active-toggle", kwargs={"slug": self.slug})
@@ -166,19 +166,19 @@ class AccountZones(models.Model):
 
 class AccountActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    activityCreator = models.ForeignKey(Account, on_delete=models.PROTECT)
-    activityTitle = models.CharField(max_length=254)
-    activityApplication = models.CharField(max_length=254)
-    activityDescription = models.CharField(max_length=254)
-    activityMethod = models.CharField(max_length=254)
-    activityCreatedDate = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(Account, on_delete=models.PROTECT)
+    title = models.CharField(max_length=254)
+    application = models.CharField(max_length=254)
+    description = models.CharField(max_length=254)
+    method = models.CharField(max_length=254)
+    createdDate = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.activityCreator
+        return self.id
 
     class Meta:
         db_table = "AccountActivity"
-        ordering = ['-activityCreatedDate']
+        ordering = ['-createdDate']
 
 
 pre_save.connect(slug_save, sender=SocialMedia)

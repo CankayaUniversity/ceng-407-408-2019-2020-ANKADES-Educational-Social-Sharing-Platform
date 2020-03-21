@@ -9,7 +9,7 @@ from rest_framework.generics import get_object_or_404
 from account.models import AccountGroup, Account
 from account.views.views import current_user_group
 from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminEditArticleCategoryForm, \
-    AdminEditArticleForm
+    AdminEditArticleForm, AddArticleForm
 from adminpanel.models import Tag, AdminActivity
 from article.forms import ArticleForm
 from article.models import Article, ArticleCategory
@@ -41,14 +41,16 @@ def admin_add_article(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
+    form = AddArticleForm(request.POST or None)
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
+        "form": form,
     }
     if request.method == "POST":
         value = request.POST.get("value")
         title = request.POST.get("title")
-        description = request.POST.get("description")
+        description = form.cleaned_data.get("description")
         isPrivate = request.POST.get("isPrivate") == "on"
         isActive = request.POST.get("isActive") == "on"
         media = request.FILES['media']
@@ -72,22 +74,20 @@ def admin_add_article_category(request):
     :param request:
     :return:
     """
-    form = AdminArticleCategoryForm(request.POST or None)
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True))
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
     context = {
-        "form": form,
-        "userGroup": userGroup
+        "userGroup": userGroup,
+        "articleCategory": articleCategory
     }
     if userGroup == 'admin':
-        if form.is_valid():
-            parentId = form.cleaned_data.get("parentId")
-            isCategory = form.cleaned_data.get("isCategory")
-            title = form.cleaned_data.get("title")
-            slug = form.cleaned_data.get("slug")
-            isActive = form.cleaned_data.get("isActive")
-            instance = ArticleCategory(parentId=parentId, isCategory=isCategory, isActive=isActive, title=title, slug=slug)
+        if request.method == "POST":
+            value = request.POST.get("value")
+            title = request.POST.get("title")
+            isActive = request.POST.get("isActive") == "on"
+            isCategory = request.POST.get("isCategory") == "on"
+            instance = ArticleCategory(parentId=value, title=title, isActive=isActive, isCategory=isCategory)
             instance.creator = request.user
             instance.save()
             messages.success(request, "Makale kategorisi başarıyla eklendi !")

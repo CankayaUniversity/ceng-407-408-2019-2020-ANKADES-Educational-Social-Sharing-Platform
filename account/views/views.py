@@ -3,14 +3,31 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import redirect, render
 from django.utils.functional import SimpleLazyObject
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, FormView
 from rest_framework.generics import get_object_or_404
+from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission
+
+
+def index(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = 'Kullanıcı'
+    if request.user.is_authenticated:
+        userGroup = current_user_group(request, currentUser)
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup
+    }
+    return render(request, "ankades/dashboard.html", context)
 
 
 def login_account(request):
@@ -94,96 +111,16 @@ def register_account(request):
         return redirect("index")
 
 
-def account_detail(request, username):
+def get_requested_user(request, username):
+    currentUser = request.user
+    userGroup = current_user_group(request, username)
     userDetail = get_object_or_404(Account, username=username)
     context = {
         "userDetail": userDetail,
+        "userGroup": userGroup,
+        "currentUser": currentUser,
     }
-    return render(request, "ankades/account/my-profile.html", context)
-
-
-def my_account(request, username):
-    userDetail = get_object_or_404(Account, username=username)
-    context = {
-        "userDetail": userDetail,
-    }
-    return render(request, "ankades/account/my-profile.html", context)
-
-
-@login_required(login_url="login_account")
-def edit_profile(request, username):
-    """
-    :param request:
-    :param username:
-    :return:
-    """
-    # getUser = request.user.username
-    # userOccupation = AccountGroup.objects.get(userId__username=username)
-    # if getUser == username:
-    #     instance = get_object_or_404(Account, username=username)
-    #     form = EditProfileForm(request.POST or None, request.FILES or None, instance=instance)
-    #     if form.is_valid():
-    #         instance = form.save(commit=False)
-    #         instance.updatedDate = datetime.datetime.now()
-    #         instance.save()
-    #         messages.success(request, "Profil başarıyla düzenlendi !")
-    #         return redirect("edit_profile", username)
-    #     context = {
-    #         "form": form,
-    #         "userOccupation": userOccupation,
-    #     }
-    #     return render(request, "ankades/account/edit-profile.html", context)
-    # else:
-    #     return redirect("edit_profile", getUser)
-    return render(request, "ankades/account/edit-profile.html")
-
-
-@login_required(login_url="login_account")
-def edit_username(request, username):
-    """
-    :param request:
-    :param username:
-    :return:
-    """
-    # getUser = request.user.username
-    # if getUser == username:
-    #     instance = get_object_or_404(Account, username=username)
-    #     form = EditUsernameForm(request.POST or None, instance=instance)
-    #     if form.is_valid():
-    #         instance.username = username
-    #         instance.updatedDate = datetime.datetime.now()
-    #         instance.save()
-    #         messages.success(request, "Kullanıcı adınız başarıyla güncellendi")
-    #         return redirect("edit_username", getUser)
-    #     context = {
-    #         "form": form
-    #     }
-    #     return render(request, "ankades/../../templates/test/account/edit-username.html", context)
-    # else:
-    #     return redirect("edit_username", getUser)
-    return None
-
-
-@login_required(login_url="login_account")
-def edit_password(request, username):
-    if request.user.is_authenticated:
-        user = get_object_or_404(Account, username=username)
-        form = AccountUpdatePasswordForm(request.POST or None, request.user, instance=request.user)
-        if form.is_valid():
-            password = form.cleaned_data.get("password")
-            user = form.save(commit=False)
-            update_session_auth_hash(request, username)
-            user = request.user
-            user.set_password(password)
-            user.save()
-            login_user = authenticate(username=username, password=password)
-            login(request, login_user)
-            messages.success(request, "Şifreniz başarıyla güncellendi.")
-            return redirect("edit_profile")
-        return render(request, "ankades/../../templates/test/account/edit-password.html", {"form": form})
-    else:
-        messages.error(request, "Bir sorun var, lütfen daha sonra tekrar deneyin")
-        return redirect("login_account")
+    return render(request, "ankades/account/account-profile.html", context)
 
 
 class FollowAccountToggle(RedirectView):
