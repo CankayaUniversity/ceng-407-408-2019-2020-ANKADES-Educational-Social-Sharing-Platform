@@ -10,26 +10,22 @@ from account.models import AccountGroup, Account
 from account.views.views import current_user_group
 from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminEditArticleCategoryForm, \
     AdminEditArticleForm, AddArticleForm
-from adminpanel.models import Tag, AdminActivity
-from article.forms import ArticleForm
 from article.models import Article, ArticleCategory
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_articles(request):
-#     """
-#     :param request:
-#     :return:
-#     """
-#     articles = Article.objects.all()
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     context = {
-#         "articles": articles,
-#         "adminGroup" : adminGroup
-#     }
-#     return render(request, "admin/article/all-articles.html", context)
-#
-#
+
+
+@login_required(login_url="login_admin")
+def admin_all_articles(request):
+    """
+    :param request:
+    :return:
+    """
+    articles = Article.objects.all()
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {
+        "articles": articles,
+        "adminGroup" : adminGroup
+    }
+    return render(request, "adminpanel/article/all-articles.html", context)
 
 
 @login_required(login_url="login_account")
@@ -159,24 +155,53 @@ def admin_add_article_category(request):
 #         activity.description = "Makale etkisizleştirilmedi(zaten aktif değil). İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
 #         activity.save()
 #         return redirect("admin_articles")
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_article_category(request):
-#     """
-#     :param request:
-#     :return:
-#     """
-#     article_categories_list = ArticleCategory.objects.all()
-#     article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     context = {
-#         "article_categories_list": article_categories_list,
-#         "article_categories_limit": article_categories_limit,
-#         "adminGroup": adminGroup
-#     }
-#     return render(request, "admin/article/all-categories.html", context)
-#
+
+
+@login_required(login_url="login_admin")
+def admin_article_categories(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    categories = ArticleCategory.objects.all()
+    article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
+    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
+    context = {
+        "categories": categories,
+        "userGroup": userGroup,
+        "article_categories_limit": article_categories_limit,
+        "adminGroup": adminGroup
+    }
+    return render(request, "adminpanel/article/categories.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_isactive_article_category(request, slug):
+    instance = get_object_or_404(ArticleCategory, slug=slug)
+    if instance.isActive is True:
+        instance.isActive = False
+        instance.save()
+        messages.success(request, "Makale kategorisi artık aktif değil.")
+        return redirect("admin_article_categories")
+    else:
+        instance.isActive = True
+        instance.save()
+        messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
+        return redirect("admin_article_categories")
+
+
+@login_required(login_url="login_admin")
+def admin_delete_article_category(request, slug):
+    instance = get_object_or_404(ArticleCategory, slug=slug)
+    if instance.isActive is True:
+        messages.error(request, "Makale kategorisi aktif olduğu için silme işlemi gerçekleştirilemedi.")
+        return redirect("admin_article_categories")
+    else:
+        instance.delete()
+        messages.success(request, "Makale kategorisi başarıyla silindi.")
+        return redirect("admin_article_categories")
 #
 # @login_required(login_url="login_admin")
 # def admin_edit_article_category(request, slug):

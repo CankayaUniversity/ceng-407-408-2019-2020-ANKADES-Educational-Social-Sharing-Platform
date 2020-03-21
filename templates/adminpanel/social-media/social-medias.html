@@ -9,11 +9,15 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Gruplar</h3>
+                            <h3 class="card-title">Sosyal Medyalar</h3>
                         </div>
+                        <button type="button" class="btn btn-success m-3" data-toggle="modal"
+                                data-target="#modal-default">
+                            Yeni Sosyal Medya Ekle
+                        </button>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="social-media" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -23,6 +27,8 @@
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
                                     <th>Resim</th>
+                                    <th>İşlemler</th>
+                                    <th>Sil</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -40,6 +46,19 @@
                                             {% else %}
                                                 Resim Yok
                                             {% endif %}</td>
+                                            <td>
+                                                <a style="color: #fff" type="button" href="{% url 'admin_isactive_socialmedia' sm.slug %}"
+                                                   class="btn btn-warning">
+                                                    {% if sm.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                </a>
+                                                <a type="button" href="{% url 'admin_edit_social_media' sm.slug %}"
+                                                   class="btn btn-success">Düzenle</a>
+                                            </td>
+                                            <td>
+                                                <a type="button" href="{% url 'admin_delete_socialmedia' sm.slug %}"
+                                                   class="btn btn-danger">Sil
+                                                </a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
@@ -52,13 +71,63 @@
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
                                     <th>Resim</th>
+                                    <th>İşlemler</th>
+                                    <th>Sil</th>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
+                    <div class="modal fade" id="modal-default">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Yeni Grup Ekle</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form" enctype="multipart/form-data"
+                                          action="{% url 'admin_add_social_media' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="title">Sosyal Medya Adı</label>
+                                                <input type="text" name="title" class="form-control" id="title"
+                                                       placeholder="Sosyal Medya Adı">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputFile">Dosya Seçin</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="media"
+                                                               id="exampleInputFile">
+                                                        <label class="custom-file-label" for="exampleInputFile">Dosya
+                                                            seçin</label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" id="">Yükle</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="isActive" class="custom-control-input"
+                                                           id="exampleCheck1">
+                                                    <label class="custom-control-label"
+                                                           for="exampleCheck1">Aktiflik</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
