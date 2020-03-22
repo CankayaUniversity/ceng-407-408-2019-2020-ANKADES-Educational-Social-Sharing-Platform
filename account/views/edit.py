@@ -30,9 +30,8 @@ def edit_profile(request, username):
         instance.save()
         activity.title = "Profil Güncelleme."
         activity.application = "Account"
-        activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = instance
+        activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")

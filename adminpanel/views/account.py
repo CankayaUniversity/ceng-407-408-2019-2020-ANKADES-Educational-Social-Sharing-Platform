@@ -130,11 +130,11 @@ def admin_edit_profile(request, username):
         instance.last_name = last_name
         instance.username = username
         instance.save()
-        activity.title = "Profil Güncelleme: " + str(currentUser)
+        activity.title = "Profil Güncelleme"
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = instance
+        activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
@@ -150,8 +150,10 @@ def admin_edit_profile(request, username):
 
 @login_required(login_url="login_admin")
 def admin_edit_username(request, username):
-    userGroup = current_user_group(request, username)
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=username)
+    activity = AdminActivity()
     context = {
         "userGroup": userGroup,
         "instance": instance
@@ -160,8 +162,16 @@ def admin_edit_username(request, username):
         username = request.POST.get('username')
         instance = Account(username=username)
         instance.save()
+        activity.title = "Profil Güncelleme"
+        activity.application = "Account"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
+        activity.save()
         messages.success(request, "Kullanıcı adınız başarıyla güncellendi.")
-        return redirect("admin_edit_profile")
+        return redirect("admin_edit_username")
     return render(request, "adminpanel/account/edit-username.html", context)
 
 
@@ -170,6 +180,7 @@ def admin_edit_email(request, username):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=username)
+    activity = AdminActivity()
     context = {
         "userGroup": userGroup,
         "instance": instance
@@ -184,11 +195,19 @@ def admin_edit_email(request, username):
             "instance": instance
         }
         if email != confirm_email:
-            messages.error(request, "Email adresleri uyuşmuyor. Lütfen tekrar deneyin")
+            messages.error(request, "E-mail adresleri uyuşmuyor. Lütfen tekrar deneyin")
             return render(request, "adminpanel/account/edit-email.html", context)
         else:
             instance = Account(email=email)
             instance.save()
+            activity.title = "E-mail Güncelleme: " + str(currentUser)
+            activity.application = "Account"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "UPDATE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı e-mail adresini güncelledi."
+            activity.save()
             messages.success(request, "Email adresiniz başarıyla güncellendi.")
             return redirect("admin_edit_profile")
     return render(request, "adminpanel/account/edit-email.html", context)

@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from account.models import Group
 from account.views.views import current_user_group
 from adminpanel.forms import AdminEditGroupForm
+from adminpanel.models import AdminActivity
 
 
 @login_required(login_url="login_admin")
@@ -76,12 +77,20 @@ def admin_add_group(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
+    activity.application = "Group"
+    activity.creator = currentUser
+    activity.title = "Grup Ekle"
+    activity.method = "POST"
+    activity.createdDate = datetime.datetime.now()
     if userGroup == 'admin':
         if request.method == "POST":
             title = request.POST.get("title")
             isActive = request.POST.get("isActive") == 'on'
             new_group = Group(title=title, isActive=isActive)
             new_group.save()
+            activity.description = "Yeni bir grup eklendi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
             messages.success(request, "Grup başarıyla oluşturuldu.")
             return redirect("admin_add_group")
         context = {
@@ -89,6 +98,9 @@ def admin_add_group(request):
         }
         return render(request, "adminpanel/group/add-group.html", context)
     else:
+        activity.description = "Yeni bir grup ekleme başarısız. İşlemi yapan kişi: " + str(
+            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_dashboard")
 
@@ -103,11 +115,22 @@ def admin_delete_group(request, slug):
     instance = get_object_or_404(Group, slug=slug)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
+    activity.title = "Grup Silme"
+    activity.method = "DELETE"
+    activity.creator = currentUser
+    activity.application = "Group"
+    activity.createdDate = datetime.datetime.now()
     if userGroup == 'admin':
         instance.delete()
+        activity.description = "Grup silme işlemi başarıyla gerçekleştirildi. İşlemi yapan kişi: " + str(activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
         messages.success(request, "Grup başarıyla silindi.")
         return redirect("admin_all_groups")
     else:
+        activity.description = "Grup silme işlemi gerçekleştirilemedi. İşlemi yapan kişi: " + str(
+            activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_dashboard")
 

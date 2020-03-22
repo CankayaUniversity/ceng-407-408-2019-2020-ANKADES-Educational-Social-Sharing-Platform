@@ -10,6 +10,7 @@ from account.models import AccountGroup, Account
 from account.views.views import current_user_group
 from adminpanel.forms import AdminArticleForm, AdminArticleCategoryForm, AdminEditArticleCategoryForm, \
     AdminEditArticleForm, AddArticleForm
+from adminpanel.models import AdminActivity
 from article.models import Article, ArticleCategory
 
 
@@ -38,6 +39,7 @@ def admin_add_article(request):
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = AddArticleForm(request.POST or None)
+    activity = AdminActivity()
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
@@ -66,6 +68,14 @@ def admin_add_article(request):
         instance.categoryId_id = value
         instance.isActive = True
         instance.save()
+        activity.title = "Makale Ekleme: " + str(currentUser)
+        activity.application = "Article"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "INSERT"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı makale ekledi."
+        activity.save()
         messages.success(request, "Makale başarıyla eklendi !")
         return redirect("admin_dashboard")
     return render(request, "adminpanel/article/add-article.html", context)
@@ -74,14 +84,33 @@ def admin_add_article(request):
 @login_required(login_url="login_admin")
 def admin_isactive_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
     if instance.isActive is True:
         instance.isActive = False
         instance.save()
+        activity.title = "Makale aktifleştirme: " + str(currentUser)
+        activity.application = "Article"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı makale aktifliği kaldırıldı."
+        activity.save()
         messages.success(request, "Makale artık aktif değil.")
         return redirect("admin_all_articles")
     else:
         instance.isActive = True
         instance.save()
+        activity.title = "Makale Aktifleştirme: " + str(currentUser)
+        activity.application = "Article"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı makaleyi aktifleştirdi."
+        activity.save()
         messages.success(request, "Makale başarıyla aktifleştirildi.")
         return redirect("admin_all_articles")
 
@@ -107,6 +136,7 @@ def admin_add_article_category(request):
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True))
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
     context = {
         "userGroup": userGroup,
         "articleCategory": articleCategory
@@ -120,6 +150,14 @@ def admin_add_article_category(request):
             instance = ArticleCategory(parentId=value, title=title, isActive=isActive, isCategory=isCategory)
             instance.creator = request.user
             instance.save()
+            activity.title = "Makale Kategorisi Ekleme: " + str(currentUser)
+            activity.application = "Article"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "INSERT"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı makale için kategori ekledi."
+            activity.save()
             messages.success(request, "Makale kategorisi başarıyla eklendi !")
             return redirect("admin_add_article_category")
         return render(request, "adminpanel/article/add-category.html", context)
@@ -214,14 +252,33 @@ def admin_article_categories(request):
 @login_required(login_url="login_admin")
 def admin_isactive_article_category(request, slug):
     instance = get_object_or_404(ArticleCategory, slug=slug)
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
     if instance.isActive is True:
         instance.isActive = False
         instance.save()
+        activity.title = "Makale Kategorisini Aktifleştirme: " + str(currentUser)
+        activity.application = "Article"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı makale kategorisinin aktifliğini kaldırdı."
+        activity.save()
         messages.success(request, "Makale kategorisi artık aktif değil.")
         return redirect("admin_article_categories")
     else:
         instance.isActive = True
         instance.save()
+        activity.title = "Makale Kategorisini Aktifleştirme: " + str(currentUser)
+        activity.application = "Article"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı makale kategorisini aktifleştirdi."
+        activity.save()
         messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
         return redirect("admin_article_categories")
 
