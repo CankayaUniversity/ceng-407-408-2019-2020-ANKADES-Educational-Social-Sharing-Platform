@@ -1,0 +1,83 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Default box -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Makale Kategorileri</h3>
+                        </div>
+                        <button type="button" class="btn btn-success m-3" data-toggle="modal"
+                                data-target="#modal-default">
+                            Yeni Makale Ekle
+                        </button>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="article-category" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oluşturan</th>
+                                    <th>Kategori</th>
+                                    <th>Ad</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>İşlemler</th>
+                                    <th>Sil</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if articles %}
+                                    {% for article in articles %}
+                                        <tr>
+                                            <td>{{ article.id }}</td>
+                                            <td>{{ article.creator }}</td>
+                                            <td>{{ article.categoryId }}</td>
+                                            <td>{{ article.title }}</td>
+                                            <td>{{ article.slug }}</td>
+                                            <td>{{ article.createdDate }}</td>
+                                            <td>{{ article.updatedDate }}</td>
+                                            <td>{{ article.isActive }}</td>
+                                            <td>
+                                                <a type="button" href="{% url 'admin_isactive_article' article.slug %}"
+                                                   class="btn btn-warning">
+                                                    {% if article.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a type="button" href="{% url 'admin_delete_article' article.slug %}"
+                                                   class="btn btn-danger">Sil
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oluşturan</th>
+                                    <th>Kategori</th>
+                                    <th>Ad</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>İşlemler</th>
+                                    <th>Sil</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}

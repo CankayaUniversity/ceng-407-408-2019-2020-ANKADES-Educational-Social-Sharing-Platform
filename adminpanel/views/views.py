@@ -146,7 +146,7 @@ def admin_tags(request):
     context = {
         "tags": tags,
     }
-    return render(request, "admin/tags/all-tags.html", context)
+    return render(request, "adminpanel/tags/all-tags.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -155,16 +155,31 @@ def admin_add_tag(request):
     :param request:
     :return:
     """
-    form = AdminTagForm(request.POST or None)
-    context = {
-        "form": form,
-    }
-    if form.is_valid():
-        title = form.cleaned_data.get("title")
-        isActive = form.cleaned_data.get("isActive")
-        instance = Tag(title=title, isActive=isActive)
-        instance.creator = request.user
-        instance.save()
-        messages.success(request, "Etiket başarıyla eklendi !")
-        return redirect("admin_tags")
-    return render(request, "adminpanel/tags/add-tag.html", context)
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_edit_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_isactive_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_delete_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    return None

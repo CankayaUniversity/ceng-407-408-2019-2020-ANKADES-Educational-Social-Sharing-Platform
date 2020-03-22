@@ -102,39 +102,39 @@ def add_article(request):
         return redirect("index")
 
 
-@login_required(login_url="login_admin")
-def edit_article(request, slug):
-    """
-    :param request:
-    :param slug:
-    :return:
-    """
-    accountGroup = AccountGroup.objects.filter(
-        Q(userId__username=request.user.username, groupId__slug="admin") |
-        Q(userId__username=request.user.username, groupId__slug="moderator") |
-        Q(userId__username=request.user.username, groupId__slug="ogretmen"))
-    currentUser = request.user.username
-    instance = get_object_or_404(Article, slug=slug)
-    if accountGroup:
-        if instance.creator.username == currentUser:
-            form = EditArticleForm(request.POST or None, request.FILES or None, instance=instance)
-            if form.is_valid():
-                instance = form.save(commit=False)
-                instance.creator = request.user
-                instance.updatedDate = datetime.datetime.now()
-                instance.save()
-                messages.success(request, "Makale başarıyla düzenlendi !")
-                context = {
-                    "form": form,
-                }
-                return render(request, "ankades/../templates/test/article/edit-article.html", context)
-            return render(request, "ankades/../templates/test/article/edit-article.html", {"form": form})
-        else:
-            messages.error(request, "Sizin makaleniz değil")
-            return redirect("index")
-    else:
-        messages.error(request, "Yetkiniz yok")
-        return redirect("index")
+# @login_required(login_url="login_admin")
+# def edit_article(request, slug):
+#     """
+#     :param request:
+#     :param slug:
+#     :return:
+#     """
+#     accountGroup = AccountGroup.objects.filter(
+#         Q(userId__username=request.user.username, groupId__slug="admin") |
+#         Q(userId__username=request.user.username, groupId__slug="moderator") |
+#         Q(userId__username=request.user.username, groupId__slug="ogretmen"))
+#     currentUser = request.user.username
+#     instance = get_object_or_404(Article, slug=slug)
+#     if accountGroup:
+#         if instance.creator.username == currentUser:
+#             form = EditArticleForm(request.POST or None, request.FILES or None, instance=instance)
+#             if form.is_valid():
+#                 instance = form.save(commit=False)
+#                 instance.creator = request.user
+#                 instance.updatedDate = datetime.datetime.now()
+#                 instance.save()
+#                 messages.success(request, "Makale başarıyla düzenlendi !")
+#                 context = {
+#                     "form": form,
+#                 }
+#                 return render(request, "ankades/../templates/test/article/edit-article.html", context)
+#             return render(request, "ankades/../templates/test/article/edit-article.html", {"form": form})
+#         else:
+#             messages.error(request, "Sizin makaleniz değil")
+#             return redirect("index")
+#     else:
+#         messages.error(request, "Yetkiniz yok")
+#         return redirect("index")
 
 
 def article_categories(request):

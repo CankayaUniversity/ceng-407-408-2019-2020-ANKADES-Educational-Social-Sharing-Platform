@@ -44,24 +44,58 @@ def admin_add_article(request):
         "form": form,
     }
     if request.method == "POST":
-        value = request.POST.get("value")
+        value = request.POST['id']
         title = request.POST.get("title")
-        description = form.cleaned_data.get("description")
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
         isPrivate = request.POST.get("isPrivate") == "on"
         isActive = request.POST.get("isActive") == "on"
-        media = request.FILES['media']
-        fs = FileSystemStorage()
-        fs.save(media.name, media)
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
         if not title and description:
             messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
             return render(request, "adminpanel/article/add-article.html", context)
-        instance = Article(categoryId=value, title=title, description=description,
-                           isPrivate=isPrivate, media=media, isActive=isActive)
+        instance = Article(title=title, description=description,
+                           isPrivate=isPrivate, isActive=isActive)
+        if request.FILES:
+            media = request.FILES.get('media')
+            fs = FileSystemStorage()
+            fs.save(media.name, media)
+            instance.media = media
         instance.creator = request.user
+        instance.categoryId_id = value
+        instance.isActive = True
         instance.save()
         messages.success(request, "Makale başarıyla eklendi !")
-        return redirect("index")
+        return redirect("admin_dashboard")
     return render(request, "adminpanel/article/add-article.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_isactive_article(request, slug):
+    instance = get_object_or_404(Article, slug=slug)
+    if instance.isActive is True:
+        instance.isActive = False
+        instance.save()
+        messages.success(request, "Makale artık aktif değil.")
+        return redirect("admin_all_articles")
+    else:
+        instance.isActive = True
+        instance.save()
+        messages.success(request, "Makale başarıyla aktifleştirildi.")
+        return redirect("admin_all_articles")
+
+
+@login_required(login_url="login_admin")
+def admin_delete_article(request, slug):
+    instance = get_object_or_404(Article, slug=slug)
+    if instance.isActive is True:
+        messages.error(request, "Makale aktif olduğu için silme işlemi gerçekleştirilemedi.")
+        return redirect("admin_all_articles")
+    else:
+        instance.delete()
+        messages.success(request, "Makale başarıyla silindi.")
+        return redirect("admin_all_articles")
 
 
 @login_required(login_url="login_admin")

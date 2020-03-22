@@ -97,14 +97,15 @@ urlpatterns = [
     #      name="admin_delete_course_category"),
 
     # Article
-    url(r'^admin/makaleler/', article.admin_all_articles, name="admin_all_articles"),
-    url(r'^admin/makaleler/ekle', article.admin_add_article, name="admin_add_article"),
-    # path('makaleler/duzenle/<slug:slug>', article.admin_edit_article, name="admin_edit_article"),
-    # path('makaleler/sil/<slug:slug>', article.admin_delete_article, name="admin_delete_article"),
+    path('admin/makaleler/', article.admin_all_articles, name="admin_all_articles"),
+    path('admin/makale-ekle', article.admin_add_article, name="admin_add_article"),
+    path('makaleler/<slug:slug>/isactive/', article.admin_isactive_article, name="admin_isactive_article"),
+    path('makaleler/<slug:slug>/sil/', article.admin_delete_article, name="admin_delete_article"),
+    # path('makale/<slug:slug>/duzenle/', article.admin_edit_article, name="admin_edit_article"),
 
     # Tag
-    # path('etiketler/', views.admin_tags, name="admin_tags"),
-    # path('etiketler/ekle', views.admin_add_tag, name="admin_add_tag"),
+    path('admin/etiketler/', views.admin_tags, name="admin_tags"),
+    path('admin/etiket/ekle', views.admin_add_tag, name="admin_add_tag"),
     # path('etiketler/duzenle/<slug:slug>', article.admin_edit_tag, name="admin_edit_tag"),
     # path('etiketler/sil/<slug:slug>', article.admin_delete_tag, name="admin_delete_tag"),
     #

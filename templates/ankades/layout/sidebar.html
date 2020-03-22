@@ -1,5 +1,5 @@
 {% load static %}
-<aside class="main-sidebar sidebar-dark-blue elevation-4" style="background: #0e396c; color: #fff">
+<aside class="main-sidebar sidebar-dark-blue elevation-4" style="background-image: url({% static 'slide01.jpg ' %}); background-size: cover; background-blend-mode: difference; color: #fff">
     <!-- Brand Logo -->
     <a href="{% url 'index' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}"
@@ -13,20 +13,22 @@
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
         {% if request.user.is_authenticated %}
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="{{ request.user.image.url }}" class="img-circle elevation-2" alt="User Image">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ request.user.image.url }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="{# {% url 'edit_profile' request.user.username %} #}"
+                       class="d-block">{{ request.user.username }}</a>
+                </div>
             </div>
-            <div class="info">
-                <a href="{# {% url 'edit_profile' request.user.username %} #}" class="d-block">{{ request.user.username }}</a>
-            </div>
-        </div>
         {% endif %}
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
+                <li class="nav-header">Navigasyon</li>
                 <li class="nav-item has-treeview">
                     <a href="{% url 'index' %}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -34,35 +36,6 @@
                             Dashboard
                         </p>
                     </a>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Tables
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="../tables/simple.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Simple Tables</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../tables/data.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>DataTables</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../tables/jsgrid.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>jsGrid</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="nav-header">EXAMPLES</li>
                 <li class="nav-item has-treeview">
@@ -94,11 +67,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-header">Makale</li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
-                            Kategoriler
+                            Makale
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -106,25 +80,16 @@
                         <li class="nav-item">
                             <a href="../chat/mailbox.html" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Makale</p>
+                                <p>Tüm Makaleler</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="../chat/compose.html" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Kurs</p>
+                                <p>Makale Kategorileri</p>
                             </a>
                         </li>
                     </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-plus-square"></i>
-                        <p>
-                            Extras
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
                 </li>
                 <li class="nav-header">MULTI LEVEL EXAMPLE</li>
                 <li class="nav-item">
