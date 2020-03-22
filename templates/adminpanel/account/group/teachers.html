@@ -11,14 +11,14 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="teacher" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Kullanıcı Id</th>
-                                    <th>Grup ID</th>
                                     <th>Kullanıcı Adı</th>
                                     <th>Grup Adı</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -26,20 +26,20 @@
                                     {% for teacher in teachers %}
                                         <tr>
                                             <td>{{ teacher.id }}</td>
-                                            <td>{{ teacher.userId.id }}</td>
-                                            <td>{{ teacher.groupId.id }}</td>
-                                            <td>{{ teacher.userId.username }}</td>
-                                            <td>{{ teacher.groupId.title }}</td>
+                                            <td>{{ teacher.userId }}</td>
+                                            <td>{{ teacher.groupId }}</td>
+                                            <td>{{ teacher.user_id }}</td>
+                                            <td>{{ teacher.groupId_id }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Kullanıcı Id</th>
-                                    <th>Grup ID</th>
                                     <th>Kullanıcı Adı</th>
                                     <th>Grup Adı</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
                                 </tr>
                                 </tfoot>
                             </table>

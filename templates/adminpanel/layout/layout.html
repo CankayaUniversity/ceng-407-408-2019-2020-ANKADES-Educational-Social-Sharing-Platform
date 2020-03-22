@@ -58,14 +58,7 @@
         });
     });
 </script>
-<script>
-    $(function () {
-        $("#admin").DataTable();
-        $('#moderator').DataTable();
-        $('#teacher').DataTable();
-        $('#student').DataTable();
-    });
-</script>
+<script type="text/javascript" src="{% static 'js/tables.js' %}"></script>
 <script>
     let header = document.getElementById("sidebar");
     let btns = header.getElementsByClassName("nav-item");

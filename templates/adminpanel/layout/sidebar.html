@@ -89,6 +89,53 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Makaleler
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'admin_all_articles' %}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Liste</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url  'admin_add_article' %}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ekle</p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Kategoriler
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'admin_article_categories' %}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Liste</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'admin_add_article_category' %}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Ekle</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 {% if userGroup == 'admin' %}
                     <li class="nav-header">Admin</li>
                     <li class="nav-item has-treeview">
@@ -163,32 +210,6 @@
                         </ul>
                     </li>
                 {% endif %}
-
-
-                <li class="nav-header">Sosyal Medya</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Sosyal Medya
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{% url 'admin_all_groups' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Sosyal Medyalar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'admin_add_group' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Sosyal Medya Ekle</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
 
                 <li class="nav-header">EXAMPLES</li>
                 <li class="nav-item has-treeview">
@@ -318,6 +339,12 @@
                     </a>
                 </li>
                 <li class="nav-header">Paylaşım</li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_tags' %}" class="nav-link">
+                        <i class="nav-icon far fa-circle text-danger"></i>
+                        <p class="text">Etiketler</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-circle text-danger"></i>

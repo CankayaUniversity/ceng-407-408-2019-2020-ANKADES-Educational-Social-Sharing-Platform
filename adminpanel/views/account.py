@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.forms import AccountRegisterForm
@@ -111,7 +112,7 @@ def admin_admins(request):
         "students": students,
         "userGroup": userGroup,
     }
-    return render(request, "adminpanel/account/group/user-groups.html", context)
+    return render(request, "adminpanel/account/group/admins.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -120,7 +121,26 @@ def admin_edit_profile(request, username):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     schools = School.objects.filter(Q(isActive=False, isCategory=False))
+    activity = AdminActivity()
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        username = request.POST.get("username")
+        instance.first_name = first_name
+        instance.last_name = last_name
+        instance.username = username
+        instance.save()
+        activity.title = "Profil Güncelleme: " + str(currentUser)
+        activity.application = "Account"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = instance
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı hesabını güncelledi."
+        activity.save()
+        messages.success(request, "Profil başarıyla güncellendi.")
+        return redirect(reverse("admin_edit_profile", kwargs={"username": username}))
     context = {
+        "instance": instance,
         "currentUser": currentUser,
         "userGroup": userGroup,
         "schools": schools,

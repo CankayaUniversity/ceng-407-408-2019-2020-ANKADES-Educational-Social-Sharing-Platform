@@ -14,6 +14,7 @@ from account.views.views import current_user_group
 from adminpanel.forms import AdminEditGroupForm
 
 
+@login_required(login_url="login_admin")
 def admin_all_groups(request, slug=None):
     """
     :param slug:
@@ -47,7 +48,7 @@ def admin_all_groups(request, slug=None):
         return redirect("admin_all_groups")
 
 
-@login_required(login_url="login_account")
+@login_required(login_url="login_admin")
 def admin_edit_group(request, slug):
     """
     :param request:

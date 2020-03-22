@@ -116,7 +116,7 @@ class SocialMedia(models.Model):
     isActive = models.BooleanField(default=True, null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    media = models.FileField(null=True, blank=True, default=None, upload_to='socialmedia/')
+    media = models.FileField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.title
@@ -168,6 +168,7 @@ class AccountActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.PROTECT)
     title = models.CharField(max_length=254)
+    slug = models.SlugField()
     application = models.CharField(max_length=254)
     description = models.CharField(max_length=254)
     method = models.CharField(max_length=254)

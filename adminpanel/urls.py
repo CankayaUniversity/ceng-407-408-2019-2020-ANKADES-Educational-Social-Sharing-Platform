@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group
+from adminpanel.views import group, socialmedia
 from adminpanel.views import views, account, article
 from adminpanel.views.group import IsActiveGroupToggle, IsActiveGroupAPIToggle
 
@@ -12,10 +12,6 @@ urlpatterns = [
     path('admin/', views.admin_dashboard, name="admin_dashboard"),
     path('admin/ayarlar/site', views.admin_settings, name="admin_settings"),
     path('admin/ayarlar/hesap', views.admin_account_settings, name="admin_account_settings"),
-    path('admin/sosyal-medya/', views.admin_all_social_medias, name="admin_all_social_medias"),
-    path('admin/sosyal-medya/ekle', views.admin_add_social_media, name="admin_add_social_media"),
-    path('admin/ayarlar/sosyal-medya/duzenle/<slug:slug>', views.admin_edit_social_media,
-         name="admin_edit_social_media"),
     path('admin/ayarlar/grup', views.admin_group_settings, name="admin_group_settings"),
     path('admin/ayarlar/izin', views.admin_permission_settings, name="admin_permission_settings"),
     # path('ayarlar/yeni-kullanici-ekle', account.admin_register_account, name="admin_register_account"),
@@ -101,19 +97,25 @@ urlpatterns = [
     #      name="admin_delete_course_category"),
 
     # Article
-    # path('makaleler/', article.admin_articles, name="admin_articles"),
-    path('admin/makaleler/ekle', article.admin_add_article, name="admin_add_article"),
-    # path('makaleler/duzenle/<slug:slug>', article.admin_edit_article, name="admin_edit_article"),
-    # path('makaleler/sil/<slug:slug>', article.admin_delete_article, name="admin_delete_article"),
-    #
-    # #Tag
-    # path('etiketler/', views.admin_tags, name="admin_tags"),
-    # path('etiketler/ekle', views.admin_add_tag, name="admin_add_tag"),
+    path('admin/makaleler/', article.admin_all_articles, name="admin_all_articles"),
+    path('admin/makale-ekle', article.admin_add_article, name="admin_add_article"),
+    path('makaleler/<slug:slug>/isactive/', article.admin_isactive_article, name="admin_isactive_article"),
+    path('makaleler/<slug:slug>/sil/', article.admin_delete_article, name="admin_delete_article"),
+    # path('makale/<slug:slug>/duzenle/', article.admin_edit_article, name="admin_edit_article"),
+
+    # Tag
+    path('admin/etiketler/', views.admin_tags, name="admin_tags"),
+    path('admin/etiket/ekle', views.admin_add_tag, name="admin_add_tag"),
     # path('etiketler/duzenle/<slug:slug>', article.admin_edit_tag, name="admin_edit_tag"),
     # path('etiketler/sil/<slug:slug>', article.admin_delete_tag, name="admin_delete_tag"),
     #
-    # # Article Category
-    # path('makaleler/makale-kategorileri/', article.admin_article_category, name="admin_article_category"),
+
+    # Article Category
+    path('admin/makale-kategorileri/', article.admin_article_categories, name="admin_article_categories"),
+    path('admin/makale-kategorileri/isactive/<slug:slug>', article.admin_isactive_article_category,
+         name="admin_isactive_article_category"),
+    path('admin/makale-kategorileri/sil/<slug:slug>', article.admin_delete_article_category,
+         name="admin_delete_article_category"),
     path('admin/makaleler/makale-kategorileri/ekle/', article.admin_add_article_category,
          name="admin_add_article_category"),
     # path('makaleler/makale-kategorileri/duzenle/<slug:slug>', article.admin_edit_article_category,
@@ -121,6 +123,15 @@ urlpatterns = [
     # path('makaleler/makale-kategorileri/sil/<slug:slug>', article.admin_delete_article_category,
     #      name="admin_delete_article_category"),
 
+    # Social Media
+    path('admin/sosyal-medya/', socialmedia.admin_all_social_medias, name="admin_all_social_medias"),
+    path('admin/sosyal-medya/ekle', socialmedia.admin_add_social_media, name="admin_add_social_media"),
+    path('admin/sosyal-medya/duzenle/<slug:slug>', socialmedia.admin_edit_social_media,
+         name="admin_edit_social_media"),
+    path('admin/sosyal-medya/isactive/<slug:slug>', socialmedia.admin_isactive_socialmedia,
+         name="admin_isactive_socialmedia"),
+    path('admin/sosyal-medya/sil/<slug:slug>', socialmedia.admin_delete_socialmedia,
+         name="admin_delete_socialmedia"),
 ]
 
 if settings.DEBUG:

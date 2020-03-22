@@ -2,21 +2,18 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from online_users.models import OnlineUserActivity
-from rest_framework.generics import get_object_or_404
-from account.models import Account, Permission, SocialMedia, AccountGroup
+from account.models import Account, AccountGroup
 from account.views.views import current_user_group
-from adminpanel.forms import AdminLoginForm, AdminSocialMediaForm, AdminEditSocialMediaForm, AdminTagForm
-from adminpanel.models import Tag, AdminActivity
-from article.models import ArticleCategory, Article
-from course.models import CourseCategory, Course
-from exam.models import Exam, School
+from adminpanel.forms import AdminLoginForm, AdminTagForm
+from adminpanel.models import Tag
+from article.models import Article
+from course.models import Course
 
 
-@login_required(login_url="login_account")
+@login_required(login_url="login_admin")
 def admin_dashboard(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
@@ -43,35 +40,35 @@ def admin_dashboard(request):
 
 
 def login_admin(request):
-    if request.user.is_authenticated:
-        return redirect("logout_account")
-    else:
-        isAdmin = True
-        form = AdminLoginForm(request.POST or None)
-        context = {"form": form}
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            accountGroup = AccountGroup.objects.filter(
-                Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
-                    userId__username=form.cleaned_data.get('username'), groupId__slug="admin"))
-            if accountGroup:
-                user = authenticate(username=username, password=password)
-                if user is None:
-                    return render(request, "admin/login.html", {"form": form, "accountGroup": accountGroup})
-                else:
-                    if user.is_active:
-                        login(request, user)
-                        messages.success(request, "Hoş geldiniz " + user.get_full_name())
-                        return redirect("admin_dashboard")
-                    else:
-                        messages.error(request, "Kullanıcı aktif değil !")
-                        return redirect("admin_dashboard")
+    """
+    :param request:
+    :return:
+    """
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            remember = request.POST.get("remember")
+            user = authenticate(username=username, password=password)
+            try:
+                get_user = Account.objects.get(username=username)
+                if not get_user.is_staff:
+                    messages.error(request, "Admin panele giriş yetkiniz yok.")
+                    return redirect("admin_dashboard")
+            except Account.DoesNotExist:
+                return redirect("admin_dashboard")
+
+            login(request, user)
+            if remember:
+                request.session.set_expiry(1209600)
             else:
-                messages.error(request,
-                               "Admin paneline giriş yetkiniz yok ya da böyle bir kullanıcı bulunamadı! Log alındı.")
-                return redirect("login_admin")
-    return render(request, "admin/login.html", context)
+                request.session.set_expiry(0)
+            messages.success(request, "Başarıyla giriş yapıldı.")
+            return redirect("admin_dashboard")
+        return render(request, "adminpanel/registration/login.html")
+    else:
+        messages.warning(request, "Zaten giriş yapılmış.")
+        return redirect("admin_dashboard")
 
 
 @login_required(login_url="login_admin")
@@ -115,69 +112,6 @@ def admin_account_settings(request):
     return None
 
 
-# Social Media Settings
-@login_required(login_url="login_admin")
-def admin_all_social_medias(request):
-    socialMedias = SocialMedia.objects.all()
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    context = {
-        "socialMedias": socialMedias,
-        "userGroup": userGroup,
-    }
-    return render(request, "adminpanel/social-media/social-medias.html", context)
-
-
-@login_required(login_url="login_admin")
-def admin_add_social_media(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    if request.method == "POST" and request.FILES['media']:
-        title = request.POST.get("title")
-        isActive = request.POST.get("isActive") == 'on'
-        media = request.FILES['media']
-        fs = FileSystemStorage()
-        fs.save(media.name, media)
-        if SocialMedia.objects.filter(title=title):
-            messages.error(request, "Bu sosyal medya daha önce eklenmiş")
-            return redirect("admin_add_social_media")
-        else:
-            new_sm = SocialMedia(title=title, media=media, isActive=isActive)
-            new_sm.save()
-            messages.success(request, "Sosyal Medya kayıt işlemi başarıyla gerçekleştirildi.")
-            return redirect("admin_all_social_medias")
-    context = {
-        "userGroup": userGroup,
-    }
-    return render(request, "adminpanel/social-media/add-social-media.html", context)
-
-
-@login_required(login_url="login_admin")
-def admin_edit_social_media(request, slug):
-    """
-    :param request:
-    :param slug:
-    :return:
-    """
-    # instance = get_object_or_404(SocialMedia, slug=slug)
-    # form = AdminEditSocialMediaForm(request.POST or None, instance=instance)
-    # adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    # context = {
-    #     "form": form,
-    #     "adminGroup": adminGroup,
-    # }
-    # if form.is_valid():
-    #     instance = form.save(commit=False)
-    #     instance.title = form.cleaned_data.get("title")
-    #     instance.slug = form.cleaned_data.get("slug")
-    #     instance.updatedDate = datetime.datetime.now()
-    #     instance.save()
-    #     messages.success(request, "Sosyal medya başarıyla düzenlendi !")
-    #     return redirect("admin_social_media_settings")
-    # return render(request, "admin/settings/edit-social-media.html", context)
-    return None
-
-
 # Group Settings
 @login_required(login_url="login_admin")
 def admin_group_settings(request):
@@ -212,7 +146,7 @@ def admin_tags(request):
     context = {
         "tags": tags,
     }
-    return render(request, "admin/tags/all-tags.html", context)
+    return render(request, "adminpanel/tags/all-tags.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -221,16 +155,31 @@ def admin_add_tag(request):
     :param request:
     :return:
     """
-    form = AdminTagForm(request.POST or None)
-    context = {
-        "form": form,
-    }
-    if form.is_valid():
-        title = form.cleaned_data.get("title")
-        isActive = form.cleaned_data.get("isActive")
-        instance = Tag(title=title, isActive=isActive)
-        instance.creator = request.user
-        instance.save()
-        messages.success(request, "Etiket başarıyla eklendi !")
-        return redirect("admin_tags")
-    return render(request, "admin/tags/add-tag.html", context)
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_edit_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_isactive_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    return None
+
+
+@login_required(login_url="login_admin")
+def admin_delete_tag(request):
+    """
+    :param request:
+    :return:
+    """
+    return None

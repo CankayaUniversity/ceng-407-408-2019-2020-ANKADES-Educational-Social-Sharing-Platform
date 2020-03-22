@@ -1,0 +1,57 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Etiketler</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="tag" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Adı</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarih</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Görüntülenme</th>
+                                    <th>Aktiflik</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if tags %}
+                                    {% for tag in tags %}
+                                        <tr>
+                                            <td>{{ tag.id }}</td>
+                                            <td>{{ tag.title }}</td>
+                                            <td>{{ tag.slug }}</td>
+                                            <td>{{ tag.createdDate }}</td>
+                                            <td>{{ tag.updatedDate }}</td>
+                                            <td>{{ tag.view }}</td>
+                                            <td>{{ tag.isActive }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Adı</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarih</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Görüntülenme</th>
+                                    <th>Aktiflik</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

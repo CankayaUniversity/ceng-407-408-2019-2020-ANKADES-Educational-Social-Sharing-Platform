@@ -1,5 +1,6 @@
 {% extends 'adminpanel/layout/layout.html' %}
 {% load crispy_forms_tags %}
+{% load crispy_forms_field %}
 {% load static %}
 {% block content %}
     <!-- Main content -->
@@ -15,17 +16,17 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form role="form" method="post" id="quickForm" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{% url 'admin_add_article' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Kategori*</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
+                                    <select class="form-control select2bs4" style="width: 100%;" name="id"
                                             required>
                                         <option disabled>Lütfen bir kategori seçiniz</option>
                                         {% if articleCategory %}
                                             {% for category in articleCategory %}
-                                                <option value="{{ category.title }}">{{ category.title }}</option>
+                                                <option value="{{ category.id }}">{{ category.title }}</option>
                                             {% endfor %}
                                         {% endif %}
                                     </select>
@@ -34,20 +35,28 @@
                                     <label>Başlık*</label>
                                     <input type="text" class="form-control" name="title" placeholder="Başlık">
                                 </div>
-                                {{ form.description }}
+                                <div class="form-group mb-0">
+                                    <div class="custom-control">
+                                        {{ form.description }}
+                                    </div>
+                                </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         {{ form.isPrivate }}
                                         <label class="custom-control-label" for="exampleCheck1">Özel</label>
                                     </div>
                                 </div>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="media" id="exampleInputFile">
-                                        <label class="custom-file-label" for="exampleInputFile">Bir resim Seçin</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="">Yükle</span>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Dosya Seçin</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="media"
+                                                   id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">Dosya seçin</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="">Yükle</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

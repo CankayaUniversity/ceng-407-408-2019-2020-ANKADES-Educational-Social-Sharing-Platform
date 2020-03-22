@@ -11,14 +11,14 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="student" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Kullanıcı Id</th>
-                                    <th>Grup ID</th>
                                     <th>Kullanıcı Adı</th>
                                     <th>Grup Adı</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Id</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -26,10 +26,10 @@
                                     {% for student in students %}
                                         <tr>
                                             <td>{{ student.id }}</td>
-                                            <td>{{ student.userId.id }}</td>
-                                            <td>{{ student.groupId.id }}</td>
-                                            <td>{{ student.userId.username }}</td>
-                                            <td>{{ student.groupId.title }}</td>
+                                            <td>{{ student.userId }}</td>
+                                            <td>{{ student.groupId }}</td>
+                                            <td>{{ student.userId_id }}</td>
+                                            <td>{{ student.groupId_id }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
