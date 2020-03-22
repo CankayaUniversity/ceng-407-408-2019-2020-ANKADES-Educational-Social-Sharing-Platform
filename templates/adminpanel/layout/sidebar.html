@@ -33,7 +33,7 @@
                 <li class="nav-header">Navigasyon</li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="nav-icon fas fa-mobile-alt"></i>
                         <p>
                             Sosyal Medya
                             <i class="fas fa-angle-left right"></i>
@@ -56,7 +56,7 @@
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="nav-icon fas fa-user-friends"></i>
                         <p>
                             Kullanıcılar
                             <i class="fas fa-angle-left right"></i>
@@ -136,11 +136,46 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_all_groups' %}" class="nav-link">
+                        <i class="fa fa-users nav-icon"></i>
+                        <p>Gruplar</p>
+                    </a>
+                </li>
                 {% if userGroup == 'admin' %}
                     <li class="nav-header">Admin</li>
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                        <a href="javascript:void(0)" class="nav-link">
                             <i class="nav-icon fas fa-table"></i>
+                            <p>
+                                Loglar
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{% url 'admin_all_logs' %}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Tüm Loglar</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'admin_admin_logs' %}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Admin Logları</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'admin_account_logs' %}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Account Logları</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Grup
                                 <i class="fas fa-angle-left right"></i>
@@ -164,7 +199,7 @@
 
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-table"></i>
+                            <i class="nav-icon fas fa-users-cog"></i>
                             <p>
                                 Grup İzinleri
                                 <i class="fas fa-angle-left right"></i>
@@ -188,7 +223,7 @@
 
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-table"></i>
+                            <i class="nav-icon fas fa-shield-alt"></i>
                             <p>
                                 İzin
                                 <i class="fas fa-angle-left right"></i>

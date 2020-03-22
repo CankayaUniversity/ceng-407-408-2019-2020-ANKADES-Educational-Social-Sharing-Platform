@@ -80,62 +80,6 @@ def logout_admin(request):
         return redirect("login_admin")
 
 
-# Site Settings
-@login_required(login_url="login_admin")
-def admin_settings(request):
-    return None
-    # adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    # context = {
-    #     "adminGroup": adminGroup,
-    # }
-    # return render(request, "admin/settings/site-settings.html", context)
-
-
-# Account Settings
-@login_required(login_url="login_admin")
-def admin_account_settings(request):
-    # accounts = Account.objects.all()
-    # accountGroups = AccountGroup.objects.all()
-    # adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    # accountFiveLimitOrdered = Account.objects.all().order_by('-date_joined')[:5]
-    # context = {
-    #     "accounts": accounts,
-    #     "accountGroups": accountGroups,
-    #     "accountFiveLimitOrdered": accountFiveLimitOrdered,
-    #     "adminGroup": adminGroup,
-    # }
-    # if adminGroup:
-    #     return render(request, "admin/settings/account-settings.html", context)
-    # else:
-    #     messages.error(request, "Yetkiniz yok")
-    #     return redirect("admin_dashboard")
-    return None
-
-
-# Group Settings
-@login_required(login_url="login_admin")
-def admin_group_settings(request):
-    # adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    # context = {
-    #     "adminGroup": adminGroup,
-    # }
-    # return render(request, "admin/settings/group-settings.html", context)
-    return None
-
-
-# Permission Settings
-@login_required(login_url="login_admin")
-def admin_permission_settings(request):
-    # permissions = Permission.objects.all()
-    # adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-    # context = {
-    #     "permissions": permissions,
-    #     "adminGroup": adminGroup,
-    # }
-    # return render(request, "admin/settings/permission-settings.html", context)
-    return None
-
-
 @login_required(login_url="login_admin")
 def admin_tags(request):
     """
