@@ -13,33 +13,24 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="moderator" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Kullanıcı Adı</th>
-                                    <th>Ad</th>
-                                    <th>Email</th>
-                                    <th>Kayıt Tarihi</th>
-                                    <th>Son Giriş</th>
-                                    <th>Takipçi</th>
-                                    <th>Aktiflik</th>
-                                    <th>İşlemler</th>
-                                </tr>
+                                    <th>Grup</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup Id</th>
                                 </thead>
                                 <tbody>
                                 {% if moderators %}
-                                    {% for account in moderators %}
+                                    {% for moderator in moderators %}
                                         <tr>
-                                            <td>{{ account.id }}</td>
-                                            <td>{{ account.username }}</td>
-                                            <td>{{ account.get_full_name }}</td>
-                                            <td>{{ account.email }}</td>
-                                            <td>{{ account.date_joined }}</td>
-                                            <td>{{ account.last_login }}</td>
-                                            <td>{{ account.follower.count }}</td>
-                                            <td>{% if account.is_active %}Aktif{% else %}Engelli{% endif %}</td>
-                                            <td><a type="button" class="btn btn-sm btn-warning" href="{% url 'admin_block_account' account.username %}">{% if account.is_active %}Engelle{% else %}Aktifleştir{% endif %}</a></td>
+                                            <td>{{ moderator.id }}</td>
+                                            <td>{{ moderator.userId }}</td>
+                                            <td>{{ moderator.groupId }}</td>
+                                            <td>{{ moderator.user_id }}</td>
+                                            <td>{{ moderator.groupId_id }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
@@ -47,12 +38,9 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Kullanıcı Adı</th>
-                                    <th>Ad</th>
-                                    <th>Email</th>
-                                    <th>Kayıt Tarihi</th>
-                                    <th>Son Giriş</th>
-                                    <th>Takipçi</th>
-                                    <th>İşlemler</th>
+                                    <th>Grup</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup Id</th>
                                 </tr>
                                 </tfoot>
                             </table>

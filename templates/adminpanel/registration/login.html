@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ankades | Giriş Yap</title>
+    <title>Ankades Admin Panel | Giriş Yap</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -53,7 +53,7 @@
                 {% endif %}
             </p>
 
-            <form method="post" action="{% url 'login_account' %}">
+            <form method="post" action="{% url 'login_admin' %}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
                     <input type="text" name="username" class="form-control" placeholder="Kullanıcı Adı" required>
@@ -90,28 +90,6 @@
                 </div>
             </form>
 
-            <div class="social-auth-links text-center mb-3">
-                <p>- VEYA -</p>
-                <a href="#" class="btn btn-block btn-primary">
-                    <i class="fab fa-facebook mr-2"></i> Facebook ile giriş yap
-                </a>
-                <a href="#" class="btn btn-block btn-danger">
-                    <i class="fab fa-google mr-2"></i> Google ile giriş yap
-                </a>
-            </div>
-                <p class="text-center">- VEYA -</p>
-            <!-- /.social-auth-links -->
-
-            <div class="row">
-                <div class="col-9">
-                    <a href="javascript:void(0)" class="text-left">Şifremi unuttum</a>
-                </div>
-                <!-- /.col -->
-                <div class="col-3 align-left">
-                    <a href="{% url 'register_account' %}" class="text-right">Kayıt ol</a>
-                </div>
-                <!-- /.col -->
-            </div>
         </div>
         <!-- /.login-card-body -->
     </div>

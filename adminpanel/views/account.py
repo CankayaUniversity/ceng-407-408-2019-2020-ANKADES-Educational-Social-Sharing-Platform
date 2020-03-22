@@ -111,7 +111,7 @@ def admin_admins(request):
         "students": students,
         "userGroup": userGroup,
     }
-    return render(request, "adminpanel/account/group/user-groups.html", context)
+    return render(request, "adminpanel/account/group/admins.html", context)
 
 
 @login_required(login_url="login_admin")

@@ -13,7 +13,7 @@ from article.models import Article
 from course.models import Course
 
 
-@login_required(login_url="login_account")
+@login_required(login_url="login_admin")
 def admin_dashboard(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
@@ -40,34 +40,35 @@ def admin_dashboard(request):
 
 
 def login_admin(request):
-    if request.user.is_authenticated:
-        return redirect("logout_account")
-    else:
-        form = AdminLoginForm(request.POST or None)
-        context = {"form": form}
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            accountGroup = AccountGroup.objects.filter(
-                Q(userId__username=form.cleaned_data.get('username'), groupId__slug="moderator") | Q(
-                    userId__username=form.cleaned_data.get('username'), groupId__slug="admin"))
-            if accountGroup:
-                user = authenticate(username=username, password=password)
-                if user is None:
-                    return render(request, "admin/login.html", {"form": form, "accountGroup": accountGroup})
-                else:
-                    if user.is_active:
-                        login(request, user)
-                        messages.success(request, "Hoş geldiniz " + user.get_full_name())
-                        return redirect("admin_dashboard")
-                    else:
-                        messages.error(request, "Kullanıcı aktif değil !")
-                        return redirect("admin_dashboard")
+    """
+    :param request:
+    :return:
+    """
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            remember = request.POST.get("remember")
+            user = authenticate(username=username, password=password)
+            try:
+                get_user = Account.objects.get(username=username)
+                if not get_user.is_staff:
+                    messages.error(request, "Admin panele giriş yetkiniz yok.")
+                    return redirect("admin_dashboard")
+            except Account.DoesNotExist:
+                return redirect("admin_dashboard")
+
+            login(request, user)
+            if remember:
+                request.session.set_expiry(1209600)
             else:
-                messages.error(request,
-                               "Admin paneline giriş yetkiniz yok ya da böyle bir kullanıcı bulunamadı! Log alındı.")
-                return redirect("login_admin")
-    return render(request, "admin/login.html", context)
+                request.session.set_expiry(0)
+            messages.success(request, "Başarıyla giriş yapıldı.")
+            return redirect("admin_dashboard")
+        return render(request, "adminpanel/registration/login.html")
+    else:
+        messages.warning(request, "Zaten giriş yapılmış.")
+        return redirect("admin_dashboard")
 
 
 @login_required(login_url="login_admin")

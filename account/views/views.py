@@ -41,17 +41,21 @@ def login_account(request):
             password = request.POST.get("password")
             remember = request.POST.get("remember")
             user = authenticate(username=username, password=password)
-            if user is None:
-                messages.error(request, "Kullanıcı adı veya şifre hatalı.")
-                return render(request, "ankades/registration/login.html")
+            try:
+                get_user = Account.objects.get(username=username)
+                if not get_user.is_active:
+                    messages.error(request, "Kullanıcı engelli olduğu için giriş yapılamadı.")
+                    return redirect("login_account")
+            except Account.DoesNotExist:
+                return redirect("login_account")
+
+            login(request, user)
+            if remember:
+                request.session.set_expiry(1209600)
             else:
-                login(request, user)
-                if remember:
-                    request.session.set_expiry(1209600)
-                else:
-                    request.session.set_expiry(0)
-                messages.success(request, "Başarıyla giriş yapıldı.")
-                return redirect("index")
+                request.session.set_expiry(0)
+            messages.success(request, "Başarıyla giriş yapıldı.")
+            return redirect("index")
         return render(request, "ankades/registration/login.html")
     else:
         messages.warning(request, "Zaten giriş yapılmış.")

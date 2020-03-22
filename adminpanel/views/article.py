@@ -28,7 +28,7 @@ def admin_all_articles(request):
     return render(request, "adminpanel/article/all-articles.html", context)
 
 
-@login_required(login_url="login_account")
+@login_required(login_url="login_admin")
 def admin_add_article(request):
     """
     :param request:
