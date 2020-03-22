@@ -7,4 +7,8 @@ $(function () {
     $('#article-category').DataTable();
     $('#groups').DataTable();
     $('#tag').DataTable();
+    $('#all-account-logs').DataTable();
+    $('#all-admin-logs').DataTable();
+    $('#account-logs').DataTable();
+    $('#admin-logs').DataTable();
 });
