@@ -13,4 +13,4 @@ class ArticleForm(forms.Form):
 class EditArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['categoryId', 'title', 'description', 'isPrivate', 'isActive', 'media']
+        fields = ['description', 'isPrivate']

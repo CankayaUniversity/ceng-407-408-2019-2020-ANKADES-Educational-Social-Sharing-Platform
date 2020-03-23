@@ -1,0 +1,59 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <section class="content mt-3">
+        <div class="container-fluid mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary p-5">
+                        <div class="card-header">{{ instance.title }}
+                        </div>
+                        <form role="form" method="post" action="{% url 'edit_article' instance.slug %}">
+                        {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Kategori*</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="id"
+                                            required>
+                                        <option disabled>Lütfen bir kategori seçiniz</option>
+                                        {% if articleCategory %}
+                                            {% for category in articleCategory %}
+                                                <option value="{{ category.id }}">{{ category.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="title">Başlık*</label>
+                                    <input type="text" value="{{ instance.title }}" class="form-control" id="title" name="title"
+                                           placeholder="Başlık">
+                                </div>
+                                <div class="form-group">
+                                    {{ form.description }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Resim*</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">{{ instance.media }}</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="">Bilgisayarda Ara</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" {% if instance.isPrivate == True %}checked{% endif %} id="exampleCheck1">
+                                    <label class="form-check-label" for="exampleCheck1">Özellik*</label>
+                                </div>
+                                <button type="submit" class="btn btn-success mt-3">Düzenle</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

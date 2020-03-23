@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
-from account.models import Account
+from account.models import Account, AccountActivity
 from account.views.views import current_user_group
 from adminpanel.forms import AddArticleForm
 from article.forms import ArticleForm, EditArticleForm
@@ -127,39 +127,58 @@ def add_article(request):
     return render(request, "ankades/article/add-article.html", context)
 
 
-# @login_required(login_url="login_admin")
-# def edit_article(request, slug):
-#     """
-#     :param request:
-#     :param slug:
-#     :return:
-#     """
-#     accountGroup = AccountGroup.objects.filter(
-#         Q(userId__username=request.user.username, groupId__slug="admin") |
-#         Q(userId__username=request.user.username, groupId__slug="moderator") |
-#         Q(userId__username=request.user.username, groupId__slug="ogretmen"))
-#     currentUser = request.user.username
-#     instance = get_object_or_404(Article, slug=slug)
-#     if accountGroup:
-#         if instance.creator.username == currentUser:
-#             form = EditArticleForm(request.POST or None, request.FILES or None, instance=instance)
-#             if form.is_valid():
-#                 instance = form.save(commit=False)
-#                 instance.creator = request.user
-#                 instance.updatedDate = datetime.datetime.now()
-#                 instance.save()
-#                 messages.success(request, "Makale başarıyla düzenlendi !")
-#                 context = {
-#                     "form": form,
-#                 }
-#                 return render(request, "ankades/../templates/test/article/edit-article.html", context)
-#             return render(request, "ankades/../templates/test/article/edit-article.html", {"form": form})
-#         else:
-#             messages.error(request, "Sizin makaleniz değil")
-#             return redirect("index")
-#     else:
-#         messages.error(request, "Yetkiniz yok")
-#         return redirect("index")
+@login_required(login_url="login_admin")
+def edit_article(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
+    instance = get_object_or_404(Article, slug=slug)
+    activity = AccountActivity()
+    form = EditArticleForm(request.POST or None, instance=instance)
+    description = instance.description
+    if instance.creator == currentUser:
+        if request.method == "POST":
+            value = request.POST['id']
+            title = request.POST.get("title")
+            isPrivate = request.POST.get("isPrivate") == "on"
+            if form.is_valid():
+                description = form.cleaned_data.get("description")
+            if request.FILES:
+                media = request.FILES.get('media')
+                fs = FileSystemStorage()
+                fs.save(media.name, media)
+                instance.media = media
+            instance.title = title
+            instance.isPrivate = isPrivate
+            instance.description = description
+            instance.creator = request.user
+            instance.categoryId_id = value
+            instance.updatedDate = datetime.datetime.now()
+            instance.isActive = True
+            instance.save()
+            activity.title = "Makale Güncelleme"
+            activity.application = "Article"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "UPDATE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı makalesini güncelledi."
+            activity.save()
+            messages.success(request, "Makale başarıyla güncellendi.")
+            # return redirect(reverse("article_detail", kwargs={"slug": slug}))
+            return redirect("index")
+        context = {
+            "instance": instance,
+            "articleCategory": articleCategory,
+            "userGroup": userGroup,
+            "form": form,
+        }
+        return render(request, "ankades/account/posts/edit-article.html", context)
 
 
 def article_categories(request):
