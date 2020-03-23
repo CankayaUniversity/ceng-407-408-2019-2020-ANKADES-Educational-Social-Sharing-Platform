@@ -12,4 +12,5 @@ $(function () {
     $('#all-admin-logs').DataTable();
     $('#account-logs').DataTable();
     $('#admin-logs').DataTable();
+    $('#my-articles').DataTable();
 });

@@ -1,0 +1,239 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary collapsed-card">
+                        <div class="card-header" data-card-widget="collapse">
+                            <h3 class="card-title">Makaleler</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+
+                            <section class="content">
+
+                                <!-- Default box -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Makalelerim</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="my-articles" class="table table-bordered table-striped projects">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    #
+                                                </th>
+                                                <th>
+                                                    Başlık
+                                                </th>
+                                                <th>
+                                                    Detay
+                                                </th>
+                                                <th>
+                                                    Project Progress
+                                                </th>
+                                                <th>
+                                                    Status
+                                                </th>
+                                                <th>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% if articles %}
+                                                {% for article in articles %}
+                                                    <tr>
+                                                        <td>
+                                                            {{ forloop.counter }}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{% url 'article_detail' article.slug %}">
+                                                                {{ article.title }}
+                                                            </a>
+                                                            <br/>
+                                                            <small>
+                                                                {{ article.createdDate }}
+                                                            </small>
+                                                        </td>
+                                                        <td>
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    Beğeni
+                                                                    <br/>
+                                                                    <p class="text-center">{{ article.likes.count }}</p>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    Görüntülenme
+                                                                    <br/>
+                                                                    <p class="text-center">{{ article.likes.count }}</p>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    Yorum
+                                                                    <br/>
+                                                                    <p class="text-center">{{ article.articlecomment_set.count }}</p>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress-sm">
+                                                                <div class="progress-bar bg-green" role="progressbar"
+                                                                     aria-volumenow="57" aria-volumemin="0"
+                                                                     aria-volumemax="100"
+                                                                     style="width: 57%">
+                                                                </div>
+                                                            </div>
+                                                            <small>
+                                                                57% Complete
+                                                            </small>
+                                                        </td>
+                                                        <td class="project-state">
+                                                            <span class="badge badge-success">Success</span>
+                                                        </td>
+                                                        <td class="project-actions text-right">
+                                                            <a class="btn btn-primary btn-sm"
+                                                               href="{% url 'article_detail' article.slug %}">
+                                                                <i class="fas fa-folder">
+                                                                </i>
+                                                                Göster
+                                                            </a>
+                                                            <a class="btn btn-info btn-sm" href="#">
+                                                                <i class="fas fa-pencil-alt">
+                                                                </i>
+                                                                Düzenle
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-danger"
+                                                                    data-toggle="modal" data-target="#modal-delete{{ forloop.counter }}">
+                                                                <i class="fas fa-trash">
+                                                                </i>
+                                                                Sil
+                                                            </button>
+                                                            <div class="modal fade" id="modal-delete{{ forloop.counter }}">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">UYARI !</h4>
+                                                                            <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p class="text-left">Gerçekten "<span
+                                                                                    class="text-bold">{{ article.title }}</span>"
+                                                                                makalenizi silmek istediğinize emin
+                                                                                misiniz?&hellip;</p>
+                                                                        </div>
+                                                                        <div class="modal-footer justify-content-between">
+                                                                            <button type="button"
+                                                                                    class="btn btn-danger"
+                                                                                    data-dismiss="modal">İptal
+                                                                            </button>
+                                                                            <form method="post" action="{% url 'delete_article' article.slug %}">
+                                                                                {% csrf_token %}
+                                                                                <button type="submit"
+                                                                                        class="btn btn-success">Sil
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /.modal-content -->
+                                                                </div>
+                                                                <!-- /.modal-dialog -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+
+                            </section>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary collapsed-card" data-card-widget="collapse">
+                        <div class="card-header">
+                            <h3 class="card-title">Sınav Arşivi</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            The body of the card
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary collapsed-card" data-card-widget="collapse">
+                        <div class="card-header">
+                            <h3 class="card-title">Sorularım</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            The body of the card
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary collapsed-card" data-card-widget="collapse">
+                        <div class="card-header">
+                            <h3 class="card-title">Kurslar</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            The body of the card
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+
+

@@ -194,14 +194,9 @@ def article_detail(request, slug):
 @login_required(login_url="login_account")
 def delete_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
-    if instance.isActive == True:
-        instance.isActive = False
-        instance.save()
-        messages.success(request, "Makale başarıyla silindi.")
-        return redirect("my_articles")
-    else:
-        messages.error(request, "Makale zaten silinmiş.")
-        return redirect(my_articles)
+    instance.delete()
+    messages.success(request, "Makale başarıyla silindi.")
+    return redirect("user_posts")
 
 
 @login_required(login_url="login_account")

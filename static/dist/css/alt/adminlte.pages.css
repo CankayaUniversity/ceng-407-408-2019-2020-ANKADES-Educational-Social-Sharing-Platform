@@ -353,10 +353,8 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 .profile-user-img {
-  border: 3px solid #adb5bd;
   margin: 0 auto;
   padding: 3px;
-  width: 100px;
 }
 
 .profile-username {

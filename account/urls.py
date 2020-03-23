@@ -2,14 +2,15 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
-from account.views import views, user, edit
+from account.views import views, user, edit, posts
 # from account.views.api import UserProfileView, UserRegistrationView, UserLoginView, AccountGroupView, \
 #     FollowAccountAPIToggle
 from account.views.views import FollowAccountToggle
 
 urlpatterns = [
     #Current User
-    url(r'^(?P<username>\w+)/duzenle/$', edit.edit_profile, name="edit_profile"),
+    path('ayarlar/', edit.edit_profile, name="edit_profile"),
+    path('paylasimlarim/', posts.user_posts, name="user_posts"),
     url(r'^(?P<username>\w+)/sifre-sifirla/$', edit.edit_password, name="edit_password"),
 
     #Login/Register

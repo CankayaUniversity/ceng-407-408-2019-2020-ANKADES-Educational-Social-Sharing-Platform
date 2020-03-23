@@ -2,6 +2,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
@@ -12,21 +13,27 @@ from account.views.views import current_user_group
 
 
 @login_required(login_url="login_account")
-def edit_profile(request, username):
+def edit_profile(request):
     """
     :param request:
-    :param username:
     :return:
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    instance = get_object_or_404(Account, username=username)
+    instance = get_object_or_404(Account, username=currentUser)
     activity = AccountActivity()
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
+        username = request.POST.get("username")
         instance.first_name = first_name
         instance.last_name = last_name
+        instance.username = username
+        if request.FILES:
+            media = request.FILES.get('media')
+            fs = FileSystemStorage()
+            fs.save(media.name, media)
+            instance.image = media
         instance.save()
         activity.title = "Profil Güncelleme."
         activity.application = "Account"
@@ -35,7 +42,7 @@ def edit_profile(request, username):
         activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
-        return redirect(reverse("account_detail", kwargs={"username": username}))
+        return redirect(reverse("account_detail", kwargs={"username": currentUser}))
     context = {
         "instance": instance,
         "currentUser": currentUser,

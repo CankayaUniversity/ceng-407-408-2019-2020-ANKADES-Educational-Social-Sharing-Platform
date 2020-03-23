@@ -12,6 +12,7 @@ from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission
+from article.models import Article, ArticleComment
 
 
 def index(request):
@@ -159,3 +160,13 @@ def current_user_permission(self, username):
 def user_social_media(self, username):
     usm = AccountSocialMedia.objects.get(userId__username=username)
     return str(usm)
+
+
+def user_articles(self, username):
+    articles = Article.objects.filter(creator__username=username)
+    return articles
+
+
+def article_comment_count(self, slug):
+    articleCommentCount = ArticleComment.objects.filter(articleId__slug=slug)
+    return articleCommentCount

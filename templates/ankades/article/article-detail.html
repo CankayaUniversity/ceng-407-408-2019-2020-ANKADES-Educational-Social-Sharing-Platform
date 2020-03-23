@@ -17,15 +17,53 @@
                         {% if instance.media %}
                             <img class="img-fluid pad" src="{{ instance.media.url }}" alt="Photo" width="100%">
                         {% endif %}
+                            <div class="container-fluid container p-5" style="background: #f8f9fa">{{ instance.description|safe }}</div>
                         <div class="container mt-3">
-                            {{ instance.description|safe }}
-                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share
+                            <button type="button" class="btn btn-danger btn-md"><i class="fas fa-share"></i> Paylaş
                             </button>
                             <a type="button" data-href='{{ instance.get_api_like_url }}'
                                data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
-                               class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Beğen
+                               class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
                             </a>
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ articleComments.count }} Yorum</span>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-12 mt-5">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-danger"><i class="far fa-thumbs-up"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Toplam Beğeni</span>
+                                            <span class="info-box-number">{{ instance.likes.count }}</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-12 mt-5">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-primary"><i class="far fa-eye"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Toplam Gösterim</span>
+                                            <span class="info-box-number">{{ instance.view }}</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-12 mt-5">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-success"><i class="far fa-comments"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Yorum Sayısı</span>
+                                            <span class="info-box-number">{{ articleComments.count }}</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -51,7 +89,7 @@
                                         <!-- /.comment-text -->
                                     </div>
                                     <!-- /.card-comment -->
-                                <hr>
+                                    <hr>
                                 </div>
                             {% endfor %}
                             <div class="container mt-3">

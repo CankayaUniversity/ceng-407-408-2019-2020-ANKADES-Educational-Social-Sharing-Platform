@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
+                                <img class="profile-user-img img-fluid"
                                      src="{{ currentUser.image.url }}"
                                      alt="{{ currentUser.get_full_name }}">
                             </div>
@@ -58,7 +58,8 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="settings">
-                                    <form class="form-horizontal" role="form" method="post" id="edit-profile" enctype="multipart/form-data">
+                                    <form class="form-horizontal" role="form" method="post" id="edit-profile"
+                                          enctype="multipart/form-data" action="{% url 'edit_profile' %}">
                                         {% csrf_token %}
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Ad:</label>
@@ -76,6 +77,62 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="username" class="col-sm-2 col-form-label">Kullanıcı Adı:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="Kullanıcı Adı" value="{{ currentUser.username }}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleInputFile">Profil Resmi</label>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="media"
+                                                           id="exampleInputFile">
+                                                    <label class="custom-file-label" for="exampleInputFile">Profil Resmi Seçin</label>
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="">Yükle</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" class="btn btn-success">Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="socialMedia">
+                                    <form class="form-horizontal" role="form" method="post" id="edit-profile"
+                                          enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group row">
+                                            <label for="inputName"
+                                                   class="col-sm-2 col-form-label">Adsafdasfdsad:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="first_name"
+                                                       name="first_name"
+                                                       placeholder="Ad" value="{{ currentUser.first_name }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail" class="col-sm-2 col-form-label">Soyad:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="last_name" name="last_name"
+                                                       placeholder="Soyad" value="{{ currentUser.last_name }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="username" class="col-sm-2 col-form-label">Kullanıcı Adı:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="Kullanıcı Adı" value="{{ currentUser.username }}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
                                                 <button type="submit" class="btn btn-success">Kaydet</button>
                                             </div>
@@ -84,6 +141,7 @@
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
+                            <!-- /.tab-pane -->
                             <!-- /.tab-content -->
                         </div><!-- /.card-body -->
                     </div>

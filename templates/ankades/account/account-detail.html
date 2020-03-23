@@ -12,12 +12,12 @@
                         </div>
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
+                                <img class="profile-user-img img-fluid"
                                      src="{{ userDetail.image.url }}"
                                      alt="{{ userDetail.get_full_name }}">
                             </div>
                             <h3 class="profile-username text-center">{{ userDetail.get_full_name }}</h3>
-                            <p class="text-muted text-center">{{ userOccupation.groupId.title }}</p>
+                            <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <hr>
                             <button type="button" class="btn btn-block btn-primary btn-xs">Profil Resmimi Güncelle
                             </button>
@@ -27,6 +27,7 @@
                                 B.S. in Computer Science from the University of Tennessee at Knoxville
                             </p>
                             <hr>
+                            F
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
                             <p class="text-muted">Malibu, California</p>
                             <hr>
@@ -356,6 +357,36 @@
                     <!-- /.nav-tabs-custom -->
                 </div>
                 <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="card card-widget widget-user-2 card-body">
+                        <div class="p-0">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        Makaleler <span class="float-right badge bg-primary">31</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        Kurslar <span class="float-right badge bg-info">5</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        Sorular <span class="float-right badge bg-success">12</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        Çıkmış Sınav Soruları <span class="float-right badge bg-danger">842</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->
