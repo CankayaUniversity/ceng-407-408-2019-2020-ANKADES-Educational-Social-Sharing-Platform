@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import RedirectView
@@ -12,6 +13,7 @@ from rest_framework.generics import get_object_or_404
 from account.models import Account, AccountActivity
 from account.views.views import current_user_group
 from adminpanel.forms import AddArticleForm
+from ankadescankaya.slug import slug_save
 from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
@@ -159,7 +161,7 @@ def edit_article(request, slug):
             instance.creator = request.user
             instance.categoryId_id = value
             instance.updatedDate = datetime.datetime.now()
-            instance.isActive = True
+            instance.isActive = False
             instance.save()
             activity.title = "Makale Güncelleme"
             activity.application = "Article"
@@ -169,6 +171,7 @@ def edit_article(request, slug):
             activity.description = str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı makalesini güncelledi."
             activity.save()
+            pre_save.connect(slug_save, sender=edit_article)
             messages.success(request, "Makale başarıyla güncellendi.")
             # return redirect(reverse("article_detail", kwargs={"slug": slug}))
             return redirect("index")
