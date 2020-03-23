@@ -5,6 +5,7 @@ $(function () {
     $('#student').DataTable();
     $('#social-media').DataTable();
     $('#article-category').DataTable();
+    $('#all-articles').DataTable();
     $('#groups').DataTable();
     $('#tag').DataTable();
     $('#all-account-logs').DataTable();

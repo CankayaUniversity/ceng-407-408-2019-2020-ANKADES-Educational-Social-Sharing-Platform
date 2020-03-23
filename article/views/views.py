@@ -1,6 +1,7 @@
 import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -10,6 +11,7 @@ from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 from account.models import Account
 from account.views.views import current_user_group
+from adminpanel.forms import AddArticleForm
 from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
@@ -63,43 +65,66 @@ def all_articles(request):
         return render(request, "ankades/../templates/test/article/articles.html", context)
 
 
+@login_required(login_url="login_admin")
+def article_categories(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    categories = ArticleCategory.objects.all()
+    article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
+    context = {
+        "categories": categories,
+        "userGroup": userGroup,
+        "article_categories_limit": article_categories_limit,
+        "currentUser": currentUser,
+    }
+    return render(request, "adminpanel/article/categories.html", context)
+
+
 @login_required(login_url="login_account")
 def add_article(request):
     """
     :param request:
     :return:
     """
-    form = ArticleForm(request.POST or None)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
+    form = AddArticleForm(request.POST or None)
     context = {
-        "form": form,
         "articleCategory": articleCategory,
         "userGroup": userGroup,
+        "form": form,
     }
-    if userGroup == 'admin':
-        if request.method == "POST":
-            value = request.POST.get("value")
-            title = request.POST.get("title")
-            description = request.POST.get("description")
-            isPrivate = request.POST.get("isPrivate")
-            media = request.POST.get("media")
-            if not title and description:
-                messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
-                return render(request, "ankades/article/add-article.html", context)
-
-            instance = Article(categoryId=value, title=title, description=description,
-                               isPrivate=isPrivate, media=media)
-            instance.isActive = True
-            instance.creator = request.user
-            instance.save()
-            messages.success(request, "Makale başarıyla eklendi !")
-            return redirect("index")
-        return render(request, "ankades/article/add-article.html", context)
-    else:
-        messages.error(request, "Yetkiniz yok!")
+    if request.method == "POST":
+        value = request.POST['id']
+        title = request.POST.get("title")
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
+        isPrivate = request.POST.get("isPrivate") == "on"
+        isActive = request.POST.get("isActive") == "on"
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
+        if not title and description:
+            messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
+            return render(request, "ankades/article/add-article.html", context)
+        instance = Article(title=title, description=description,
+                           isPrivate=isPrivate, isActive=isActive)
+        if request.FILES:
+            media = request.FILES.get('media')
+            fs = FileSystemStorage()
+            fs.save(media.name, media)
+            instance.media = media
+        instance.creator = request.user
+        instance.categoryId_id = value
+        instance.isActive = True
+        instance.save()
+        messages.success(request, "Makale başarıyla eklendi !")
         return redirect("index")
+    return render(request, "ankades/article/add-article.html", context)
 
 
 # @login_required(login_url="login_admin")
@@ -141,9 +166,9 @@ def article_categories(request):
     keyword = request.GET.get("keyword")
     if keyword:
         searchCategories = ArticleCategory.objects.filter(title__contains=keyword)
-        return render(request, "ankades/../templates/test/article/articles.html", {"searchCategories": searchCategories})
+        return render(request, "ankades/article/categories.html", {"searchCategories": searchCategories})
     categories = ArticleCategory.objects.all()
-    return render(request, "ankades/../templates/test/article/articles.html", {"categories": categories})
+    return render(request, "ankades/article/categories.html", {"categories": categories})
 
 
 def article_detail(request, slug):
@@ -163,7 +188,7 @@ def article_detail(request, slug):
         "description": instance.description,
         "media": instance.media
     }
-    return render(request, "ankades/../templates/test/article/article-detail.html", context)
+    return render(request, "ankades/article/article-detail.html", context)
 
 
 @login_required(login_url="login_account")

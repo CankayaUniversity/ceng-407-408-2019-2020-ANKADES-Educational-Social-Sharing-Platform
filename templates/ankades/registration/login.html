@@ -33,7 +33,7 @@
                     {% for message in messages %}
                         <div class="row">
                             <div class="col-12">
-                                <div class="card {% if message.tags == "error" %}bg-danger{% endif %}">
+                                <div class="card {% if message.tags == "error" %}bg-danger{% else %}bg-success{% endif %}">
                                     <div class="card-header">
                                         <h3 class="card-title">{% if message.tags == "error" %}HATA !{% else %}BAŞARILI !{% endif %}</h3>
                                         <div class="card-tools">

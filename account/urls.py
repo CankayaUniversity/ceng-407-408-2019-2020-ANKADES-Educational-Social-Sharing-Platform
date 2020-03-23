@@ -9,8 +9,8 @@ from account.views.views import FollowAccountToggle
 
 urlpatterns = [
     #Current User
-    url(r'^(?P<username>\w+)/ayarlar/$', edit.edit_profile, name="edit_profile"),
-    url(r'^sifre-sifirla/(?P<username>\w+)/$', edit.edit_password, name="edit_password"),
+    url(r'^(?P<username>\w+)/duzenle/$', edit.edit_profile, name="edit_profile"),
+    url(r'^(?P<username>\w+)/sifre-sifirla/$', edit.edit_password, name="edit_password"),
 
     #Login/Register
     path('giris-yap/', views.login_account, name="login_account"),

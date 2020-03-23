@@ -16,7 +16,6 @@ class AdminActivity(models.Model):
     description = models.CharField(max_length=254)
     method = models.CharField(max_length=254)
     createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -33,7 +32,6 @@ class Tag(models.Model):
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
     createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title

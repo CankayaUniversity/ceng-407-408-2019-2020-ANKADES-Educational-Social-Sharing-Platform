@@ -21,7 +21,6 @@
                                     <th>Metod</th>
                                     <th>Description</th>
                                     <th>Oluşturulduğu Tarih</th>
-                                    <th>Sil</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -35,11 +34,6 @@
                                             <td>{{ accLog.method }}</td>
                                             <td>{{ accLog.description }}</td>
                                             <td>{{ accLog.createdDate }}</td>
-                                            <td>
-                                                <a type="button" href="{% url 'admin_delete_account_log' accLog.id %}"
-                                                   class="btn btn-danger">Sil
-                                                </a>
-                                            </td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
@@ -52,7 +46,6 @@
                                     <th>Metod</th>
                                     <th>Description</th>
                                     <th>Oluşturulduğu Tarih</th>
-                                    <th>Sil</th>
                                 </tr>
                                 </tfoot>
                             </table>

@@ -21,10 +21,14 @@ def admin_all_articles(request):
     :return:
     """
     articles = Article.objects.all()
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "articles": articles,
-        "adminGroup" : adminGroup
+        "adminGroup": adminGroup,
+        "currentUser": currentUser,
+        "userGroup": userGroup,
     }
     return render(request, "adminpanel/article/all-articles.html", context)
 
@@ -43,6 +47,7 @@ def admin_add_article(request):
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
+        "currentUser": currentUser,
         "form": form,
     }
     if request.method == "POST":
@@ -139,6 +144,7 @@ def admin_add_article_category(request):
     activity = AdminActivity()
     context = {
         "userGroup": userGroup,
+        "currentUser": currentUser,
         "articleCategory": articleCategory
     }
     if userGroup == 'admin':
@@ -244,7 +250,8 @@ def admin_article_categories(request):
         "categories": categories,
         "userGroup": userGroup,
         "article_categories_limit": article_categories_limit,
-        "adminGroup": adminGroup
+        "adminGroup": adminGroup,
+        "currentUser": currentUser,
     }
     return render(request, "adminpanel/article/categories.html", context)
 

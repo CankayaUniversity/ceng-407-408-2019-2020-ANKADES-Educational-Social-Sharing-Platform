@@ -9,6 +9,7 @@ from article.views.views import ArticleLikeToggle
 
 urlpatterns = [
     path('makaleler/', views.all_articles, name="all_articles"),
+    path('makale-kategorileri/', views.article_categories, name="article_categories"),
     path('makale-ekle/', views.add_article, name="add_article"),
     path('makale/<slug:slug>/', views.article_detail, name="article_detail"),
     path('makale/sil/<slug:slug>/', views.delete_article, name="delete_article"),

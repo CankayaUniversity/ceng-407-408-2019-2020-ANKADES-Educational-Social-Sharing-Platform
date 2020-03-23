@@ -131,8 +131,6 @@ urlpatterns = [
     path('admin/logs/', activity.admin_all_logs, name="admin_all_logs"),
     path('admin/logs/admins', activity.admin_admin_logs, name="admin_admin_logs"),
     path('admin/logs/accounts', activity.admin_account_logs, name="admin_account_logs"),
-    path('admin/logs/admin/delete-log/<uuid:id>/', activity.admin_delete_admin_log, name="admin_delete_admin_log"),
-    path('admin/logs/accounts/delete-log/<uuid:id>/', activity.admin_delete_account_log, name="admin_delete_account_log"),
 ]
 
 if settings.DEBUG:
