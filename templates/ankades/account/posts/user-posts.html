@@ -57,7 +57,7 @@
                                                             {{ forloop.counter }}
                                                         </td>
                                                         <td>
-                                                            <a href="{% url 'article_detail' article.slug %}">
+                                                            <a href="{% url 'article_detail' username=article.creator slug=article.slug %}">
                                                                 {{ article.title }}
                                                             </a>
                                                             <br/>
@@ -101,23 +101,26 @@
                                                         </td>
                                                         <td class="project-actions text-right">
                                                             <a class="btn btn-primary btn-sm"
-                                                               href="{% url 'article_detail' article.slug %}">
+                                                               href="{% url 'article_detail' username=article.creator slug=article.slug %}">
                                                                 <i class="fas fa-folder">
                                                                 </i>
                                                                 Göster
                                                             </a>
-                                                            <a class="btn btn-info btn-sm" href="{% url 'edit_article' article.slug %}">
+                                                            <a class="btn btn-info btn-sm"
+                                                               href="{% url 'edit_article' article.slug %}">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>
                                                                 Düzenle
                                                             </a>
                                                             <button type="button" class="btn btn-sm btn-danger"
-                                                                    data-toggle="modal" data-target="#modal-delete{{ forloop.counter }}">
+                                                                    data-toggle="modal"
+                                                                    data-target="#modal-delete{{ forloop.counter }}">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 Sil
                                                             </button>
-                                                            <div class="modal fade" id="modal-delete{{ forloop.counter }}">
+                                                            <div class="modal fade"
+                                                                 id="modal-delete{{ forloop.counter }}">
                                                                 <div class="modal-dialog">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
@@ -139,7 +142,8 @@
                                                                                     class="btn btn-danger"
                                                                                     data-dismiss="modal">İptal
                                                                             </button>
-                                                                            <form method="post" action="{% url 'delete_article' article.slug %}">
+                                                                            <form method="post"
+                                                                                  action="{% url 'delete_article' article.slug %}">
                                                                                 {% csrf_token %}
                                                                                 <button type="submit"
                                                                                         class="btn btn-success">Sil

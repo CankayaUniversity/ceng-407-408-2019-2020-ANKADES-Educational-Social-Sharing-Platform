@@ -330,42 +330,24 @@ def admin_register_account(request):
 #     else:
 #         messages.error(request, "Yetkiniz yok !")
 #         return redirect("admin_dashboard")
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_add_account_group(request):
-#     """
-#     :param request:
-#     :return:
-#     """
-#     form = AdminAccountGroupForm(request.POST or None)
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     context = {"form": form, "adminGroup": adminGroup}
-#     if adminGroup:
-#         if form.is_valid():
-#             userId = form.cleaned_data.get("userId")
-#             groupId = form.cleaned_data.get("groupId")
-#             if AccountGroup.objects.filter(Q(groupId=groupId) and Q(userId=userId)):
-#                 messages.error(request, 'Bu kullanıcıya izin daha önce eklenmiş.')
-#             else:
-#                 instance = form.save(commit=False)
-#                 activity = AdminActivity()
-#                 activity.title = "Kullanıcıya grup ekleme"
-#                 activity.creator = request.user.username
-#                 activity.method = "POST"
-#                 activity.application = "Account Group"
-#                 activity.updatedDate = datetime.datetime.now()
-#                 activity.description = "Yeni " + activity.application + " oluşturuldu. İşlemi yapan kişi" + activity.creator
-#                 instance.save()
-#                 activity.save()
-#                 messages.success(request, "Kullanıcıya başarıyla grup eklendi.")
-#                 return redirect("admin_add_account_group")
-#         return render(request, "admin/account/group/add-account-group.html", context)
-#     else:
-#         messages.error(request, "Yetkiniz yok!")
-#         return redirect("admin_dashboard")
-#
-#
+
+
+@login_required(login_url="login_admin")
+def admin_add_account_group(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    if request.method == "POST":
+        group = request.POST['groupId']
+        user = request.POST['userId']
+        instance = AccountGroup(userId=user, groupId=group)
+
+    return None
+
+
 # @login_required(login_url="login_admin")
 # def admin_edit_account_group(request, id):
 #     """

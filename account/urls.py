@@ -6,6 +6,7 @@ from account.views import views, user, edit, posts
 # from account.views.api import UserProfileView, UserRegistrationView, UserLoginView, AccountGroupView, \
 #     FollowAccountAPIToggle
 from account.views.views import FollowAccountToggle
+from article.views import views as articleviews
 
 urlpatterns = [
     #Current User
@@ -19,7 +20,7 @@ urlpatterns = [
     path('kayit-ol/', views.register_account, name="register_account"),
 
     #Requested User
-    url(r'^(?P<username>\w+)/$', user.account_detail, name="account_detail"),
+    url(r'^(?P<username>[\w-]+)/$', user.account_detail, name="account_detail"),
     # url(r'^kullanici-adi-duzenle/(?P<username>\w+)/$', views.edit_username, name="edit_username"),
     url(r'^(?P<username>[\w-]+)/takip/$', FollowAccountToggle.as_view(), name="follow-toggle"),
     # url(r'^Article/(?P<username>[\w-]+)/Follow/$', FollowAccountAPIToggle.as_view(), name="follow-api-toggle"),

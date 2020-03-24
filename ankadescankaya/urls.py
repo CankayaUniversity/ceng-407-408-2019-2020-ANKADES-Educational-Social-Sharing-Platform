@@ -5,7 +5,6 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
-
 from ankadescankaya import views
 
 router = routers.SimpleRouter()
@@ -34,7 +33,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', include("adminpanel.urls")),
+    path('admin/', include("adminpanel.urls")),
     path('', include("account.urls")),
     path('', include("course.urls")),
     path('', include("article.urls")),

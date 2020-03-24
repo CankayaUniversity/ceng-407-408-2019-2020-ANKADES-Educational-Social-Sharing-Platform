@@ -61,7 +61,7 @@
                                                         </a>
                                                     </span>
                                                         <h3 class="entry-title">
-                                                            <a href="{% url 'article_detail' article.slug %}"
+                                                            <a href="{% url 'article_detail' article.username article.slug %}"
                                                                rel="bookmark">
                                                                 {{ article.title }}
                                                             </a>
@@ -71,7 +71,7 @@
                                                 <div class="entry-content">
                                                     {{ article.description|safe|truncatechars:10 }}
                                                     <div class="post-footer d-md-flex align-items-center justify-content-between">
-                                                        <a href="{% url 'article_detail' article.slug %}"
+                                                        <a href="{% url 'article_detail' username=article.creator slug=article.slug %}"
                                                            class="read-more btn btn-primary"><span>Devamı</span></a>
                                                         <div class="entry-meta color-darkgrey post-meta">
                                                             <span class="post-tags">
@@ -188,7 +188,7 @@
                                                 {% endif %}
                                                 <div class="media-body">
                                                     <p style="font-size: 15px">
-                                                        <a href="{% url 'article_detail' al.slug %}">
+                                                        <a href="{% url 'article_detail' article.username al.slug %}">
                                                             {{ al.title }}
                                                         </a>
                                                     </p>

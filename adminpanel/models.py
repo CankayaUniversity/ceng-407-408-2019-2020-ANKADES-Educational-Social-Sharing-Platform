@@ -9,7 +9,6 @@ from ankadescankaya.slug import slug_save
 
 class AdminActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    slug = models.SlugField(unique=True, allow_unicode=True)
     creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=254)
     application = models.CharField(max_length=254)
@@ -42,4 +41,3 @@ class Tag(models.Model):
 
 
 pre_save.connect(slug_save, sender=Tag)
-pre_save.connect(slug_save, sender=AdminActivity)

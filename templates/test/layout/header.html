@@ -11,7 +11,7 @@
 						    		<i class="fa fa-user"></i>
 						    	</span>
 						    	<span class="small-text">
-						    		<a href="{% url 'account_detail' request.user.username %}">Hoş geldiniz
+						    		<a href="{% url 'account_detail' %}">Hoş geldiniz
                                         {% if request.user.get_full_name %}
                                             {{ request.user.get_full_name }}{% else %}
                                             {{ request.user.username }}{% endif %}!</a>

@@ -13,14 +13,15 @@ from account.views.views import current_user_group
 
 
 @login_required(login_url="login_account")
-def edit_profile(request):
+def edit_profile(request, username):
     """
+    :param username:
     :param request:
     :return:
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    instance = get_object_or_404(Account, username=currentUser)
+    instance = get_object_or_404(Account, username=username)
     activity = AccountActivity()
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -42,7 +43,7 @@ def edit_profile(request):
         activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
-        return redirect(reverse("account_detail", kwargs={"username": currentUser}))
+        return redirect(reverse("account_detail", kwargs={"username": username}))
     context = {
         "instance": instance,
         "currentUser": currentUser,

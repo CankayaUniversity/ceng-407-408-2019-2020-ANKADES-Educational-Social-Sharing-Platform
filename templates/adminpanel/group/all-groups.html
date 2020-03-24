@@ -37,9 +37,7 @@
                                             <td>{{ group.updatedDate }}</td>
                                             <td>{{ group.isActive }}</td>
                                             <td>
-                                                <a type="button" id="#{{ group.get_active_url }}"
-                                                   data-href='{{ group.get_active_api_url }}'
-                                                   href='{{ group.get_active_url }}'
+                                                <a type="button" href="{% url 'admin_isactive_group' group.slug %}"
                                                    class="btn btn-warning">
                                                     {% if group.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>

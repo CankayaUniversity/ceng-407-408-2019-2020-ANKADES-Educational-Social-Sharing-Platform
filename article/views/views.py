@@ -102,7 +102,7 @@ def add_article(request):
         "form": form,
     }
     if request.method == "POST":
-        value = request.POST['id']
+        value = request.POST['categoryId']
         title = request.POST.get("title")
         if form.is_valid():
             description = form.cleaned_data.get("description")
@@ -193,8 +193,11 @@ def article_categories(request):
     return render(request, "ankades/article/categories.html", {"categories": categories})
 
 
-def article_detail(request, slug):
+def article_detail(request, username, slug):
     instance = get_object_or_404(Article, slug=slug)
+    if instance.creator.username != username:
+        messages.error(request, "Aradığınız şeyi bulamadık")
+        return redirect("index")
     articles = Article.objects.all()
     relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
     articleComments = ArticleComment.objects.filter(articleId__slug=slug)

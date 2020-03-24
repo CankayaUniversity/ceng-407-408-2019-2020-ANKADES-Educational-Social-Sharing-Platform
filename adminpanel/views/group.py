@@ -92,7 +92,7 @@ def admin_add_group(request):
             activity.description = "Yeni bir grup eklendi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
             activity.save()
             messages.success(request, "Grup başarıyla oluşturuldu.")
-            return redirect("admin_add_group")
+            return redirect("admin_all_groups")
         context = {
             "userGroup": userGroup
         }
@@ -281,40 +281,27 @@ def admin_isactive_group(request, slug):
     :return:
     """
     instance = get_object_or_404(Group, slug=slug)
+    getSlug = slug
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     if userGroup == 'admin':
         if instance.isActive:
             instance.updatedDate = datetime.datetime.now()
             instance.isActive = False
+            instance.slug = getSlug
             instance.save()
-            messages.success(request, "Group aktifleştirildi.")
+            messages.success(request, "Group artık aktif değil.")
             return redirect("admin_all_groups")
         else:
             instance.isActive = True
             instance.updatedDate = datetime.datetime.now()
+            instance.slug = slug
             instance.save()
-            messages.success(request, "Group artık aktif değil.")
+            messages.success(request, "Group aktifleştirildi.")
             return redirect("admin_all_groups")
     else:
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_all_groups")
-
-
-class IsActiveGroupToggle(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        slug = self.kwargs.get("slug")
-        obj = get_object_or_404(Group, slug=slug)
-        url_ = obj.get_absolute_url()
-        if obj.isActive is True:
-            obj.isActive = False
-            obj.updatedDate = datetime.datetime.now()
-            obj.save()
-        else:
-            obj.isActive = True
-            obj.updatedDate = datetime.datetime.now()
-            obj.save()
-        return url_
 
 
 class IsActiveGroupAPIToggle(APIView):

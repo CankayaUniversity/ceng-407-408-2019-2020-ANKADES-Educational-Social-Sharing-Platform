@@ -61,6 +61,7 @@ class Account(AbstractUser):
     updatedDate = models.DateTimeField(null=True, blank=True)
     follower = models.ManyToManyField('self', related_name="follower", default=0, db_table="AccountFollower")
     email = models.EmailField(unique=True, null=False, blank=True)
+    is_admin = models.BooleanField(null=True, blank=True, default=False, verbose_name="Is Admin?")
 
     def __str__(self):
         return self.username
