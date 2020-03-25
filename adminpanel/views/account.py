@@ -130,10 +130,10 @@ def admin_admins(request):
 
 
 @login_required(login_url="login_admin")
-def admin_edit_profile(request, username):
-    instance = get_object_or_404(Account, username=username)
+def admin_edit_profile(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    instance = get_object_or_404(Account, username=currentUser)
     schools = School.objects.filter(Q(isActive=False, isCategory=False))
     activity = AdminActivity()
     if request.method == "POST":

@@ -15,7 +15,7 @@ urlpatterns = [
     # path('add-new-user', account.admin_register_account, name="admin_register_account"),
 
     # User
-    url(r'^edit-profile/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
+    path('edit-profile/', account.admin_edit_profile, name="admin_edit_profile"),
     path('all-users/', account.admin_all_users, name="admin_all_users"),
     path('user-groups', account.admin_all_user_groups, name="admin_all_user_groups"),
     path('blocked-users', account.admin_blocked_users, name="admin_blocked_users"),

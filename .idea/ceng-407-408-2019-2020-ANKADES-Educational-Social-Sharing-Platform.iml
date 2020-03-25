@@ -20,8 +20,9 @@
       <excludeFolder url="file://$MODULE_DIR$/windowsenv" />
       <excludeFolder url="file://$MODULE_DIR$/wvenv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (ceng-407-408-2019-2020-ANKADES-Educational-Social-Sharing-Platform)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="ankadesInterpreter" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="ionicons" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="templateFileTypes">
