@@ -24,6 +24,7 @@ def admin_all_groups(request, slug=None):
     """
     currentUser = request.user
     userGroup = 'Kullanıcı'
+    activity = AdminActivity()
     if request.user.is_authenticated:
         userGroup = current_user_group(request, currentUser)
     groups = Group.objects.all()
@@ -37,6 +38,14 @@ def admin_all_groups(request, slug=None):
             isActive = request.POST.get("isActive") == 'on'
             new_group = Group(title=title, isActive=isActive)
             new_group.save()
+            activity.title = "Grup Oluşturma"
+            activity.method = "INSERT"
+            activity.creator = currentUser
+            activity.application = "Group"
+            activity.createdDate = datetime.datetime.now()
+            activity.description = "Yeni bir grup oluşturuldu. İşlemi yapan kişi: " + str(
+                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
             messages.success(request, "Grup başarıyla oluşturuldu.")
             return redirect("admin_add_group")
         context = {
@@ -57,6 +66,13 @@ def admin_edit_group(request, slug):
     :return:
     """
     instance = get_object_or_404(Group, slug=slug)
+    currentUser = request.user
+    activity = AdminActivity()
+    activity.application = "Group"
+    activity.creator = currentUser
+    activity.title = "Grup Düzenleme"
+    activity.method = "UPDATE"
+    activity.createdDate = datetime.datetime.now()
     form = AdminEditGroupForm(request.POST or None, instance=instance)
     if form.is_valid():
         title = form.cleaned_data.get("title")
@@ -64,6 +80,9 @@ def admin_edit_group(request, slug):
     if request.method == "POST":
         instance.updatedDate = datetime.datetime.now()
         instance.save()
+        activity.description = "Grup düzenlendi. İşlemi yapan kişi: " + str(
+            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
         messages.success(request, "Grup başarıyla düzenlendi.")
         return render(request, "adminpanel/group/edit-group.html", {'form': form})
     return redirect("admin_edit_group")
@@ -284,12 +303,21 @@ def admin_isactive_group(request, slug):
     getSlug = slug
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
+    activity.title = "Grup Aktifliği Düzenleme"
+    activity.method = "UPDATE"
+    activity.creator = currentUser
+    activity.application = "Group"
+    activity.createdDate = datetime.datetime.now()
     if userGroup == 'admin':
         if instance.isActive:
             instance.updatedDate = datetime.datetime.now()
             instance.isActive = False
             instance.slug = getSlug
             instance.save()
+            activity.description = "Grup aktifliği kaldırıldı. İşlemi yapan kişi: " + str(
+                activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
             messages.success(request, "Group artık aktif değil.")
             return redirect("admin_all_groups")
         else:
@@ -297,6 +325,9 @@ def admin_isactive_group(request, slug):
             instance.updatedDate = datetime.datetime.now()
             instance.slug = slug
             instance.save()
+            activity.description = "Grup başarıyla aktifleştirildi. İşlemi yapan kişi: " + str(
+                activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
             messages.success(request, "Group aktifleştirildi.")
             return redirect("admin_all_groups")
     else:

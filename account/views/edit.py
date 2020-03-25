@@ -68,6 +68,9 @@ def edit_password(request, username):
     if request.user.is_authenticated:
         user = get_object_or_404(Account, username=username)
         form = AccountUpdatePasswordForm(request.POST or None, request.user, instance=request.user)
+        currentUser = request.user
+        instance = get_object_or_404(Account, username=currentUser)
+        activity = AccountActivity()
         if form.is_valid():
             password = form.cleaned_data.get("password")
             user = form.save(commit=False)
@@ -77,7 +80,14 @@ def edit_password(request, username):
             user.save()
             login_user = authenticate(username=username, password=password)
             login(request, login_user)
-            messages.success(request, "Şifreniz başarıyla güncellendi.")
+            activity.title = "Parola Güncelleme."
+            activity.application = "Account"
+            activity.method = "UPDATE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı parolasını güncelledi."
+            activity.save()
+            messages.success(request, "Parolanız başarıyla güncellendi.")
             return redirect("edit_profile")
         return render(request, "ankades/../../templates/test/account/edit-password.html", {"form": form})
     else:

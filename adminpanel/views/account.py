@@ -229,6 +229,7 @@ def admin_edit_email(request, username):
 
 @login_required(login_url="login_admin")
 def admin_blocked_users(request):
+    activity = AdminActivity()
     blockedUsers = Account.objects.filter(is_active=False)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
@@ -239,6 +240,14 @@ def admin_blocked_users(request):
     if userGroup == 'admin':
         return render(request, "adminpanel/account/blocked-user.html", context)
     else:
+        activity.title = "Giriş Yapma"
+        activity.application = "Account"
+        activity.createdDate = datetime.datetime.now()
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısının yetkisi yok."
+        activity.save()
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_dashboard")
 
@@ -248,15 +257,32 @@ def admin_block_account(request, username):
     user = get_object_or_404(Account, username=username)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
     if userGroup == 'admin' or userGroup == 'moderator':
         if user.is_active is True:
             user.is_active = False
             user.save()
+            activity.title = "Kullanıcı Engelleme"
+            activity.application = "Account"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "UPDATE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı engellendi."
+            activity.save()
             messages.success(request, "Kullanıcı başarıyla engellendi.")
             return redirect("admin_all_users")
         else:
             user.is_active = True
             user.save()
+            activity.title = "Kullanıcı Aktifleştirme"
+            activity.application = "Account"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "UPDATE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı aktifleştirildi."
+            activity.save()
             messages.success(request, "Kullanıcı başarıyla aktifleştirildi.")
             return redirect("admin_all_users")
     else:
@@ -270,6 +296,7 @@ def admin_register_account(request):
     userGroup = current_user_group(request, currentUser)
     getGroup = Group.objects.get(slug="uye")
     accountGroup = AccountGroup()
+    activity = AdminActivity()
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser
@@ -295,6 +322,14 @@ def admin_register_account(request):
             accountGroup.userId_id = new_user.id
             accountGroup.groupId_id = getGroup.id
             accountGroup.save()
+            activity.title = "Kullanıcı Ekleme"
+            activity.application = "Account"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "UPDATE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı eklendi."
+            activity.save()
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
             return redirect("admin_all_users")
     return render(request, "adminpanel/account/add-account.html", context)

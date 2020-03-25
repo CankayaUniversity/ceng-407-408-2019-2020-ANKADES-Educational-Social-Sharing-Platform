@@ -78,8 +78,18 @@ def logout_account(request):
     :param request:
     :return:
     """
+    currentUser = request.user
+    instance = get_object_or_404(Account, username=currentUser)
+    activity = AccountActivity()
     if request.user.is_authenticated:
         logout(request)
+        activity.title = "Çıkış Yapma."
+        activity.application = "LOGOUT"
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı çıkış yaptı."
+        activity.save()
         messages.success(request, "Başarıyla çıkış yapıldı")
         return redirect("index")
     else:
@@ -92,6 +102,9 @@ def register_account(request):
     :return:
     """
     if not request.user.is_authenticated:
+        currentUser = request.user
+        instance = get_object_or_404(Account, username=currentUser)
+        activity = AccountActivity()
         if request.method == "POST":
             first_name = request.POST.get("first_name")
             last_name = request.POST.get("last_name")
@@ -117,6 +130,13 @@ def register_account(request):
                 getGroup = Group.objects.get(slug="uye")
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
+                activity.title = "Giriş Yapma"
+                activity.application = "REGISTER"
+                activity.method = "UPDATE"
+                activity.creator = currentUser
+                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı giriş yaptı."
+                activity.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("login_account")
         return render(request, "ankades/registration/register.html")

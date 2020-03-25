@@ -26,6 +26,8 @@
                                     <th>Oluşturulduğu Tarihi</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
+                                    <th>Üst Kategori</th>
+                                    <th>İşlemler</th>
                                     <th>Sil</th>
                                 </tr>
                                 </thead>
@@ -39,6 +41,7 @@
                                             <td>{{ category.createdDate }}</td>
                                             <td>{{ category.updatedDate }}</td>
                                             <td>{{ category.isActive }}</td>
+                                            <td>{{ category.isCategory }}</td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_isactive_article_category' category.slug %}"
                                                    class="btn btn-warning">
@@ -61,6 +64,7 @@
                                     <th>Oluşturulduğu Tarihi</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
+                                    <th>Üst Kategori</th>
                                     <th>İşlemler</th>
                                     <th>Sil</th>
                                 </tr>

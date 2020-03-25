@@ -86,6 +86,10 @@ def article_categories(request):
     return render(request, "adminpanel/article/categories.html", context)
 
 
+class ArticleActivity(object):
+    pass
+
+
 @login_required(login_url="login_account")
 def add_article(request):
     """
@@ -96,6 +100,7 @@ def add_article(request):
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = AddArticleForm(request.POST or None)
+    activity = ArticleActivity()
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
@@ -124,6 +129,13 @@ def add_article(request):
         instance.categoryId_id = value
         instance.isActive = True
         instance.save()
+        activity.title = "Makale Ekle"
+        activity.application = "Article"
+        activity.method = "INSERT"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı makale ekledi."
+        activity.save()
         messages.success(request, "Makale başarıyla eklendi !")
         return redirect("index")
     return render(request, "ankades/article/add-article.html", context)
@@ -196,7 +208,7 @@ def article_categories(request):
 def article_detail(request, username, slug):
     instance = get_object_or_404(Article, slug=slug)
     if instance.creator.username != username:
-        messages.error(request, "Aradığınız şeyi bulamadık")
+        messages.error(request, "Aradığınız makale bulunamadı.")
         return redirect("index")
     articles = Article.objects.all()
     relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
@@ -246,12 +258,22 @@ def my_articles(request, username):
 
 @login_required(login_url="login_account")
 def add_article_comment(request, slug):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = ArticleActivity()
+    activity.application = "Article"
+    activity.creator = currentUser
+    activity.title = "Makale Yorumu Ekle"
     instance = get_object_or_404(Article, slug=slug)
     if request.method == "POST":
         content = request.POST.get("content")
         new_comment = ArticleComment(content=content, creator=request.user)
         new_comment.articleId = instance
         new_comment.save()
+        activity.description = "Makaleye yeni bir yorum eklendi. İşlemi yapan kişi: " + str(
+            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
+        messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
     return redirect(reverse("article_detail", kwargs={"slug": slug}))
 
 

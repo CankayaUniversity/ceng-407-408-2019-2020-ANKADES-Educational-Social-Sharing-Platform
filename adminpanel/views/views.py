@@ -8,7 +8,7 @@ from online_users.models import OnlineUserActivity
 from account.models import Account, AccountGroup
 from account.views.views import current_user_group
 from adminpanel.forms import AdminLoginForm, AdminTagForm
-from adminpanel.models import Tag
+from adminpanel.models import Tag, AdminActivity
 from article.models import Article
 from course.models import Course
 
@@ -44,6 +44,7 @@ def login_admin(request):
     :param request:
     :return:
     """
+    activity = AdminActivity()
     if not request.user.is_authenticated:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -63,6 +64,13 @@ def login_admin(request):
                 request.session.set_expiry(1209600)
             else:
                 request.session.set_expiry(0)
+                activity.creator = user
+                activity.method = "POST"
+                activity.title = "Kullanıcı giriş yaptı"
+                activity.createdDate = datetime.datetime.now()
+                activity.application = "LOGIN"
+                activity.description = str(activity.creator.username) + " giriş yaptı."
+                activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("admin_dashboard")
         return render(request, "adminpanel/registration/login.html")
@@ -73,8 +81,18 @@ def login_admin(request):
 
 @login_required(login_url="login_admin")
 def logout_admin(request):
+    currentUser = request.user
+    activity = AdminActivity()
     if request.user.is_authenticated:
         logout(request)
+        activity.title = "Çıkış Yapma."
+        activity.application = "LOGOUT"
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı çıkış yaptı."
+        activity.save()
+        messages.success(request, "Başarıyla çıkış yapıldı")
         return redirect("login_admin")
     else:
         return redirect("login_admin")
