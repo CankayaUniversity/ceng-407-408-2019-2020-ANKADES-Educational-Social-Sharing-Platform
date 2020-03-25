@@ -3,6 +3,7 @@ $(function () {
     $('#moderator').DataTable();
     $('#teacher').DataTable();
     $('#student').DataTable();
+    $('#member').DataTable();
     $('#social-media').DataTable();
     $('#article-category').DataTable();
     $('#all-articles').DataTable();
@@ -13,4 +14,6 @@ $(function () {
     $('#account-logs').DataTable();
     $('#admin-logs').DataTable();
     $('#my-articles').DataTable();
+    $('#all-users').DataTable();
+    $('#blocked-users').DataTable();
 });

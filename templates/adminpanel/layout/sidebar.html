@@ -14,7 +14,7 @@
                 <img src="{{ request.user.image.url }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{% url 'admin_edit_profile' request.user.username %} "
+                <a href="{% url 'admin_edit_profile' %} "
                    class="d-block">{{ request.user.username }}</a>
             </div>
         </div>
@@ -76,7 +76,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'admin_add_group' %}" class="nav-link">
+                            <a href="{% url 'admin_register_account' %}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Kullanıcı Ekle</p>
                             </a>

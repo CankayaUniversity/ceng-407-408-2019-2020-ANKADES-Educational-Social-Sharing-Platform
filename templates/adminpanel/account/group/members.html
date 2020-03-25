@@ -1,0 +1,50 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Moderatörler</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="member" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup Id</th>
+                                </thead>
+                                <tbody>
+                                {% if members %}
+                                    {% for member in members %}
+                                        <tr>
+                                            <td>{{ member.id }}</td>
+                                            <td>{{ member.userId }}</td>
+                                            <td>{{ member.groupId }}</td>
+                                            <td>{{ member.user_id }}</td>
+                                            <td>{{ member.groupId_id }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup Id</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

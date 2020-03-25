@@ -11,7 +11,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
-from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission
+from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission, \
+    AccountActivity
 from article.models import Article, ArticleComment
 
 
@@ -36,6 +37,7 @@ def login_account(request):
     :param request:
     :return:
     """
+    activity = AccountActivity()
     if not request.user.is_authenticated:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -55,6 +57,13 @@ def login_account(request):
                 request.session.set_expiry(1209600)
             else:
                 request.session.set_expiry(0)
+            activity.creator = user
+            activity.method = "POST"
+            activity.title = "Kullanıcı giriş yaptı"
+            activity.createdDate = datetime.datetime.now()
+            activity.application = "ACCOUNT"
+            activity.description = str(activity.creator.username) + " giriş yaptı."
+            activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("index")
         return render(request, "ankades/registration/login.html")
@@ -105,7 +114,7 @@ def register_account(request):
                 new_user.save()
                 new_user.set_password(password)
                 new_user.save()
-                getGroup = Group.objects.get(slug="ogrenci")
+                getGroup = Group.objects.get(slug="uye")
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")

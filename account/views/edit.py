@@ -13,7 +13,7 @@ from account.views.views import current_user_group
 
 
 @login_required(login_url="login_account")
-def edit_profile(request, username):
+def edit_profile(request):
     """
     :param username:
     :param request:
@@ -21,7 +21,7 @@ def edit_profile(request, username):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    instance = get_object_or_404(Account, username=username)
+    instance = get_object_or_404(Account, username=currentUser)
     activity = AccountActivity()
     if request.method == "POST":
         first_name = request.POST.get("first_name")

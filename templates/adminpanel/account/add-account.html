@@ -1,0 +1,64 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- jquery validation -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Makale Paylaşma</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" method="post" action="{% url 'admin_register_account' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Adı*</label>
+                                    <input type="text" class="form-control" name="first_name" placeholder="Ad">
+                                </div>
+                                <div class="form-group">
+                                    <label>Soyadı*</label>
+                                    <input type="text" class="form-control" name="last_name" placeholder="Soyad">
+                                </div>
+                                <div class="form-group">
+                                    <label>Kullanıcı Adı*</label>
+                                    <input type="text" class="form-control" name="username" placeholder="Kullanıcı Adı">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email*</label>
+                                    <input type="text" class="form-control" name="email" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şifre*</label>
+                                    <input type="password" class="form-control" name="password" placeholder="Şifre">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şifre Tekrar*</label>
+                                    <input type="password" class="form-control" name="confirm_password" placeholder="Şifre Tekrar">
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Gönder</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!--/.col (left) -->
+                <!-- right column -->
+                <div class="col-md-6">
+
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}

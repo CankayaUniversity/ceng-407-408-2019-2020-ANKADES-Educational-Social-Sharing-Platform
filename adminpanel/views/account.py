@@ -37,6 +37,7 @@ def admin_all_user_groups(request):
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
+    members = AccountGroup.objects.filter(Q(groupId__slug="üye"))
     accounts = Account.objects.all().order_by('-date_joined')[:5]
     context = {
         "userGroup": userGroup,
@@ -95,6 +96,19 @@ def admin_moderators(request):
         "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/group/moderators.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_members(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    members = AccountGroup.objects.filter(Q(groupId__slug="member"))
+    context = {
+        "members": members,
+        "userGroup": userGroup,
+        "currentUser": currentUser,
+    }
+    return render(request, "adminpanel/account/group/members.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -254,7 +268,7 @@ def admin_block_account(request, username):
 def admin_register_account(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    getGroup = Group.objects.get(slug="ogrenci")
+    getGroup = Group.objects.get(slug="uye")
     accountGroup = AccountGroup()
     context = {
         "userGroup": userGroup,
@@ -267,19 +281,9 @@ def admin_register_account(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        form = {
-            "first_name": first_name,
-            "last_name": last_name,
-            "username": username,
-            "email": email,
-            "password": password,
-            "confirm_password": confirm_password,
-            "userGroup": userGroup,
-            "currentUser": currentUser,
-        }
         if password and confirm_password and password != confirm_password:
             messages.error(request, "Girilen şifreler uyuşmuyor. Lütfen tekrar deneyin.")
-            return render(request, "adminpanel/account/add-account.html", form)
+            return render(request, "adminpanel/account/add-account.html", context)
         else:
             new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email)
             new_user.is_active = True
@@ -293,9 +297,7 @@ def admin_register_account(request):
             accountGroup.save()
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
             return redirect("admin_all_users")
-    else:
-        messages.error(request, "Yetkiniz Yok !")
-        return redirect("admin_dashboard")
+    return render(request, "adminpanel/account/add-account.html", context)
 
 # # Kullanıcı izinleri
 # @login_required(login_url="login_admin")

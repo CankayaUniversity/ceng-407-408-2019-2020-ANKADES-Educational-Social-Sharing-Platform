@@ -147,7 +147,6 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.card-body -->
                     </div>
                 </div>
             </div>
@@ -161,7 +160,6 @@
                         <a href="{% url 'admin_students' %}" style="color: #fff" type="button" class="btn btn-primary m-3">
                             Öğrenci Listesine Git
                         </a>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <table id="student" class="table table-bordered table-striped">
                                 <thead>
@@ -196,12 +194,55 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Üyeler</h3>
+                        </div>
+                        <a href="{% url 'admin_members' %}" style="color: #fff" type="button" class="btn btn-primary m-3">
+                            Üye Listesine Git
+                        </a>
+                        <div class="card-body">
+                            <table id="member" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if members %}
+                                    {% for member in members %}
+                                        <tr>
+                                            <td>{{ member.id }}</td>
+                                            <td>{{ member.userId.id }}</td>
+                                            <td>{{ member.groupId.id }}</td>
+                                            <td>{{ member.userId.username }}</td>
+                                            <td>{{ member.groupId.title }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Id</th>
+                                    <th>Grup ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Grup Adı</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

@@ -16,15 +16,17 @@ urlpatterns = [
 
     # User
     url(r'^edit-profile/(?P<username>\w+)/$', account.admin_edit_profile, name="admin_edit_profile"),
-    path('user/groups/', account.admin_all_users, name="admin_all_users"),
+    path('all-users/', account.admin_all_users, name="admin_all_users"),
     path('user-groups', account.admin_all_user_groups, name="admin_all_user_groups"),
     path('blocked-users', account.admin_blocked_users, name="admin_blocked_users"),
     url(r'^profile/(?P<username>[\w-]+)/$', account.admin_my_account, name="admin_my_account"),
     url(r'^block-user/(?P<username>\w+)/$', account.admin_block_account, name="admin_block_account"),
     url(r'^students/', account.admin_students, name="admin_students"),
     url(r'^teachers/', account.admin_teachers, name="admin_teachers"),
+    url(r'^members/', account.admin_members, name="admin_members"),
     url(r'^moderators/', account.admin_moderators, name="admin_moderators"),
     url(r'^admins/', account.admin_admins, name="admin_admins"),
+    url(r'^register/', account.admin_register_account, name="admin_register_account"),
 
     # User Permission
     # path('account-permissions/', account.admin_account_permission, name="admin_account_permission"),

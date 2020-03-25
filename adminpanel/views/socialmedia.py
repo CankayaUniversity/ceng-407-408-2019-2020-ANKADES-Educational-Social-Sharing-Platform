@@ -105,8 +105,7 @@ def admin_edit_social_media(request, slug):
 
 
 @login_required(login_url="login_admin")
-def admin_add_social_media(request, slug):
-    instance = get_object_or_404(SocialMedia, slug=slug)
+def admin_add_social_media(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     activity = AdminActivity()
