@@ -103,7 +103,6 @@ def register_account(request):
     """
     if not request.user.is_authenticated:
         currentUser = request.user
-        instance = get_object_or_404(Account, username=currentUser)
         activity = AccountActivity()
         if request.method == "POST":
             first_name = request.POST.get("first_name")

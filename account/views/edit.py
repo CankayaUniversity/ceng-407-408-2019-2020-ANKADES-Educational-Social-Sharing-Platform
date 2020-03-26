@@ -93,3 +93,35 @@ def edit_password(request, username):
     else:
         messages.error(request, "Bir sorun var, lütfen daha sonra tekrar deneyin")
         return redirect("login_account")
+
+
+
+@login_required(login_url="login_account")
+def edit_email(request):
+    """
+    :param username:
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    instance = get_object_or_404(Account, username=currentUser)
+    activity = AccountActivity()
+    if request.method == "POST":
+        email = request.POST.get("email")
+        instance.email = email
+        instance.save()
+        activity.title = "Email Güncelleme."
+        activity.application = "Account"
+        activity.method = "UPDATE"
+        activity.creator = currentUser
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı email adresini güncelledi."
+        activity.save()
+        messages.success(request, "Email başarıyla güncellendi.")
+        return redirect(reverse("account_detail", kwargs={"username": currentUser}))
+    context = {
+        "instance": instance,
+        "currentUser": currentUser.username,
+        "userGroup": userGroup,
+    }
+    return render(request, "ankades/account/edit-profile.html", context)

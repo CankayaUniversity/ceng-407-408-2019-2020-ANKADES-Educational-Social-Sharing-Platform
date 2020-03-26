@@ -86,10 +86,6 @@ def article_categories(request):
     return render(request, "adminpanel/article/categories.html", context)
 
 
-class ArticleActivity(object):
-    pass
-
-
 @login_required(login_url="login_account")
 def add_article(request):
     """
@@ -100,7 +96,7 @@ def add_article(request):
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = AddArticleForm(request.POST or None)
-    activity = ArticleActivity()
+    activity = AccountActivity()
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
@@ -260,7 +256,7 @@ def my_articles(request, username):
 def add_article_comment(request, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = ArticleActivity()
+    activity = AccountActivity()
     activity.application = "Article"
     activity.creator = currentUser
     activity.title = "Makale Yorumu Ekle"
