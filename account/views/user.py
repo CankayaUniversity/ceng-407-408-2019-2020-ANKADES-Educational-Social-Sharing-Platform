@@ -9,6 +9,11 @@ from account.views.views import current_user_group
 
 @login_required(login_url="login_account")
 def account_detail(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     userDetail = get_object_or_404(Account, username=username)
     if request.user.is_authenticated:
         currentUser = request.user

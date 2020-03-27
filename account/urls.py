@@ -13,7 +13,8 @@ urlpatterns = [
     path('ayarlar/', edit.edit_profile, name="edit_profile"),
     path('email-duzenle/', edit.edit_email, name="edit_email"),
     path('paylasimlarim/', posts.user_posts, name="user_posts"),
-    url(r'^(?P<username>\w+)/sifre-sifirla/$', edit.edit_password, name="edit_password"),
+    path('kullanici-adi-duzenle/', edit.edit_username, name="edit_username"),
+    # path('sifre-sifirla/', edit.edit_password, name="edit_password"),
 
     # Login/Register
     path('giris-yap/', views.login_account, name="login_account"),
@@ -22,7 +23,6 @@ urlpatterns = [
 
     # Requested User
     url(r'^(?P<username>[\w-]+)/$', user.account_detail, name="account_detail"),
-    # url(r'^kullanici-adi-duzenle/(?P<username>\w+)/$', views.edit_username, name="edit_username"),
     url(r'^(?P<username>[\w-]+)/takip/$', FollowAccountToggle.as_view(), name="follow-toggle"),
     # url(r'^Article/(?P<username>[\w-]+)/Follow/$', FollowAccountAPIToggle.as_view(), name="follow-api-toggle"),
     path('', views.index, name="index"),

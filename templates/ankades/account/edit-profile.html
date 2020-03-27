@@ -55,6 +55,8 @@
                                                         data-toggle="tab">Sosyal Medya</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#email"
                                                         data-toggle="tab">Email</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#username"
+                                                        data-toggle="tab">Kullanıcı Adı</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -106,15 +108,75 @@
                                         </div>
                                     </form>
                                 </div>
+                                <div class="tab-pane" id="username">
+                                    <p>
+                                        <b>"{{ instance.username }}"</b> olan kullanıcı adınızı gerçekten değiştirmek
+                                        istediğinize emin misiniz?
+                                    </p>
+                                    <hr>
+                                    <p>
+                                        <b>"Kullanıcı adınız değiştirdiğinizde diğer kullanıcılar, size yeni kullanıcı
+                                            adınızla erişecektir. "</b>
+                                    </p>
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                            data-toggle="modal"
+                                            data-target="#modal-edit-username">Değiştir
+                                    </button>
+                                </div>
+                                <!-- /.tab-content -->
+                                <div class="modal fade"
+                                     id="modal-edit-username">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">UYARI !</h4>
+                                                <button type="button" class="close"
+                                                        data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="text-left">Gerçekten "<span
+                                                        class="text-bold">{{ instance.username }}</span>"
+                                                    kullanıcı adınızı değiştirmek istediğinize emin
+                                                    misiniz?&hellip;</p>
+                                                <br>
+                                                <form method="post"
+                                                      action="{% url 'edit_username' %}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="username"
+                                                               placeholder="Kullanıcı Adı"
+                                                               value="{{ instance.username }}">
+                                                    </div>
+                                                    <br>
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            data-dismiss="modal">İptal
+                                                    </button>
+                                                    <button type="submit"
+                                                            class="btn btn-success">Değiştir
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
                             </div>
                             <!-- /.tab-content -->
-                        </div><!-- /.card-body -->
-                    </div>
-                    <!-- /.nav-tabs-custom -->
+                        </div>
+                        <!-- /.tab-pane -->
+
+                    </div><!-- /.card-body -->
                 </div>
-                <!-- /.col -->
+                <!-- /.nav-tabs-custom -->
             </div>
-            <!-- /.row -->
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
