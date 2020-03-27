@@ -308,12 +308,12 @@ def admin_register_account(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
+        is_active = request.POST.get('is_active') == "on"
         if password and confirm_password and password != confirm_password:
             messages.error(request, "Girilen şifreler uyuşmuyor. Lütfen tekrar deneyin.")
             return render(request, "adminpanel/account/add-account.html", context)
         else:
-            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email)
-            new_user.is_active = True
+            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email, is_active=is_active)
             new_user.is_admin = False
             new_user.is_staff = False
             new_user.save()
