@@ -5,7 +5,6 @@ from django.urls import path
 
 from adminpanel.views import group, socialmedia, activity
 from adminpanel.views import views, account, article
-from adminpanel.views.group import IsActiveGroupAPIToggle
 
 urlpatterns = [
     # Main Url
@@ -52,7 +51,6 @@ urlpatterns = [
     path('isactive-group/<slug:slug>', group.admin_isactive_group,
          name="admin_isactive_group"),
 
-    url(r'^AdminPanel/Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="active-api-toggle"),
 
     # Group Permission
     # path('gruplar/grup-izinleri/', group.admin_group_permission, name="admin_group_permission"),

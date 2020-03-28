@@ -36,7 +36,7 @@ class ArticleCategoryViewSet(viewsets.ModelViewSet):
 
 def all_articles(request):
     articles_categories_lists = ArticleCategory.objects.all()
-    articles_limit = Article.objects.all().order_by('-createdDate')[:5]
+    articles_limit = Article.objects.all().order_by('-createdDate')
     articleComment = ArticleComment.objects.all()
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
@@ -47,10 +47,10 @@ def all_articles(request):
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
         }
-        return render(request, "ankades/../templates/test/article/articles.html", context)
+        return render(request, "ankades/article/all-articles.html", context)
     else:
         articles = Article.objects.all()
-        paginator = Paginator(articles, 1)
+        paginator = Paginator(articles, 12)
         try:
             article_pagination = paginator.page(page)
         except PageNotAnInteger:
@@ -64,7 +64,7 @@ def all_articles(request):
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
         }
-        return render(request, "ankades/../templates/test/article/articles.html", context)
+        return render(request, "ankades/article/all-articles.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -204,22 +204,20 @@ def article_categories(request):
 def article_detail(request, username, slug):
     instance = get_object_or_404(Article, slug=slug)
     if instance.creator.username != username:
-        messages.error(request, "Aradığınız makale bulunamadı.")
+        messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
         return redirect("index")
     articles = Article.objects.all()
     relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
     articleComments = ArticleComment.objects.filter(articleId__slug=slug)
     articleCategories = ArticleCategory.objects.all()
     instance.view += 1
+    instance.save()
     context = {
         "articles": articles,
         "relatedPosts": relatedPosts,
         "articleComments": articleComments,
         "articleCategories": articleCategories,
         "instance": instance,
-        "title": instance.title,
-        "description": instance.description,
-        "media": instance.media
     }
     return render(request, "ankades/article/article-detail.html", context)
 
@@ -227,9 +225,34 @@ def article_detail(request, username, slug):
 @login_required(login_url="login_account")
 def delete_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
-    instance.delete()
-    messages.success(request, "Makale başarıyla silindi.")
-    return redirect("user_posts")
+    currentUser = request.user
+    if instance.creator == currentUser:
+        instance.delete()
+        messages.success(request, "Makale başarıyla silindi.")
+        return redirect("user_posts")
+    else:
+        messages.error(request, "Bu makale size ait değil")
+        return redirect("user_posts")
+
+
+@login_required(login_url="login_account")
+def add_article_comment(request, slug):
+    currentUser = request.user
+    activity = AccountActivity()
+    activity.application = "Article"
+    activity.creator = currentUser
+    activity.title = "Makale Yorumu Ekle"
+    instance = get_object_or_404(Article, slug=slug)
+    if request.method == "POST":
+        content = request.POST.get("content")
+        new_comment = ArticleComment(content=content, creator=request.user)
+        new_comment.articleId = instance
+        new_comment.save()
+        activity.description = "Makaleye yeni bir yorum eklendi. İşlemi yapan kişi: " + str(
+            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
+        messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
+    return redirect(reverse("article_detail", kwargs={"slug": slug}))
 
 
 @login_required(login_url="login_account")
@@ -250,27 +273,6 @@ def my_articles(request, username):
         "articleCategories": articleCategories,
     }
     return render(request, "ankades/../templates/test/article/my-articles.html", context)
-
-
-@login_required(login_url="login_account")
-def add_article_comment(request, slug):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    activity = AccountActivity()
-    activity.application = "Article"
-    activity.creator = currentUser
-    activity.title = "Makale Yorumu Ekle"
-    instance = get_object_or_404(Article, slug=slug)
-    if request.method == "POST":
-        content = request.POST.get("content")
-        new_comment = ArticleComment(content=content, creator=request.user)
-        new_comment.articleId = instance
-        new_comment.save()
-        activity.description = "Makaleye yeni bir yorum eklendi. İşlemi yapan kişi: " + str(
-            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
-        activity.save()
-        messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
-    return redirect(reverse("article_detail", kwargs={"slug": slug}))
 
 
 class ArticleLikeToggle(RedirectView):

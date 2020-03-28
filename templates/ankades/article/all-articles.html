@@ -1,0 +1,54 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load static %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                {% if articles %}
+                    {% if article_pagination %}
+                        {% for article in article_pagination %}
+                            <div class="card-deck col-3">
+                                <div class="card">
+                                    <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
+                                         width="504" height="180">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a
+                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                        </h5>
+                                        <p class="card-text">{{ article.description|safe|truncatewords:20 }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                        <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }} Yorum</small>
+                                        <small class="text-muted ml-2 float-right">{{ article.likes.count }} Beğeni</small>
+                                        <small class="text-muted float-right">{{ article.view }} Görüntülenme</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                            <div class="card" style="width: 18rem;">#}
+                            {#                                <img class="card-img-top" src="..." alt="Card image cap">#}
+                            {#                                <div class="card-body">#}
+                            {#                                    <h5 class="card-title">Card title</h5>#}
+                            {#                                    <p class="card-text">Some quick example text to build on the card title and make up#}
+                            {#                                        the bulk of the card's content.</p>#}
+                            {#                                </div>#}
+                            {#                                <ul class="list-group list-group-flush">#}
+                            {#                                    <li class="list-group-item">Cras justo odio</li>#}
+                            {#                                    <li class="list-group-item">Dapibus ac facilisis in</li>#}
+                            {#                                    <li class="list-group-item">Vestibulum at eros</li>#}
+                            {#                                </ul>#}
+                            {#                                <div class="card-body">#}
+                            {#                                    <a href="#" class="card-link">Card link</a>#}
+                            {#                                    <a href="#" class="card-link">Another link</a>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

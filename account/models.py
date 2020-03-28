@@ -124,13 +124,14 @@ class SocialMedia(models.Model):
 
     class Meta:
         db_table = "SocialMedia"
-        ordering = ["-createdDate"]
+        ordering = ["title"]
 
 
 class AccountSocialMedia(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     userId = models.ForeignKey(Account, on_delete=models.PROTECT)
     socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.PROTECT)
+    url = models.URLField(null=True, blank=True)
 
     class Meta:
         db_table = "AccountSocialMedia"

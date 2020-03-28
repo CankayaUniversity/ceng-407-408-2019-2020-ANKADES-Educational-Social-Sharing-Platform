@@ -11,44 +11,6 @@
 # from account.serializers import UserRegistrationSerializer, UserLoginSerializer
 #
 #
-# class UserRegistrationView(CreateAPIView):
-#     serializer_class = UserRegistrationSerializer
-#     permission_classes = (AllowAny,)
-#
-#     @swagger_auto_schema(operation_summary="Registration a new user")
-#     def post(self, request, **kwargs):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         status_code = status.HTTP_201_CREATED
-#         response = {
-#             'success': 'True',
-#             'status code': status_code,
-#             'message': None,
-#         }
-#
-#         return Response(response, status=status_code)
-#
-#
-# class UserLoginView(RetrieveAPIView):
-#     permission_classes = (AllowAny,)
-#     serializer_class = UserLoginSerializer
-#
-#     @swagger_auto_schema(operation_summary="Login account")
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         response = {
-#             'success': 'True',
-#             'status code': status.HTTP_200_OK,
-#             'message': None,
-#             'token': serializer.data['token'],
-#         }
-#         status_code = status.HTTP_200_OK
-#
-#         return Response(response, status=status_code)
-#
-#
 # class AccountGroupView(RetrieveAPIView):
 #     permission_classes = (AllowAny,)
 #     serializer_class = AccountGroupSerializer
@@ -93,7 +55,7 @@
 #                     'date_joined': user_profile.date_joined,
 #                     'is_active': user_profile.is_active,
 #                     'image': user_profile.image,
-#                     'description': user_profile.description,
+#                     'description': user_profile.bio,
 #                 }]
 #             }
 #
@@ -113,27 +75,4 @@
 #     serializer_class = AccountGroupSerializer
 #
 #
-# class FollowAccountAPIToggle(APIView):
-#     authentication_classes = (authentication.BasicAuthentication,)
-#     permission_classes = (permissions.IsAuthenticated,)
-#
-#     @swagger_auto_schema(operation_summary="Follow an account by given username")
-#     def get(self, request, username=None, format=None):
-#         username = self.kwargs.get("username")
-#         obj = get_object_or_404(Account, username=username)
-#         user = self.request.user
-#         updated = False
-#         followed = False
-#         if user.is_authenticated():
-#             if user in obj.follower.all():
-#                 followed = False
-#                 obj.follower.remove(user)
-#             else:
-#                 followed = True
-#                 obj.follower.add(user)
-#             updated = True
-#         data = {
-#             "updated": updated,
-#             "followed": followed
-#         }
-#         return Response(data)
+

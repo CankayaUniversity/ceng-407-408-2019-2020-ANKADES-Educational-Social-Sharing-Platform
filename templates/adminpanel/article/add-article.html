@@ -33,8 +33,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Başlık*</label>
-                                    <input type="text" class="form-control" name="title" placeholder="Başlık">
+                                    <label for="title">Başlık*</label>
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="Başlık">
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control">
@@ -44,15 +44,15 @@
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         {{ form.isPrivate }}
-                                        <label class="custom-control-label" for="exampleCheck1">Özel</label>
+                                        <label class="custom-control-label" for="isPrivate">Özel</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">File input</label>
+                                    <label for="file">File input</label>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="exampleInputFile">
-                                            <label class="custom-file-label" for="exampleInputFile"></label>
+                                            <label class="custom-file-label" for="file"></label>
                                         </div>
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="">Upload</span>

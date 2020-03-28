@@ -12,7 +12,7 @@ from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission, \
-    AccountActivity
+    AccountActivity, SocialMedia
 from article.models import Article, ArticleComment
 
 
@@ -30,6 +30,24 @@ def index(request):
         "userGroup": userGroup
     }
     return render(request, "ankades/dashboard.html", context)
+
+
+@login_required(login_url="login_account")
+def account_detail(request, username):
+    userDetail = get_object_or_404(Account, username=username)
+    if request.user.is_authenticated:
+        currentUser = request.user
+        userGroup = current_user_group(request, username)
+        context = {
+            "userDetail": userDetail,
+            "userGroup": userGroup,
+            "currentUser": currentUser,
+        }
+    else:
+        context = {
+            "userDetail": userDetail,
+        }
+    return render(request, "ankades/account/account-detail.html", context)
 
 
 def login_account(request):
@@ -51,7 +69,6 @@ def login_account(request):
                     return redirect("login_account")
             except Account.DoesNotExist:
                 return redirect("login_account")
-
             login(request, user)
             if remember:
                 request.session.set_expiry(1209600)
@@ -198,3 +215,8 @@ def user_articles(self, username):
 def article_comment_count(self, slug):
     articleCommentCount = ArticleComment.objects.filter(articleId__slug=slug)
     return articleCommentCount
+
+
+def get_social_media(self, slug):
+    socialMedia = get_object_or_404(SocialMedia, slug=slug)
+    return socialMedia.id

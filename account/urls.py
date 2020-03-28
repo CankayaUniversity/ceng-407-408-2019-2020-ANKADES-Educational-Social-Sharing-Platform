@@ -11,9 +11,11 @@ from article.views import views as articleviews
 urlpatterns = [
     # Current User
     path('ayarlar/', edit.edit_profile, name="edit_profile"),
-    path('email-duzenle/', edit.edit_email, name="edit_email"),
+    path('ayarlar/email-duzenle', edit.edit_email, name="edit_email"),
     path('paylasimlarim/', posts.user_posts, name="user_posts"),
-    path('kullanici-adi-duzenle/', edit.edit_username, name="edit_username"),
+    path('ayarlar/kullanici-adi-duzenle', edit.edit_username, name="edit_username"),
+    path('ayarlar/sifre-yenile', edit.edit_password, name="edit_password"),
+    path('ayarlar/sosyal-medya-ekle', edit.add_social_media_to_user, name="add_social_media_to_user"),
     # path('sifre-sifirla/', edit.edit_password, name="edit_password"),
 
     # Login/Register
@@ -22,16 +24,8 @@ urlpatterns = [
     path('kayit-ol/', views.register_account, name="register_account"),
 
     # Requested User
-    url(r'^(?P<username>[\w-]+)/$', user.account_detail, name="account_detail"),
-    url(r'^(?P<username>[\w-]+)/takip/$', FollowAccountToggle.as_view(), name="follow-toggle"),
     # url(r'^Article/(?P<username>[\w-]+)/Follow/$', FollowAccountAPIToggle.as_view(), name="follow-api-toggle"),
     path('', views.index, name="index"),
-
-    # rest view
-    # url(r'^Account/Profile/', UserProfileView.as_view()),
-    # url(r'^Account/Register/', UserRegistrationView.as_view()),
-    # url(r'^Account/Login/', UserLoginView.as_view()),
-    # url(r'^Account/Group/', AccountGroupView.as_view()),
 
 ]
 

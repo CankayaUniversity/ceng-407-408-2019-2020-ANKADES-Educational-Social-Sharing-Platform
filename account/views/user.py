@@ -17,7 +17,7 @@ def account_detail(request, username):
     userDetail = get_object_or_404(Account, username=username)
     if request.user.is_authenticated:
         currentUser = request.user
-        userGroup = current_user_group(request, username)
+        userGroup = current_user_group(request, currentUser)
         context = {
             "userDetail": userDetail,
             "userGroup": userGroup,

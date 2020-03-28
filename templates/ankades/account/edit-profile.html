@@ -51,12 +51,14 @@
                             <ul class="nav nav-pills">
                                 <li class="nav-item"><a class="nav-link active" href="#settings"
                                                         data-toggle="tab">Düzenle</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#socialMedia"
+                                <li class="nav-item"><a class="nav-link" href="#socialmedia"
                                                         data-toggle="tab">Sosyal Medya</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#email"
                                                         data-toggle="tab">Email</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#username"
                                                         data-toggle="tab">Kullanıcı Adı</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#password"
+                                                        data-toggle="tab">Şifre</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -66,7 +68,7 @@
                                           enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="form-group row">
-                                            <label for="inputName" class="col-sm-2 col-form-label">Ad:</label>
+                                            <label for="first_name" class="col-sm-2 col-form-label">Ad:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="first_name"
                                                        name="first_name"
@@ -74,7 +76,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputEmail" class="col-sm-2 col-form-label">Soyad:</label>
+                                            <label for="last_name" class="col-sm-2 col-form-label">Soyad:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="last_name" name="last_name"
                                                        placeholder="Soyad" value="{{ currentUser.last_name }}" required>
@@ -87,8 +89,48 @@
                                         </div>
                                     </form>
                                 </div>
-                                <!-- /.tab-pane -->
-                                <div class="tab-pane" id="email">
+                                {#                                end of tab content#}
+                                <div class="tab-pane {% if active_tab == 'socialmedia' %}active{% endif %}" id="socialmedia">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Sosyal Medya</th>
+                                            <th>URL</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if sm %}
+                                            {% for socialMedia in sm %}
+                                                <tr>
+                                                    <td>{{ socialMedia.title }}</td>
+                                                    <td contenteditable="true">
+                                                        <form method="post" action="{% url 'add_social_media_to_user' %}">
+                                                            {% csrf_token %}
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control"
+                                                                       name="{{ socialMedia.slug }}"
+                                                                       value="{% if accountSocialMedia.socialMediaId.slug == socialMedia.slug %}{{ accountSocialMedia.url }}{% endif %}"
+                                                                       placeholder="URL (https://{% if socialMedia.slug == 'google-drive' %}drive.google.com{% else %}www.{{ socialMedia.slug }}.com/{{ currentUser.username }}{% endif %})">
+                                                                    <span class="input-group-append">
+                                                                        <button type="submit"
+                                                                            class="btn btn-success btn-md">Hesabı Ekle</button>
+                                                                    </span>
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <tfoot>
+                                        <tr>
+                                            <th>Sosyal Medya</th>
+                                            <th>URL</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                {#                                end of tab content#}
+                                <div class="tab-pane {% if active_tab == 'email' %}active{% endif %}" id="email">
                                     <form class="form-horizontal" role="form" method="post"
                                           action="{% url 'edit_email' %}"
                                           enctype="multipart/form-data">
@@ -108,22 +150,65 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="tab-pane" id="username">
+                                {#                                end of tab content#}
+                                <div class="tab-pane {% if active_tab == 'username' %}active{% endif %}" id="username">
                                     <p>
                                         <b>"{{ instance.username }}"</b> olan kullanıcı adınızı gerçekten değiştirmek
                                         istediğinize emin misiniz?
                                     </p>
                                     <hr>
                                     <p>
-                                        <b>"Kullanıcı adınız değiştirdiğinizde diğer kullanıcılar, size yeni kullanıcı
-                                            adınızla erişecektir. "</b>
+                                        <b>UYARI: Kullanıcı adınızı değiştirdiğiniz zaman, diğer kullanıcılar, sizin
+                                            profilinize artık yeni kullanıcı
+                                            adınızla erişebilecekler. Yine de değiştirmek istiyorsanız aşağıdaki
+                                            "Değiştir" butonuna tıklayınız.</b>
                                     </p>
-                                    <button type="button" class="btn btn-sm btn-danger"
+                                    <button type="button" class="btn btn-md btn-danger"
                                             data-toggle="modal"
                                             data-target="#modal-edit-username">Değiştir
                                     </button>
                                 </div>
-                                <!-- /.tab-content -->
+                                {#                                end of tab content#}
+                                <div class="tab-pane {% if active_tab == 'password' %}active{% endif %}" id="password">
+                                    <form class="form-horizontal" role="form" method="post" id="edit-password"
+                                          action="{% url 'edit_password' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group row">
+                                            <label for="old_password" class="col-sm-2 col-form-label">Eski
+                                                Şifreniz:</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" class="form-control" id="old_password"
+                                                       name="old_password"
+                                                       placeholder="Eski Şifreniz" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="password" class="col-sm-2 col-form-label">Yeni Şifreniz:</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" class="form-control" id="password"
+                                                       name="password"
+                                                       placeholder="Yeni Şifreniz" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="old_password" class="col-sm-2 col-form-label">Yeni Şifreniz
+                                                Tekrar:</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" class="form-control" id="confirm_password"
+                                                       name="confirm_password"
+                                                       placeholder="Yeni Şifreniz Tekrar" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" class="btn btn-success">Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                {#                                end of tab content#}
+                                {#                                Modal for username#}
                                 <div class="modal fade"
                                      id="modal-edit-username">
                                     <div class="modal-dialog">

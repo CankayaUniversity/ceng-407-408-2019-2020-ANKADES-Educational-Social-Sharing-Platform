@@ -1,8 +1,11 @@
+from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import authentication, permissions
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from account.models import Account
 from article.models import Article
 
 
