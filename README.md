@@ -29,6 +29,16 @@ DATABASES = {
 
 **CREATE SUPER USER:** Activate the virtual environment on your terminal.
 
+```
+python manage.py createsuperuser
+```
+
+**ADDING HOME CATEGORY
+
+120523ef-de49-4f5a-9ada-63362d72070a  -> Copy this UUID and paste it to ArticleCategory "table" -> id and parentId.
+
+You have to fill creator_id field with your superuser's UUID which is in Account "table".
+
 On Windows:
 
 ```
