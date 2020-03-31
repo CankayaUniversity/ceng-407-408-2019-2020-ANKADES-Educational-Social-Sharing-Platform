@@ -36,7 +36,6 @@
 #     title = models.CharField(max_length=254, verbose_name="Makale Başlığı")
 #     slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
 #     description = RichTextField(verbose_name="Makale Açıklaması")
-#     media = models.FileField(null=True, blank=True, verbose_name="Makale Dosya Yükleme")
 #     createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Makale Oluşturulduğu Tarih")
 #     updatedDate = models.DateTimeField(verbose_name="Makale Güncellendiği Tarih", null=True, blank=True)
 #     view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
@@ -69,20 +68,3 @@
 #     class Meta:
 #         db_table = "QuestionComment"
 #         ordering = ['-createdDate']
-#
-#
-# class QuestionTag(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Tag Id")
-#     tagId = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, verbose_name="Etiket")
-#     questionId = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, verbose_name="Soru")
-#     createdDate = models.DateTimeField(auto_now_add=True)
-#     updatedDate = models.DateTimeField(null=True, blank=True)
-#     view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
-#     like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
-#     isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-#
-#     def __str__(self):
-#         return self.tagId
-#
-#     class Meta:
-#         db_table = "QuestionTag"

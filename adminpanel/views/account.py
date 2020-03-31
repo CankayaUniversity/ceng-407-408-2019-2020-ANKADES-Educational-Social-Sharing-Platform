@@ -301,6 +301,7 @@ def admin_register_account(request):
         "userGroup": userGroup,
         "currentUser": currentUser
     }
+    #if userGroup == 'admin:
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -309,13 +310,15 @@ def admin_register_account(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
         is_active = request.POST.get('is_active') == "on"
+        is_staff = request.POST.get('is_staff') == "on"
+        is_admin = request.POST.get('is_admin') == "on"
+
         if password and confirm_password and password != confirm_password:
             messages.error(request, "Girilen şifreler uyuşmuyor. Lütfen tekrar deneyin.")
             return render(request, "adminpanel/account/add-account.html", context)
         else:
-            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email, is_active=is_active)
-            new_user.is_admin = False
-            new_user.is_staff = False
+            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email,
+                               is_active=is_active, is_staff=is_staff, is_admin=is_admin)
             new_user.save()
             new_user.set_password(password)
             new_user.save()
@@ -333,6 +336,7 @@ def admin_register_account(request):
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
             return redirect("admin_all_users")
     return render(request, "adminpanel/account/add-account.html", context)
+
 
 # # Kullanıcı izinleri
 # @login_required(login_url="login_admin")
@@ -383,7 +387,6 @@ def admin_add_account_group(request):
         instance = AccountGroup(userId=user, groupId=group)
 
     return None
-
 
 # @login_required(login_url="login_admin")
 # def admin_edit_account_group(request, id):
@@ -476,4 +479,3 @@ def admin_add_account_group(request):
 #         messages.error(request, "Yetkiniz Yok!")
 #
 #
-
