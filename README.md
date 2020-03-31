@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 You dont need to install stackbuilder.
 
-**Create a database then change your database login information in faulttrackingsystem->settings.py in _DATABASES_**
+**Create a database then change your database login information in ankadescankaya->settings.py in _DATABASES_**
 
 ```
 DATABASES = {
