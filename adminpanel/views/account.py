@@ -29,19 +29,18 @@ def admin_all_users(request):
 def admin_all_user_groups(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-
     admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     members = AccountGroup.objects.filter(Q(groupId__slug="üye"))
-    accounts = Account.objects.all().order_by('-date_joined')[:5]
     context = {
         "userGroup": userGroup,
         "admins": admins,
         "moderators": moderators,
         "teachers": teachers,
         "students": students,
+        "members": members,
     }
     return render(request, "adminpanel/account/group/user-groups.html", context)
 
