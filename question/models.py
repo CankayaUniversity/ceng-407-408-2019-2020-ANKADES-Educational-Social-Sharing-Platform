@@ -2,6 +2,8 @@ import uuid
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
+from django.urls import reverse
+
 from account.models import Account
 from adminpanel.models import Tag
 
@@ -30,20 +32,35 @@ class QuestionCategory(models.Model):
 
 
 class Question(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Makale Id")
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, verbose_name="Makale Öğretmeni")
-    categoryId = models.ForeignKey(QuestionCategory, verbose_name="Makale Kategori",
-                                   on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=254, verbose_name="Makale Başlığı")
-    slug = models.SlugField(unique=True, max_length=254, verbose_name="Slug", allow_unicode=True)
-    description = RichTextField(verbose_name="Makale Açıklaması")
-    createdDate = models.DateTimeField(auto_now_add=True, verbose_name="Makale Oluşturulduğu Tarih")
-    updatedDate = models.DateTimeField(verbose_name="Makale Güncellendiği Tarih", null=True, blank=True)
-    view = models.PositiveIntegerField(default=0, verbose_name="Makale Görüntülenme Tarihi")
-    is_active = models.BooleanField(default=True, verbose_name="Aktiflik")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    questionNumber = models.PositiveIntegerField(unique=True, auto_created=True)
+    creator = models.ForeignKey(Account, on_delete=models.PROTECT)
+    categoryId = models.ForeignKey(QuestionCategory, on_delete=models.PROTECT, null=False)
+    title = models.CharField(max_length=254, null=False, blank=False)
+    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    description = RichTextField(null=False, blank=False)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    view = models.PositiveIntegerField(default=0)
+    isActive = models.BooleanField(default=True)
+    isPrivate = models.BooleanField(default=False, null=True, blank=True)
+    likes = models.ManyToManyField(Account, related_name="questionLikes", default=0, blank=True,
+                                   db_table="AccountLikedQuestion")
 
     def __str__(self):
-        return self.title
+        return self.questionNumber
+
+    def __unicode__(self):
+        return self.questionNumber
+
+    def get_absolute_url(self):
+        return reverse("question_detail", kwargs={"username": self.creator.username, "slug": self.questionNumber})
+
+    def get_like_url(self):
+        return reverse("question-like-toggle", kwargs={"username": self.creator.username, "slug": self.questionNumber})
+
+    def get_api_like_url(self):
+        return reverse("question-like-api-toggle", kwargs={"username": self.creator.username, "slug": self.questionNumber})
 
     class Meta:
         db_table = "Question"
@@ -51,20 +68,20 @@ class Question(models.Model):
 
 
 class QuestionComment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Yorum Id")
-    questionId = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, verbose_name="Makale Yorumcusu")
-    creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, verbose_name="Kullanıcı Adı", null=True, blank=True)
-    content = RichTextField(verbose_name="Yorum", blank=False, null=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    questionId = models.ForeignKey(Question, on_delete=models.PROTECT)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.PROTECT)
+    content = RichTextField(blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    parentId = models.ForeignKey('self', null=True, related_name="Cevap", on_delete=models.SET_NULL)
-    isRoot = models.BooleanField(default=False, verbose_name="Root Durumu")
-    isActive = models.BooleanField(default=True, verbose_name="Aktiflik")
-    view = models.PositiveIntegerField(default=0, verbose_name="Yorum Görüntülenme Tarihi")
-    like = models.PositiveIntegerField(default=0, verbose_name="Yorum Beğeni Sayısı")
+    parentId = models.ForeignKey('self', null=True, related_name="questionCommentId", on_delete=models.PROTECT)
+    isRoot = models.BooleanField(default=False)
+    isActive = models.BooleanField(default=True)
+    view = models.PositiveIntegerField(default=0)
+    like = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.creator
+        return self.questionId
 
     class Meta:
         db_table = "QuestionComment"

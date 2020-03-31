@@ -1,9 +1,11 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
-from question import views
+from question.views import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('sorular/', views.index, name="index"),
 ]
 
 if settings.DEBUG:

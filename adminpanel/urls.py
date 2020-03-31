@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity
+from adminpanel.views import group, socialmedia, activity, question
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -51,6 +51,9 @@ urlpatterns = [
     path('isactive-group/<slug:slug>', group.admin_isactive_group,
          name="admin_isactive_group"),
 
+
+    path('question/add-question-category/', question.admin_add_question_category, name="admin_add_question_category"),
+    path('question/add-question/', question.admin_add_question, name="admin_add_question"),
 
     # Group Permission
     # path('gruplar/grup-izinleri/', group.admin_group_permission, name="admin_group_permission"),

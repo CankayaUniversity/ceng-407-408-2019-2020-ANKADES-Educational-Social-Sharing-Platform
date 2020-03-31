@@ -104,6 +104,8 @@ def admin_tags(request):
     :param request:
     :return:
     """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     tags = Tag.objects.all()
     context = {
         "tags": tags,

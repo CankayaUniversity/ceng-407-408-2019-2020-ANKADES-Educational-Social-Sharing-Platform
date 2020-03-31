@@ -153,25 +153,32 @@ def admin_add_article_category(request):
             title = request.POST.get("title")
             isActive = request.POST.get("isActive") == "on"
             isCategory = request.POST.get("isCategory") == "on"
-            instance = ArticleCategory(parentId=value, title=title, isActive=isActive, isCategory=isCategory)
-            instance.creator = request.user
-            instance.save()
-            activity.title = "Makale Kategorisi Ekleme: " + str(currentUser)
-            activity.application = "Article"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "INSERT"
-            activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı makale için kategori ekledi."
-            activity.save()
-            messages.success(request, "Makale kategorisi başarıyla eklendi !")
-            return redirect("admin_add_article_category")
+            try:
+                getTitle = ArticleCategory.objects.get(title=title)
+                if title:
+                    error = title + " isimli kategori " + getTitle.parentId.title + " kategorisinde zaten mevcut."
+                    messages.error(request, error)
+                    return redirect("admin_add_article_category")
+            except:
+                instance = ArticleCategory(parentId=value, title=title, isActive=isActive, isCategory=isCategory)
+                instance.creator = request.user
+                instance.save()
+                activity.title = "Makale Kategorisi Ekleme: " + str(currentUser)
+                activity.application = "Article"
+                activity.createdDate = datetime.datetime.now()
+                activity.method = "INSERT"
+                activity.creator = currentUser
+                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı makale için kategori ekledi."
+                activity.save()
+                messages.success(request, "Makale kategorisi başarıyla eklendi !")
+                return redirect("admin_add_article_category")
         return render(request, "adminpanel/article/add-category.html", context)
     else:
         messages.error(request, "Yetkiniz yok!")
         return redirect("admin_dashboard")
-#
-#
+
+
 # @login_required(login_url="login_admin")
 # def admin_edit_article(request, slug):
 #     """
