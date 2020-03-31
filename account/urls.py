@@ -3,10 +3,6 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 from account.views import views, user, edit, posts
-# from account.views.api import UserProfileView, UserRegistrationView, UserLoginView, AccountGroupView, \
-#     FollowAccountAPIToggle
-from account.views.views import FollowAccountToggle
-from article.views import views as articleviews
 
 urlpatterns = [
     # Current User

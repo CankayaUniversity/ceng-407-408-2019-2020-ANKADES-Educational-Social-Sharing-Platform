@@ -17,7 +17,8 @@
                         {% if instance.media %}
                             <img class="img-fluid pad" src="{{ instance.media.url }}" alt="Photo" width="100%">
                         {% endif %}
-                            <div class="container-fluid container p-5" style="background: #f8f9fa">{{ instance.description|safe }}</div>
+                        <div class="container-fluid container p-5"
+                             style="background: #f8f9fa">{{ instance.description|safe }}</div>
                         <div class="container mt-3">
                             <button type="button" class="btn btn-danger btn-md"><i class="fas fa-share"></i> Paylaş
                             </button>
@@ -93,23 +94,25 @@
                                 </div>
                             {% endfor %}
                             <div class="container mt-3">
-                                <form method="post" id="commentForm" class="comment-form"
-                                      action="{% url 'add_article_comment' instance.slug %}">
-                                    {% csrf_token %}
-                                    <p class="comment-form-comment form-group has-placeholder">
-                                        <label for="comment">Yorum Yap</label>
-                                        <i class="fa fa-edit color-main"></i>
-                                        <textarea class="form-control" id="comment" name="content"
-                                                  cols="45"
-                                                  rows="8" maxlength="65525" aria-required="true"
-                                                  required="required" placeholder=""></textarea>
-                                    </p>
-                                    <p class="form-submit">
-                                        <button type="submit" class="btn btn-primary">
-                                            <span>Gönder</span>
-                                        </button>
-                                    </p>
-                                </form>
+                                {% if request.user.is_authenticated %}
+                                    <form method="post" id="commentForm" class="comment-form"
+                                          action="{% url 'add_article_comment' instance.slug %}">
+                                        {% csrf_token %}
+                                        <p class="comment-form-comment form-group has-placeholder">
+                                            <label for="comment">Yorum Yap</label>
+                                            <i class="fa fa-edit color-main"></i>
+                                            <textarea class="form-control" id="comment" name="content"
+                                                      cols="45"
+                                                      rows="8" maxlength="65525" aria-required="true"
+                                                      required="required" placeholder=""></textarea>
+                                        </p>
+                                        <p class="form-submit">
+                                            <button type="submit" class="btn btn-primary">
+                                                <span>Gönder</span>
+                                            </button>
+                                        </p>
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
                     {% else %}

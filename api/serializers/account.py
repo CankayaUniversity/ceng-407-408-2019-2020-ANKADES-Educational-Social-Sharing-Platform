@@ -6,12 +6,11 @@ from rest_framework_jwt.settings import api_settings
 
 from account.models import Account
 
-
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 
 
-#Registration
+# Registration
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -19,7 +18,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-
     profile = UserSerializer(required=False)
 
     class Meta:
@@ -42,31 +40,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    profile = UserSerializer
-
-    class Meta:
-        model = Account
-        fields = ('username', '')
-
-    def get(self, username, validated_data):
-        username = validated_data.get("username", None)
-        profile = validated_data.pop('profile')
-        try:
-            get_object_or_404(Account, username=username)
-        except:
-            raise serializers.ValidationError(
-                {"data": {
-                    "success": "False",
-                    "status": status.HTTP_404_NOT_FOUND,
-                    "error": "True",
-                    "message": "Kullanıcı bulunamadı.",
-                }}
-            )
-        return validated_data
-
-
-#Login
+# Login
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)

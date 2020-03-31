@@ -13,7 +13,6 @@ urlpatterns = [
     # path('makale/<slug:slug>/', views.article_detail, name="article_detail"),
     path('makale/sil/<slug:slug>/', views.delete_article, name="delete_article"),
     path('makale/duzenle/<slug:slug>/', views.edit_article, name="edit_article"),
-    url(r'^makale/makalelerim/(?P<username>\w+)/$', views.my_articles, name="my_articles"),
     path('makale/yorum-ekle/<slug:slug>/', views.add_article_comment, name="add_article_comment"),
     url(r'^(?P<username>[\w-]+)/(?P<slug>[\w-]+)/like/$', ArticleLikeToggle.as_view(), name="like-toggle"),
     url(r'^(?P<username>[\w-]+)/(?P<slug>[\w-]+)/$', views.article_detail, name="article_detail"),

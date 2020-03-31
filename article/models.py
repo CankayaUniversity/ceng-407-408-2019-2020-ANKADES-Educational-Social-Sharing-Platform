@@ -13,7 +13,7 @@ from ankadescankaya.slug import slug_save
 class ArticleCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=254)
+    title = models.CharField(max_length=254, unique=True)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = models.TextField(null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)

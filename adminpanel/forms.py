@@ -75,6 +75,10 @@ class AddArticleForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget())
 
 
+class AddQuestionForm(forms.Form):
+    description = forms.CharField(widget=CKEditorWidget())
+
+
 class AdminEditArticleForm(forms.ModelForm):
     class Meta:
         model = Article

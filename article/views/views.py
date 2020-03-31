@@ -252,27 +252,7 @@ def add_article_comment(request, slug):
             activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
         activity.save()
         messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
-    return redirect(reverse("article_detail", kwargs={"slug": slug}))
-
-
-@login_required(login_url="login_account")
-def my_articles(request, username):
-    keyword = request.GET.get("keyword")
-    if keyword:
-        article_pagination = Article.objects.filter(Q(title__contains=keyword) |
-                                                    Q(description__contains=keyword))
-        context = {
-            "article_pagination": article_pagination,
-        }
-        return render(request, "ankades/../templates/test/article/my-articles.html", context)
-    user = get_object_or_404(Account, username=username)
-    articleCategories = Article.objects.all()
-    myArticles = Article.objects.filter(Q(creator=user))
-    context = {
-        "myArticles": myArticles,
-        "articleCategories": articleCategories,
-    }
-    return render(request, "ankades/../templates/test/article/my-articles.html", context)
+    return redirect("all_articles")
 
 
 class ArticleLikeToggle(RedirectView):

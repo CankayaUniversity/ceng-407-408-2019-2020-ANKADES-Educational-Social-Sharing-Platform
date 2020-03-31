@@ -38,7 +38,7 @@ urlpatterns = [
 
     # User Group
     # path('kullanicilar/grup/', group.admin_account_groups, name="admin_account_groups"),
-    path('kullanicilar/grup/ekle/', account.admin_add_account_group, name="admin_add_account_group"),
+    path('admin/add-group-to-user', account.admin_add_group_to_user, name="admin_add_group_to_user"),
     # path('kullanicilar/grup/duzenle/<uuid:id>', account.admin_edit_account_group, name="admin_edit_account_group"),
     # path('kullanicilar/grup/sil/<uuid:id>', group.admin_delete_account_group, name="admin_delete_account_group"),
 

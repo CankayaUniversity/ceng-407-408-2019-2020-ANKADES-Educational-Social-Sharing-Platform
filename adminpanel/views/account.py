@@ -2,16 +2,13 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
-from account.forms import AccountRegisterForm
 from account.models import Account, Group, AccountGroup
 from account.views.views import current_user_group
-from adminpanel.forms import AdminEditProfileForm
 from adminpanel.models import AdminActivity
 from exam.models import School
 
@@ -149,7 +146,8 @@ def admin_edit_profile(request):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı hesabını güncelledi."
+        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
         return redirect(reverse("admin_edit_profile", kwargs={"username": username}))
@@ -301,7 +299,6 @@ def admin_register_account(request):
         "userGroup": userGroup,
         "currentUser": currentUser
     }
-    #if userGroup == 'admin:
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -310,15 +307,14 @@ def admin_register_account(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
         is_active = request.POST.get('is_active') == "on"
-        is_staff = request.POST.get('is_staff') == "on"
-        is_admin = request.POST.get('is_admin') == "on"
-
         if password and confirm_password and password != confirm_password:
             messages.error(request, "Girilen şifreler uyuşmuyor. Lütfen tekrar deneyin.")
             return render(request, "adminpanel/account/add-account.html", context)
         else:
             new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email,
-                               is_active=is_active, is_staff=is_staff, is_admin=is_admin)
+                               is_active=is_active)
+            new_user.is_admin = False
+            new_user.is_staff = False
             new_user.save()
             new_user.set_password(password)
             new_user.save()
@@ -336,6 +332,49 @@ def admin_register_account(request):
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
             return redirect("admin_all_users")
     return render(request, "adminpanel/account/add-account.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_add_group_to_user(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    groups = Group.objects.all()
+    users = Account.objects.all()
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+        "groups": groups,
+        "users": users,
+    }
+    activity = AdminActivity()
+    if userGroup == 'admin':
+        if request.method == "POST":
+            userId = request.POST['userId']
+            groupId = request.POST['groupId']
+            try:
+                getExistAccount = AccountGroup.objects.get(userId__id=userId)
+                if getExistAccount:
+                    messages.error(request, "Kullanıcının zaten bir grubu mevcut.")
+                    return redirect("admin_dashboard")
+            except:
+                instance = AccountGroup()
+                instance.groupId_id = groupId
+                instance.userId_id = userId
+                instance.save()
+                activity.creator = currentUser
+                activity.method = "POST"
+                activity.createdDate = datetime.datetime.now()
+                activity.application = "Account Group"
+                activity.title = "Kullanıcıya Grup Ekleme"
+                activity.description = str(instance.userId.get_full_name()) + " kullanıcısına " + str(
+                    instance.groupId.title) + " grubu eklendi. İşlem tarihi: " + str(
+                    activity.createdDate) + ". İşlemi gerçekleştiren kişi: " + str(activity.creator)
+                activity.save()
+                return redirect("admin_dashboard")
+    else:
+        messages.error(request, "Yetkiniz yok.")
+        return redirect("admin_dashboard")
+    return render(request, "adminpanel/account/group/add-group-to-user.html", context)
 
 
 # # Kullanıcı izinleri
@@ -372,21 +411,6 @@ def admin_register_account(request):
 #         messages.error(request, "Yetkiniz yok !")
 #         return redirect("admin_dashboard")
 
-
-@login_required(login_url="login_admin")
-def admin_add_account_group(request):
-    """
-    :param request:
-    :return:
-    """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    if request.method == "POST":
-        group = request.POST['groupId']
-        user = request.POST['userId']
-        instance = AccountGroup(userId=user, groupId=group)
-
-    return None
 
 # @login_required(login_url="login_admin")
 # def admin_edit_account_group(request, id):
