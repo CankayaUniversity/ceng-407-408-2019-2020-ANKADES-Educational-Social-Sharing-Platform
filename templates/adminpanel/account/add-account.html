@@ -1,20 +1,16 @@
 {% extends 'adminpanel/layout/layout.html' %}
 {% load static %}
 {% block content %}
-    <!-- Main content -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <!-- left column -->
                 <div class="col-md-12">
-                    <!-- jquery validation -->
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Makale Paylaşma</h3>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form role="form" method="post" action="{% url 'admin_register_account' %}" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{% url 'admin_register_account' %}"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">
@@ -39,26 +35,39 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Şifre Tekrar*</label>
-                                    <input type="password" class="form-control" name="confirm_password" placeholder="Şifre Tekrar">
+                                    <input type="password" class="form-control" name="confirm_password"
+                                           placeholder="Şifre Tekrar">
                                 </div>
+                                <div class="form-group">
+                                    <label>Grup Adı*</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="groupId"
+                                            required>
+                                        <option disabled>Lütfen bir grup seçiniz</option>
+                                        {% if groups %}
+                                            {% for group in groups %}
+                                                <option value="{{ group.id }}">{{ group.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="is_active" class="custom-control-input"
+                                               id="is_active">
+                                        <label class="custom-control-label" for="is_active">Aktiflik</label>
+                                    </div>
+                                </div>
+                                <br>
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Gönder</button>
                             </div>
                         </form>
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!--/.col (left) -->
-                <!-- right column -->
                 <div class="col-md-6">
-
                 </div>
-                <!--/.col (right) -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

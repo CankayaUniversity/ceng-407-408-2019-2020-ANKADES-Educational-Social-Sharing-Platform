@@ -292,12 +292,13 @@ def admin_block_account(request, username):
 def admin_register_account(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    getGroup = Group.objects.get(slug="uye")
     accountGroup = AccountGroup()
+    groups = Group.objects.all()
     activity = AdminActivity()
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser
+        "currentUser": currentUser,
+        "groups": groups,
     }
     if request.method == "POST":
         first_name = request.POST.get('first_name')
@@ -306,28 +307,31 @@ def admin_register_account(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
+        getGroup = request.POST['groupId']
         is_active = request.POST.get('is_active') == "on"
         if password and confirm_password and password != confirm_password:
             messages.error(request, "Girilen şifreler uyuşmuyor. Lütfen tekrar deneyin.")
             return render(request, "adminpanel/account/add-account.html", context)
         else:
-            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email,
-                               is_active=is_active)
-            new_user.is_admin = False
-            new_user.is_staff = False
+            new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email, is_active=is_active)
             new_user.save()
             new_user.set_password(password)
             new_user.save()
             accountGroup.userId_id = new_user.id
-            accountGroup.groupId_id = getGroup.id
+            accountGroup.groupId_id = getGroup
             accountGroup.save()
+            if accountGroup.groupId.slug == 'admin':
+                new_user.is_admin = True
+                new_user.save()
+            elif accountGroup.groupId.slug == 'moderator':
+                new_user.is_staff = True
+                new_user.save()
             activity.title = "Kullanıcı Ekleme"
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı eklendi."
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı eklendi."
             activity.save()
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
             return redirect("admin_all_users")

@@ -33,7 +33,7 @@ def admin_dashboard(request):
         "user_activity_objects": user_activity_objects,
         "number_of_active_users": number_of_active_users,
     }
-    if userGroup == 'admin':
+    if userGroup == 'admin' or userGroup == 'moderator':
         return render(request, "adminpanel/dashboard.html", context)
     else:
         return redirect("index")
@@ -53,12 +53,12 @@ def login_admin(request):
             user = authenticate(username=username, password=password)
             try:
                 get_user = Account.objects.get(username=username)
-                if not get_user.is_staff:
+                if get_user.is_staff is not True and get_user.is_admin is not True:
                     messages.error(request, "Admin panele giriş yetkiniz yok.")
-                    return redirect("admin_dashboard")
+                    return redirect("index")
             except Account.DoesNotExist:
-                return redirect("admin_dashboard")
-
+                messages.error(request, "dsaf")
+                return redirect("index")
             login(request, user)
             if remember:
                 request.session.set_expiry(1209600)
