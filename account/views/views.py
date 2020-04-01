@@ -217,7 +217,7 @@ def user_social_media(self, username):
 
 def user_articles(self, username):
     try:
-        articles = Article.objects.get(creator__username=username)
+        articles = Article.objects.filter(creator__username=username)
         return articles
     except:
         articles = None
@@ -226,7 +226,7 @@ def user_articles(self, username):
 
 def user_questions(self, username):
     try:
-        questions = Question.objects.get(creator__username=username)
+        questions = Question.objects.filter(creator__username=username)
         return questions
     except:
         questions = None

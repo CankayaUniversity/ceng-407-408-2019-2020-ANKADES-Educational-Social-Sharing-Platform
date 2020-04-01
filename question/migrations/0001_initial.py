@@ -15,46 +15,30 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('adminpanel', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Article',
+            name='Question',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('questionNumber', models.CharField(max_length=32, unique=True)),
                 ('title', models.CharField(max_length=254)),
                 ('slug', models.SlugField(allow_unicode=True, max_length=254, unique=True)),
                 ('description', ckeditor.fields.RichTextField()),
-                ('media', models.FileField(blank=True, null=True, upload_to='')),
                 ('createdDate', models.DateTimeField(auto_now_add=True)),
                 ('updatedDate', models.DateTimeField(blank=True, null=True)),
                 ('view', models.PositiveIntegerField(default=0)),
                 ('isActive', models.BooleanField(default=True)),
                 ('isPrivate', models.BooleanField(blank=True, default=False, null=True)),
-                ('readTime', models.IntegerField(default=0)),
             ],
             options={
-                'db_table': 'Article',
+                'db_table': 'Question',
                 'ordering': ['-createdDate'],
             },
         ),
         migrations.CreateModel(
-            name='ArticleTag',
-            fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('view', models.PositiveIntegerField(default=0)),
-                ('like', models.PositiveIntegerField(default=0)),
-                ('isActive', models.BooleanField(default=True)),
-                ('articleId', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='article.Article')),
-                ('tagId', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='adminpanel.Tag')),
-            ],
-            options={
-                'db_table': 'ArticleTag',
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleComment',
+            name='QuestionComment',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('content', ckeditor.fields.RichTextField()),
@@ -64,17 +48,17 @@ class Migration(migrations.Migration):
                 ('isActive', models.BooleanField(default=True)),
                 ('view', models.PositiveIntegerField(default=0)),
                 ('like', models.PositiveIntegerField(default=0)),
-                ('articleId', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='article.Article')),
-                ('creator', models.ForeignKey(max_length=50, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
-                ('parentId', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='articleCommentId', to='article.ArticleComment')),
+                ('creator', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('parentId', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='questionCommentId', to='question.QuestionComment')),
+                ('questionId', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='question.Question')),
             ],
             options={
-                'db_table': 'ArticleComment',
+                'db_table': 'QuestionComment',
                 'ordering': ['-createdDate'],
             },
         ),
         migrations.CreateModel(
-            name='ArticleCategory',
+            name='QuestionCategory',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=254, unique=True)),
@@ -88,26 +72,26 @@ class Migration(migrations.Migration):
                 ('isActive', models.BooleanField(default=True)),
                 ('isCategory', models.BooleanField(default=False)),
                 ('creator', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('parentId', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='article.ArticleCategory')),
+                ('parentId', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='question.QuestionCategory')),
             ],
             options={
-                'db_table': 'ArticleCategory',
+                'db_table': 'QuestionCategory',
                 'ordering': ['-createdDate'],
             },
         ),
         migrations.AddField(
-            model_name='article',
+            model_name='question',
             name='categoryId',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='article.ArticleCategory'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='question.QuestionCategory'),
         ),
         migrations.AddField(
-            model_name='article',
+            model_name='question',
             name='creator',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='article',
+            model_name='question',
             name='likes',
-            field=models.ManyToManyField(blank=True, db_table='AccountLikedArticle', default=0, related_name='articleLikes', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True, db_table='AccountLikedQuestion', default=0, related_name='questionLikes', to=settings.AUTH_USER_MODEL),
         ),
     ]

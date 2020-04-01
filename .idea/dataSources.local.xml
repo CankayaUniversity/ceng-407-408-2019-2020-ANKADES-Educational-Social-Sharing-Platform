@@ -10,13 +10,10 @@
       <user-name>postgres</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node negative="1">
-            <node kind="database" qname="ankades">
-              <node kind="schema" qname="public" />
-            </node>
-            <node kind="database" qname="ankadesdb">
-              <node kind="schema" negative="1" />
-            </node>
+          <node kind="database">
+            <name qname="ankades" />
+            <name qname="ankadesdb" />
+            <node kind="schema" qname="public" />
           </node>
         </introspection-scope>
       </schema-mapping>

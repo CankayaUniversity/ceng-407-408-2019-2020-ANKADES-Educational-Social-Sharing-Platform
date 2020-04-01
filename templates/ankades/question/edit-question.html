@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 {% load static %}
-{% block title %}Ankades Soru Sorma{% endblock %}
+{% block title %}Ankades Soru Düzeltme{% endblock %}
 {% block content %}
     <section class="content-header">
         <div class="container-fluid">
@@ -12,14 +12,14 @@
                         <div class="card-header">
                             <h3 class="card-title">Soru Sorma</h3>
                         </div>
-                        <form role="form" method="post" action="{% url 'add_question' %}">
+                        <form role="form" method="post" action="{% url 'edit_question' instance.slug instance.questionNumber %}">
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Kategori*</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="value"
                                             required>
-                                        <option disabled>Lütfen bir kategori seçiniz</option>
+                                        <option value="{{ instance.categoryId_id }}">{{ instance.categoryId.title }}</option>
                                         {% if questionCategory %}
                                             {% for category in questionCategory %}
                                                 <option value="{{ category.id }}">{{ category.title }}</option>
@@ -29,13 +29,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="title">Başlık*</label>
-                                    <input type="text" class="form-control" id="title" name="title"
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ instance.title }}"
                                            placeholder="Başlık">
                                 </div>
                                 <div class="form-group mb-0">
                                     <label>Sorunuz*</label>
                                     <div>
-                                        {{  }}
+                                        {{ form.description }}
                                     </div>
                                 </div>
                             </div>

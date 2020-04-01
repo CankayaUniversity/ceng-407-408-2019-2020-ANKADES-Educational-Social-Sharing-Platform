@@ -9,7 +9,7 @@ from django.views.generic import RedirectView
 
 from account.models import AccountActivity
 from account.views.views import current_user_group
-from question.forms import AddQuestionForm
+from question.forms import AddQuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
 
 
@@ -53,7 +53,13 @@ def add_question(request):
 
 
 def all_questions(request):
-    return None
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+    }
+    return render(request, "ankades/question/all-questions.html", context)
 
 
 def question_detail(request, slug, questionNumber):
@@ -71,8 +77,38 @@ def question_detail(request, slug, questionNumber):
     return render(request, "ankades/question/question-detail.html", context)
 
 
-def edit_question(request, questionNumber):
-    return None
+def edit_question(request, slug, questionNumber):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    try:
+        instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        form = EditQuestionForm(request.POST or None, instance=instance)
+        if instance.creator == currentUser:
+            if request.method == "POST":
+                instance = form.save(commit=False)
+                value = request.POST['value']
+                title = request.POST.get('title')
+                if form.is_valid():
+                    description = form.cleaned_data.get("description")
+                instance.categoryId_id = value
+                instance.title = title
+                instance.description = description
+                instance.save()
+                messages.success(request, "Sorunuz başarıyla güncellendi")
+                return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
+        else:
+            messages.error(request, "Bu soru size ait değil !")
+            return redirect("index")
+    except:
+        return render(request, "404.html")
+
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+        "instance": instance,
+        "form": form,
+    }
+    return render(request, "ankades/question/edit-question.html", context)
 
 
 def delete_question(request, questionNumber):

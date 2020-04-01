@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'ankadescankaya.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ankades',
+        'NAME': 'ankadesdb',
         'USER': 'postgres',
         'PASSWORD': 'bacaglar',
         'HOST': '127.0.0.1',
