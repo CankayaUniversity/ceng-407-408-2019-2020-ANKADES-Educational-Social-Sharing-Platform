@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from account.models import AccountGroup
 from account.views.views import current_user_group
 from adminpanel.models import AdminActivity
-from question.models import QuestionCategory
+from question.models import QuestionCategory, Question
 
 
 @login_required(login_url="login_admin")
@@ -39,7 +39,8 @@ def admin_add_question_category(request):
                     messages.error(request, error)
                     return redirect("admin_add_question_category")
             except:
-                instance = QuestionCategory(parentId_id=categoryId, title=title, isActive=isActive, isCategory=isCategory)
+                instance = QuestionCategory(parentId_id=categoryId, title=title, isActive=isActive,
+                                            isCategory=isCategory)
                 instance.creator = request.user
                 instance.save()
                 activity.title = "Soru Kategorisi Ekleme: " + str(currentUser)
@@ -81,6 +82,11 @@ def admin_question_categories(request):
 
 @login_required(login_url="login_admin")
 def admin_delete_article_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     try:
         instance = QuestionCategory.objects.get(slug=slug)
         if instance.isActive is True:
@@ -96,6 +102,11 @@ def admin_delete_article_category(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_isactive_question_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     try:
         instance = QuestionCategory.objects.get(slug=slug)
         currentUser = request.user
@@ -137,6 +148,11 @@ def admin_isactive_question_category(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_question_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     activity = AdminActivity()
@@ -168,3 +184,20 @@ def admin_delete_question_category(request, slug):
     else:
         messages.error(request, "Yetkiniz Yok")
         return redirect("admin_question_categories")
+
+
+@login_required(login_url="login_admin")
+def admin_all_questions(request):
+    """
+    :param request:
+    :return:
+    """
+    questions = Question.objects.all()
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    context = {
+        "questions": questions,
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+    }
+    return render(request, "adminpanel/question/all-questions.html", context)

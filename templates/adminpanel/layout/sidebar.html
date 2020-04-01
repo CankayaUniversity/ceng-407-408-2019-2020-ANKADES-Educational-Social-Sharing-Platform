@@ -111,12 +111,6 @@
                                 <p>Liste</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{% url  'admin_add_article' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Ekle</p>
-                            </a>
-                        </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -134,6 +128,47 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="{% url 'admin_add_article_category' %}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Ekle</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Sorular
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'admin_all_questions' %}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Liste</p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Kategoriler
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'admin_question_categories' %}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Liste</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'admin_add_question_category' %}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Ekle</p>
                                     </a>

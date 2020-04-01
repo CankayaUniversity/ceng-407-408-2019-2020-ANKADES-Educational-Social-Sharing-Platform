@@ -58,6 +58,7 @@ urlpatterns = [
          name="admin_delete_question_category"),
     path('add-question-category/', question.admin_add_question_category,
          name="admin_add_question_category"),
+    path('all-questions/', question.admin_all_questions, name="admin_all_questions"),
     # path('question/add-question/', question.admin_add_question, name="admin_add_question"),
 
     # Group Permission
