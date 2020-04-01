@@ -105,8 +105,6 @@ def add_article(request):
     if request.method == "POST":
         value = request.POST['categoryId']
         title = request.POST.get("title")
-        if form.is_valid():
-            description = form.cleaned_data.get("description")
         isPrivate = request.POST.get("isPrivate") == "on"
         isActive = request.POST.get("isActive") == "on"
         if form.is_valid():
@@ -121,13 +119,13 @@ def add_article(request):
             fs = FileSystemStorage()
             fs.save(media.name, media)
             instance.media = media
-        instance.creator = request.user
+        instance.creator = currentUser
         instance.categoryId_id = value
         instance.isActive = True
         instance.save()
         activity.title = "Makale Ekle"
         activity.application = "Article"
-        activity.method = "INSERT"
+        activity.method = "POST"
         activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale ekledi."

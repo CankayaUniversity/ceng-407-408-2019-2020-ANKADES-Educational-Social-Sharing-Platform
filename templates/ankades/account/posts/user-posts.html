@@ -16,41 +16,38 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body" style="display: none;">
-
                             <section class="content">
 
-                                <!-- Default box -->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Makalelerim</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="my-articles" class="table table-bordered table-striped projects">
-                                            <thead>
-                                            <tr>
-                                                <th>
-                                                    #
-                                                </th>
-                                                <th>
-                                                    Başlık
-                                                </th>
-                                                <th>
-                                                    Detay
-                                                </th>
-                                                <th>
-                                                    Project Progress
-                                                </th>
-                                                <th>
-                                                    Status
-                                                </th>
-                                                <th>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% if articles %}
+                                {% if articles %}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Makalelerim</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="my-articles" class="table table-bordered table-striped projects">
+                                                <thead>
+                                                <tr>
+                                                    <th>
+                                                        #
+                                                    </th>
+                                                    <th>
+                                                        Başlık
+                                                    </th>
+                                                    <th>
+                                                        Detay
+                                                    </th>
+                                                    <th>
+                                                        Project Progress
+                                                    </th>
+                                                    <th>
+                                                        Status
+                                                    </th>
+                                                    <th>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
                                                 {% for article in articles %}
                                                     <tr>
                                                         <td>
@@ -158,85 +155,187 @@
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
-                                            {% endif %}
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
+                                {% else %}
+                                    <div class="callout callout-info">
+                                        <h5>Uyarı!</h5>
 
+                                        <p>Herhangi bir makeleniz bulumuyor.</p>
+                                    </div>
+                                {% endif %}
                             </section>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-primary collapsed-card" data-card-widget="collapse">
-                        <div class="card-header">
-                            <h3 class="card-title">Sınav Arşivi</h3>
+                    <div class="card card-primary collapsed-card">
+                        <div class="card-header" data-card-widget="collapse">
+                            <h3 class="card-title">Sorular</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                                         class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body" style="display: none;">
-                            The body of the card
+                            <section class="content">
+                                {% if questions %}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Sorularım</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="my-articles" class="table table-bordered table-striped projects">
+                                                <thead>
+                                                <tr>
+                                                    <th>
+                                                        #
+                                                    </th>
+                                                    <th>
+                                                        Başlık
+                                                    </th>
+                                                    <th>
+                                                        Detay
+                                                    </th>
+                                                    <th>
+                                                        Project Progress
+                                                    </th>
+                                                    <th>
+                                                        Status
+                                                    </th>
+                                                    <th>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for question in questions %}
+                                                    <tr>
+                                                        <td>
+                                                            {{ forloop.counter }}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{% url 'question_detail' slug=question.slug questionNumber=question.questionNumber %}">
+                                                                {{ question.title }}
+                                                            </a>
+                                                            <br/>
+                                                            <small>
+                                                                {{ question.createdDate }}
+                                                            </small>
+                                                        </td>
+                                                        <td>
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    Beğeni
+                                                                    <br/>
+                                                                    <p class="text-center">{{ question.likes.count }}</p>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    Görüntülenme
+                                                                    <br/>
+                                                                    <p class="text-center">{{ question.likes.count }}</p>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    Yorum
+                                                                    <br/>
+                                                                    <p class="text-center">{{ question.questioncomment_set.count }}</p>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress-sm">
+                                                                <div class="progress-bar bg-green" role="progressbar"
+                                                                     aria-volumenow="57" aria-volumemin="0"
+                                                                     aria-volumemax="100"
+                                                                     style="width: 57%">
+                                                                </div>
+                                                            </div>
+                                                            <small>
+                                                                57% Complete
+                                                            </small>
+                                                        </td>
+                                                        <td class="project-state">
+                                                            <span class="badge badge-success">Success</span>
+                                                        </td>
+                                                        <td class="project-actions text-right">
+                                                            <a href="{% url 'question_detail' slug=question.slug questionNumber=question.questionNumber %}">
+                                                                <i class="fas fa-folder">
+                                                                </i>
+                                                                Göster
+                                                            </a>
+                                                            <a class="btn btn-info btn-sm"
+                                                               href="{% url 'edit_question' question.questionNumber %}">
+                                                                <i class="fas fa-pencil-alt">
+                                                                </i>
+                                                                Düzenle
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-danger"
+                                                                    data-toggle="modal"
+                                                                    data-target="#modal-delete{{ forloop.counter }}">
+                                                                <i class="fas fa-trash">
+                                                                </i>
+                                                                Sil
+                                                            </button>
+                                                            <div class="modal fade"
+                                                                 id="modal-delete{{ forloop.counter }}">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">UYARI !</h4>
+                                                                            <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p class="text-left">Gerçekten "<span
+                                                                                    class="text-bold">{{ article.title }}</span>"
+                                                                                bu soruyu silmek istediğinize emin
+                                                                                misiniz?&hellip;</p>
+                                                                        </div>
+                                                                        <div class="modal-footer justify-content-between">
+                                                                            <button type="button"
+                                                                                    class="btn btn-danger"
+                                                                                    data-dismiss="modal">İptal
+                                                                            </button>
+                                                                            <form method="post"
+                                                                                  action="{% url 'delete_question' question.questionNumber %}">
+                                                                                {% csrf_token %}
+                                                                                <button type="submit"
+                                                                                        class="btn btn-success">Sil
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="callout callout-info">
+                                        <h5>Uyarı!</h5>
+                                        <p>Daha önce herhangi bir soru sormamışsınız.</p>
+                                    </div>
+                                    <a type="button" class="btn btn-success" href="{% url 'add_question' %}">Yeni Soru
+                                        Sor</a>
+                                {% endif %}
+                            </section>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-primary collapsed-card" data-card-widget="collapse">
-                        <div class="card-header">
-                            <h3 class="card-title">Sorularım</h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                        class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body" style="display: none;">
-                            The body of the card
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-primary collapsed-card" data-card-widget="collapse">
-                        <div class="card-header">
-                            <h3 class="card-title">Kurslar</h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                        class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body" style="display: none;">
-                            The body of the card
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 {% endblock %}
 
 

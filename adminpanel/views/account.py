@@ -59,11 +59,9 @@ def admin_my_account(request, username):
 
 @login_required(login_url="login_admin")
 def admin_students(request):
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
         "students": students,
-        "adminGroup": adminGroup,
     }
     return render(request, "adminpanel/account/group/students.html", context)
 

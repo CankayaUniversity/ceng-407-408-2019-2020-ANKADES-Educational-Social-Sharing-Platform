@@ -14,6 +14,7 @@ from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission, \
     AccountActivity, SocialMedia
 from article.models import Article, ArticleComment
+from question.models import Question
 
 
 def index(request):
@@ -78,7 +79,7 @@ def login_account(request):
             activity.method = "POST"
             activity.title = "Kullanıcı giriş yaptı"
             activity.createdDate = datetime.datetime.now()
-            activity.application = "ACCOUNT"
+            activity.application = "Account"
             activity.description = str(activity.creator.username) + " giriş yaptı."
             activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
@@ -101,7 +102,7 @@ def logout_account(request):
     if request.user.is_authenticated:
         logout(request)
         activity.title = "Çıkış Yapma."
-        activity.application = "LOGOUT"
+        activity.application = "Logout"
         activity.method = "UPDATE"
         activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
@@ -147,7 +148,7 @@ def register_account(request):
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
                 activity.title = "Giriş Yapma"
-                activity.application = "REGISTER"
+                activity.application = "Register"
                 activity.method = "UPDATE"
                 activity.creator = currentUser
                 activity.description = str(activity.createdDate) + " tarihinde, " + str(
@@ -188,35 +189,54 @@ class FollowAccountToggle(RedirectView):
 
 
 def current_user_group(self, username):
-    group = AccountGroup.objects.get(userId__username=username)
-    return str(group.groupId)
-
-
-def user_group(self, username):
-    group = AccountGroup.objects.get(userId__username=username)
-    return group.groupId
+    try:
+        group = AccountGroup.objects.get(userId__username=username)
+        return str(group.groupId)
+    except:
+        group = None
+        return group
 
 
 def current_user_permission(self, username):
-    userPermission = AccountPermission.objects.get(userId__username=username)
-    return str(userPermission.permissionId)
+    try:
+        userPermission = AccountPermission.objects.get(userId__username=username)
+        return str(userPermission.permissionId)
+    except:
+        userPermission = None
+        return userPermission
 
 
 def user_social_media(self, username):
-    usm = AccountSocialMedia.objects.get(userId__username=username)
-    return str(usm)
+    try:
+        usm = AccountSocialMedia.objects.get(userId__username=username)
+        return str(usm)
+    except:
+        usm = None
+        return usm
 
 
 def user_articles(self, username):
-    articles = Article.objects.filter(creator__username=username)
-    return articles
+    try:
+        articles = Article.objects.get(creator__username=username)
+        return articles
+    except:
+        articles = None
+        return articles
 
 
-def article_comment_count(self, slug):
-    articleCommentCount = ArticleComment.objects.filter(articleId__slug=slug)
-    return articleCommentCount
+def user_questions(self, username):
+    try:
+        questions = Question.objects.get(creator__username=username)
+        return questions
+    except:
+        questions = None
+        return questions
 
 
 def get_social_media(self, slug):
-    socialMedia = get_object_or_404(SocialMedia, slug=slug)
-    return socialMedia.id
+    try:
+        socialMedia = get_object_or_404(SocialMedia, slug=slug)
+        return socialMedia.id
+    except:
+        socialMedia = None
+        return socialMedia

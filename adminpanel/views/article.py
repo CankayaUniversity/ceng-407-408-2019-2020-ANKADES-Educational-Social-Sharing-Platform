@@ -23,10 +23,8 @@ def admin_all_articles(request):
     articles = Article.objects.all()
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "articles": articles,
-        "adminGroup": adminGroup,
         "currentUser": currentUser,
         "userGroup": userGroup,
     }
@@ -57,8 +55,6 @@ def admin_add_article(request):
             description = form.cleaned_data.get("description")
         isPrivate = request.POST.get("isPrivate") == "on"
         isActive = request.POST.get("isActive") == "on"
-        if form.is_valid():
-            description = form.cleaned_data.get("description")
         if not title and description:
             messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
             return render(request, "adminpanel/article/add-article.html", context)
@@ -76,7 +72,7 @@ def admin_add_article(request):
         activity.title = "Makale Ekleme: " + str(currentUser)
         activity.application = "Article"
         activity.createdDate = datetime.datetime.now()
-        activity.method = "INSERT"
+        activity.method = "POST"
         activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale ekledi."
@@ -166,7 +162,7 @@ def admin_add_article_category(request):
                 activity.title = "Makale Kategorisi Ekleme: " + str(currentUser)
                 activity.application = "Article"
                 activity.createdDate = datetime.datetime.now()
-                activity.method = "INSERT"
+                activity.method = "POST"
                 activity.creator = currentUser
                 activity.description = str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı makale için kategori ekledi."
@@ -252,12 +248,10 @@ def admin_article_categories(request):
     userGroup = current_user_group(request, currentUser)
     categories = ArticleCategory.objects.all()
     article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
-    adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
     context = {
         "categories": categories,
         "userGroup": userGroup,
         "article_categories_limit": article_categories_limit,
-        "adminGroup": adminGroup,
         "currentUser": currentUser,
     }
     return render(request, "adminpanel/article/categories.html", context)

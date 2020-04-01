@@ -2,10 +2,12 @@ import uuid
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
+from django.db.models.signals import pre_save
 from django.urls import reverse
 
 from account.models import Account
 from adminpanel.models import Tag
+from ankadescankaya.slug import slug_save
 
 
 class QuestionCategory(models.Model):
@@ -43,9 +45,8 @@ class Question(models.Model):
     updatedDate = models.DateTimeField(null=True, blank=True)
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
-    isPrivate = models.BooleanField(default=False, null=True, blank=True)
     likes = models.ManyToManyField(Account, related_name="questionLikes", default=0, blank=True,
-                                   db_table="AccountLikedQuestion")
+                                   db_table="LikedQuestion")
 
     def __str__(self):
         return self.questionNumber
@@ -54,13 +55,13 @@ class Question(models.Model):
         return self.questionNumber
 
     def get_absolute_url(self):
-        return reverse("question_detail", kwargs={"username": self.creator.username, "slug": self.questionNumber})
+        return reverse("question_detail", kwargs={"questionNumber": self.questionNumber})
 
     def get_like_url(self):
-        return reverse("question-like-toggle", kwargs={"username": self.creator.username, "slug": self.questionNumber})
+        return reverse("question-like-toggle", kwargs={"questionNumber": self.questionNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-api-toggle", kwargs={"username": self.creator.username, "slug": self.questionNumber})
+        return reverse("question-like-api-toggle", kwargs={"questionNumber": self.questionNumber})
 
     class Meta:
         db_table = "Question"
@@ -78,11 +79,24 @@ class QuestionComment(models.Model):
     isRoot = models.BooleanField(default=False)
     isActive = models.BooleanField(default=True)
     view = models.PositiveIntegerField(default=0)
-    like = models.PositiveIntegerField(default=0)
+    likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True, db_table="LikedQuestionComment")
 
     def __str__(self):
         return self.questionId
 
+    def get_absolute_url(self):
+        return reverse("question_detail", kwargs={"questionNumber": self.questionId.questionNumber})
+
+    def get_like_url(self):
+        return reverse("question-like-comment-toggle", kwargs={"questionNumber": self.questionId.questionNumber})
+
+    def get_api_like_url(self):
+        return reverse("question-like-comment-api-toggle", kwargs={"questionNumber": self.questionId.questionNumber})
+
     class Meta:
         db_table = "QuestionComment"
         ordering = ['-createdDate']
+
+
+pre_save.connect(slug_save, sender=Question)
+pre_save.connect(slug_save, sender=QuestionCategory)

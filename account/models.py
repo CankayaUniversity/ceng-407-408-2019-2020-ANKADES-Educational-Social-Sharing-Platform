@@ -170,7 +170,6 @@ class AccountActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.PROTECT)
     title = models.CharField(max_length=254)
-    slug = models.SlugField()
     application = models.CharField(max_length=254)
     description = models.CharField(max_length=254)
     method = models.CharField(max_length=254)

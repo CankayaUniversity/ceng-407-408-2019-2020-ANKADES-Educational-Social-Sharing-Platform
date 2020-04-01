@@ -1,21 +1,17 @@
 {% extends 'adminpanel/layout/layout.html' %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
+{% block title %}Ankades Makale Ekleme{% endblock %}
 {% load static %}
 {% block content %}
-    <!-- Main content -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <!-- left column -->
                 <div class="col-md-12">
-                    <!-- jquery validation -->
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Makale Paylaşma</h3>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
                         <form role="form" method="post" action="{% url 'admin_add_article' %}"
                               enctype="multipart/form-data">
                             {% csrf_token %}
@@ -34,10 +30,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="title">Başlık*</label>
-                                    <input type="text" class="form-control" id="title" name="title" placeholder="Başlık">
+                                    <input type="text" class="form-control" id="title" name="title"
+                                           placeholder="Başlık">
                                 </div>
                                 <div class="form-group mb-0">
-                                    <div class="custom-control">
+                                    <label>İçerik*</label>
+                                    <div>
                                         {{ form.description }}
                                     </div>
                                 </div>
@@ -60,23 +58,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Gönder</button>
                             </div>
                         </form>
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!--/.col (left) -->
-                <!-- right column -->
                 <div class="col-md-6">
-
                 </div>
-                <!--/.col (right) -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', include("adminpanel.urls")),
     path('', include("account.urls")),
     path('', include("course.urls")),
+    path('', include("question.urls")),
     path('', include("article.urls")),
     path('', include("exam.urls")),
     path('', include("directmessage.urls")),

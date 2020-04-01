@@ -68,7 +68,7 @@ def login_admin(request):
                 activity.method = "POST"
                 activity.title = "Kullanıcı giriş yaptı"
                 activity.createdDate = datetime.datetime.now()
-                activity.application = "LOGIN"
+                activity.application = "Login"
                 activity.description = str(activity.creator.username) + " giriş yaptı."
                 activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
@@ -86,7 +86,7 @@ def logout_admin(request):
     if request.user.is_authenticated:
         logout(request)
         activity.title = "Çıkış Yapma."
-        activity.application = "LOGOUT"
+        activity.application = "Logout"
         activity.method = "UPDATE"
         activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(

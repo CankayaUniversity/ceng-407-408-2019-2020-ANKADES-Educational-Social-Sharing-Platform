@@ -39,7 +39,7 @@ def admin_all_groups(request, slug=None):
             new_group = Group(title=title, isActive=isActive)
             new_group.save()
             activity.title = "Grup Oluşturma"
-            activity.method = "INSERT"
+            activity.method = "POST"
             activity.creator = currentUser
             activity.application = "Group"
             activity.createdDate = datetime.datetime.now()

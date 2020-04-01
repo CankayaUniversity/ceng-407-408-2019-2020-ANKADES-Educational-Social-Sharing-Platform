@@ -1,0 +1,22 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row error-page">
+                <h1 class="headline text-warning" style="font-size: 404px"> 404</h1>
+            </div>
+            <div class="row error-page">
+                <h2 class="container"><i class="fas fa-exclamation-triangle text-warning"></i> Upss..! Böyle bir sayfa
+                    bulunamadı :(
+                </h2>
+            </div>
+            <div class="row error-page">
+                <h4 class="container text-center">
+                    <a type="button" class="btn btn-lg btn-primary" href="{% url 'admin_dashboard' %}">Admin paneline geri
+                        dön.</a>
+                </h4>
+            </div>
+        </div>
+    </section>
+{% endblock %}

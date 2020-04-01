@@ -51,9 +51,14 @@ urlpatterns = [
     path('isactive-group/<slug:slug>', group.admin_isactive_group,
          name="admin_isactive_group"),
 
-
-    path('question/add-question-category/', question.admin_add_question_category, name="admin_add_question_category"),
-    path('question/add-question/', question.admin_add_question, name="admin_add_question"),
+    path('question-categories/', question.admin_question_categories, name="admin_question_categories"),
+    path('isactive-question-categories<slug:slug>/', question.admin_isactive_question_category,
+         name="admin_isactive_question_category"),
+    path('delete-question-category/<slug:slug>/', question.admin_delete_question_category,
+         name="admin_delete_question_category"),
+    path('add-question-category/', question.admin_add_question_category,
+         name="admin_add_question_category"),
+    # path('question/add-question/', question.admin_add_question, name="admin_add_question"),
 
     # Group Permission
     # path('gruplar/grup-izinleri/', group.admin_group_permission, name="admin_group_permission"),
