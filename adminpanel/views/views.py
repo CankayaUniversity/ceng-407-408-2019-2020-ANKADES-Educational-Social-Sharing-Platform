@@ -50,16 +50,20 @@ def login_admin(request):
             username = request.POST.get("username")
             password = request.POST.get("password")
             remember = request.POST.get("remember")
-            user = authenticate(username=username, password=password)
             try:
                 get_user = Account.objects.get(username=username)
                 if get_user.is_staff is not True and get_user.is_admin is not True:
                     messages.error(request, "Admin panele giriş yetkiniz yok.")
                     return redirect("index")
             except Account.DoesNotExist:
-                messages.error(request, "dsaf")
-                return redirect("index")
-            login(request, user)
+                messages.error(request, "Böyle bir kullanıcı bulunamadı.")
+                return redirect("login_admin")
+            user = authenticate(username=get_user, password=password)
+            if user:
+                login(request, user)
+            else:
+                messages.error(request, "Şifre hatalı.")
+                return redirect("login_admin")
             if remember:
                 request.session.set_expiry(1209600)
             else:

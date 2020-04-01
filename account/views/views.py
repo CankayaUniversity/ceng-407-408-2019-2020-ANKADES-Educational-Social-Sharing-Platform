@@ -62,14 +62,20 @@ def login_account(request):
             username = request.POST.get("username")
             password = request.POST.get("password")
             remember = request.POST.get("remember")
-            user = authenticate(username=username, password=password)
             try:
                 get_user = Account.objects.get(username=username)
                 if not get_user.is_active:
                     messages.error(request, "Kullanıcı engelli olduğu için giriş yapılamadı.")
                     return redirect("login_account")
             except Account.DoesNotExist:
+                messages.error(request, "Böyle bir kullanıcı bulunamadı.")
                 return redirect("login_account")
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+            else:
+                messages.error(request, "Şifre hatalı.")
+                return redirect("login_admin")
             login(request, user)
             if remember:
                 request.session.set_expiry(1209600)
