@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account
@@ -10,16 +11,20 @@ from question.models import QuestionComment
 def user_posts(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    articles = user_articles(request, currentUser)
-    questions = user_questions(request, currentUser)
-    articleComments = ArticleComment.objects.filter(articleId__creator=currentUser)
-    questionComments = QuestionComment.objects.filter(questionId__creator=currentUser)
-    context = {
-        "currentUser": currentUser,
-        "userGroup": userGroup,
-        "articles": articles,
-        "questions": questions,
-        "articleComments": articleComments,
-        "questionComments": questionComments,
-    }
-    return render(request, "ankades/account/posts/user-posts.html", context)
+    try:
+        articles = user_articles(request, currentUser)
+        questions = user_questions(request, currentUser)
+        articleComments = ArticleComment.objects.filter(articleId__creator=currentUser)
+        questionComments = QuestionComment.objects.filter(questionId__creator=currentUser)
+        context = {
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+            "articles": articles,
+            "questions": questions,
+            "articleComments": articleComments,
+            "questionComments": questionComments,
+        }
+        return render(request, "ankades/account/posts/user-posts.html", context)
+    except:
+        messages.error(request, "Öncelikle giriş yapmalısınız.")
+        return redirect("index")

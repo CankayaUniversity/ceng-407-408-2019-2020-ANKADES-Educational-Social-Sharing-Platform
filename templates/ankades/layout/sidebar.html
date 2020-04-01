@@ -1,6 +1,5 @@
 {% load static %}
 <aside class="main-sidebar sidebar-dark-blue elevation-4" style="background: #0e396c; color: #fff">
-    <!-- Brand Logo -->
     <a href="{% url 'index' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}"
              alt="AdminLTE Logo"
@@ -8,67 +7,32 @@
              style="opacity: .8">
         <span class="brand-text font-weight-light">ANKADES</span>
     </a>
-
-    <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user (optional) -->
         {% if request.user.is_authenticated %}
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <img src="{{ request.user.image.url }}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="{# {% url 'edit_profile' request.user.username %} #}"
-                       class="d-block">{{ request.user.username }}</a>
+                    <a href="{% url 'edit_profile' %}"
+                       class="d-block">{{ currentUser.get_full_name }}</a>
                 </div>
             </div>
         {% endif %}
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
-                <li class="nav-header">Navigasyon</li>
-                <li class="nav-item has-treeview">
-                    <a href="{% url 'index' %}" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-header">EXAMPLES</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-envelope"></i>
-                        <p>
-                            Mailbox
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="../chat/mailbox.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Inbox</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../chat/compose.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Compose</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../chat/read-mail.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Read</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-header">Makale</li>
-                <li class="nav-item has-treeview">
+                {% if currentUser.is_authenticated %}
+                    <li class="nav-header">Navigasyon</li>
+                    <li class="nav-item has-treeview">
+                        <a href="{% url 'index' %}" class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item has-treeview mt-3">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
@@ -91,96 +55,46 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Level 1</p>
-                    </a>
-                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
+                        <i class="nav-icon fas fa-question"></i>
                         <p>
-                            Level 1
-                            <i class="right fas fa-angle-left"></i>
+                            Soru
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{% url 'all_questions' %}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Level 2</p>
+                                <p>Tüm Sorular</p>
                             </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Level 2
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Level 2</p>
+                                <p>Soru Kategorileri</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Level 1</p>
-                    </a>
-                </li>
-                <li class="nav-header">Paylaşım</li>
-                <li class="nav-item">
-                    <a href="{% url 'add_question' %}" class="nav-link">
-                        <i class="nav-icon far fa-circle text-danger"></i>
-                        <p class="text">Soru Sor</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-circle text-warning"></i>
-                        <p>Sınav Sorusu Paylaş</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'add_article' %}" class="nav-link">
-                        <i class="nav-icon far fa-circle text-info"></i>
-                        <p>Makale Paylaş</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-circle text-info"></i>
-                        <p>Kurs Oluştur</p>
-                    </a>
-                </li>
+                {% if currentUser.is_authenticated %}
+                    <li class="nav-header">Paylaşım</li>
+                    <li class="nav-item">
+                        <a href="{% url 'add_question' %}" class="nav-link">
+                            <i class="nav-icon far fa-circle text-danger"></i>
+                            <p class="text">Soru Sor</p>
+                        </a>
+                    </li>
+                    {% if userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'teacher' %}
+                        <li class="nav-item">
+                            <a href="{% url 'add_article' %}" class="nav-link">
+                                <i class="nav-icon far fa-circle text-info"></i>
+                                <p>Makale Paylaş</p>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

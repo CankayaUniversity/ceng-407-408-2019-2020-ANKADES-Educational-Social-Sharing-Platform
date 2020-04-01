@@ -1,5 +1,6 @@
 {% extends 'ankades/layout/layout.html' %}
 {% load static %}
+{% block title %}Ankades - {{ instance.title }}{% endblock %}
 {% block content %}
     <section class="content">
         <div class="container-fluid">
@@ -31,14 +32,11 @@
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">
                                     <div class="info-box">
                                         <span class="info-box-icon bg-danger"><i class="far fa-thumbs-up"></i></span>
-
                                         <div class="info-box-content">
                                             <span class="info-box-text">Toplam Beğeni</span>
                                             <span class="info-box-number">{{ instance.likes.count }}</span>
                                         </div>
-                                        <!-- /.info-box-content -->
                                     </div>
-                                    <!-- /.info-box -->
                                 </div>
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">
                                     <div class="info-box">
@@ -48,9 +46,7 @@
                                             <span class="info-box-text">Toplam Gösterim</span>
                                             <span class="info-box-number">{{ instance.view }}</span>
                                         </div>
-                                        <!-- /.info-box-content -->
                                     </div>
-                                    <!-- /.info-box -->
                                 </div>
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">
                                     <div class="info-box">
@@ -60,14 +56,11 @@
                                             <span class="info-box-text">Yorum Sayısı</span>
                                             <span class="info-box-number">{{ articleComments.count }}</span>
                                         </div>
-                                        <!-- /.info-box-content -->
                                     </div>
-                                    <!-- /.info-box -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- /.card-body -->
                     {% if articleComments %}
                         <div class="container">
                             <h4 class="comments-title">
@@ -76,20 +69,16 @@
                             {% for ac in articleComments %}
                                 <div class="card-footer card-comments">
                                     <div class="card-comment">
-                                        <!-- User image -->
                                         <img class="img-circle img-sm" src="{{ ac.creator.image.url }}"
                                              alt="User Image">
-
                                         <div class="comment-text">
                                         <span class="username">
                                             <a href="{% url 'account_detail' ac.creator.username %}">{{ ac.creator.get_full_name }}</a>
                                             <span class="text-muted float-right">{{ ac.createdDate }}</span>
-                                        </span><!-- /.username -->
+                                        </span>
                                             {{ ac.content }}
                                         </div>
-                                        <!-- /.comment-text -->
                                     </div>
-                                    <!-- /.card-comment -->
                                     <hr>
                                 </div>
                             {% endfor %}
@@ -117,11 +106,11 @@
                         </div>
                     {% else %}
                         <div class="container">
-                            <form method="post" id="commentform" class="comment-form"#}
+                            <form method="post" id="commentform" class="comment-form"
                                   action="{% url 'add_article_comment' instance.slug %}">
                                 {% csrf_token %}
                                 <p class="comment-form-comment form-group has-placeholder">
-                                    <label for="comment">Comment</label>
+                                    <label for="comment">Yorum Yap</label>
                                     <i class="fa fa-edit color-main"></i>
                                     <textarea class="form-control" id="comment" name="content"
                                               cols="45"
@@ -141,160 +130,3 @@
         </div>
     </section>
 {% endblock %}
-
-
-
-
-
-
-{##}
-{#{% if articleComments %}#}
-{#    <div id="comments" class="comments-area hero-bg rounded">#}
-{#        <h4 class="comments-title">#}
-{#            Yorumlar#}
-{#        </h4>#}
-{#        <ol class="comment-list">#}
-{#            {% for articleComment in articleComments %}#}
-{#                <li class="comment">#}
-{#                    <article class="comment-body">#}
-{#                        <footer class="comment-meta">#}
-{#                            <div class="comment-author vcard">#}
-{#                                <img alt="" src="images/team/comment-01.jpg">#}
-{#                                <b class="fn">#}
-{#                                    <a href="#" rel="nofollow"#}
-{#                                       class="url fw-500">{{ articleComment.creator.get_full_name }}</a>#}
-{#                                    <span class="comment-metadata">#}
-{#															<a href="#">#}
-{#																<time datetime="2018-03-14T07:57:01+00:00">#}
-{#																	{{ articleComment.createdDate }}#}
-{#																</time>#}
-{#															</a>#}
-{#														</span>#}
-{#                                </b>#}
-{#                                <div class="float-right reply">#}
-{#                                    <a href="#respond">#}
-{#                                        <i class="color-darkgrey fa fa-mail-reply"#}
-{#                                           aria-hidden="true"></i>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <!-- .comment-author -->#}
-{#                        </footer>#}
-{#                        <!-- .comment-meta -->#}
-{#                        <div class="comment-content">#}
-{#                            {{ articleComment.content }}#}
-{#                        </div>#}
-{#                        <!-- .comment-content -->#}
-{#                    </article>#}
-{#                    <!-- .comment-body -->#}
-{#                    <ol class="children">#}
-{#                        <li class="comment">#}
-{#                            <article class="comment-body">#}
-{#                                <footer class="comment-meta">#}
-{#                                    <div class="comment-author vcard">#}
-{#                                        <img alt="" src="images/team/comment-02.jpg">#}
-{#                                        <b class="fn">#}
-{#                                            <a href="#" rel="nofollow"#}
-{#                                               class="url fw-500">Patric#}
-{#                                                Knowles</a>#}
-{#                                            <span class="comment-metadata">#}
-{#																	<a href="#">#}
-{#																		<time datetime="2018-03-14T07:57:01+00:00">#}
-{#																			March 14, 2018#}
-{#																		</time>#}
-{#																	</a>#}
-{#																</span>#}
-{#                                        </b>#}
-{#                                        <div class="float-right reply">#}
-{#                                            <a href="#respond">#}
-{#                                                <i class="color-darkgrey fa fa-mail-reply"#}
-{#                                                   aria-hidden="true"></i>#}
-{#                                            </a>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <!-- .comment-author -->#}
-{#                                </footer>#}
-{#                                <!-- .comment-meta -->#}
-{#                                <div class="comment-content">#}
-{#                                    <p>#}
-{#                                        Lorem ipsum dolor sit amet, consectetur#}
-{#                                        adipiscing#}
-{#                                        elit.#}
-{#                                        Proin volutpat quis nisl sed rhoncus.#}
-{#                                    </p>#}
-{#                                </div>#}
-{#                                <!-- .comment-content -->#}
-{#                            </article>#}
-{#                            <!-- .comment-body -->#}
-{#                        </li>#}
-{#                        <!-- #comment-## -->#}
-{#                    </ol>#}
-{#                    <!-- .children -->#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ol>#}
-{##}
-{#        <h6 id="reply-title" class="comment-reply-title">Yorum Yapın</h6>#}
-{##}
-{#        <div id="respond" class="comment-respond ls ms">#}
-{#            {% if request.user.is_authenticated %}#}
-{#                <form method="post" id="commentform" class="comment-form"#}
-{#                      action="{% url 'add_article_comment' instance.slug %}">#}
-{#                    {% csrf_token %}#}
-{#                    <p class="comment-form-comment form-group has-placeholder">#}
-{#                        <label for="comment">Comment</label>#}
-{#                        <i class="fa fa-edit color-main"></i>#}
-{#                        <textarea class="form-control" id="comment" name="content"#}
-{#                                  cols="45"#}
-{#                                  rows="8" maxlength="65525" aria-required="true"#}
-{#                                  required="required" placeholder=""></textarea>#}
-{#                    </p>#}
-{#                    <p class="form-submit">#}
-{#                        <button type="submit" class="btn btn-primary">#}
-{#                            <span>Gönder</span>#}
-{#                        </button>#}
-{#                    </p>#}
-{#                </form>#}
-{#            {% else %}#}
-{#                <div class="alert alert-primary" role="alert">#}
-{#                    Yorum yapabilmeniz için, giriş yapmanız gerekmektedir.#}
-{#                </div>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#        <!-- #respond -->#}
-{##}
-{#    </div>#}
-{#{% else %}#}
-{#    <div id="comments" class="comments-area hero-bg rounded">#}
-{#        <h4 class="comments-title">#}
-{#            Yorumlar#}
-{#        </h4>#}
-{#        <h6 id="reply-title" class="comment-reply-title">İlk yorumu yapan sen ol</h6>#}
-{#        <div id="respond" class="comment-respond ls ms">#}
-{#            {% if request.user.is_authenticated %}#}
-{#                <form method="post" id="commentform" class="comment-form"#}
-{#                      action="{% url 'add_article_comment' instance.slug %}">#}
-{#                    {% csrf_token %}#}
-{#                    <p class="comment-form-comment form-group has-placeholder">#}
-{#                        <label for="comment">Comment</label>#}
-{#                        <i class="fa fa-edit color-main"></i>#}
-{#                        <textarea class="form-control ckeditor" id="comment"#}
-{#                                  name="content"#}
-{#                                  cols="45"#}
-{#                                  rows="8" aria-required="true"#}
-{#                                  required="required" placeholder=""></textarea>#}
-{#                    </p>#}
-{#                    <p class="form-submit">#}
-{#                        <button type="submit" class="btn btn-primary">#}
-{#                            <span>Gönder</span>#}
-{#                        </button>#}
-{#                    </p>#}
-{#                </form>#}
-{#            {% else %}#}
-{#                <div class="alert alert-primary" role="alert">#}
-{#                    Yorum yapabilmeniz için, giriş yapmanız gerekmektedir.#}
-{#                </div>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#    </div>#}
-{#{% endif %}#}
