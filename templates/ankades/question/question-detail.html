@@ -1,0 +1,164 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load static %}
+{% block title %}Ankades | {{ instance.title }}{% endblock %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card card-widget mt-3 p-3 col-lg-12">
+                    <div class="card-header">
+                        <div class="user-block">
+                            <img class="img-circle" src="{{ instance.creator.image.url }}" alt="User Image">
+                            <span class="username"><a href="#">{{ instance.creator.get_full_name }}</a></span>
+                            <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="container-fluid container p-5"
+                             style="background: #f8f9fa">
+
+                            <div class="title-inline">
+                                <h2>{{ instance.title }}</h2>
+                            </div>
+                            {{ instance.description|safe }}
+                        </div>
+                        <div class="container mt-3">
+                            <button type="button" class="btn btn-danger btn-md"><i class="fas fa-share"></i> Paylaş
+                            </button>
+                            <a type="button" data-href='{{ instance.get_api_like_url }}'
+                               data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
+                               class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
+                            </a>
+                            <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ questionAnswers.count }} Yorum</span>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-12 mt-5">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-danger"><i class="far fa-thumbs-up"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Toplam Beğeni</span>
+                                            <span class="info-box-number">{{ instance.likes.count }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-12 mt-5">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-primary"><i class="far fa-eye"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Toplam Gösterim</span>
+                                            <span class="info-box-number">{{ instance.view }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-12 mt-5">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-success"><i class="far fa-comments"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Yorum Sayısı</span>
+                                            <span class="info-box-number">{{ questionAnswers.count }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        {% if certifiedAnswer %}
+                            <div class="timeline">
+                                <div class="time-label">
+                                    <span class="bg-success"><i class="fas fa-check"></i> {{ certifiedAnswer.content }}</span>
+                                </div>
+                                <div class="timeline-item card-footer card-comments">
+                                    <div class="card-comment">
+                                        <img class="img-circle img-sm" src="{{ certifiedAnswer.creator.image.url }}"
+                                             alt="User Image">
+                                        <div class="comment-text">
+                                        <span class="username">
+                                            <a href="{% url 'account_detail' certifiedAnswer.creator %}">{{ certifiedAnswer.creator.get_full_name }}</a>
+                                            <span class="text-muted float-right">{{ certifiedAnswer.createdDate }}</span>
+                                        </span>
+                                            {{ certifiedAnswer.content }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <h4 class="comments-title mb-3">
+                            Cevaplar
+                        </h4>
+                        {% if questionAnswers %}
+                            {% for answer in questionAnswers %}
+                                <div class="timeline">
+                                    <div>
+                                        {% if answer.isCertified %}
+                                            <i class="fas fa-check bg-success"></i>
+                                        {% else %}
+                                            <i class="fas fa-comment bg-blue"></i>
+                                        {% endif %}
+                                        <div class="timeline-item p-2">
+                                                        <img class="img-circle img-sm" src="{{ answer.creator.image.url }}"
+                                                            alt="User Image">
+                                                        <span class="time"><i
+                                                                class="fas fa-clock"></i> {{ answer.createdDate }}</span>
+                                            <h3 class="timeline-header ml-2 no-border"><a
+                                                    href="#">{{ answer.creator.get_full_name }}</a></h3>
+                                            <div class="timeline-body">
+                                                {{ answer.content }}
+                                            </div>
+                                            <div class="timeline-footer">
+                                                <a class="btn btn-primary btn-sm">Oy ver</a>
+                                                <a class="btn btn-primary btn-sm">Cevapla</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if answerReply %}
+                                        {% for reply in answerReply %}
+                                            {% if reply.parentId_id == answer.id %}
+                                                <div>
+                                                    <div class="timeline-item p-2" style="background-color: #f8f9fa !important; border:none; box-shadow: none">
+                                                        <img class="img-circle img-sm" src="{{ reply.creator.image.url }}"
+                                                            alt="User Image">
+                                                        <span class="time"><i
+                                                                class="fas fa-clock"></i> {{ reply.createdDate }}</span>
+                                                        <h3 class="timeline-header"><a
+                                                                href="#">{{ reply.creator.get_full_name }}</a></h3>
+                                                        <div class="timeline-body">
+                                                            {{ reply.content }}
+                                                        </div>
+                                                        <div class="timeline-footer">
+                                                            <a class="btn btn-primary btn-sm">Oy ver</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="container">
+                        <form method="post" class="comment-form"
+                              action="{% url 'add_question_answer' slug=instance.slug questionNumber=instance.questionNumber %}">
+                            {% csrf_token %}
+                            <p class="comment-form-comment form-group has-placeholder">
+                                <label for="content">Cevap</label>
+                                <i class="fa fa-edit color-main"></i>
+                                <textarea class="form-control" id="content" name="content"
+                                          cols="45"
+                                          rows="8" maxlength="65525" aria-required="true"
+                                          required="required" placeholder=""></textarea>
+                            </p>
+                            <p class="form-submit">
+                                <button type="submit" class="btn btn-primary">
+                                    <span>Gönder</span>
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

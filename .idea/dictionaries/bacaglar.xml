@@ -31,6 +31,7 @@
       <w>başlık</w>
       <w>begen</w>
       <w>beni</w>
+      <w>beğen</w>
       <w>beğeni</w>
       <w>bitbucket</w>
       <w>biyografi</w>
@@ -41,6 +42,10 @@
       <w>bulunamadı</w>
       <w>bölüm</w>
       <w>böyle</w>
+      <w>cevabınız</w>
+      <w>cevap</w>
+      <w>cevapla</w>
+      <w>cevaplar</w>
       <w>cikis</w>
       <w>ckeditor</w>
       <w>corsheaders</w>
@@ -61,6 +66,7 @@
       <w>düzenlendi</w>
       <w>düzenleyebilirsiniz</w>
       <w>ebevynlik</w>
+      <w>ederiz</w>
       <w>ekle</w>
       <w>ekleme</w>
       <w>eklendi</w>
@@ -90,7 +96,9 @@
       <w>gerçekleştirebilmek</w>
       <w>gerçekleştiren</w>
       <w>gerçekleştirildi</w>
+      <w>gerçekleştirildiği</w>
       <w>gerçekleştirilemedi</w>
+      <w>gerçekten</w>
       <w>girilen</w>
       <w>giris</w>
       <w>giriş</w>
@@ -101,19 +109,23 @@
       <w>gruplar</w>
       <w>gruplari</w>
       <w>grupları</w>
+      <w>gönder</w>
       <w>gönderildi</w>
       <w>görüntülenme</w>
       <w>görüntüleyebilir</w>
       <w>göster</w>
+      <w>gösterim</w>
       <w>güncelleme</w>
       <w>güncellendi</w>
       <w>güncellenme</w>
       <w>hatalı</w>
       <w>hatırla</w>
+      <w>herhangi</w>
       <w>hesap</w>
       <w>icheck</w>
       <w>ionicons</w>
       <w>isactive</w>
+      <w>istediğiniz</w>
       <w>istediğinize</w>
       <w>isteği</w>
       <w>izin</w>
@@ -128,6 +140,7 @@
       <w>i̇zinler</w>
       <w>i̇zni</w>
       <w>i̇şlemi</w>
+      <w>i̇şlemin</w>
       <w>i̇şlemler</w>
       <w>kapalı</w>
       <w>kapat</w>
@@ -188,6 +201,7 @@
       <w>oluşturuldu</w>
       <w>oluşturulduğu</w>
       <w>oluşturulma</w>
+      <w>onaylanmış</w>
       <w>outdent</w>
       <w>panele</w>
       <w>paylasimlarim</w>
@@ -208,14 +222,18 @@
       <w>silinen</w>
       <w>silinme</w>
       <w>silme</w>
+      <w>silmek</w>
       <w>sistemimizde</w>
       <w>socialmedia</w>
       <w>sonra</w>
+      <w>sormamışsınız</w>
       <w>soru</w>
       <w>sorular</w>
       <w>sorularım</w>
       <w>sorun</w>
       <w>sorusu</w>
+      <w>soruya</w>
+      <w>soruyu</w>
       <w>sosyal</w>
       <w>sweetalert</w>
       <w>sınav</w>
@@ -227,32 +245,40 @@
       <w>tarihi</w>
       <w>tarihinde</w>
       <w>tekrar</w>
+      <w>teşekkür</w>
       <w>toastr</w>
       <w>toplam</w>
       <w>treeview</w>
       <w>udemy</w>
       <w>unuttum</w>
       <w>uploadimage</w>
+      <w>uyari</w>
       <w>uygulama</w>
       <w>uyuşmuyor</w>
+      <w>vermek</w>
       <w>veya</w>
       <w>yapan</w>
       <w>yapmak</w>
+      <w>yapmalısınız</w>
       <w>yaptı</w>
       <w>yapılamadı</w>
       <w>yapıldı</w>
       <w>yapılmış</w>
       <w>yasakli</w>
       <w>yasaklı</w>
+      <w>yazdığınız</w>
       <w>yeni</w>
       <w>yenile</w>
       <w>yetkiniz</w>
       <w>yetkisi</w>
       <w>yetkisiz</w>
       <w>yorum</w>
+      <w>yorumlar</w>
+      <w>yorumu</w>
       <w>zaten</w>
       <w>çıkmış</w>
       <w>önce</w>
+      <w>öncelikle</w>
       <w>özel</w>
       <w>öğrenci</w>
       <w>öğrenciler</w>

@@ -11,9 +11,10 @@ urlpatterns = [
     path('soru-sor/', views.add_question, name="add_question"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/$', views.question_detail, name="question_detail"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/duzenle/$', views.edit_question, name="edit_question"),
-    url(r'^soru/(?P<questionNumber>[\w-]+)/sil/$', views.delete_question, name="delete_question"),
-    url(r'^soru/(?P<questionNumber>[\w-]+)/like/$', QuestionLikeToggle.as_view(), name="question-like-toggle"),
-    url(r'^soru/(?P<questionNumber>[\w-]+)/like/$', QuestionLikeCommentToggle.as_view(), name="question-like-comment-toggle"),
+    url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/yorum-yap/$', views.add_question_answer, name="add_question_answer"),
+    url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/sil/$', views.delete_question, name="delete_question"),
+    url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/like/$', QuestionLikeToggle.as_view(), name="question-like-toggle"),
+    url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/like/$', QuestionLikeCommentToggle.as_view(), name="question-like-comment-toggle"),
 ]
 
 if settings.DEBUG:

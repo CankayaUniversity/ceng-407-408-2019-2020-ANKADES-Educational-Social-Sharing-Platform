@@ -66,13 +66,23 @@ def question_detail(request, slug, questionNumber):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     try:
-        getQuestion = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        instance.view += 1
+        questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, questionId__questionNumber=questionNumber, isRoot=True, isReply=False)
+        answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False)
+        try:
+            certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug, questionId__questionNumber=questionNumber, isCertified=True)
+        except:
+            certifiedAnswer = None
     except:
         return render(request, "404.html")
     context = {
         "currentUser": currentUser,
         "userGroup": userGroup,
-        "getQuestion": getQuestion
+        "instance": instance,
+        "questionAnswers": questionAnswers,
+        "certifiedAnswer": certifiedAnswer,
+        "answerReply": answerReply,
     }
     return render(request, "ankades/question/question-detail.html", context)
 
@@ -111,14 +121,82 @@ def edit_question(request, slug, questionNumber):
     return render(request, "ankades/question/edit-question.html", context)
 
 
+def add_question_answer(request, slug, questionNumber):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AccountActivity()
+    activity.application = "Question"
+    activity.creator = currentUser
+    activity.title = "Soru Yorum Ekleme"
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+    }
+    try:
+        instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
+        if request.method == "POST":
+            content = request.POST.get("content")
+            new_answer = QuestionComment(content=content, creator=request.user)
+            new_answer.questionId = instance
+            new_answer.isActive = True
+            new_answer.isRoot = True
+            new_answer.answerNumber = get_random_string(length=32)
+            new_answer.save()
+            new_answer.parentId_id = new_answer.id
+            new_answer.save()
+            activity.description = "Soruya yeni bir cevap eklendi. İşlemi yapan kişi: " + str(
+                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
+            messages.success(request, "Cevabınız başarıyla oluşturuldu.")
+        return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}), context)
+    except:
+        messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")
+        return redirect("all_questions")
+
+
+def add_question_answer_reply(request, slug, questionNumber, answerNumber):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AccountActivity()
+    activity.application = "Question"
+    activity.creator = currentUser
+    activity.title = "Soru Yorum Ekleme"
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+    }
+    try:
+        instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
+        parentAnswer = QuestionComment.objects.get(answerNumber=answerNumber)
+        if request.method == "POST":
+            content = request.POST.get("content")
+            new_answer = QuestionComment(content=content, creator=request.user)
+            new_answer.questionId = instance
+            new_answer.answerNumber = get_random_string(length=32)
+            new_answer.parentId.answerNumber = parentAnswer.answerNumber
+            new_answer.isActive = True
+            new_answer.isRoot = False
+            new_answer.save()
+            new_answer.parentId_id = new_answer.id
+            activity.description = "Soruya yeni bir cevap eklendi. İşlemi yapan kişi: " + str(
+                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
+            messages.success(request, "Cevabınız başarıyla oluşturuldu.")
+        return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}), context)
+    except:
+        messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")
+        return redirect("all_questions")
+
+
 def delete_question(request, questionNumber):
     return None
 
 
 class QuestionLikeToggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get("slug")
         questionNumber = self.kwargs.get("questionNumber")
-        obj = get_object_or_404(Question, questionNumber=questionNumber)
+        obj = get_object_or_404(Question, slug=slug, questionNumber=questionNumber)
         url_ = obj.get_absolute_url()
         user = self.request.user
         if user.is_authenticated:
@@ -126,6 +204,7 @@ class QuestionLikeToggle(RedirectView):
                 obj.likes.remove(user)
             else:
                 obj.likes.add(user)
+        obj.view -= 1
         return url_
 
 

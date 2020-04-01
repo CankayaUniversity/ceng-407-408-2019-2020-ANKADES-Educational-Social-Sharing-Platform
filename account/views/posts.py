@@ -11,7 +11,7 @@ from question.models import QuestionComment
 def user_posts(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    try:
+    if currentUser.is_authenticated:
         articles = user_articles(request, currentUser)
         questions = user_questions(request, currentUser)
         articleComments = ArticleComment.objects.filter(articleId__creator=currentUser)
@@ -25,6 +25,6 @@ def user_posts(request):
             "questionComments": questionComments,
         }
         return render(request, "ankades/account/posts/user-posts.html", context)
-    except:
+    else:
         messages.error(request, "Öncelikle giriş yapmalısınız.")
         return redirect("index")

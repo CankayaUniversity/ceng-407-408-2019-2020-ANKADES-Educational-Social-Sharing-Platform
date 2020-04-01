@@ -13,7 +13,6 @@
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body">
                         {% if instance.media %}
                             <img class="img-fluid pad" src="{{ instance.media.url }}" alt="Photo" width="100%">
@@ -106,7 +105,7 @@
                         </div>
                     {% else %}
                         <div class="container">
-                            <form method="post" id="commentform" class="comment-form"
+                            <form method="post" class="comment-form"
                                   action="{% url 'add_article_comment' instance.slug %}">
                                 {% csrf_token %}
                                 <p class="comment-form-comment form-group has-placeholder">

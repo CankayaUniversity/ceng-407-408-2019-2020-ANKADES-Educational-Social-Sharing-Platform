@@ -55,13 +55,13 @@ class Question(models.Model):
         return self.questionNumber
 
     def get_absolute_url(self):
-        return reverse("question_detail", kwargs={"questionNumber": self.questionNumber})
+        return reverse("question_detail", kwargs={"slug": self.slug, "questionNumber": self.questionNumber})
 
     def get_like_url(self):
-        return reverse("question-like-toggle", kwargs={"questionNumber": self.questionNumber})
+        return reverse("question-like-toggle", kwargs={"slug": self.slug, "questionNumber": self.questionNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-api-toggle", kwargs={"questionNumber": self.questionNumber})
+        return reverse("question-like-api-toggle", kwargs={"slug": self.slug, "questionNumber": self.questionNumber})
 
     class Meta:
         db_table = "Question"
@@ -71,27 +71,30 @@ class Question(models.Model):
 class QuestionComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     questionId = models.ForeignKey(Question, on_delete=models.PROTECT)
+    answerNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     content = RichTextField(blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     parentId = models.ForeignKey('self', null=True, related_name="questionCommentId", on_delete=models.PROTECT)
-    isRoot = models.BooleanField(default=False)
+    isRoot = models.BooleanField(default=True)
+    isCertified = models.BooleanField(default=False)
     isActive = models.BooleanField(default=True)
+    isReply = models.BooleanField(default=False)
     view = models.PositiveIntegerField(default=0)
     likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True, db_table="LikedQuestionComment")
 
     def __str__(self):
-        return self.questionId
+        return self.answerNumber
 
     def get_absolute_url(self):
-        return reverse("question_detail", kwargs={"questionNumber": self.questionId.questionNumber})
+        return reverse("question_detail", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
 
     def get_like_url(self):
-        return reverse("question-like-comment-toggle", kwargs={"questionNumber": self.questionId.questionNumber})
+        return reverse("question-like-comment-toggle", kwargs={"questionNumber": self.answerNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-comment-api-toggle", kwargs={"questionNumber": self.questionId.questionNumber})
+        return reverse("question-like-comment-api-toggle", kwargs={"questionNumber": self.answerNumber})
 
     class Meta:
         db_table = "QuestionComment"

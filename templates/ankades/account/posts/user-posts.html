@@ -308,7 +308,7 @@
                                                                                     data-dismiss="modal">İptal
                                                                             </button>
                                                                             <form method="post"
-                                                                                  action="{% url 'delete_question' question.questionNumber %}">
+                                                                                  action="{% url 'delete_question' slug=question.slug  questionNumber=question.questionNumber %}">
                                                                                 {% csrf_token %}
                                                                                 <button type="submit"
                                                                                         class="btn btn-success">Sil
