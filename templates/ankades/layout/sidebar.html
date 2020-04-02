@@ -15,13 +15,13 @@
                 </div>
                 <div class="info">
                     <a href="{% url 'edit_profile' %}"
-                       class="d-block">{{ currentUser.get_full_name }}</a>
+                       class="d-block">{{ request.user.get_full_name }}</a>
                 </div>
             </div>
         {% endif %}
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                {% if currentUser.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li class="nav-header">Navigasyon</li>
                     <li class="nav-item has-treeview">
                         <a href="{% url 'index' %}" class="nav-link">
@@ -78,7 +78,7 @@
                         </li>
                     </ul>
                 </li>
-                {% if currentUser.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li class="nav-header">Paylaşım</li>
                     <li class="nav-item">
                         <a href="{% url 'add_question' %}" class="nav-link">
