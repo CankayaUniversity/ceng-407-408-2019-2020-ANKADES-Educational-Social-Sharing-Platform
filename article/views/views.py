@@ -35,6 +35,8 @@ class ArticleCategoryViewSet(viewsets.ModelViewSet):
 
 
 def all_articles(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     articles_categories_lists = ArticleCategory.objects.all()
     articles_limit = Article.objects.all().order_by('-createdDate')
     articleComment = ArticleComment.objects.all()
@@ -46,6 +48,8 @@ def all_articles(request):
             "articles": articles,
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
         }
         return render(request, "ankades/article/all-articles.html", context)
     else:
