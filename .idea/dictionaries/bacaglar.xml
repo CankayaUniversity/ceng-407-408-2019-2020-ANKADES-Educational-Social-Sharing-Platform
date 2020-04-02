@@ -10,8 +10,11 @@
       <w>adresleri</w>
       <w>aktif</w>
       <w>aktifleştir</w>
+      <w>aktifleştirdi</w>
       <w>aktifleştirildi</w>
+      <w>aktifleştirme</w>
       <w>aktiflik</w>
+      <w>aktifliğini</w>
       <w>ankades</w>
       <w>ankadescankaya</w>
       <w>aradığınız</w>
@@ -40,6 +43,7 @@
       <w>bugraahmetcaglar</w>
       <w>bulleted</w>
       <w>bulunamadı</w>
+      <w>bulundu</w>
       <w>bölüm</w>
       <w>böyle</w>
       <w>cevabınız</w>
@@ -125,6 +129,7 @@
       <w>icheck</w>
       <w>ionicons</w>
       <w>isactive</w>
+      <w>isimli</w>
       <w>istediğiniz</w>
       <w>istediğinize</w>
       <w>isteği</w>
@@ -134,6 +139,7 @@
       <w>izni</w>
       <w>için</w>
       <w>işlemi</w>
+      <w>işleminde</w>
       <w>i̇ptal</w>
       <w>i̇sim</w>
       <w>i̇zin</w>
@@ -142,12 +148,16 @@
       <w>i̇şlemi</w>
       <w>i̇şlemin</w>
       <w>i̇şlemler</w>
+      <w>kaldırdı</w>
       <w>kapalı</w>
       <w>kapat</w>
       <w>kategori</w>
       <w>kategoriler</w>
       <w>kategorileri</w>
+      <w>kategoris</w>
       <w>kategorisi</w>
+      <w>kategorisini</w>
+      <w>kategorisinin</w>
       <w>kaydedildi</w>
       <w>kayit</w>
       <w>kayıt</w>
@@ -158,12 +168,14 @@
       <w>kullanıcı</w>
       <w>kullanıcılar</w>
       <w>kullanıcının</w>
+      <w>kullanıcısı</w>
       <w>kullanıcıya</w>
       <w>kurs</w>
       <w>kurslar</w>
       <w>lineutils</w>
       <w>linkedin</w>
       <w>linki</w>
+      <w>liste</w>
       <w>listesi</w>
       <w>listesine</w>
       <w>loglar</w>
@@ -218,6 +230,7 @@
       <w>sayısı</w>
       <w>sifirla</w>
       <w>sifre</w>
+      <w>sildi</w>
       <w>silindi</w>
       <w>silinen</w>
       <w>silinme</w>

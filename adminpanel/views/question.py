@@ -101,6 +101,52 @@ def admin_delete_article_category(request, slug):
 
 
 @login_required(login_url="login_admin")
+def admin_isactive_question(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    try:
+        instance = Question.objects.get(slug=slug)
+        currentUser = request.user
+        userGroup = current_user_group(request, currentUser)
+        activity = AdminActivity()
+        if userGroup == 'admin':
+            if instance.isActive is True:
+                instance.isActive = False
+                instance.save()
+                activity.title = "Soru Aktifleştirme"
+                activity.application = "Question"
+                activity.createdDate = datetime.datetime.now()
+                activity.method = "UPDATE"
+                activity.creator = currentUser
+                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı soru aktifliğini kaldırdı."
+                activity.save()
+                messages.success(request, "Soru kategorisi artık aktif değil.")
+                return redirect("admin_all_questions")
+            else:
+                instance.isActive = True
+                instance.save()
+                activity.title = "Soru Aktifleştirme"
+                activity.application = "Question"
+                activity.createdDate = datetime.datetime.now()
+                activity.method = "UPDATE"
+                activity.creator = currentUser
+                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı soru aktifleştirdi."
+                activity.save()
+                messages.success(request, "Soru başarıyla aktifleştirildi.")
+                return redirect("admin_all_questions")
+        else:
+            messages.error(request, "Yetkiniz Yok")
+            return redirect("admin_all_questions")
+    except:
+        return render(request, "adminpanel/404-admin.html")
+
+
+@login_required(login_url="login_admin")
 def admin_isactive_question_category(request, slug):
     """
     :param request:
@@ -147,6 +193,46 @@ def admin_isactive_question_category(request, slug):
 
 
 @login_required(login_url="login_admin")
+def admin_delete_question(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
+    if userGroup == 'admin':
+        instance = get_object_or_404(Question, slug=slug)
+        if instance.isActive is True:
+            activity.title = "Soru Silme"
+            activity.application = "Question"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "DELETE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı soru silme işleminde bulundu. Başarısız."
+            activity.save()
+            messages.error(request, "Soru aktif olduğu için silme işlemi gerçekleştirilemedi.")
+            return redirect("admin_question_categories")
+        else:
+            instance.delete()
+            activity.title = "Soru Silme"
+            activity.application = "Question"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "DELETE"
+            activity.creator = currentUser
+            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcısı soru sildi."
+            activity.save()
+            messages.success(request, "Soru başarıyla silindi.")
+            return redirect("admin_all_questions")
+    else:
+        messages.error(request, "Yetkiniz Yok")
+        return redirect("admin_all_questions")
+
+
+@login_required(login_url="login_admin")
 def admin_delete_question_category(request, slug):
     """
     :param request:
@@ -159,7 +245,7 @@ def admin_delete_question_category(request, slug):
     if userGroup == 'admin':
         instance = get_object_or_404(QuestionCategory, slug=slug)
         if instance.isActive is True:
-            activity.title = "Soru Kategorisini Silme"
+            activity.title = "Soru Kategori Silme"
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
@@ -171,7 +257,7 @@ def admin_delete_question_category(request, slug):
             return redirect("admin_question_categories")
         else:
             instance.delete()
-            activity.title = "Soru Kategorisini Silme"
+            activity.title = "Soru Kategori Silme"
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"

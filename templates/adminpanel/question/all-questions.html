@@ -5,8 +5,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <!-- Default box -->
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Sorular</h3>
@@ -25,6 +23,7 @@
                                     <th>Kategori</th>
                                     <th>Ad</th>
                                     <th>Slug</th>
+                                    <th>Soru Numarası</th>
                                     <th>Oluşturulduğu Tarihi</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
@@ -40,18 +39,19 @@
                                             <td>{{ question.creator }}</td>
                                             <td>{{ question.categoryId }}</td>
                                             <td>{{ question.title }}</td>
+                                            <td>{{ question.slug }}</td>
                                             <td>{{ question.questionNumber }}</td>
                                             <td>{{ question.createdDate }}</td>
                                             <td>{{ question.updatedDate }}</td>
                                             <td>{{ question.isActive }}</td>
                                             <td>
-                                                <a type="button" href="{% url 'admin_isactive_question' question.questionNumber %}"
+                                                <a type="button" href="{% url 'admin_isactive_question' question.slug %}"
                                                    class="btn btn-warning">
-                                                    {% if questions.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                    {% if question.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
                                             </td>
                                             <td>
-                                                <a type="button" href="{% url 'admin_delete_question' question.questionNumber %}"
+                                                <a type="button" href="{% url 'admin_delete_question' question.slug %}"
                                                    class="btn btn-danger">Sil
                                                 </a>
                                             </td>
@@ -65,6 +65,7 @@
                                     <th>Kategori</th>
                                     <th>Ad</th>
                                     <th>Slug</th>
+                                    <th>Soru Numarası</th>
                                     <th>Oluşturulduğu Tarihi</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
@@ -79,5 +80,4 @@
             </div>
         </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

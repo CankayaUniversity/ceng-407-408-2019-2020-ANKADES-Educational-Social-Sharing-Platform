@@ -51,6 +51,11 @@ urlpatterns = [
     path('isactive-group/<slug:slug>', group.admin_isactive_group,
          name="admin_isactive_group"),
 
+    path('all-questions/', question.admin_all_questions, name="admin_all_questions"),
+    path('all-questions/isactive-question/<slug:slug>/', question.admin_isactive_question,
+         name="admin_isactive_question"),
+    path('all-questions/delete-question/<slug:slug>/', question.admin_delete_question,
+         name="admin_delete_question"),
     path('question-categories/', question.admin_question_categories, name="admin_question_categories"),
     path('isactive-question-categories<slug:slug>/', question.admin_isactive_question_category,
          name="admin_isactive_question_category"),
@@ -58,7 +63,6 @@ urlpatterns = [
          name="admin_delete_question_category"),
     path('add-question-category/', question.admin_add_question_category,
          name="admin_add_question_category"),
-    path('all-questions/', question.admin_all_questions, name="admin_all_questions"),
     # path('question/add-question/', question.admin_add_question, name="admin_add_question"),
 
     # Group Permission
