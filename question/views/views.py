@@ -128,6 +128,7 @@ def add_question_answer(request, slug, questionNumber):
     activity.application = "Question"
     activity.creator = currentUser
     activity.title = "Soru Yorum Ekleme"
+    activity.method = "POST"
     context = {
         "currentUser": currentUser,
         "userGroup": userGroup,
@@ -145,7 +146,7 @@ def add_question_answer(request, slug, questionNumber):
             new_answer.parentId_id = new_answer.id
             new_answer.save()
             activity.description = "Soruya yeni bir cevap eklendi. İşlemi yapan kişi: " + str(
-                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + " ."
             activity.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
         return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}), context)
