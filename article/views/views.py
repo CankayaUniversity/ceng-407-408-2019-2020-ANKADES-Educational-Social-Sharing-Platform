@@ -67,6 +67,8 @@ def all_articles(request):
             "article_pagination": article_pagination,
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
         }
         return render(request, "ankades/article/all-articles.html", context)
 
