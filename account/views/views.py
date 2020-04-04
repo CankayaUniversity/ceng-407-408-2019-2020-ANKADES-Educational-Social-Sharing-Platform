@@ -108,6 +108,7 @@ def logout_account(request):
         activity.title = "Çıkış Yapma."
         activity.application = "Logout"
         activity.method = "UPDATE"
+        activity.createdDate = datetime.datetime.now()
         activity.creator = currentUser
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı çıkış yaptı."

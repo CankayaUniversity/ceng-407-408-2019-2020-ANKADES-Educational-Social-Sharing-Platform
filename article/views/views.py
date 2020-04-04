@@ -88,6 +88,7 @@ def article_categories(request):
         "userGroup": userGroup,
         "article_categories_limit": article_categories_limit,
         "currentUser": currentUser,
+        "userGroup": userGroup,
     }
     return render(request, "adminpanel/article/categories.html", context)
 
@@ -107,6 +108,7 @@ def add_article(request):
         "articleCategory": articleCategory,
         "userGroup": userGroup,
         "form": form,
+        "currentUser": currentUser,
     }
     if request.method == "POST":
         value = request.POST['categoryId']
@@ -192,6 +194,7 @@ def edit_article(request, slug):
             "articleCategory": articleCategory,
             "userGroup": userGroup,
             "form": form,
+            "currentUser": currentUser,
         }
         return render(request, "ankades/account/posts/edit-article.html", context)
 
@@ -206,6 +209,8 @@ def article_categories(request):
 
 
 def article_detail(request, username, slug):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Article, slug=slug)
     if instance.creator.username != username:
         messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
@@ -222,6 +227,8 @@ def article_detail(request, username, slug):
         "articleComments": articleComments,
         "articleCategories": articleCategories,
         "instance": instance,
+        "currentUser": currentUser,
+        "userGroup": userGroup,
     }
     return render(request, "ankades/article/article-detail.html", context)
 
@@ -245,6 +252,7 @@ def add_article_comment(request, slug):
     activity = AccountActivity()
     activity.application = "Article"
     activity.creator = currentUser
+    activity.createdDate = datetime.datetime.now()
     activity.title = "Makale Yorumu Ekle"
     instance = get_object_or_404(Article, slug=slug)
     if request.method == "POST":

@@ -93,7 +93,8 @@ def logout_admin(request):
         activity.application = "Logout"
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı çıkış yaptı."
         activity.save()
         messages.success(request, "Başarıyla çıkış yapıldı")

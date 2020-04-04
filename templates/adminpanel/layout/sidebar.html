@@ -14,7 +14,7 @@
                 <img src="{{ request.user.image.url }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{% url 'admin_edit_profile' %} "
+                <a href="{% url 'admin_my_account' request.user.username %} "
                    class="d-block">{{ request.user.username }}</a>
             </div>
         </div>

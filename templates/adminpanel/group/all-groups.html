@@ -34,7 +34,7 @@
                                             <td>{{ group.id }}</td>
                                             <td>{{ group.title }}</td>
                                             <td>{{ group.createdDate }}</td>
-                                            <td>{{ group.updatedDate }}</td>
+                                            <td>{% if group.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ group.updatedDate }}{% endif %}</td>
                                             <td>{{ group.isActive }}</td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_isactive_group' group.slug %}"
