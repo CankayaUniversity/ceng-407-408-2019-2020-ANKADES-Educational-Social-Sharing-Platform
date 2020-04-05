@@ -11,6 +11,8 @@ from rest_framework.generics import get_object_or_404
 from account.models import Account, AccountActivity, AccountSocialMedia, SocialMedia
 from account.views.views import current_user_group, get_social_media
 
+import datetime
+
 
 @login_required(login_url="login_account")
 def edit_profile(request):
@@ -49,7 +51,8 @@ def edit_profile(request):
         activity.application = "Account"
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
@@ -62,6 +65,7 @@ def add_social_media_to_user(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
+    activity = AccountActivity()
     sm = SocialMedia.objects.all()
     try:
         accountSocialMedia = AccountSocialMedia.objects.get(userId__username=currentUser)
@@ -100,6 +104,14 @@ def add_social_media_to_user(request):
         google_drive = request.POST.get('google_drive')
         linkedin = request.POST.get('linkedin')
         udemy = request.POST.get('udemy')
+        activity.title = "Sosyal Medya Hesabı Ekleme."
+        activity.application = "Account"
+        activity.method = "POST"
+        activity.creator = currentUser
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı sosyal medya hesabı ekledi."
+        activity.save()
         messages.success(request, "Değişiklikler başarıyla kaydedildi.")
         return redirect("index")
         # return redirect("index")
@@ -125,7 +137,8 @@ def edit_username(request):
         activity.application = "Account"
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
         messages.success(request, "Kullanıcı adı başarıyla güncellendi.")
@@ -172,7 +185,8 @@ def edit_password(request):
             activity.application = "Account"
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.createdDate = datetime.datetime.now()
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı parolasını güncelledi."
             activity.save()
             messages.success(request, "Şifreniz başarıyla güncellendi.")
@@ -198,7 +212,8 @@ def edit_email(request):
         activity.application = "Account"
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı email adresini güncelledi."
         activity.save()
         messages.success(request, "Email başarıyla güncellendi.")

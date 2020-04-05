@@ -84,7 +84,7 @@ def login_account(request):
             activity.title = "Kullanıcı giriş yaptı"
             activity.createdDate = datetime.datetime.now()
             activity.application = "Account"
-            activity.description = str(activity.creator.username) + " giriş yaptı."
+            activity.description = "" + str(activity.creator.username) + " giriş yaptı."
             activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("index")
@@ -110,7 +110,7 @@ def logout_account(request):
         activity.method = "UPDATE"
         activity.createdDate = datetime.datetime.now()
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı çıkış yaptı."
         activity.save()
         messages.success(request, "Başarıyla çıkış yapıldı")
@@ -156,7 +156,8 @@ def register_account(request):
                 activity.application = "Register"
                 activity.method = "UPDATE"
                 activity.creator = currentUser
-                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.createdDate = datetime.datetime.now()
+                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı giriş yaptı."
                 activity.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")

@@ -38,7 +38,7 @@
                                             <td>{{ question.slug }}</td>
                                             <td>{{ question.questionNumber }}</td>
                                             <td>{{ question.createdDate }}</td>
-                                            <td>{{ question.updatedDate }}</td>
+                                            <td>{% if question.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ question.updatedDate }}{% endif %}</td>
                                             <td>{{ question.isActive }}</td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_isactive_question' question.slug %}"

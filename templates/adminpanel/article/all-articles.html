@@ -38,7 +38,7 @@
                                             <td>{{ article.title }}</td>
                                             <td>{{ article.slug }}</td>
                                             <td>{{ article.createdDate }}</td>
-                                            <td>{{ article.updatedDate }}</td>
+                                            <td>{% if article.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ article.updatedDate }}{% endif %}</td>
                                             <td>{{ article.isActive }}</td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_isactive_article' article.slug %}"

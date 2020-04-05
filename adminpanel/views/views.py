@@ -73,7 +73,7 @@ def login_admin(request):
                 activity.title = "Kullanıcı giriş yaptı"
                 activity.createdDate = datetime.datetime.now()
                 activity.application = "Login"
-                activity.description = str(activity.creator.username) + " giriş yaptı."
+                activity.description = "" + str(activity.creator.username) + " giriş yaptı."
                 activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("admin_dashboard")

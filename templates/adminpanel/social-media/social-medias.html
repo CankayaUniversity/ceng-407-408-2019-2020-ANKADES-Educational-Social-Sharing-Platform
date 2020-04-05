@@ -39,7 +39,7 @@
                                             <td>{{ sm.title }}</td>
                                             <td>{{ sm.slug }}</td>
                                             <td>{{ sm.createdDate }}</td>
-                                            <td>{{ sm.updatedDate }}</td>
+                                            <td>{% if sm.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ sm.updatedDate }}{% endif %}</td>
                                             <td>{{ sm.isActive }}</td>
                                             <td>{% if sm.media %}
                                                 <a target="_blank" href="{{ sm.media.url }}">Resme Bak</a>

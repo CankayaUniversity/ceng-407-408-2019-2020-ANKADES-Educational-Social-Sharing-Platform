@@ -143,7 +143,7 @@ def admin_edit_profile(request):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
@@ -176,7 +176,7 @@ def admin_edit_username(request, username):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
         messages.success(request, "Kullanıcı adınız başarıyla güncellendi.")
@@ -214,7 +214,7 @@ def admin_edit_email(request, username):
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı e-mail adresini güncelledi."
             activity.save()
             messages.success(request, "Email adresiniz başarıyla güncellendi.")
@@ -240,7 +240,7 @@ def admin_blocked_users(request):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısının yetkisi yok."
         activity.save()
         messages.error(request, "Yetkiniz yok.")
@@ -262,7 +262,7 @@ def admin_block_account(request, username):
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı engellendi."
             activity.save()
             messages.success(request, "Kullanıcı başarıyla engellendi.")
@@ -275,7 +275,7 @@ def admin_block_account(request, username):
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı aktifleştirildi."
             activity.save()
             messages.success(request, "Kullanıcı başarıyla aktifleştirildi.")
@@ -328,7 +328,7 @@ def admin_register_account(request):
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı eklendi."
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı eklendi."
             activity.save()
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
             return redirect("admin_all_users")

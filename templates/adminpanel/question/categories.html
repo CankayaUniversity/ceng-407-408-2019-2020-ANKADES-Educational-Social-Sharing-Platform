@@ -37,7 +37,7 @@
                                             <td>{{ category.creator }}</td>
                                             <td>{{ category.title }}</td>
                                             <td>{{ category.createdDate }}</td>
-                                            <td>{{ category.updatedDate }}</td>
+                                            <td>{% if category.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ category.updatedDate }}{% endif %}</td>
                                             <td>{{ category.isActive }}</td>
                                             <td>{{ category.isCategory }}</td>
                                             <td>

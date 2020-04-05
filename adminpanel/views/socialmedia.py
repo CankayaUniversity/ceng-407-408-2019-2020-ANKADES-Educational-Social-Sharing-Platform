@@ -38,7 +38,7 @@ def admin_isactive_socialmedia(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya aktifliğini kaldırdı."
         activity.save()
         messages.success(request, "Makale kategorisi artık aktif değil.")
@@ -51,7 +51,7 @@ def admin_isactive_socialmedia(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya güncelledi."
         activity.save()
         messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
@@ -96,7 +96,7 @@ def admin_edit_social_media(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya güncelledi."
         activity.save()
         messages.success(request, "Sosyal Medya başarıyla güncellendi.")
@@ -121,7 +121,7 @@ def admin_add_social_media(request):
             activity.createdDate = datetime.datetime.now()
             activity.method = "INSERT"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı sosyal medya ekledi."
             activity.save()
             messages.error(request, "Bu sosyal medya daha önce eklenmiş")
@@ -134,7 +134,7 @@ def admin_add_social_media(request):
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
             activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı sosyal medya güncelledi."
             activity.save()
             messages.success(request, "Sosyal Medya kayıt işlemi başarıyla gerçekleştirildi.")

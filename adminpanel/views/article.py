@@ -74,7 +74,7 @@ def admin_add_article(request):
         activity.createdDate = datetime.datetime.now()
         activity.method = "POST"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale ekledi."
         activity.save()
         messages.success(request, "Makale başarıyla eklendi !")
@@ -96,7 +96,7 @@ def admin_isactive_article(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale aktifliği kaldırıldı."
         activity.save()
         messages.success(request, "Makale artık aktif değil.")
@@ -109,7 +109,7 @@ def admin_isactive_article(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makaleyi aktifleştirdi."
         activity.save()
         messages.success(request, "Makale başarıyla aktifleştirildi.")
@@ -164,7 +164,7 @@ def admin_add_article_category(request):
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "POST"
                 activity.creator = currentUser
-                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı makale için kategori ekledi."
                 activity.save()
                 messages.success(request, "Makale kategorisi başarıyla eklendi !")
@@ -271,7 +271,7 @@ def admin_isactive_article_category(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale kategorisinin aktifliğini kaldırdı."
         activity.save()
         messages.success(request, "Makale kategorisi artık aktif değil.")
@@ -284,7 +284,7 @@ def admin_isactive_article_category(request, slug):
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
         activity.creator = currentUser
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale kategorisini aktifleştirdi."
         activity.save()
         messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
