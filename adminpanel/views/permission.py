@@ -1,50 +1,68 @@
-# import datetime
-#
-# from django.contrib import messages
-# from django.contrib.auth.decorators import login_required
-# from django.shortcuts import redirect, render
-# from rest_framework.generics import get_object_or_404
-# from account.models import GroupPermission, Permission
-# from adminpanel.forms import AdminPermissionForm
-#
-# # Permissions Done
-#
-# @login_required(login_url="login_admin")
-# def admin_all_permissions(request):
-#     """
-#     :param request:
-#     :return:
-#     """
-#     permissions = Permission.objects.all()
-#     context = {
-#         "permissions": permissions,
-#     }
-#     return render(request, "admin/permissions/all-permissions.html", context)
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_add_permission(request):
-#     """
-#     :param request:
-#     :return:
-#     """
-#     return None
-#     # form = AdminPermissionForm(request.POST or None)
-#     # adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     # context = {
-#     #     "form": form,
-#     #     "adminGroup": adminGroup,
-#     # }
-#     # if adminGroup:
-#     #     if form.is_valid():
-#     #         instance = form.save(commit=False)
-#     #         instance.save()
-#     #         messages.success(request, "İzin başarıyla eklendi")
-#     #         return redirect("admin_all_permissions")
-#     #     return render(request, "admin/permissions/add-permission.html", context)
-#     # else:
-#     #     messages.error(request, "Yetkiniz Yok !")
-#     #     return redirect("admin_dashboard")
+import datetime
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from rest_framework.generics import get_object_or_404
+from account.models import GroupPermission, Permission
+from account.views.views import current_user_group
+from adminpanel.forms import AdminPermissionForm
+from adminpanel.models import AdminActivity
+
+
+@login_required(login_url="login_admin")
+def admin_all_permissions(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    permissions = Permission.objects.all()
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+        "permissions": permissions,
+    }
+    return render(request, "admin/permissions/all-permissions.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_add_permission(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AdminActivity()
+    activity.application = "Permission"
+    activity.creator = currentUser
+    activity.title = "İzin Ekle"
+    activity.method = "POST"
+    activity.createdDate = datetime.datetime.now()
+    if userGroup == 'admin':
+        if request.method == "POST":
+            title = request.POST.get("title")
+            description = request.POST.get("description")
+            isActive = request.POST.get("isActive") == 'on'
+            new_group = Permission(title=title, description=description, isActive=isActive)
+            new_group.save()
+            activity.description = "Yeni bir izin eklendi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
+            activity.save()
+            messages.success(request, "İzin başarıyla oluşturuldu.")
+            return redirect("admin_all_permissions")
+        context = {
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+        }
+        return render(request, "adminpanel/permission/add-permission.html", context)
+    else:
+        activity.description = "Yeni bir grup ekleme başarısız. İşlemi yapan kişi: " + str(
+            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+        activity.save()
+        messages.error(request, "Yetkiniz yok.")
+        return redirect("admin_dashboard")
 #
 #
 # @login_required(login_url="login_admin")

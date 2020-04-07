@@ -12,12 +12,25 @@ class Permission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(null=False, blank=False, max_length=100)
     slug = models.CharField(unique=True, blank=False, null=False, max_length=254)
+    description = models.CharField(max_length=254, null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.slug
+
+    def __unicode__(self):
+        return self.slug
+
+    def get_absolute_url(self):
+        return reverse("admin_edit_permission", kwargs={"slug": self.slug})
+
+    def get_active_url(self):
+        return reverse("permission-active-toggle", kwargs={"slug": self.slug})
+
+    def get_active_api_url(self):
+        return reverse("permission-active-api-toggle", kwargs={"slug": self.slug})
 
     class Meta:
         db_table = "Permission"
@@ -42,10 +55,10 @@ class Group(models.Model):
         return reverse("admin_edit_group", kwargs={"slug": self.slug})
 
     def get_active_url(self):
-        return reverse("active-toggle", kwargs={"slug": self.slug})
+        return reverse("group-active-toggle", kwargs={"slug": self.slug})
 
     def get_active_api_url(self):
-        return reverse("active-api-toggle", kwargs={"slug": self.slug})
+        return reverse("group-active-api-toggle", kwargs={"slug": self.slug})
 
     class Meta:
         db_table = "Group"

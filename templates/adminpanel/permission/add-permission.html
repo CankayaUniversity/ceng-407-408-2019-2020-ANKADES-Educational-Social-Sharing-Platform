@@ -1,5 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Add Group{% endblock %}
+{% block title %}Ankacademy | Add Permission{% endblock %}
 {% load static %}
 {% block content %}
     <div class="container-fluid">
@@ -7,15 +7,15 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Grup Ekle</h3>
+                        <h3 class="card-title">İzin Ekle</h3>
                     </div>
-                    <form role="form" action="{% url 'admin_add_group' %}" method="post">
+                    <form role="form" action="{% url 'admin_add_permission' %}" method="post">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="title">Grup Adı</label>
+                                <label for="title">İzin Adı</label>
                                 <input type="text" name="title" class="form-control" id="title"
-                                       placeholder="Grup Adı">
+                                       placeholder="İzin Adı">
                             </div>
                             <div class="form-group mb-0">
                                 <div class="custom-control custom-checkbox">

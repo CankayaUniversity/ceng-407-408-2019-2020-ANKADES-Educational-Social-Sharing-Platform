@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question
+from adminpanel.views import group, socialmedia, activity, question, permission
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -74,8 +74,8 @@ urlpatterns = [
     #      name="admin_edit_group_permission"),
     #
     # Permission
-    # path('izinler/', permission.admin_all_permissions, name="admin_all_permissions"),
-    # path('izinler/ekle/', permission.admin_add_permission, name="admin_add_permission"),
+    path('permissions/', permission.admin_all_permissions, name="admin_all_permissions"),
+    path('add-permission/', permission.admin_add_permission, name="admin_add_permission"),
     # path('izinler/duzenle/<slug:slug>', permission.admin_edit_permission,
     #      name="admin_edit_permission"),
     # path('izinler/sil/<slug:slug>', permission.admin_delete_permission,

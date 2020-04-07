@@ -5,7 +5,7 @@
              alt="AdminLTE Logo"
              class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">ANKADES</span>
+        <span class="brand-text font-weight-light">ANKACADEMY</span>
     </a>
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -14,7 +14,7 @@
             </div>
             <div class="info">
                 <a href="{% url 'admin_my_account' request.user.username %} "
-                   class="d-block">{{ request.user.username }}</a>
+                   class="d-block">{{ currentUser.get_full_name }}</a>
             </div>
         </div>
         <nav class="mt-2">
@@ -237,7 +237,29 @@
                             </li>
                         </ul>
                     </li>
-
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-shield-alt"></i>
+                            <p>
+                                İzin
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{% url 'admin_all_permissions' %}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>İzinler</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'admin_add_permission' %}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>İzin Ekle</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-users-cog"></i>
@@ -257,30 +279,6 @@
                                 <a href="{% url 'admin_add_group' %}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Grup İzni Ekle</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-shield-alt"></i>
-                            <p>
-                                İzin
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{% url 'admin_all_groups' %}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>İzinler</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'admin_add_group' %}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>İzin Ekle</p>
                                 </a>
                             </li>
                         </ul>

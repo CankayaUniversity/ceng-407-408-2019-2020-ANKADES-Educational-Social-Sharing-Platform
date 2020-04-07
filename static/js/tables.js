@@ -16,4 +16,5 @@ $(function () {
     $('#my-articles').DataTable();
     $('#all-users').DataTable();
     $('#blocked-users').DataTable();
+    $('#permissions').DataTable();
 });

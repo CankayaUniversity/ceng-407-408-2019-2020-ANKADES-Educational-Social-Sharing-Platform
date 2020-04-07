@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     # url(r'^Account/(?P<username>[\w-]+)/Follow/$', FollowAccountAPIToggle.as_view(), name="follow-api-toggle"),
     url(r'^Article/(?P<username>[\w-]+)/(?P<slug>[\w-]+)/Like/$', ArticleLikeAPIToggle.as_view(), name="article-like-api-toggle"),
-    url(r'^Account/Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="active-api-toggle"),
+    url(r'^Account/Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="group-active-api-toggle"),
     url(r'^Account/Follow/(?P<username>[\w-]+)/$', FollowAccountAPI.as_view(), name="follow-api"),
     url(r'^Account/Login/$', AccountLoginAPIView.as_view(), name="login-api"),
 

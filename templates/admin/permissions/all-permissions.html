@@ -1,5 +1,6 @@
 {% extends 'adminpanel/layout/layout.html' %}
 {% load static %}
+{% block title %}Ankacademy | All Permissions{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
     <section class="content-header">
@@ -8,19 +9,20 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Gruplar</h3>
+                            <h3 class="card-title">İzinler</h3>
                         </div>
                         <button type="button" class="btn btn-success m-3" data-toggle="modal"
                                 data-target="#modal-default">
-                            Yeni Grup Ekle
+                            Yeni İzin Ekle
                         </button>
                         <div class="card-body">
-                            <table id="groups" class="table table-bordered table-striped">
+                            <table id="permissions" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Grup Adı</th>
+                                    <th>İzin Adı</th>
                                     <th>Kullanım Şekli</th>
+                                    <th>Açıklama</th>
                                     <th>Oluşturulduğu Tarih</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
@@ -29,23 +31,24 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% if groups %}
-                                    {% for group in groups %}
+                                {% if permissions %}
+                                    {% for permission in permissions %}
                                         <tr>
-                                            <td>{{ group.id }}</td>
-                                            <td>{{ group.title }}</td>
-                                            <td>{{ group.slug }}</td>
-                                            <td>{{ group.createdDate }}</td>
-                                            <td>{% if group.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ group.updatedDate }}{% endif %}</td>
-                                            <td>{{ group.isActive }}</td>
+                                            <td>{{ permission.id }}</td>
+                                            <td>{{ permission.title }}</td>
+                                            <td>{{ permission.slug }}</td>
+                                            <td>{{ permission.description }}</td>
+                                            <td>{{ permission.createdDate }}</td>
+                                            <td>{% if permission.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ permission.updatedDate }}{% endif %}</td>
+                                            <td>{{ permission.isActive }}</td>
                                             <td>
-                                                <a type="button" href="{% url 'admin_isactive_group' group.slug %}"
+                                                <a type="button" href="{% url 'admin_isactive_group' permission.slug %}"
                                                    class="btn btn-warning">
-                                                    {% if group.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                    {% if permission.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
                                             </td>
                                             <td>
-                                                <a type="button" href="{% url 'admin_delete_group' group.slug %}"
+                                                <a type="button" href="{% url 'admin_delete_group' permission.slug %}"
                                                    class="btn btn-danger">Sil
                                                 </a>
                                             </td>
@@ -55,8 +58,9 @@
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Grup Adı</th>
+                                    <th>İzin Adı</th>
                                     <th>Kullanım Şekli</th>
+                                    <th>Açıklama</th>
                                     <th>Oluşturulduğu Tarih</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
@@ -71,26 +75,31 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Yeni Grup Ekle</h4>
+                                    <h4 class="modal-title">Yeni İzin Ekle</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form role="form" action="{% url 'admin_add_group' %}" method="post">
+                                    <form role="form" action="{% url 'admin_add_permission' %}" method="post">
                                         {% csrf_token %}
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="title">Grup Adı</label>
+                                                <label for="title">İzin Adı</label>
                                                 <input type="text" name="title" class="form-control" id="title"
-                                                       placeholder="Grup Adı">
+                                                       placeholder="İzin Adı">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description">Açıklama</label>
+                                                <input type="text" name="description" class="form-control" id="description"
+                                                       placeholder="Açıklama">
                                             </div>
                                             <div class="form-group mb-0">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" name="isActive" class="custom-control-input"
-                                                           id="exampleCheck1">
+                                                           id="isActive">
                                                     <label class="custom-control-label"
-                                                           for="exampleCheck1">Aktiflik</label>
+                                                           for="isActive">Aktiflik</label>
                                                 </div>
                                             </div>
                                         </div>

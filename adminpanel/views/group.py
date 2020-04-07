@@ -113,7 +113,8 @@ def admin_add_group(request):
             messages.success(request, "Grup başarıyla oluşturuldu.")
             return redirect("admin_all_groups")
         context = {
-            "userGroup": userGroup
+            "userGroup": userGroup,
+            "currentUser": currentUser,
         }
         return render(request, "adminpanel/group/add-group.html", context)
     else:
