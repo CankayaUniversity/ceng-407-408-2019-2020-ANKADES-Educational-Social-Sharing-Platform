@@ -1,5 +1,6 @@
 {% extends 'adminpanel/layout/layout.html' %}
 {% load static %}
+{% block title %}Members{% endblock %}
 {% block content %}
     <section class="content-header">
         <div class="container-fluid">
@@ -15,7 +16,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Kullanıcı Adı</th>
-                                    <th>Grup</th>
+                                    <th>Group Grup</th>
                                     <th>Kullanıcı Id</th>
                                     <th>Grup Id</th>
                                 </thead>
@@ -26,7 +27,7 @@
                                             <td>{{ member.id }}</td>
                                             <td>{{ member.userId }}</td>
                                             <td>{{ member.groupId }}</td>
-                                            <td>{{ member.user_id }}</td>
+                                            <td>{{ member.userId_id }}</td>
                                             <td>{{ member.groupId_id }}</td>
                                         </tr>
                                     {% endfor %}

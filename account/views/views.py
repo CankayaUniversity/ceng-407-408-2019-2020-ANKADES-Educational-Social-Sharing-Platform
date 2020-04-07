@@ -125,7 +125,6 @@ def register_account(request):
     :return:
     """
     if not request.user.is_authenticated:
-        currentUser = request.user
         activity = AccountActivity()
         if request.method == "POST":
             first_name = request.POST.get("first_name")
@@ -152,13 +151,15 @@ def register_account(request):
                 getGroup = Group.objects.get(slug="uye")
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
-                activity.title = "Giriş Yapma"
-                activity.application = "Register"
-                activity.method = "UPDATE"
-                activity.creator = currentUser
+                new_user = authenticate(username=username, password=password)
+                login(request, new_user)
+                activity.title = "Kayıt Olma"
+                activity.application = "ACCOUNT"
+                activity.method = "POST"
+                activity.creator = new_user
                 activity.createdDate = datetime.datetime.now()
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı giriş yaptı."
+                    activity.creator) + " kullanıcısı kayıt oldu."
                 activity.save()
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("login_account")

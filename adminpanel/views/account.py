@@ -17,7 +17,7 @@ from exam.models import School
 def admin_all_users(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    accounts = Account.objects.all().order_by('-date_joined')[:5]
+    accounts = Account.objects.all().order_by('-date_joined')
     context = {
         "userGroup": userGroup,
         "accounts": accounts,
@@ -33,7 +33,7 @@ def admin_all_user_groups(request):
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
-    members = AccountGroup.objects.filter(Q(groupId__slug="üye"))
+    members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
         "userGroup": userGroup,
         "admins": admins,
@@ -96,7 +96,7 @@ def admin_moderators(request):
 def admin_members(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    members = AccountGroup.objects.filter(Q(groupId__slug="member"))
+    members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
         "members": members,
         "userGroup": userGroup,
@@ -353,10 +353,13 @@ def admin_add_group_to_user(request):
             userId = request.POST['userId']
             groupId = request.POST['groupId']
             try:
-                getExistAccount = AccountGroup.objects.get(userId__id=userId)
+                getExistAccount = AccountGroup.objects.get(userId=userId)
                 if getExistAccount:
-                    messages.error(request, "Kullanıcının zaten bir grubu mevcut.")
-                    return redirect("admin_dashboard")
+                    getExistAccount.groupId = groupId
+                    getExistAccount.userId = userId
+                    getExistAccount.save()
+                    messages.success(request, "Kullanıcının grubu başarıyla değiştirildi.")
+                    return redirect("admin_all_user_groups")
             except:
                 instance = AccountGroup()
                 instance.groupId_id = groupId
@@ -371,6 +374,7 @@ def admin_add_group_to_user(request):
                     instance.groupId.title) + " grubu eklendi. İşlem tarihi: " + str(
                     activity.createdDate) + ". İşlemi gerçekleştiren kişi: " + str(activity.creator)
                 activity.save()
+                messages.success(request, "Kullanıcının grubu başarıyla değiştirildi.")
                 return redirect("admin_dashboard")
     else:
         messages.error(request, "Yetkiniz yok.")

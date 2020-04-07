@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5433/</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="@ankacademydb.cnsubgh6d703.eu-central-1.rds.amazonaws.com" uuid="1358a8a2-7279-4b98-b78f-30efe9671e68">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ankacademydb.cnsubgh6d703.eu-central-1.rds.amazonaws.com:5432/</jdbc-url>
+    </data-source>
   </component>
 </project>

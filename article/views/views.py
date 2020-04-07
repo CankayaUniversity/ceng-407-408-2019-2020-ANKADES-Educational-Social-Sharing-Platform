@@ -6,7 +6,6 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
@@ -14,7 +13,7 @@ from account.models import Account, AccountActivity
 from account.views.views import current_user_group
 from adminpanel.forms import AddArticleForm
 from ankadescankaya.slug import slug_save
-from article.forms import ArticleForm, EditArticleForm
+from article.forms import EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 
@@ -88,7 +87,6 @@ def article_categories(request):
         "userGroup": userGroup,
         "article_categories_limit": article_categories_limit,
         "currentUser": currentUser,
-        "userGroup": userGroup,
     }
     return render(request, "adminpanel/article/categories.html", context)
 

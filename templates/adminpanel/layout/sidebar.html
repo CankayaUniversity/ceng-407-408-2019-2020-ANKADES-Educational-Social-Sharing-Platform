@@ -1,6 +1,5 @@
 {% load static %}
 <aside class="main-sidebar sidebar-dark-blue elevation-4" style="background: #0e396c; color: #fff">
-    <!-- Brand Logo -->
     <a href="{% url 'index' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}"
              alt="AdminLTE Logo"
@@ -81,12 +80,6 @@
                                 <p>Kullanıcıya Grup Ekle</p>
                             </a>
                         </li>
-                        {#                        <li class="nav-item">#}
-                        {#                            <a href="{% url 'admin_register_account' %}" class="nav-link">#}
-                        {#                                <i class="far fa-circle nav-icon"></i>#}
-                        {#                                <p>Kullanıcı Ekle</p>#}
-                        {#                            </a>#}
-                        {#                        </li>#}
                         <li class="nav-item">
                             <a href="{% url 'admin_blocked_users' %}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -95,7 +88,12 @@
                         </li>
                     </ul>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{% url 'admin_all_groups' %}" class="nav-link">
+                        <i class="fa fa-users nav-icon"></i>
+                        <p>Gruplar</p>
+                    </a>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-circle"></i>
@@ -176,12 +174,6 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin_all_groups' %}" class="nav-link">
-                        <i class="fa fa-users nav-icon"></i>
-                        <p>Gruplar</p>
-                    </a>
                 </li>
                 {% if userGroup == 'admin' %}
                     <li class="nav-header">Admin</li>
@@ -294,134 +286,6 @@
                         </ul>
                     </li>
                 {% endif %}
-
-                <li class="nav-header">EXAMPLES</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-envelope"></i>
-                        <p>
-                            Mailbox
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="../chat/mailbox.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Inbox</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../chat/compose.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Compose</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../chat/read-mail.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Read</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Kategoriler
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{% url 'admin_add_article_category' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Makale Kategori Ekle</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../chat/compose.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Kurs</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-plus-square"></i>
-                        <p>
-                            Extras
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Level 1</p>
-                    </a>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
-                        <p>
-                            Level 1
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Level 2</p>
-                            </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Level 2
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Level 2</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Level 1</p>
-                    </a>
-                </li>
                 <li class="nav-header">Paylaşım</li>
                 <li class="nav-item">
                     <a href="{% url 'admin_tags' %}" class="nav-link">
@@ -455,7 +319,5 @@
                 </li>
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>
