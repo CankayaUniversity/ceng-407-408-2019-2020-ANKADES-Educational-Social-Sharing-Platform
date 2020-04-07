@@ -4,7 +4,7 @@ from django import forms
 from question.models import Question
 
 
-class AddQuestionForm(forms.Form):
+class QuestionForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget())
 
 

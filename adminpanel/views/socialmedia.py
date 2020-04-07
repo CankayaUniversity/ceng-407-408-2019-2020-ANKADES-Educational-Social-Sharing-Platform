@@ -3,9 +3,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-from django.db.models import Q
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.models import SocialMedia
@@ -20,6 +18,7 @@ def admin_all_social_medias(request):
     userGroup = current_user_group(request, currentUser)
     context = {
         "socialMedias": socialMedias,
+        "currentUser": currentUser,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/social-media/social-medias.html", context)
@@ -78,6 +77,7 @@ def admin_edit_social_media(request, slug):
     :return:
     """
     currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(SocialMedia, slug=slug)
     activity = AdminActivity()
     if request.method == "POST" and request.FILES['media']:
@@ -101,7 +101,12 @@ def admin_edit_social_media(request, slug):
         activity.save()
         messages.success(request, "Sosyal Medya başarıyla güncellendi.")
         return redirect("admin_all_social_medias")
-    return render(request, "adminpanel/social-media/edit-social-media.html", {"instance": instance})
+    context = {
+        "instance": instance,
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+    }
+    return render(request, "adminpanel/social-media/edit-social-media.html", context)
 
 
 @login_required(login_url="login_admin")

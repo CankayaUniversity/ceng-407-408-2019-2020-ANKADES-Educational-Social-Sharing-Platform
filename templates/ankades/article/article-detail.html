@@ -1,6 +1,6 @@
 {% extends 'ankades/layout/layout.html' %}
 {% load static %}
-{% block title %}Ankades - {{ instance.title }}{% endblock %}
+{% block title %}{{ instance.creator.get_full_name }} | {{ instance.title }}{% endblock %}
 {% block content %}
     <section class="content">
         <div class="container-fluid">
@@ -17,8 +17,12 @@
                         {% if instance.media %}
                             <img class="img-fluid pad" src="{{ instance.media.url }}" alt="Photo" width="100%">
                         {% endif %}
-                        <div class="container-fluid container p-5"
-                             style="background: #f8f9fa">{{ instance.description|safe }}</div>
+                        <div class="container-fluid container p-5" style="background: #f8f9fa">
+                            <p style="font-size: 3em">{{ instance.title }}</p>
+                            <p>
+                                <i style="color: #57a4ff" class="fa fa-ticket-alt"> {{ instance.categoryId }}</i>
+                            </p>
+                            {{ instance.description|safe }}</div>
                         <div class="container mt-3">
                             <button type="button" class="btn btn-danger btn-md"><i class="fas fa-share"></i> Paylaş
                             </button>

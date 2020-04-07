@@ -11,7 +11,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
-from account.models import Account, Group, AccountGroup, GroupPermission, AccountSocialMedia, AccountPermission, \
+from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
     AccountActivity, SocialMedia
 from article.models import Article, ArticleComment
 from question.models import Question

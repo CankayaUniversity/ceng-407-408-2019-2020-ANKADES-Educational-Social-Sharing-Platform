@@ -6,14 +6,14 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
-from account.models import Account, AccountActivity
+from account.models import AccountActivity
 from account.views.views import current_user_group
-from adminpanel.forms import AddArticleForm
 from ankadescankaya.slug import slug_save
-from article.forms import EditArticleForm
+from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 
@@ -100,7 +100,7 @@ def add_article(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
-    form = AddArticleForm(request.POST or None)
+    form = ArticleForm(request.POST or None)
     activity = AccountActivity()
     context = {
         "articleCategory": articleCategory,
@@ -112,14 +112,12 @@ def add_article(request):
         value = request.POST['categoryId']
         title = request.POST.get("title")
         isPrivate = request.POST.get("isPrivate") == "on"
-        isActive = request.POST.get("isActive") == "on"
         if form.is_valid():
             description = form.cleaned_data.get("description")
         if not title and description:
             messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
             return render(request, "ankades/article/add-article.html", context)
-        instance = Article(title=title, description=description,
-                           isPrivate=isPrivate, isActive=isActive)
+        instance = Article(title=title, description=description, isPrivate=isPrivate)
         if request.FILES:
             media = request.FILES.get('media')
             fs = FileSystemStorage()
@@ -185,8 +183,7 @@ def edit_article(request, slug):
             activity.save()
             pre_save.connect(slug_save, sender=edit_article)
             messages.success(request, "Makale başarıyla güncellendi.")
-            # return redirect(reverse("article_detail", kwargs={"slug": slug}))
-            return redirect("index")
+            return redirect(reverse("article_detail", kwargs={"slug": slug}))
         context = {
             "instance": instance,
             "articleCategory": articleCategory,
@@ -198,37 +195,56 @@ def edit_article(request, slug):
 
 
 def article_categories(request):
+    """
+    :param request:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     keyword = request.GET.get("keyword")
     if keyword:
         searchCategories = ArticleCategory.objects.filter(title__contains=keyword)
-        return render(request, "ankades/article/categories.html", {"searchCategories": searchCategories})
+        context = {
+            "searchCategories": searchCategories,
+            "userGroup": userGroup,
+            "currentUser": currentUser,
+        }
+        return render(request, "ankades/article/categories.html", context)
     categories = ArticleCategory.objects.all()
-    return render(request, "ankades/article/categories.html", {"categories": categories})
+    context = {
+        "categories": categories,
+        "userGroup": userGroup,
+        "currentUser": currentUser,
+    }
+    return render(request, "ankades/article/categories.html", context)
 
 
 def article_detail(request, username, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    instance = get_object_or_404(Article, slug=slug)
-    if instance.creator.username != username:
-        messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
-        return redirect("index")
-    articles = Article.objects.all()
-    relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
-    articleComments = ArticleComment.objects.filter(articleId__slug=slug)
-    articleCategories = ArticleCategory.objects.all()
-    instance.view += 1
-    instance.save()
-    context = {
-        "articles": articles,
-        "relatedPosts": relatedPosts,
-        "articleComments": articleComments,
-        "articleCategories": articleCategories,
-        "instance": instance,
-        "currentUser": currentUser,
-        "userGroup": userGroup,
-    }
-    return render(request, "ankades/article/article-detail.html", context)
+    try:
+        instance = Article.objects.get(slug=slug)
+        if instance.creator.username != username:
+            messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
+            return render(request, "404.html")
+        articles = Article.objects.all()
+        relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
+        articleComments = ArticleComment.objects.filter(articleId__slug=slug)
+        articleCategories = ArticleCategory.objects.all()
+        instance.view += 1
+        instance.save()
+        context = {
+            "articles": articles,
+            "relatedPosts": relatedPosts,
+            "articleComments": articleComments,
+            "articleCategories": articleCategories,
+            "instance": instance,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+        }
+        return render(request, "ankades/article/article-detail.html", context)
+    except:
+        return render(request, "404.html")
 
 
 @login_required(login_url="login_account")

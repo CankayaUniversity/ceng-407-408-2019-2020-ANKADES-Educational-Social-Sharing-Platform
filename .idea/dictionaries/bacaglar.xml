@@ -14,6 +14,7 @@
       <w>aktifleştirildi</w>
       <w>aktifleştirme</w>
       <w>aktiflik</w>
+      <w>aktifliği</w>
       <w>aktifliğini</w>
       <w>ankacademy</w>
       <w>ankades</w>
@@ -54,6 +55,7 @@
       <w>cevaplar</w>
       <w>cikis</w>
       <w>ckeditor</w>
+      <w>clearfix</w>
       <w>corsheaders</w>
       <w>daha</w>
       <w>datatables</w>
@@ -66,15 +68,18 @@
       <w>değiştirildi</w>
       <w>dialogui</w>
       <w>directmessage</w>
+      <w>dosya</w>
       <w>duzenle</w>
       <w>dönem</w>
       <w>düzeltme</w>
       <w>düzenle</w>
+      <w>düzenleme</w>
       <w>düzenlendi</w>
       <w>düzenleyebilirsiniz</w>
       <w>ebevynlik</w>
       <w>ederiz</w>
       <w>ekle</w>
+      <w>ekledi</w>
       <w>ekleme</w>
       <w>eklendi</w>
       <w>eklenmiş</w>
@@ -107,6 +112,7 @@
       <w>gerçekleştirildiği</w>
       <w>gerçekleştirilemedi</w>
       <w>gerçekten</w>
+      <w>geçilemez</w>
       <w>girilen</w>
       <w>giris</w>
       <w>giriş</w>
@@ -123,6 +129,7 @@
       <w>görüntüleyebilir</w>
       <w>göster</w>
       <w>gösterim</w>
+      <w>güncelledi</w>
       <w>güncelleme</w>
       <w>güncellendi</w>
       <w>güncellenme</w>
@@ -142,6 +149,7 @@
       <w>izinleri</w>
       <w>izni</w>
       <w>için</w>
+      <w>işaretleyin</w>
       <w>işlemi</w>
       <w>işleminde</w>
       <w>i̇ptal</w>
@@ -153,8 +161,10 @@
       <w>i̇şlem</w>
       <w>i̇şlemi</w>
       <w>i̇şlemin</w>
+      <w>i̇şleminin</w>
       <w>i̇şlemler</w>
       <w>kaldırdı</w>
+      <w>kaldırıldı</w>
       <w>kapalı</w>
       <w>kapat</w>
       <w>kategori</w>
@@ -165,6 +175,7 @@
       <w>kategorisini</w>
       <w>kategorisinin</w>
       <w>kaydedildi</w>
+      <w>kaydet</w>
       <w>kayit</w>
       <w>kayıt</w>
       <w>kişi</w>
@@ -180,6 +191,8 @@
       <w>kullanım</w>
       <w>kurs</w>
       <w>kurslar</w>
+      <w>kutucuğu</w>
+      <w>kısımları</w>
       <w>lineutils</w>
       <w>linkedin</w>
       <w>linki</w>
@@ -192,6 +205,7 @@
       <w>makale</w>
       <w>makaleler</w>
       <w>makalelerim</w>
+      <w>makalesini</w>
       <w>medya</w>
       <w>medyalar</w>
       <w>mesaj</w>
@@ -215,6 +229,7 @@
       <w>okul</w>
       <w>okullar</w>
       <w>okunma</w>
+      <w>olacak</w>
       <w>olduğu</w>
       <w>olma</w>
       <w>oluştur</w>
@@ -237,6 +252,8 @@
       <w>resmi</w>
       <w>resminiz</w>
       <w>sayısı</w>
+      <w>seçin</w>
+      <w>seçiniz</w>
       <w>sifirla</w>
       <w>sifre</w>
       <w>sildi</w>
@@ -283,6 +300,7 @@
       <w>yapmak</w>
       <w>yapmalısınız</w>
       <w>yaptı</w>
+      <w>yapılacaklar</w>
       <w>yapılamadı</w>
       <w>yapıldı</w>
       <w>yapılmamış</w>
@@ -298,11 +316,14 @@
       <w>yorum</w>
       <w>yorumlar</w>
       <w>yorumu</w>
+      <w>yükle</w>
       <w>zaten</w>
+      <w>çağrı</w>
       <w>çıkmış</w>
       <w>önce</w>
       <w>öncelikle</w>
       <w>özel</w>
+      <w>özellik</w>
       <w>öğrenci</w>
       <w>öğrenciler</w>
       <w>öğrencileri</w>

@@ -26,8 +26,12 @@
                                     <th>Oluşturulduğu Tarih</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
-                                    <th>İşlemler</th>
-                                    <th>Sil</th>
+                                    {% if userGroup == 'admin' %}
+                                        <th>İşlemler</th>
+                                    {% endif %}
+                                    {% if userGroup == 'admin' %}
+                                        <th>Sil</th>
+                                    {% endif %}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -39,19 +43,26 @@
                                             <td>{{ permission.slug }}</td>
                                             <td>{{ permission.description }}</td>
                                             <td>{{ permission.createdDate }}</td>
-                                            <td>{% if permission.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ permission.updatedDate }}{% endif %}</td>
+                                            <td>{% if permission.updatedDate == None %}Güncelleme Yapılmamış{% else %}
+                                                {{ permission.updatedDate }}{% endif %}</td>
                                             <td>{{ permission.isActive }}</td>
-                                            <td>
-                                                <a type="button" href="{% url 'admin_isactive_group' permission.slug %}"
-                                                   class="btn btn-warning">
-                                                    {% if permission.isActive %}Kapat{% else %}Aktifleştir{% endif %}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a type="button" href="{% url 'admin_delete_group' permission.slug %}"
-                                                   class="btn btn-danger">Sil
-                                                </a>
-                                            </td>
+                                            {% if userGroup == 'admin' %}
+                                                <td>
+                                                    <a type="button"
+                                                       href="{% url 'admin_isactive_permission' permission.slug %}"
+                                                       class="btn btn-warning">{% if permission.isActive %}
+                                                        Kapat{% else %}Aktifleştir{% endif %}
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+                                            {% if userGroup == 'admin' %}
+                                                <td>
+                                                    <a type="button"
+                                                       href="{% url 'admin_delete_permission' permission.slug %}"
+                                                       class="btn btn-danger">Sil
+                                                    </a>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
@@ -64,8 +75,12 @@
                                     <th>Oluşturulduğu Tarih</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
-                                    <th>İşlemler</th>
-                                    <th>Sil</th>
+                                    {% if userGroup == 'admin' %}
+                                        <th>İşlemler</th>
+                                    {% endif %}
+                                    {% if userGroup == 'admin' %}
+                                        <th>Sil</th>
+                                    {% endif %}
                                 </tr>
                                 </tfoot>
                             </table>
@@ -91,7 +106,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="description">Açıklama</label>
-                                                <input type="text" name="description" class="form-control" id="description"
+                                                <input type="text" name="description" class="form-control"
+                                                       id="description"
                                                        placeholder="Açıklama">
                                             </div>
                                             <div class="form-group mb-0">
@@ -103,9 +119,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">İptal
                                         </button>
-                                        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" name="submit" class="btn btn-success float-right">Kaydet
+                                        </button>
                                     </form>
                                 </div>
                             </div>

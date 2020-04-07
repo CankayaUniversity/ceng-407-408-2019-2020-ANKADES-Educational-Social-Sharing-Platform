@@ -1,27 +1,23 @@
 {% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | Makale Ekle{% endblock %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 {% load static %}
 {% block content %}
-    <!-- Main content -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <!-- left column -->
                 <div class="col-md-12">
-                    <!-- jquery validation -->
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Makale Paylaşma</h3>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
                         <form role="form" method="post" action="{% url 'add_article' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Kategori*</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="categoryId"
+                                    <label for="categoryId">Kategori*</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="categoryId" id="categoryId"
                                             required>
                                         <option disabled>Lütfen bir kategori seçiniz</option>
                                         {% if articleCategory %}
@@ -32,8 +28,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Başlık*</label>
-                                    <input type="text" class="form-control" name="title" placeholder="Başlık">
+                                    <label for="title">Başlık*</label>
+                                    <input type="text" id="title" class="form-control" name="title" placeholder="Başlık">
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control">
@@ -42,8 +38,8 @@
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
-                                        {{ form.isPrivate }}
-                                        <label class="custom-control-label" for="exampleCheck1">Özel</label>
+                                        <input type="checkbox" name="isPrivate" class="custom-control-input" id="isPrivate">
+                                        <label class="custom-control-label" for="isPrivate">Özellik</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -51,8 +47,8 @@
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" name="media"
-                                                   id="exampleInputFile">
-                                            <label class="custom-file-label" for="exampleInputFile">Dosya seçin</label>
+                                                   id="media">
+                                            <label class="custom-file-label" for="media">Dosya seçin</label>
                                         </div>
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="">Yükle</span>
@@ -60,23 +56,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Gönder</button>
                             </div>
                         </form>
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!--/.col (left) -->
-                <!-- right column -->
-                <div class="col-md-6">
-
-                </div>
-                <!--/.col (right) -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

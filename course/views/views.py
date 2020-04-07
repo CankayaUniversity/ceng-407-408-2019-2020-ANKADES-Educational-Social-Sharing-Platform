@@ -5,7 +5,6 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
-from course.forms import AddArticleComment
 from course.models import Course, CourseCategory, CourseComment
 
 

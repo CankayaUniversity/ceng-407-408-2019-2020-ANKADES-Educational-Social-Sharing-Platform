@@ -1,4 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | All Groups{% endblock %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -40,7 +41,7 @@
                                             <td>{{ group.isActive }}</td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_isactive_group' group.slug %}"
-                                                   class="btn btn-warning">
+                                                   class="btn btn-warning" style="color: #fff">
                                                     {% if group.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
                                             </td>
@@ -88,15 +89,15 @@
                                             <div class="form-group mb-0">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" name="isActive" class="custom-control-input"
-                                                           id="exampleCheck1">
+                                                           id="isActive">
                                                     <label class="custom-control-label"
-                                                           for="exampleCheck1">Aktiflik</label>
+                                                           for="isActive">Aktiflik</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">İptal
                                         </button>
-                                        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" name="submit" class="btn btn-success float-right">Kaydet</button>
                                     </form>
                                 </div>
                             </div>

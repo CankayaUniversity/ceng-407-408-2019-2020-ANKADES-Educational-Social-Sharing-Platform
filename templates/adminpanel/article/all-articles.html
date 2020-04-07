@@ -1,17 +1,15 @@
 {% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | All Articles{% endblock %}
 {% load static %}
 {% block content %}
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <!-- Default box -->
-
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Makaleler</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <table id="all-articles" class="table table-bordered table-striped">
                                 <thead>
@@ -25,7 +23,9 @@
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
                                     <th>İşlemler</th>
-                                    <th>Sil</th>
+                                    {% if userGroup == 'admin' %}
+                                        <th>Sil</th>
+                                    {% endif %}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -38,7 +38,8 @@
                                             <td>{{ article.title }}</td>
                                             <td>{{ article.slug }}</td>
                                             <td>{{ article.createdDate }}</td>
-                                            <td>{% if article.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ article.updatedDate }}{% endif %}</td>
+                                            <td>{% if article.updatedDate == None %}Güncelleme Yapılmamış{% else %}
+                                                {{ article.updatedDate }}{% endif %}</td>
                                             <td>{{ article.isActive }}</td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_isactive_article' article.slug %}"
@@ -46,11 +47,14 @@
                                                     {% if article.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
                                             </td>
-                                            <td>
-                                                <a type="button" href="{% url 'admin_delete_article' article.slug %}"
-                                                   class="btn btn-danger">Sil
-                                                </a>
-                                            </td>
+                                            {% if userGroup == 'admin' %}
+                                                <td>
+                                                    <a type="button"
+                                                       href="{% url 'admin_delete_article' article.slug %}"
+                                                       class="btn btn-danger">Sil
+                                                    </a>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
@@ -65,7 +69,9 @@
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
                                     <th>İşlemler</th>
-                                    <th>Sil</th>
+                                    {% if userGroup == 'admin' %}
+                                        <th>Sil</th>
+                                    {% endif %}
                                 </tr>
                                 </tfoot>
                             </table>
@@ -75,5 +81,4 @@
             </div>
         </div>
     </section>
-    <!-- /.content -->
 {% endblock %}

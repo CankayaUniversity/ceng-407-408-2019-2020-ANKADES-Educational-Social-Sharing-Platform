@@ -1,5 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Add Group to User{% endblock %}
+{% block title %}Ankacademy | Add Permission to User{% endblock %}
 {% load static %}
 {% block content %}
     <div class="container-fluid">
@@ -13,20 +13,20 @@
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Grup Adı*</label>
-                                <select class="form-control select2bs4" style="width: 100%;" name="groupId"
+                                <label for="permissionId">Grup Adı*</label>
+                                <select class="form-control select2bs4" style="width: 100%;" name="permissionId" id="permissionId"
                                         required>
-                                    <option disabled>Lütfen bir grup seçiniz</option>
-                                    {% if groups %}
-                                        {% for group in groups %}
-                                            <option value="{{ group.id }}">{{ group.title }}</option>
+                                    <option disabled>Lütfen bir izin seçiniz</option>
+                                    {% if permissions %}
+                                        {% for permission in permissions %}
+                                            <option value="{{ permission.id }}">{{ permission.title }}</option>
                                         {% endfor %}
                                     {% endif %}
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Kullanıcı Adı*</label>
-                                <select class="form-control select2bs4" style="width: 100%;" name="userId"
+                                <label for="userId">Kullanıcı Adı*</label>
+                                <select class="form-control select2bs4" style="width: 100%;" name="userId" id="userId"
                                         required>
                                     <option disabled>Lütfen bir kullanıcı seçiniz</option>
                                     {% if users %}

@@ -1,4 +1,5 @@
 {% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | Makaleler{% endblock %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 {% load static %}
@@ -12,8 +13,8 @@
                             <div class="card-deck col-3">
                                 <div class="card">
                                     {% if article.media %}
-                                    <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
-                                         width="504" height="180">
+                                        <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
+                                             width="504" height="180">
                                     {% endif %}
                                     <div class="card-body">
                                         <h5 class="card-title"><a
@@ -31,23 +32,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {#                            <div class="card" style="width: 18rem;">#}
-                            {#                                <img class="card-img-top" src="..." alt="Card image cap">#}
-                            {#                                <div class="card-body">#}
-                            {#                                    <h5 class="card-title">Card title</h5>#}
-                            {#                                    <p class="card-text">Some quick example text to build on the card title and make up#}
-                            {#                                        the bulk of the card's content.</p>#}
-                            {#                                </div>#}
-                            {#                                <ul class="list-group list-group-flush">#}
-                            {#                                    <li class="list-group-item">Cras justo odio</li>#}
-                            {#                                    <li class="list-group-item">Dapibus ac facilisis in</li>#}
-                            {#                                    <li class="list-group-item">Vestibulum at eros</li>#}
-                            {#                                </ul>#}
-                            {#                                <div class="card-body">#}
-                            {#                                    <a href="#" class="card-link">Card link</a>#}
-                            {#                                    <a href="#" class="card-link">Another link</a>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
                         {% endfor %}
                     {% endif %}
                 {% endif %}

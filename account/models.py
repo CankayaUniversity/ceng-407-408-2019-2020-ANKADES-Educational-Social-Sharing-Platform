@@ -96,18 +96,9 @@ class Account(AbstractUser):
         ordering = ["-date_joined"]
 
 
-class GroupPermission(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    groupId = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
-    permissionId = models.ForeignKey(Permission, on_delete=models.PROTECT)
-
-    class Meta:
-        db_table = "GroupPermission"
-
-
 class AccountPermission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    groupId = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
+    permissionId = models.ForeignKey(Permission, on_delete=models.PROTECT, null=True)
     userId = models.ForeignKey(Account, on_delete=models.PROTECT)
 
     class Meta:

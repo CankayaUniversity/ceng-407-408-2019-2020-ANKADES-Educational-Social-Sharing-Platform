@@ -14,8 +14,8 @@ from adminpanel.models import AdminActivity
 def admin_all_logs(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    adminLogs = AdminActivity.objects.all()
-    accountLogs = AccountActivity.objects.all()
+    adminLogs = AdminActivity.objects.all().order_by('-createdDate')
+    accountLogs = AccountActivity.objects.all().order_by('-createdDate')
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -29,7 +29,7 @@ def admin_all_logs(request):
 def admin_admin_logs(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    adminLogs = AdminActivity.objects.all()
+    adminLogs = AdminActivity.objects.all().order_by('-createdDate')
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -42,7 +42,7 @@ def admin_admin_logs(request):
 def admin_account_logs(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    accountLogs = AccountActivity.objects.all()
+    accountLogs = AccountActivity.objects.all().order_by('-createdDate')
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,

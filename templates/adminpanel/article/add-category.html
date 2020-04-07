@@ -15,8 +15,8 @@
                             <form method="post" enctype="multipart/form-data" class="form-control-user">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <label>Üst Kategorisi*</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
+                                    <label for="select">Üst Kategorisi*</label>
+                                    <select id="select" class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
                                             required>
                                         <option disabled>Lütfen üst kategori seçiniz</option>
                                         {% if articleCategory %}
@@ -27,8 +27,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Başlık</label>
-                                    <input type="text" class="form-control" name="title" placeholder="Kategori Adı">
+                                    <label for="title">Başlık</label>
+                                    <input type="text" id="title" class="form-control" name="title" placeholder="Kategori Adı">
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">

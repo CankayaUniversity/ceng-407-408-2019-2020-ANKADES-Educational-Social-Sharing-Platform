@@ -7,7 +7,6 @@ from article.models import Article, ArticleCategory
 
 class ArticleForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget(), label="Yazı")
-    isPrivate = forms.BooleanField(widget=forms.Select(attrs={'class': 'custom-control-input'}), label="Özel")
 
 
 class EditArticleForm(forms.ModelForm):

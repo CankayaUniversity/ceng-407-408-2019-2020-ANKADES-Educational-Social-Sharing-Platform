@@ -6,7 +6,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>{{ number_of_active_users }}</h3>
@@ -19,11 +18,9 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ userCount }}</h3>
-
                             <p>Toplam Üye</p>
                         </div>
                         <div class="icon">
@@ -32,13 +29,10 @@
                         <a href="{% url 'admin_all_users' %}" class="small-box-footer">Detay <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ sum }}</h3>
-
                             <p>Toplam Paylaşım</p>
                         </div>
                         <div class="icon">
@@ -56,7 +50,6 @@
                                 <i class="ion ion-clipboard mr-1"></i>
                                 Yapılacaklar Listesi
                             </h3>
-
                             <div class="card-tools">
                                 <ul class="pagination pagination-sm">
                                     <li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
@@ -67,20 +60,15 @@
                                 </ul>
                             </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <ul class="todo-list" data-widget="todo-list">
                                 <li>
-                                    <!-- checkbox -->
                                     <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo1" id="todoCheck1">
                                         <label for="todoCheck1"></label>
                                     </div>
-                                    <!-- todo text -->
                                     <span class="text">Design a nice theme</span>
-                                    <!-- Emphasis label -->
                                     <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
-                                    <!-- General tools such as edit or delete-->
                                     <div class="tools">
                                         <i class="fas fa-edit"></i>
                                         <i class="fas fa-trash"></i>
@@ -100,9 +88,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <!-- /.card-body -->
                         <div class="card-footer clearfix">
-
                             <button type="button" class="btn btn-success float-right" data-toggle="modal"
                                     data-target="#modal-xl">
                                 <i class="fas fa-plus"></i> Yeni Ekle
@@ -132,8 +118,8 @@
                                        placeholder="Başlık">
                             </div>
                             <div class="form-group">
-                                <label>Açıklama</label>
-                                <textarea class="form-control" rows="3" name="description"
+                                <label for="description">Açıklama</label>
+                                <textarea class="form-control" rows="3" name="description" id="description"
                                           placeholder="Açıklama"></textarea>
                             </div>
                         </div>
@@ -144,8 +130,6 @@
                     </form>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 {% endblock %}

@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
-from account.models import Account, Group, AccountGroup
+from account.models import Account, Group, AccountGroup, Permission, AccountPermission
 from account.views.views import current_user_group
 from adminpanel.models import AdminActivity
 from exam.models import School
@@ -382,129 +382,45 @@ def admin_add_group_to_user(request):
     return render(request, "adminpanel/account/group/add-group-to-user.html", context)
 
 
-# # Kullanıcı izinleri
-# @login_required(login_url="login_admin")
-# def admin_add_account_permission(request):
-#     form = AdminAccountPermissionForm(request.POST or None)
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     context = {
-#         "form": form,
-#         "adminGroup": adminGroup,
-#     }
-#     if adminGroup:
-#         if form.is_valid():
-#             userId = form.cleaned_data.get("userId")
-#             permissionId = form.cleaned_data.get("permissionId")
-#             isActive = form.cleaned_data.get("isActive")
-#             if AccountPermission.objects.filter(Q(permissionId=permissionId, userId=userId)):
-#                 messages.error(request, 'Bu kullanıcıya izin daha önce eklenmiş.')
-#             else:
-#                 instance = AccountPermission(userId=userId, permissionId=permissionId, isActive=isActive)
-#                 activity = AdminActivity()
-#                 activity.title = "Kullanıcıya izin ekleme"
-#                 activity.creator = request.user.username
-#                 activity.method = "POST"
-#                 activity.application = "Account Permission"
-#                 activity.updatedDate = datetime.datetime.now()
-#                 activity.description = "Yeni " + activity.application + " oluşturuldu. Oluşturan kişi: " + activity.creator
-#                 activity.save()
-#                 instance.save()
-#                 messages.success(request, "Kullanıcıya başarıyla izin eklendi.")
-#                 return redirect("admin_add_account_permission")
-#         return render(request, "admin/account/permission/add-account-permission.html", context)
-#     else:
-#         messages.error(request, "Yetkiniz yok !")
-#         return redirect("admin_dashboard")
-
-
-# @login_required(login_url="login_admin")
-# def admin_edit_account_group(request, id):
-#     """
-#     :param request:
-#     :param id:
-#     :return:
-#     """
-#     instance = get_object_or_404(AccountGroup, id=id)
-#     form = AdminAccountGroupForm(request.POST or None, instance=instance)
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     if adminGroup:
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             instance.updatedDate = datetime.datetime.now()
-#             activity = AdminActivity()
-#             activity.title = "Kullanıcı grubu düzenlendi"
-#             activity.creator = request.user.username
-#             activity.method = "UPDATE"
-#             activity.application = "Account Group"
-#             activity.updatedDate = datetime.datetime.now()
-#             activity.description = "Kullanıcı grubu düzenlendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
-#             activity.save()
-#             instance.save()
-#             messages.success(request, "Kullanıcı grubu başarıyla güncellendi.")
-#             return redirect("admin_account_groups")
-#         return render(request, "admin/account/group/edit-account-group.html", {"form": form, "adminGroup": adminGroup})
-#     else:
-#         messages.error(request, "Yetkiniz Yok !")
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_edit_account_permission(request, id):
-#     """
-#     :param request:
-#     :param id:
-#     :return:
-#     """
-#     instance = get_object_or_404(AccountPermission, id=id)
-#     form = AdminAccountPermissionForm(request.POST or None, instance=instance)
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     if adminGroup:
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             instance.updatedDate = datetime.datetime.now()
-#             activity = AdminActivity()
-#             activity.title = "Kullanıcı izni silindi"
-#             activity.creator = request.user.username
-#             activity.me = "UPDATE"
-#             activity.application = "Account Permission"
-#             activity.updatedDate = datetime.datetime.now()
-#             activity.description = "Kullanıcı izni başarıyla güncellendi. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
-#             activity.save()
-#             instance.save()
-#             messages.success(request, "Kullanıcı izni başarıyla düzenlendi !")
-#             return redirect("admin_account_permission")
-#         return render(request, "admin/account/permission/edit-account-permission.html", {"form": form, "adminGroup": adminGroup})
-#     else:
-#         messages.error(request, "Yetkiniz Yok!")
-#
-#
-# @login_required(login_url="login_admin")
-# def admin_deactivate_account_permission(request, id):
-#     """
-#     :param request:ku
-#     :param id:
-#     :return:
-#     """
-#     instance = get_object_or_404(AccountPermission, id=id)
-#     activity = AdminActivity()
-#     adminGroup = AccountGroup.objects.filter(userId__username=request.user.username, groupId__slug="admin")
-#     if adminGroup:
-#         if instance.isActive is True:
-#             instance.isActive = False
-#             activity.title = "Kullanıcı izni etkisizleştirildi"
-#             activity.creator = request.user.username
-#             activity.method = "UPDATE"
-#             activity.application = "Account Permission"
-#             activity.updatedDate = datetime.datetime.now()
-#             activity.description = "Kullanıcı izni artık aktif değil. İşlemi yapan kişi: " + activity.creator + " Uygulama adı: " + activity.application
-#             activity.save()
-#             instance.save()
-#             messages.success(request, "Kullanıcı izni başarıyla etkisizleştirildi.")
-#             return redirect("admin_account_permission")
-#         else:
-#             instance.isActive = False
-#             messages.error(request, "Kullanıcı izni aktif.")
-#             return redirect("admin_account_permission")
-#     else:
-#         messages.error(request, "Yetkiniz Yok!")
-#
-#
+@login_required(login_url="login_admin")
+def admin_add_permission_to_user(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    permissions = Permission.objects.all()
+    users = Account.objects.all()
+    context = {
+        "currentUser": currentUser,
+        "userGroup": userGroup,
+        "permissions": permissions,
+        "users": users,
+    }
+    activity = AdminActivity()
+    if userGroup == 'admin':
+        if request.method == "POST":
+            userId = request.POST['userId']
+            permissionId = request.POST['permissionId']
+            try:
+                getExistAccount = AccountPermission.objects.get(userId=userId, permissionId=permissionId)
+                if getExistAccount:
+                    messages.success(request, "Bu izin, kullanıcıya daha önce eklenmiş.")
+                    return redirect("admin_all_user_permissions")
+            except:
+                instance = AccountPermission()
+                instance.userId_id = userId
+                instance.permissionId_id = permissionId
+                instance.save()
+                activity.creator = currentUser
+                activity.method = "POST"
+                activity.createdDate = datetime.datetime.now()
+                activity.application = "Account Permission"
+                activity.title = "Kullanıcıya İzin Ekleme"
+                activity.description = str(instance.userId.get_full_name()) + " kullanıcısına " + str(
+                    instance.permissionId.title) + " izni eklendi. İşlem tarihi: " + str(
+                    activity.createdDate) + ". İşlemi gerçekleştiren kişi: " + str(activity.creator)
+                activity.save()
+                messages.success(request, "Kullanıcının izni başarıyla eklendi.")
+                return redirect("admin_dashboard")
+    else:
+        messages.error(request, "Yetkiniz yok.")
+        return redirect("admin_dashboard")
+    return render(request, "adminpanel/account/permission/add-permission-to-user.html", context)

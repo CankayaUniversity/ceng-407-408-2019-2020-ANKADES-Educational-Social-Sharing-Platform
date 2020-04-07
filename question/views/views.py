@@ -9,14 +9,14 @@ from django.views.generic import RedirectView
 
 from account.models import AccountActivity
 from account.views.views import current_user_group
-from question.forms import AddQuestionForm, EditQuestionForm
+from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
 
 
 def add_question(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    form = AddQuestionForm(request.POST or None)
+    form = QuestionForm(request.POST or None)
     activity = AccountActivity()
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=False))
     description = None
