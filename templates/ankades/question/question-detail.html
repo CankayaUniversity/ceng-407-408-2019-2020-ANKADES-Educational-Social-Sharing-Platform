@@ -1,6 +1,6 @@
 {% extends 'ankades/layout/layout.html' %}
 {% load static %}
-{% block title %}Ankades | {{ instance.title }}{% endblock %}
+{% block title %}Ankacademy | {{ instance.title }}{% endblock %}
 {% block content %}
     <section class="content">
         <div class="container-fluid">
@@ -16,7 +16,6 @@
                     <div class="card-body">
                         <div class="container-fluid container p-5"
                              style="background: #f8f9fa">
-
                             <div class="title-inline">
                                 <h2>{{ instance.title }}</h2>
                             </div>
@@ -28,6 +27,12 @@
                             <a type="button" data-href='{{ instance.get_api_like_url }}'
                                data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
                                class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
+                            </a>
+                            <a class="btn btn-info btn-md"
+                               href="{% url 'edit_question' instance.slug instance.questionNumber %}">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                                Düzenle
                             </a>
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ questionAnswers.count }} Yorum</span>
                             <div class="row">
@@ -97,10 +102,10 @@
                                             <i class="fas fa-comment bg-blue"></i>
                                         {% endif %}
                                         <div class="timeline-item p-2">
-                                                        <img class="img-circle img-sm" src="{{ answer.creator.image.url }}"
-                                                            alt="User Image">
-                                                        <span class="time"><i
-                                                                class="fas fa-clock"></i> {{ answer.createdDate }}</span>
+                                            <img class="img-circle img-sm" src="{{ answer.creator.image.url }}"
+                                                 alt="User Image">
+                                            <span class="time"><i
+                                                    class="fas fa-clock"></i> {{ answer.createdDate }}</span>
                                             <h3 class="timeline-header ml-2 no-border"><a
                                                     href="#">{{ answer.creator.get_full_name }}</a></h3>
                                             <div class="timeline-body">
@@ -118,7 +123,7 @@
                                                 <div>
                                                     <div class="timeline-item p-2" style="background-color: #f8f9fa !important; border:none; box-shadow: none">
                                                         <img class="img-circle img-sm" src="{{ reply.creator.image.url }}"
-                                                            alt="User Image">
+                                                            alt="{{ reply.creator.get_full_name }}">
                                                         <span class="time"><i
                                                                 class="fas fa-clock"></i> {{ reply.createdDate }}</span>
                                                         <h3 class="timeline-header"><a

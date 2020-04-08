@@ -72,6 +72,63 @@
                             </table>
                         </div>
                     </div>
+                    <div class="modal fade" id="modal-default">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Yeni Kategori Ekle</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form" action="{% url 'admin_add_article_category' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>Üst Kategori*</label>
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                         name="category.title"
+                                                        required>
+                                                    <option disabled>Lütfen bir üst kategori seçiniz</option>
+                                                    {% if articleCategory %}
+                                                        {% for category in articleCategory %}
+                                                            <option value="{{ category.title }}">{{ category.title }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Kategori Adı*</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                       placeholder="Kategori Adı">
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="isActive" class="custom-control-input"
+                                                           id="isActive">
+                                                    <label class="custom-control-label"
+                                                           for="isActive">Aktiflik</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="isCategory"
+                                                           class="custom-control-input"
+                                                           id="isCategory">
+                                                    <label class="custom-control-label"
+                                                           for="isCategory">Üst Kategori mi?</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="submit" name="submit" class="btn btn-primary">Kaydet</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

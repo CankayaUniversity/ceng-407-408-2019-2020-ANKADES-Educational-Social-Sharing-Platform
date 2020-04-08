@@ -30,6 +30,12 @@
                                data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
                                class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
                             </a>
+                            <a class="btn btn-info btn-md"
+                               href="{% url 'edit_article' instance.slug %}">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                                Düzenle
+                            </a>
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ articleComments.count }} Yorum</span>
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">

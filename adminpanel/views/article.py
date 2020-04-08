@@ -8,6 +8,7 @@ from rest_framework.generics import get_object_or_404
 
 from account.views.views import current_user_group
 from adminpanel.models import AdminActivity
+from article.forms import ArticleForm
 from article.models import Article, ArticleCategory
 
 
@@ -103,9 +104,9 @@ def admin_add_article_category(request):
             try:
                 getTitle = ArticleCategory.objects.get(title=title)
                 if title:
-                    error = title + " isimli kategori " + getTitle.parentId.title + " kategorisinde zaten mevcut."
-                    messages.error(request, error)
+                    messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
                     return redirect("admin_add_article_category")
+                return render(request, "adminpanel/article/add-category.html", context)
             except:
                 instance = ArticleCategory(parentId=value, title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
