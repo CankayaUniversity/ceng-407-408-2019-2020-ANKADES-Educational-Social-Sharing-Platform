@@ -9,7 +9,7 @@
                     <div class="card-header">
                         <div class="user-block">
                             <img class="img-circle" src="{{ instance.creator.image.url }}" alt="User Image">
-                            <span class="username"><a href="#">{{ instance.creator.get_full_name }}</a></span>
+                            <span class="username"><a href="{% url 'account_detail' instance.creator %}">{{ instance.creator.get_full_name }}</a></span>
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
                         </div>
                     </div>
@@ -30,12 +30,14 @@
                                data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
                                class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
                             </a>
-                            <a class="btn btn-info btn-md"
-                               href="{% url 'edit_article' instance.slug %}">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Düzenle
-                            </a>
+                            {% if instance.creator == request.user %}
+                                <a class="btn btn-info btn-md"
+                                   href="{% url 'edit_article' instance.slug %}">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Düzenle
+                                </a>
+                            {% endif %}
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ articleComments.count }} Yorum</span>
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">

@@ -1,4 +1,5 @@
 {% extends 'ankades/layout/layout.html' %}
+{% block title %}{{ instance.creator.get_full_name }} - {{ instance.title }}{% endblock %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
@@ -10,11 +11,12 @@
                         <div class="card-header">{{ instance.title }}
                         </div>
                         <form role="form" method="post" action="{% url 'edit_article' instance.slug %}">
-                        {% csrf_token %}
+                            {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Kategori*</label>
+                                    <label for="categoryId">Kategori*</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="id"
+                                            id="categoryId"
                                             required>
                                         <option disabled>Lütfen bir kategori seçiniz</option>
                                         {% if articleCategory %}
@@ -26,18 +28,20 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="title">Başlık*</label>
-                                    <input type="text" value="{{ instance.title }}" class="form-control" id="title" name="title"
+                                    <input type="text" value="{{ instance.title }}" class="form-control" id="title"
+                                           name="title"
                                            placeholder="Başlık">
                                 </div>
                                 <div class="form-group">
                                     {{ form.description }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Resim*</label>
+                                    <label for="media">Resim*</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                                            <label class="custom-file-label" for="exampleInputFile">{{ instance.media }}</label>
+                                            <input type="file" class="custom-file-input" id="media" name="media">
+                                            <label class="custom-file-label" for="media">
+                                                {% if instance.media %}{{ instance.media }}{% endif %}</label>
                                         </div>
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="">Bilgisayarda Ara</span>
@@ -45,10 +49,11 @@
                                     </div>
                                 </div>
                                 <div class="form-check">
-                                    <input type="checkbox" name="isPrivate" class="form-check-input" {% if instance.isPrivate == True %}checked{% endif %} id="exampleCheck1">
-                                    <label class="form-check-label" for="exampleCheck1">Özellik*</label>
+                                    <input type="checkbox" name="isPrivate" class="form-check-input"
+                                           {% if instance.isPrivate == True %}checked{% endif %} id="isPrivate">
+                                    <label class="form-check-label" for="isPrivate">Özellik*</label>
                                 </div>
-                                <button type="submit" class="btn btn-success mt-3">Düzenle</button>
+                                <button type="submit" id="btn-submit" class="btn btn-success mt-3">Düzenle</button>
                             </div>
                         </form>
                     </div>

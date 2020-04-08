@@ -151,49 +151,52 @@ def edit_article(request, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
-    instance = get_object_or_404(Article, slug=slug)
     activity = AccountActivity()
-    form = EditArticleForm(request.POST or None, instance=instance)
-    description = instance.description
-    if instance.creator == currentUser:
-        if request.method == "POST":
-            value = request.POST['id']
-            title = request.POST.get("title")
-            isPrivate = request.POST.get("isPrivate") == "on"
-            if form.is_valid():
-                description = form.cleaned_data.get("description")
-            if request.FILES:
-                media = request.FILES.get('media')
-                fs = FileSystemStorage()
-                fs.save(media.name, media)
-                instance.media = media
-            instance.title = title
-            instance.isPrivate = isPrivate
-            instance.description = description
-            instance.creator = request.user
-            instance.categoryId_id = value
-            instance.updatedDate = datetime.datetime.now()
-            instance.isActive = False
-            instance.save()
-            activity.title = "Makale Güncelleme"
-            activity.application = "Article"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "UPDATE"
-            activity.creator = currentUser
-            activity.description = str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı makalesini güncelledi."
-            activity.save()
-            pre_save.connect(slug_save, sender=edit_article)
-            messages.success(request, "Makale başarıyla güncellendi.")
-            return redirect(reverse("article_detail", kwargs={"slug": slug}))
-        context = {
-            "instance": instance,
-            "articleCategory": articleCategory,
-            "userGroup": userGroup,
-            "form": form,
-            "currentUser": currentUser,
-        }
-        return render(request, "ankades/account/posts/edit-article.html", context)
+    try:
+        instance = Article.objects.get(slug=slug)
+        form = EditArticleForm(request.POST or None, instance=instance)
+        description = instance.description
+        if instance.creator == currentUser:
+            if request.method == "POST":
+                value = request.POST['id']
+                title = request.POST.get("title")
+                isPrivate = request.POST.get("isPrivate") == "on"
+                if form.is_valid():
+                    description = form.cleaned_data.get("description")
+                if request.FILES:
+                    media = request.FILES.get('media')
+                    fs = FileSystemStorage()
+                    fs.save(media.name, media)
+                    instance.media = media
+                instance.title = title
+                instance.isPrivate = isPrivate
+                instance.description = description
+                instance.creator = request.user
+                instance.categoryId_id = value
+                instance.updatedDate = datetime.datetime.now()
+                instance.isActive = False
+                instance.save()
+                activity.title = "Makale Güncelleme"
+                activity.application = "Article"
+                activity.createdDate = datetime.datetime.now()
+                activity.method = "UPDATE"
+                activity.creator = currentUser
+                activity.description = str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı makalesini güncelledi."
+                activity.save()
+                pre_save.connect(slug_save, sender=edit_article)
+                messages.success(request, "Makale başarıyla güncellendi.")
+                return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
+            context = {
+                "instance": instance,
+                "articleCategory": articleCategory,
+                "userGroup": userGroup,
+                "form": form,
+                "currentUser": currentUser,
+            }
+            return render(request, "ankades/account/posts/edit-article.html", context)
+    except:
+        return render(request, "404.html")
 
 
 def article_categories(request):
@@ -230,7 +233,7 @@ def article_detail(request, username, slug):
             messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
             return render(request, "404.html")
         articles = Article.objects.all()
-        relatedPosts = Article.objects.all().order_by('-createdDate')[:4]
+        relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
         articleComments = ArticleComment.objects.filter(articleId__slug=slug)
         articleCategories = ArticleCategory.objects.all()
         instance.view += 1
