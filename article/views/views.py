@@ -80,6 +80,7 @@ def article_categories(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True))
     categories = ArticleCategory.objects.all()
     article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
     context = {
@@ -87,6 +88,7 @@ def article_categories(request):
         "userGroup": userGroup,
         "article_categories_limit": article_categories_limit,
         "currentUser": currentUser,
+        "articleCategory": articleCategory,
     }
     return render(request, "adminpanel/article/categories.html", context)
 

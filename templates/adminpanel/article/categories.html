@@ -37,7 +37,8 @@
                                             <td>{{ category.creator }}</td>
                                             <td>{{ category.title }}</td>
                                             <td>{{ category.createdDate }}</td>
-                                            <td>{% if category.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ category.updatedDate }}{% endif %}</td>
+                                            <td>{% if category.updatedDate == None %}Güncelleme Yapılmamış{% else %}
+                                                {{ category.updatedDate }}{% endif %}</td>
                                             <td>{{ category.isActive }}</td>
                                             <td>{{ category.isCategory }}</td>
                                             <td>
@@ -86,11 +87,11 @@
                                         {% csrf_token %}
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label>Üst Kategori*</label>
-                                                <select class="form-control select2bs4" style="width: 100%;"
-                                                         name="category.title"
+                                                <label for="select">Üst Kategorisi*</label>
+                                                <select id="select" class="form-control select2bs4" style="width: 100%;"
+                                                        value="Seçiniz"
                                                         required>
-                                                    <option disabled>Lütfen bir üst kategori seçiniz</option>
+                                                    <option disabled>Lütfen üst kategori seçiniz</option>
                                                     {% if articleCategory %}
                                                         {% for category in articleCategory %}
                                                             <option value="{{ category.title }}">{{ category.title }}</option>
