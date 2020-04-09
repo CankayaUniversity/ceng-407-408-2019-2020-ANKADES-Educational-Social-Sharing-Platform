@@ -14,8 +14,10 @@
                     <img src="{{ currentUser.image.url }}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="{% url 'edit_profile' %}"
-                       class="d-block">{{ currentUser.get_full_name }}</a>
+                    <a href="{% url 'admin_my_account' currentUser.username %} "
+                       class="d-block">
+                        {% if currentUser.first_name is not None %}{{ currentUser.get_full_name }}{% else %}
+                            {{ currentUser.username }}{% endif %}</a>
                 </div>
             </div>
         {% endif %}
