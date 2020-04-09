@@ -260,10 +260,10 @@ def delete_article(request, slug):
     if instance.creator == currentUser:
         instance.delete()
         messages.success(request, "Makale başarıyla silindi.")
-        return redirect("user_posts")
+        return redirect(reverse("account_detail", kwargs={"username": currentUser}))
     else:
         messages.error(request, "Bu makale size ait değil")
-        return redirect("user_posts")
+        return redirect(reverse("account_detail", kwargs={"username": currentUser}))
 
 
 @login_required(login_url="login_account")

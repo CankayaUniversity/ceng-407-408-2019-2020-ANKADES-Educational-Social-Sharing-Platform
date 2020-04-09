@@ -23,17 +23,9 @@
         {% endif %}
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                {% if currentUser.is_authenticated %}
-                    <li class="nav-header">Navigasyon</li>
-                    <li class="nav-item has-treeview">
-                        <a href="{% url 'index' %}" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    </li>
-                {% endif %}
+
+                {% include 'ankades/layout/article-categories.html' %}
+                {% include 'ankades/layout/question-categories.html' %}
                 <li class="nav-item has-treeview mt-3">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>

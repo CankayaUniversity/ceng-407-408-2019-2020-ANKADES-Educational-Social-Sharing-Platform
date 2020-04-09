@@ -47,29 +47,3 @@ class AccountLoginAPIView(CreateAPIView):
         status_code = status.HTTP_200_OK
 
         return Response(response, status=status_code)
-
-
-class FollowAccountAPI(APIView):
-    authentication_classes = (authentication.BasicAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    @swagger_auto_schema(operation_summary="Follow an account by given username")
-    def get(self, request, username=None, format=None):
-        username = self.kwargs.get("username")
-        obj = get_object_or_404(Account, username=username)
-        user = self.request.user
-        updated = False
-        followed = False
-        if user.is_authenticated():
-            if user in obj.follower.all():
-                followed = False
-                obj.follower.remove(user)
-            else:
-                followed = True
-                obj.follower.add(user)
-            updated = True
-        data = {
-            "updated": updated,
-            "followed": followed
-        }
-        return Response(data)

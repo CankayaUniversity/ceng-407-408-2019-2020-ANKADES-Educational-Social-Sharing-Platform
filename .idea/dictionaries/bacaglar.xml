@@ -34,6 +34,7 @@
       <w>basicstyles</w>
       <w>başarısız</w>
       <w>başarıyla</w>
+      <w>başladınız</w>
       <w>başlık</w>
       <w>begen</w>
       <w>beni</w>
@@ -78,6 +79,7 @@
       <w>düzenleyebilirsiniz</w>
       <w>ebevynlik</w>
       <w>ederiz</w>
+      <w>edilen</w>
       <w>ekle</w>
       <w>ekledi</w>
       <w>ekleme</w>
@@ -101,6 +103,7 @@
       <w>etkisizleştir</w>
       <w>etkisizleştirildi</w>
       <w>etkisizleştirilmedi</w>
+      <w>etmeye</w>
       <w>evet</w>
       <w>eylemi</w>
       <w>eşleşmedi</w>
@@ -133,6 +136,7 @@
       <w>güncelleme</w>
       <w>güncellendi</w>
       <w>güncellenme</w>
+      <w>hakkımda</w>
       <w>hatalı</w>
       <w>hatırla</w>
       <w>herhangi</w>
@@ -187,6 +191,7 @@
       <w>kullanıcının</w>
       <w>kullanıcısı</w>
       <w>kullanıcısına</w>
+      <w>kullanıcısını</w>
       <w>kullanıcıya</w>
       <w>kullanım</w>
       <w>kurs</w>
@@ -245,6 +250,7 @@
       <w>paylaşim</w>
       <w>paylaşma</w>
       <w>paylaşım</w>
+      <w>paylaşımlar</w>
       <w>profil</w>
       <w>profili</w>
       <w>profilim</w>
@@ -277,7 +283,9 @@
       <w>sweetalert</w>
       <w>sınav</w>
       <w>takip</w>
+      <w>takipciler</w>
       <w>takipçi</w>
+      <w>takipçiler</w>
       <w>taki̇p</w>
       <w>taki̇pçi̇</w>
       <w>tarih</w>
@@ -296,6 +304,7 @@
       <w>uyuşmuyor</w>
       <w>vermek</w>
       <w>veya</w>
+      <w>yabancı</w>
       <w>yapan</w>
       <w>yapmak</w>
       <w>yapmalısınız</w>
@@ -309,6 +318,7 @@
       <w>yasaklı</w>
       <w>yazdığınız</w>
       <w>yazı</w>
+      <w>yazılım</w>
       <w>yeni</w>
       <w>yenile</w>
       <w>yetkiniz</w>
@@ -318,8 +328,10 @@
       <w>yorumlar</w>
       <w>yorumu</w>
       <w>yükle</w>
+      <w>zaman</w>
       <w>zaten</w>
       <w>çağrı</w>
+      <w>çizelgesi</w>
       <w>çıkmış</w>
       <w>önce</w>
       <w>öncelikle</w>

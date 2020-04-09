@@ -67,14 +67,14 @@ class Group(models.Model):
 
 class Account(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    bio = RichTextField(null=True, blank=True)
+    cv = RichTextField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True, max_length=254)
     image = models.FileField(default='default-user-image.png')
     backgroundImage = models.FileField(default='photo1.png')
     view = models.PositiveIntegerField(default=0, null=True, blank=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    follower = models.ManyToManyField('self', related_name="follower", default=0, db_table="AccountFollower")
     email = models.EmailField(unique=True, null=False, blank=True)
-    is_admin = models.BooleanField(null=True, blank=True, default=False, verbose_name="Is Admin?")
+    is_admin = models.BooleanField(null=True, blank=True, default=False)
 
     def __str__(self):
         return self.username
@@ -85,15 +85,18 @@ class Account(AbstractUser):
     def get_absolute_url(self):
         return reverse("account_detail", kwargs={"username": self.username})
 
-    def get_like_url(self):
-        return reverse("follower-toggle", kwargs={"username": self.username})
-
-    def get_api_like_url(self):
-        return reverse("follower-api-toggle", kwargs={"username": self.username})
-
     class Meta:
         db_table = "Account"
         ordering = ["-date_joined"]
+
+
+class AccountFollower(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    followerId = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="followerId")
+    followingId = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="followingId")
+
+    class Meta:
+        db_table = "AccountFollow"
 
 
 class AccountPermission(models.Model):

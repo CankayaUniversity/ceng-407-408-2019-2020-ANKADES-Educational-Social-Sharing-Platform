@@ -4,7 +4,6 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 from account.views import views
-from account.views.views import FollowAccountToggle
 
 urlpatterns = [
     path('api/', include("api.urls")),
@@ -17,7 +16,7 @@ urlpatterns = [
     path('', include("directmessage.urls")),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^(?P<username>[\w-]+)/$', views.account_detail, name="account_detail"),
-    url(r'^(?P<username>[\w-]+)/takip/$', FollowAccountToggle.as_view(), name="follow-toggle"),
+    path('takip-et/<username>', views.follow_account, name="follow_account"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

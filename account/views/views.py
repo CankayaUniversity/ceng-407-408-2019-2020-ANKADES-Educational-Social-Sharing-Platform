@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.functional import SimpleLazyObject
 from django.views.generic import RedirectView, FormView
 from rest_framework.generics import get_object_or_404
@@ -12,7 +13,7 @@ from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
-    AccountActivity, SocialMedia
+    AccountActivity, SocialMedia, AccountFollower
 from article.models import Article, ArticleComment
 from question.models import Question
 
@@ -39,20 +40,49 @@ def account_detail(request, username):
     :return:
     """
     currentUser = request.user
-    userGroup = current_user_group(request, username)
+    userGroup = current_user_group(request, currentUser)
     try:
         userDetail = Account.objects.get(username=username)
-        accountActivity = AccountActivity.objects.filter(creator=userDetail).values('createdDate').order_by('createdDate')
+        userDetailGroup = user_group(request, username)
+        followers = AccountFollower.objects.filter(followingId__username=userDetail.username)
+        followings = AccountFollower.objects.filter(followerId__username=userDetail.username)
+        articles = user_articles(request, username)
+        questions = user_questions(request, username)
         context = {
             "userDetail": userDetail,
+            "userDetailGroup": userDetailGroup,
             "userGroup": userGroup,
             "currentUser": currentUser,
-            "accountActivity": accountActivity,
+            "articles": articles,
+            "questions": questions,
+            "followers": followers,
+            "followings": followings,
         }
         return render(request, "ankades/account/account-detail.html", context)
     except:
-        messages.error(request, "Kullanıcı bulunamadı")
-        return redirect("index")
+        messages.error(request, "Böyle bir kullanıcı bulunamadı.")
+        return render(request, "404.html")
+
+
+@login_required(login_url="login_account")
+def follow_account(request, username):
+    currentUser = request.user
+    try:
+        getFollowing = Account.objects.get(username=username)
+        try:
+            instance = AccountFollower.objects.get(followerId__username=currentUser, followingId__username=getFollowing.username)
+            instance.delete()
+            return redirect(reverse("account_detail", kwargs={"username": getFollowing}))
+        except:
+            new_follower = AccountFollower()
+            new_follower.followerId = currentUser
+            new_follower.followingId = getFollowing
+            new_follower.save()
+            messages.success(request, str(new_follower.followingId.get_full_name() + " kullanıcısını takip etmeye başladınız."))
+            return redirect(reverse("account_detail", kwargs={"username": getFollowing}))
+    except:
+        messages.error(request, "Böyle bir kullanıcı bulunamadı.")
+        return render(request, "404.html")
 
 
 def login_account(request):
@@ -202,6 +232,15 @@ class FollowAccountToggle(RedirectView):
 
 
 def current_user_group(self, username):
+    try:
+        group = AccountGroup.objects.get(userId__username=username)
+        return str(group.groupId)
+    except:
+        group = None
+        return group
+
+
+def user_group(self, username):
     try:
         group = AccountGroup.objects.get(userId__username=username)
         return str(group.groupId)

@@ -36,6 +36,7 @@ class QuestionCategory(models.Model):
 class Question(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     questionNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
+    introduction = models.CharField(null=True, blank=True, max_length=254)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     categoryId = models.ForeignKey(QuestionCategory, on_delete=models.PROTECT, null=False)
     title = models.CharField(max_length=254, null=False, blank=False)

@@ -14,6 +14,7 @@ $(function () {
     $('#account-logs').DataTable();
     $('#admin-logs').DataTable();
     $('#my-articles').DataTable();
+    $('#my-questions').DataTable();
     $('#all-users').DataTable();
     $('#blocked-users').DataTable();
     $('#permissions').DataTable();

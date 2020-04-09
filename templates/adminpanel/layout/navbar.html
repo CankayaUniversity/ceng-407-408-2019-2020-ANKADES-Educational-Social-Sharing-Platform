@@ -113,7 +113,7 @@
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ request.user.get_full_name }}</span>
                     <div class="dropdown-divider"></div>
-                    <a href="{% url 'account_detail' request.user.username %}" class="dropdown-item">
+                    <a href="{% url 'account_detail' currentUser.username %}" class="dropdown-item">
                         <i class="fas fa-user-edit mr-2" style="align-content: center"></i> Profilim
                     </a>
                     <div class="dropdown-divider"></div>

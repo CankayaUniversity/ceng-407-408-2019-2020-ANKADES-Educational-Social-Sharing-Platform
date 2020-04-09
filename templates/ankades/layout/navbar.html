@@ -107,14 +107,14 @@
                     <span class="badge badge-warning navbar-badge"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ request.user.get_full_name }} !</span>
+                    <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ currentUser.get_full_name }} !</span>
                     <div class="dropdown-divider"></div>
-                    <a href="{% url 'account_detail' request.user.username %}" class="dropdown-item">
-                        <i class="fas fa-user-edit mr-2" style="align-content: center"></i> Profilim
+                    <a href="{% url 'index' %}" class="dropdown-item">
+                        <i class="fas fa-tachometer-alt mr-2" style="align-content: center"></i> Dashboard
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="{% url 'user_posts' %}" class="dropdown-item">
-                        <i class="fas fa-share-square mr-2" style="align-content: center"></i> Paylaşımlarım
+                    <a href="{% url 'account_detail' currentUser.username %}" class="dropdown-item">
+                        <i class="fas fa-user-edit mr-2" style="align-content: center"></i> Profilim
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{% url 'edit_profile' %}" class="dropdown-item">
