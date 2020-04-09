@@ -133,6 +133,7 @@ def add_article(request):
         activity.application = "Article"
         activity.method = "POST"
         activity.creator = currentUser
+        activity.createdDate = datetime.datetime.now()
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale ekledi."
         activity.save()

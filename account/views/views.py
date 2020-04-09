@@ -33,20 +33,26 @@ def index(request):
 
 @login_required(login_url="login_account")
 def account_detail(request, username):
-    userDetail = get_object_or_404(Account, username=username)
-    if request.user.is_authenticated:
-        currentUser = request.user
-        userGroup = current_user_group(request, username)
+    """
+    :param request:
+    :param username:
+    :return:
+    """
+    currentUser = request.user
+    userGroup = current_user_group(request, username)
+    try:
+        userDetail = Account.objects.get(username=username)
+        accountActivity = AccountActivity.objects.filter(creator=userDetail).values('createdDate').order_by('createdDate')
         context = {
             "userDetail": userDetail,
             "userGroup": userGroup,
             "currentUser": currentUser,
+            "accountActivity": accountActivity,
         }
-    else:
-        context = {
-            "userDetail": userDetail,
-        }
-    return render(request, "ankades/account/account-detail.html", context)
+        return render(request, "ankades/account/account-detail.html", context)
+    except:
+        messages.error(request, "Kullanıcı bulunamadı")
+        return redirect("index")
 
 
 def login_account(request):
@@ -247,3 +253,19 @@ def get_social_media(self, slug):
     except:
         socialMedia = None
         return socialMedia
+
+
+# def get_user_timeline(request, username):
+#     currentUser = request.user
+#     userGroup = current_user_group(request, currentUser)
+#     try:
+#         accountActivity = AccountActivity.objects.get(creator__username=username)
+#         context = {
+#             "currentUser": currentUser,
+#             "userGroup": userGroup,
+#             "accountActivity": accountActivity,
+#         }
+#         return render(request, "ankades/account/timeline.html", context)
+#     except:
+#         messages.error(request, "Kullanıcı bulunamadı.")
+#         return render(request, "404.html")

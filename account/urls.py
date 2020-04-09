@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
-from account.views import views, user, edit, posts
+from account.views import views, edit, posts
 
 urlpatterns = [
     # Current User

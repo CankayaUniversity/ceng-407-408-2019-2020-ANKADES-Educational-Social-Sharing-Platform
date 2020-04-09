@@ -48,6 +48,7 @@ class Article(models.Model):
     isPrivate = models.BooleanField(default=False, null=True, blank=True)
     likes = models.ManyToManyField(Account, related_name="articleLikes", default=0, blank=True, db_table="AccountLikedArticle")
     readTime = models.IntegerField(default=0)
+    introduction = models.CharField(max_length=254, null=True, blank=True)
 
     def __str__(self):
         return self.title
