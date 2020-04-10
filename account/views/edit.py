@@ -8,7 +8,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
-from account.models import Account, AccountActivity, AccountSocialMedia, SocialMedia
+from account.forms import EditProfileForm
+from account.models import Account, AccountLogs, AccountSocialMedia, SocialMedia
 from account.views.views import current_user_group, get_social_media
 
 import datetime
@@ -23,7 +24,7 @@ def edit_profile(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     sm = SocialMedia.objects.all()
     try:
         accountSocialMedia = AccountSocialMedia.objects.get(userId__username=currentUser.username)
@@ -41,11 +42,6 @@ def edit_profile(request):
         last_name = request.POST.get("last_name")
         instance.first_name = first_name
         instance.last_name = last_name
-        if request.FILES:
-            media = request.FILES.get('media')
-            fs = FileSystemStorage()
-            fs.save(media.name, media)
-            instance.image = media
         instance.save()
         activity.title = "Profil Güncelleme."
         activity.application = "Account"
@@ -60,12 +56,30 @@ def edit_profile(request):
     return render(request, "ankades/account/edit-profile.html", context)
 
 
+@login_required(login_url="login_account")
+def edit_profile_photo(request):
+    currentUser = request.user
+    try:
+        instance = Account.objects.get(username=currentUser)
+        if request.method == 'POST':
+            form = EditProfileForm(request.POST, request.FILES, instance=instance)
+            if form.is_valid():
+                form.save()
+                return redirect(reverse("account_detail", kwargs={"username": currentUser}))
+        else:
+            form = EditProfileForm()
+        return render(request, 'ankades/account/edit-profile.html', {"form": form})
+    except:
+        messages.error(request, "Giriş yapmalısınız.")
+        return redirect("index")
+
+
 @login_required(login_url="login_admin")
 def add_social_media_to_user(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     sm = SocialMedia.objects.all()
     try:
         accountSocialMedia = AccountSocialMedia.objects.get(userId__username=currentUser)
@@ -128,7 +142,7 @@ def edit_username(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     if request.method == "POST":
         username = request.POST.get("username")
         instance.username = username
@@ -158,7 +172,7 @@ def edit_password(request):
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
     currentPassword = instance.password
-    activity = AccountActivity()
+    activity = AccountLogs()
     context = {
         "currentUser": currentUser,
         "userGroup": userGroup,
@@ -203,7 +217,7 @@ def edit_email(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     if request.method == "POST":
         email = request.POST.get("email")
         instance.email = email

@@ -15,7 +15,7 @@ urlpatterns = [
     path('', include("exam.urls")),
     path('', include("directmessage.urls")),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^(?P<username>[\w-]+)/$', views.account_detail, name="account_detail"),
+    url(r'^(?P<username>[\w-]+)$', views.account_detail, name="account_detail"),
     path('takip-et/<username>', views.follow_account, name="follow_account"),
 ]
 if settings.DEBUG:

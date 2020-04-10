@@ -9,7 +9,7 @@ from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, Permission, AccountPermission
 from account.views.views import current_user_group
-from adminpanel.models import AdminActivity
+from adminpanel.models import AdminLogs
 from exam.models import School
 
 
@@ -129,7 +129,7 @@ def admin_edit_profile(request):
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=currentUser)
     schools = School.objects.filter(Q(isActive=False, isCategory=False))
-    activity = AdminActivity()
+    activity = AdminLogs()
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -162,7 +162,7 @@ def admin_edit_username(request, username):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=username)
-    activity = AdminActivity()
+    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "instance": instance
@@ -189,7 +189,7 @@ def admin_edit_email(request, username):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(Account, username=username)
-    activity = AdminActivity()
+    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "instance": instance
@@ -224,7 +224,7 @@ def admin_edit_email(request, username):
 
 @login_required(login_url="login_admin")
 def admin_blocked_users(request):
-    activity = AdminActivity()
+    activity = AdminLogs()
     blockedUsers = Account.objects.filter(is_active=False)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
@@ -252,7 +252,7 @@ def admin_block_account(request, username):
     user = get_object_or_404(Account, username=username)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     if userGroup == 'admin' or userGroup == 'moderator':
         if user.is_active is True:
             user.is_active = False
@@ -291,7 +291,7 @@ def admin_register_account(request):
     userGroup = current_user_group(request, currentUser)
     accountGroup = AccountGroup()
     groups = Group.objects.all()
-    activity = AdminActivity()
+    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -347,7 +347,7 @@ def admin_add_group_to_user(request):
         "groups": groups,
         "users": users,
     }
-    activity = AdminActivity()
+    activity = AdminLogs()
     if userGroup == 'admin':
         if request.method == "POST":
             userId = request.POST['userId']
@@ -394,7 +394,7 @@ def admin_add_permission_to_user(request):
         "permissions": permissions,
         "users": users,
     }
-    activity = AdminActivity()
+    activity = AdminLogs()
     if userGroup == 'admin':
         if request.method == "POST":
             userId = request.POST['userId']

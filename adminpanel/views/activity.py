@@ -5,17 +5,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from account.models import AccountActivity
+from account.models import AccountLogs
 from account.views.views import current_user_group
-from adminpanel.models import AdminActivity
+from adminpanel.models import AdminLogs
 
 
 @login_required(login_url="login_admin")
 def admin_all_logs(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    adminLogs = AdminActivity.objects.all().order_by('-createdDate')
-    accountLogs = AccountActivity.objects.all().order_by('-createdDate')
+    adminLogs = AdminLogs.objects.all().order_by('-createdDate')
+    accountLogs = AccountLogs.objects.all().order_by('-createdDate')
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -29,7 +29,7 @@ def admin_all_logs(request):
 def admin_admin_logs(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    adminLogs = AdminActivity.objects.all().order_by('-createdDate')
+    adminLogs = AdminLogs.objects.all().order_by('-createdDate')
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -42,7 +42,7 @@ def admin_admin_logs(request):
 def admin_account_logs(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    accountLogs = AccountActivity.objects.all().order_by('-createdDate')
+    accountLogs = AccountLogs.objects.all().order_by('-createdDate')
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,

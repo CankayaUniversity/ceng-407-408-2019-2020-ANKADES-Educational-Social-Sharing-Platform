@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 
 from account.models import AccountGroup
 from account.views.views import current_user_group
-from adminpanel.models import AdminActivity
+from adminpanel.models import AdminLogs
 from question.models import QuestionCategory, Question
 
 
@@ -20,7 +20,7 @@ def admin_add_question_category(request):
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=True))
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -28,7 +28,7 @@ def admin_add_question_category(request):
     }
     if userGroup == 'admin':
         if request.method == "POST":
-            categoryId = request.POST.get("categoryId")
+            categoryId = request.POST["categoryId"]
             title = request.POST.get("title")
             isActive = request.POST.get("isActive") == "on"
             isCategory = request.POST.get("isCategory") == "on"
@@ -39,9 +39,10 @@ def admin_add_question_category(request):
                     messages.error(request, error)
                     return redirect("admin_add_question_category")
             except:
-                instance = QuestionCategory(parentId_id=categoryId, title=title, isActive=isActive,
+                instance = QuestionCategory(title=title, isActive=isActive,
                                             isCategory=isCategory)
                 instance.creator = request.user
+                instance.parentId_id = categoryId
                 instance.save()
                 activity.title = "Soru Kategorisi Ekleme: " + str(currentUser)
                 activity.application = "Question"
@@ -111,7 +112,7 @@ def admin_isactive_question(request, slug):
         instance = Question.objects.get(slug=slug)
         currentUser = request.user
         userGroup = current_user_group(request, currentUser)
-        activity = AdminActivity()
+        activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
@@ -157,7 +158,7 @@ def admin_isactive_question_category(request, slug):
         instance = QuestionCategory.objects.get(slug=slug)
         currentUser = request.user
         userGroup = current_user_group(request, currentUser)
-        activity = AdminActivity()
+        activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
@@ -201,7 +202,7 @@ def admin_delete_question(request, slug):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(Question, slug=slug)
         if instance.isActive is True:
@@ -241,7 +242,7 @@ def admin_delete_question_category(request, slug):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(QuestionCategory, slug=slug)
         if instance.isActive is True:

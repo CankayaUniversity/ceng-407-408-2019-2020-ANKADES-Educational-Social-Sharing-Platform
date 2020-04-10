@@ -47,7 +47,7 @@ class AccountLoginForm(forms.Form):
 
 class EditProfileForm(forms.ModelForm):
     model = Account
-    fields = ['bio', '']
+    fields = ['bio', 'media']
 
 
 # class EditUsernameForm(forms.ModelForm):

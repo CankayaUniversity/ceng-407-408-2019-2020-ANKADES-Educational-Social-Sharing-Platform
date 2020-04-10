@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
-from account.models import AccountActivity
+from account.models import AccountLogs
 from account.views.views import current_user_group
 from ankadescankaya.slug import slug_save
 from article.forms import EditArticleForm, ArticleForm
@@ -52,7 +52,7 @@ def all_articles(request):
         }
         return render(request, "ankades/article/all-articles.html", context)
     else:
-        articles = Article.objects.all()
+        articles = Article.objects.filter(isActive=True)
         paginator = Paginator(articles, 12)
         try:
             article_pagination = paginator.page(page)
@@ -103,7 +103,7 @@ def add_article(request):
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = ArticleForm(request.POST or None)
-    activity = AccountActivity()
+    activity = AccountLogs()
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
@@ -152,7 +152,7 @@ def edit_article(request, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
-    activity = AccountActivity()
+    activity = AccountLogs()
     try:
         instance = Article.objects.get(slug=slug)
         form = EditArticleForm(request.POST or None, instance=instance)
@@ -258,9 +258,10 @@ def delete_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
     currentUser = request.user
     if instance.creator == currentUser:
-        instance.delete()
-        messages.success(request, "Makale başarıyla silindi.")
-        return redirect(reverse("account_detail", kwargs={"username": currentUser}))
+        if instance.isActive:
+            instance.isActive = False
+            messages.success(request, "Makale başarıyla silindi.")
+            return redirect(reverse("account_detail", kwargs={"username": currentUser}))
     else:
         messages.error(request, "Bu makale size ait değil")
         return redirect(reverse("account_detail", kwargs={"username": currentUser}))
@@ -269,7 +270,7 @@ def delete_article(request, slug):
 @login_required(login_url="login_account")
 def add_article_comment(request, slug):
     currentUser = request.user
-    activity = AccountActivity()
+    activity = AccountLogs()
     activity.application = "Article"
     activity.creator = currentUser
     activity.createdDate = datetime.datetime.now()
@@ -285,6 +286,11 @@ def add_article_comment(request, slug):
         activity.save()
         messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
     return redirect("all_articles")
+
+
+def get_article_categories(request):
+    articleCategory = ArticleCategory.objects.filter(isRoot=False)
+    return None
 
 
 class ArticleLikeToggle(RedirectView):

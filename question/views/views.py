@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 
-from account.models import AccountActivity
+from account.models import AccountLogs
 from account.views.views import current_user_group
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
@@ -17,7 +17,7 @@ def add_question(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     form = QuestionForm(request.POST or None)
-    activity = AccountActivity()
+    activity = AccountLogs()
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=False))
     description = None
     if request.method == "POST":
@@ -124,7 +124,7 @@ def edit_question(request, slug, questionNumber):
 def add_question_answer(request, slug, questionNumber):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     activity.application = "Question"
     activity.creator = currentUser
     activity.title = "Soru Yorum Ekleme"
@@ -158,7 +158,7 @@ def add_question_answer(request, slug, questionNumber):
 def add_question_answer_reply(request, slug, questionNumber, answerNumber):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     activity.application = "Question"
     activity.creator = currentUser
     activity.title = "Soru Yorum Ekleme"

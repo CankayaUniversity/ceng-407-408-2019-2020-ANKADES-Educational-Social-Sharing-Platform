@@ -6,6 +6,7 @@ from account.views import views, edit
 urlpatterns = [
     # Current User
     path('ayarlar/', edit.edit_profile, name="edit_profile"),
+    path('ayarlar/resim-ekle', edit.edit_profile_photo, name="edit_profile_photo"),
     path('ayarlar/email-duzenle', edit.edit_email, name="edit_email"),
     path('ayarlar/kullanici-adi-duzenle', edit.edit_username, name="edit_username"),
     path('ayarlar/sifre-yenile', edit.edit_password, name="edit_password"),
@@ -13,12 +14,11 @@ urlpatterns = [
     # path('sifre-sifirla/', edit.edit_password, name="edit_password"),
 
     # Login/Register
-    path('giris-yap/', views.login_account, name="login_account"),
-    path('cikis-yap/', views.logout_account, name="logout_account"),
-    path('kayit-ol/', views.register_account, name="register_account"),
+    path('giris-yap', views.login_account, name="login_account"),
+    path('cikis-yap', views.logout_account, name="logout_account"),
+    path('kayit-ol', views.register_account, name="register_account"),
 
     # Requested User
-    # url(r'^Article/(?P<username>[\w-]+)/Follow/$', FollowAccountAPIToggle.as_view(), name="follow-api-toggle"),
     path('', views.index, name="index"),
 
 ]

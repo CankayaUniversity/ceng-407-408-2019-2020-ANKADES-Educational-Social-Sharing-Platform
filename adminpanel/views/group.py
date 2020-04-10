@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from account.models import Group
 from account.views.views import current_user_group
 from adminpanel.forms import AdminEditGroupForm
-from adminpanel.models import AdminActivity
+from adminpanel.models import AdminLogs
 
 
 @login_required(login_url="login_admin")
@@ -20,7 +20,7 @@ def admin_all_groups(request, slug=None):
     """
     currentUser = request.user
     userGroup = 'Kullanıcı'
-    activity = AdminActivity()
+    activity = AdminLogs()
     if request.user.is_authenticated:
         userGroup = current_user_group(request, currentUser)
     groups = Group.objects.all()
@@ -60,7 +60,7 @@ def admin_edit_group(request, slug):
     """
     instance = get_object_or_404(Group, slug=slug)
     currentUser = request.user
-    activity = AdminActivity()
+    activity = AdminLogs()
     activity.application = "Group"
     activity.creator = currentUser
     activity.title = "Grup Düzenleme"
@@ -88,7 +88,7 @@ def admin_add_group(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     activity.application = "Group"
     activity.creator = currentUser
     activity.title = "Grup Ekle"
@@ -126,7 +126,7 @@ def admin_delete_group(request, slug):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     activity.title = "Grup Silme"
     activity.method = "DELETE"
     activity.creator = currentUser
@@ -160,7 +160,7 @@ def admin_isactive_group(request, slug):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     activity.title = "Grup Aktifliği Düzenleme"
     activity.method = "UPDATE"
     activity.creator = currentUser

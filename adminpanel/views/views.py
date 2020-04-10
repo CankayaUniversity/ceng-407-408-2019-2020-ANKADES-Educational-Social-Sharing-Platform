@@ -8,7 +8,7 @@ from online_users.models import OnlineUserActivity
 
 from account.models import Account
 from account.views.views import current_user_group
-from adminpanel.models import Tag, AdminActivity
+from adminpanel.models import Tag, AdminLogs
 from article.models import Article
 from course.models import Course
 
@@ -44,7 +44,7 @@ def login_admin(request):
     :param request:
     :return:
     """
-    activity = AdminActivity()
+    activity = AdminLogs()
     if not request.user.is_authenticated:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -86,7 +86,7 @@ def login_admin(request):
 @login_required(login_url="login_admin")
 def logout_admin(request):
     currentUser = request.user
-    activity = AdminActivity()
+    activity = AdminLogs()
     if request.user.is_authenticated:
         logout(request)
         activity.title = "Çıkış Yapma."

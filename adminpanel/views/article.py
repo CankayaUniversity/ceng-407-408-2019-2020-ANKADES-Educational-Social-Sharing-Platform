@@ -1,4 +1,6 @@
 import datetime
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
@@ -7,7 +9,7 @@ from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
 from account.views.views import current_user_group
-from adminpanel.models import AdminActivity
+from adminpanel.models import AdminLogs
 from article.forms import ArticleForm
 from article.models import Article, ArticleCategory
 
@@ -33,7 +35,7 @@ def admin_all_articles(request):
 def admin_isactive_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
     currentUser = request.user
-    activity = AdminActivity()
+    activity = AdminLogs()
     if instance.isActive is True:
         instance.isActive = False
         instance.save()
@@ -86,10 +88,10 @@ def admin_add_article_category(request):
     :param request:
     :return:
     """
-    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True))
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True)).order_by('title')
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
@@ -97,7 +99,7 @@ def admin_add_article_category(request):
     }
     if userGroup == 'admin':
         if request.method == "POST":
-            value = request.POST.get("value")
+            value = request.POST['categoryId']
             title = request.POST.get("title")
             isActive = request.POST.get("isActive") == "on"
             isCategory = request.POST.get("isCategory") == "on"
@@ -108,8 +110,9 @@ def admin_add_article_category(request):
                     return redirect("admin_add_article_category")
                 return render(request, "adminpanel/article/add-category.html", context)
             except:
-                instance = ArticleCategory(parentId=value, title=title, isActive=isActive, isCategory=isCategory)
+                instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
+                instance.parentId_id = value
                 instance.save()
                 activity.title = "Makale Kategorisi Ekleme: " + str(currentUser)
                 activity.application = "Article"
@@ -139,7 +142,7 @@ def admin_edit_article(request, slug):
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     instance = Article.objects.get(slug=slug)
     form = ArticleForm(request.POST or None)
-    activity = AdminActivity()
+    activity = AdminLogs()
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
@@ -201,7 +204,7 @@ def admin_isactive_article_category(request, slug):
     instance = get_object_or_404(ArticleCategory, slug=slug)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     if instance.isActive is True:
         instance.isActive = False
         instance.save()

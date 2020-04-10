@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 
 from account.models import SocialMedia
 from account.views.views import current_user_group
-from adminpanel.models import AdminActivity
+from adminpanel.models import AdminLogs
 
 
 @login_required(login_url="login_admin")
@@ -28,7 +28,7 @@ def admin_all_social_medias(request):
 def admin_isactive_socialmedia(request, slug):
     instance = get_object_or_404(SocialMedia, slug=slug)
     currentUser = request.user
-    activity = AdminActivity()
+    activity = AdminLogs()
     if instance.isActive is True:
         instance.isActive = False
         instance.save()
@@ -79,7 +79,7 @@ def admin_edit_social_media(request, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     instance = get_object_or_404(SocialMedia, slug=slug)
-    activity = AdminActivity()
+    activity = AdminLogs()
     if request.method == "POST" and request.FILES['media']:
         title = request.POST.get('title')
         isActive = request.POST.get("isActive") == 'on'
@@ -113,7 +113,7 @@ def admin_edit_social_media(request, slug):
 def admin_add_social_media(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    activity = AdminActivity()
+    activity = AdminLogs()
     if request.method == "POST" and request.FILES['media']:
         title = request.POST.get("title")
         isActive = request.POST.get("isActive") == 'on'

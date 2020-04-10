@@ -13,7 +13,7 @@ from rest_framework.reverse import reverse_lazy
 
 from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
-    AccountActivity, SocialMedia, AccountFollower
+    AccountLogs, SocialMedia, AccountFollower
 from article.models import Article, ArticleComment
 from question.models import Question
 
@@ -90,7 +90,7 @@ def login_account(request):
     :param request:
     :return:
     """
-    activity = AccountActivity()
+    activity = AccountLogs()
     if not request.user.is_authenticated:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -138,7 +138,7 @@ def logout_account(request):
     """
     currentUser = request.user
     instance = get_object_or_404(Account, username=currentUser)
-    activity = AccountActivity()
+    activity = AccountLogs()
     if request.user.is_authenticated:
         logout(request)
         activity.title = "Çıkış Yapma."
@@ -161,7 +161,7 @@ def register_account(request):
     :return:
     """
     if not request.user.is_authenticated:
-        activity = AccountActivity()
+        activity = AccountLogs()
         if request.method == "POST":
             first_name = request.POST.get("first_name")
             last_name = request.POST.get("last_name")
@@ -298,11 +298,11 @@ def get_social_media(self, slug):
 #     currentUser = request.user
 #     userGroup = current_user_group(request, currentUser)
 #     try:
-#         accountActivity = AccountActivity.objects.get(creator__username=username)
+#         AccountLogs = AccountLogs.objects.get(creator__username=username)
 #         context = {
 #             "currentUser": currentUser,
 #             "userGroup": userGroup,
-#             "accountActivity": accountActivity,
+#             "AccountLogs": AccountLogs,
 #         }
 #         return render(request, "ankades/account/timeline.html", context)
 #     except:

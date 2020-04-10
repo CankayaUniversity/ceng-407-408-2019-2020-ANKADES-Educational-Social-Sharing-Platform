@@ -12,16 +12,16 @@
                             <h3 class="card-title">Makale Kategori Ekleme</h3>
                         </div>
                         <div class="card-body">
-                            <form method="post" enctype="multipart/form-data" class="form-control-user">
+                            <form method="post" enctype="multipart/form-data" class="form-control-user" action="{% url 'admin_add_article_category' %}">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="select">Üst Kategorisi*</label>
-                                    <select id="select" class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
+                                    <select id="select" class="form-control select2bs4" style="width: 100%;" value="Seçiniz" name="categoryId"
                                             required>
                                         <option disabled>Lütfen üst kategori seçiniz</option>
                                         {% if articleCategory %}
                                             {% for category in articleCategory %}
-                                                <option value="{{ category.title }}">{{ category.title }}</option>
+                                                <option value="{{ category.id }}">{{ category.title }}</option>
                                             {% endfor %}
                                         {% endif %}
                                     </select>

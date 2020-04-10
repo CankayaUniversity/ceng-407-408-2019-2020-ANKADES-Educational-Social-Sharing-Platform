@@ -7,7 +7,7 @@ from account.models import Account
 from ankadescankaya.slug import slug_save
 
 
-class AdminActivity(models.Model):
+class AdminLogs(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, max_length=50, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=254)
@@ -20,7 +20,7 @@ class AdminActivity(models.Model):
         return self.title
 
     class Meta:
-        db_table = "AdminActivity"
+        db_table = "AdminLogs"
         ordering = ['-createdDate']
 
 
