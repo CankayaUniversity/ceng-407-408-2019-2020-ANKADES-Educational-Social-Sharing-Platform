@@ -21,6 +21,7 @@ def admin_all_users(request):
     context = {
         "userGroup": userGroup,
         "accounts": accounts,
+        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/all-users.html", context)
 
@@ -36,6 +37,7 @@ def admin_all_user_groups(request):
     members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
         "userGroup": userGroup,
+        "currentUser": currentUser,
         "admins": admins,
         "moderators": moderators,
         "teachers": teachers,
@@ -53,15 +55,20 @@ def admin_my_account(request, username):
     context = {
         "userDetail": userDetail,
         "userGroup": userGroup,
+        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/my-profile.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_students(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
         "students": students,
+        "currentUser": currentUser,
+        "userGroup": userGroup,
     }
     return render(request, "adminpanel/account/group/students.html", context)
 
@@ -119,6 +126,7 @@ def admin_admins(request):
         "teachers": teachers,
         "students": students,
         "userGroup": userGroup,
+        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/group/admins.html", context)
 
@@ -165,6 +173,7 @@ def admin_edit_username(request, username):
     activity = AdminLogs()
     context = {
         "userGroup": userGroup,
+        "currentUser": currentUser,
         "instance": instance
     }
     if request.method == "POST":
@@ -192,6 +201,7 @@ def admin_edit_email(request, username):
     activity = AdminLogs()
     context = {
         "userGroup": userGroup,
+        "currentUser": currentUser,
         "instance": instance
     }
     if request.method == "POST":
@@ -231,6 +241,7 @@ def admin_blocked_users(request):
     context = {
         "users": blockedUsers,
         "userGroup": userGroup,
+        "currentUser": currentUser,
     }
     if userGroup == 'admin':
         return render(request, "adminpanel/account/blocked-user.html", context)

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c1b116e7-4017-47b5-9c7f-8e4827260fd2" name="ankacademy" url="http://ec2-3-127-68-115.eu-central-1.compute.amazonaws.com">
+        <fileTransfer host="ec2-3-127-68-115.eu-central-1.compute.amazonaws.com" port="22" privateKey="C:\Users\bacaglar\Desktop\anka-academy.ppk" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

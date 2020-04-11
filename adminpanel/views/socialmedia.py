@@ -146,5 +146,6 @@ def admin_add_social_media(request):
             return redirect("admin_all_social_medias")
     context = {
         "userGroup": userGroup,
+        "currentUser": currentUser,
     }
     return render(request, "adminpanel/social-media/add-social-media.html", context)

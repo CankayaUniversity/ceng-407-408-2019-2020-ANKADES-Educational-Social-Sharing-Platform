@@ -67,6 +67,10 @@ def admin_edit_group(request, slug):
     activity.method = "UPDATE"
     activity.createdDate = datetime.datetime.now()
     form = AdminEditGroupForm(request.POST or None, instance=instance)
+    context = {
+        "form": form,
+        "currentUser": currentUser,
+    }
     if form.is_valid():
         title = form.cleaned_data.get("title")
     if request.method == "POST":

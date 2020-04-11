@@ -141,12 +141,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static")
+# ]
+#
+# STATIC_URL = '/staticfiles/'
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATIC_URL = '/staticfiles/'
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -285,12 +300,3 @@ CKEDITOR_CONFIGS = {
     }
 }
 CKEDITOR_UPLOAD_PATH = '/media/'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'testsite_app'
-EMAIL_HOST_PASSWORD = 'mys3cr3tp4ssw0rd'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'TestSite Team <noreply@example.com>'

@@ -179,7 +179,8 @@ def register_account(request):
                 messages.error(request, "Bu kullanıcı adı sistemimizde mevcut")
                 return render(request, "ankades/registration/register.html")
             else:
-                new_user = Account(first_name=first_name, last_name=last_name, username=username, email=email)
+                new_user = Account(first_name=first_name, last_name=last_name, email=email)
+                new_user.username = username.lower()
                 new_user.is_active = True
                 new_user.save()
                 new_user.set_password(password)

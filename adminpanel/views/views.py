@@ -114,6 +114,8 @@ def admin_tags(request):
     tags = Tag.objects.all()
     context = {
         "tags": tags,
+        "currentUser": currentUser,
+        "userGroup": userGroup,
     }
     return render(request, "adminpanel/tags/all-tags.html", context)
 
