@@ -23,6 +23,7 @@ def edit_profile(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    userDetail = currentUser
     instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
     sm = SocialMedia.objects.all()
@@ -31,6 +32,7 @@ def edit_profile(request):
     except:
         accountSocialMedia = None
     context = {
+        "userDetail": userDetail,
         "instance": instance,
         "currentUser": currentUser,
         "userGroup": userGroup,

@@ -72,14 +72,14 @@ def follow_account(request, username):
         try:
             instance = AccountFollower.objects.get(followerId__username=currentUser, followingId__username=getFollowing.username)
             instance.delete()
-            return redirect(reverse("account_detail", kwargs={"username": getFollowing}))
+            return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
         except:
             new_follower = AccountFollower()
             new_follower.followerId = currentUser
             new_follower.followingId = getFollowing
             new_follower.save()
             messages.success(request, str(new_follower.followingId.get_full_name() + " kullanıcısını takip etmeye başladınız."))
-            return redirect(reverse("account_detail", kwargs={"username": getFollowing}))
+            return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
     except:
         messages.error(request, "Böyle bir kullanıcı bulunamadı.")
         return render(request, "404.html")
