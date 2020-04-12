@@ -47,7 +47,7 @@ class Question(models.Model):
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
     likes = models.ManyToManyField(Account, related_name="questionLikes", default=0, blank=True,
-                                   db_table="LikedQuestion")
+                                   db_table="AccountLikedQuestion")
 
     def __str__(self):
         return self.questionNumber
@@ -83,7 +83,7 @@ class QuestionComment(models.Model):
     isActive = models.BooleanField(default=True)
     isReply = models.BooleanField(default=False)
     view = models.PositiveIntegerField(default=0)
-    likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True, db_table="LikedQuestionComment")
+    likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True, db_table="AccountLikedQuestionComment")
 
     def __str__(self):
         return self.answerNumber

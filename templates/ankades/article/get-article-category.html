@@ -17,9 +17,11 @@
                             <li class="breadcrumb-item"><a
                                     href="{% url 'article_category_page' articleCategory.parentId.parentId.slug %}">{{ articleCategory.parentId.parentId.title }}</a>
                             </li>{% endif %}
-                        <li class="breadcrumb-item"><a
-                                href="{% url 'article_category_page' articleCategory.parentId.slug %}">{{ articleCategory.parentId.title }}</a>
-                        </li>
+                        {% if questionCategory.parentId.slug != "home" %}
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'article_category_page' articleCategory.parentId.slug %}">{{ articleCategory.parentId.title }}</a>
+                            </li>
+                        {% endif %}
                         <li class="breadcrumb-item active">{{ articleCategory.title }}</li>
                     </ol>
                 </div>
