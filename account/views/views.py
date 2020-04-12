@@ -132,7 +132,7 @@ def login_account(request):
             except Account.DoesNotExist:
                 messages.error(request, "Böyle bir kullanıcı bulunamadı.")
                 return redirect("login_account")
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=username.lower(), password=password)
             if user:
                 login(request, user)
             else:
