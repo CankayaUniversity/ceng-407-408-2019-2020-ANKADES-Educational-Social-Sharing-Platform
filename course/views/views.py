@@ -5,6 +5,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
+from article.models import ArticleCategory
 from course.models import Course, CourseCategory, CourseComment
 
 
@@ -21,15 +22,30 @@ from course.models import Course, CourseCategory, CourseComment
 # class CourseSubToSubCategoryViewSet(viewsets.ModelViewSet):
 #     queryset = CourseSubToSubCategory.objects.all().order_by('-course_sub_to_sub_category_created_date')
 #     serializer_class = CourseSubToSubCategorySerializer
+from question.models import QuestionCategory
 
 
 def all_courses(request):
     keyword = request.GET.get("keyword")
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     if keyword:
         coursePagination = Course.objects.filter(Q(title__contains=keyword) |
                                                  Q(content__contains=keyword))
         context = {
             "coursePagination": coursePagination,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
         }
         return render(request, "ankades/../templates/test/course/courses.html", context)
 
@@ -51,6 +67,12 @@ def all_courses(request):
         "courseComments": courseComments,
         "courseCategories": courseCategories,
         "courseLimit": courseLimit,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
     }
     return render(request, "ankades/../templates/test/course/courses.html", context)
 
@@ -70,10 +92,24 @@ def course_detail(request, slug):
     courseComments = CourseComment.objects.all()
     courseCategories = CourseCategory.objects.all()
     courseDetail.view += 1
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     context = {
         "articleDetail": courseDetail,
         "courses": courses,
         "courseComments": courseComments,
         "courseCategories": courseCategories,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
     }
     return render(request, "ankades/../templates/test/course/course-detail.html", context)
