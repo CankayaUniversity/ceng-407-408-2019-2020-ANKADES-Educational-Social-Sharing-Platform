@@ -14,6 +14,9 @@ from account.views.views import current_user_group, get_social_media
 
 import datetime
 
+from article.models import ArticleCategory
+from question.models import QuestionCategory
+
 
 @login_required(login_url="login_account")
 def edit_profile(request):
@@ -22,6 +25,14 @@ def edit_profile(request):
     :return:
     """
     currentUser = request.user
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     userGroup = current_user_group(request, currentUser)
     userDetail = currentUser
     instance = get_object_or_404(Account, username=currentUser)
@@ -33,6 +44,12 @@ def edit_profile(request):
         accountSocialMedia = None
     context = {
         "userDetail": userDetail,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
         "instance": instance,
         "currentUser": currentUser,
         "userGroup": userGroup,
@@ -80,6 +97,14 @@ def edit_profile_photo(request):
 def add_social_media_to_user(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
     sm = SocialMedia.objects.all()
@@ -90,6 +115,12 @@ def add_social_media_to_user(request):
     context = {
         "userGroup": userGroup,
         "currentUser": currentUser,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
         "instance": instance,
         "sm": sm,
         "accountSocialMedia": accountSocialMedia,
@@ -143,6 +174,14 @@ def edit_username(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
     if request.method == "POST":
@@ -162,6 +201,12 @@ def edit_username(request):
     context = {
         "instance": instance,
         "currentUser": currentUser,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
         "userGroup": userGroup,
         "active_tab": 'username',
     }
@@ -172,12 +217,26 @@ def edit_username(request):
 def edit_password(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     instance = get_object_or_404(Account, username=currentUser)
     currentPassword = instance.password
     activity = AccountLogs()
     context = {
         "currentUser": currentUser,
         "userGroup": userGroup,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
         "instance": instance,
     }
     if request.method == "POST":
@@ -218,6 +277,14 @@ def edit_email(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
     if request.method == "POST":
@@ -237,6 +304,12 @@ def edit_email(request):
     context = {
         "instance": instance,
         "currentUser": currentUser.username,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
         "userGroup": userGroup,
     }
     return render(request, "ankades/account/edit-profile.html", context)

@@ -247,26 +247,26 @@ def get_requested_user(request, username):
     currentUser = request.user
     userGroup = current_user_group(request, username)
     userDetail = get_object_or_404(Account, username=username)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     context = {
         "userDetail": userDetail,
         "userGroup": userGroup,
         "currentUser": currentUser,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
     }
     return render(request, "ankades/account/account-profile.html", context)
-
-
-class FollowAccountToggle(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        username = self.kwargs.get("username")
-        obj = get_object_or_404(Account, username=username)
-        url_ = obj.get_absolute_url()
-        user = self.request.user
-        if user.is_authenticated:
-            if user in obj.follower.all():
-                obj.follower.remove(user)
-            else:
-                obj.follower.add(user)
-        return url_
 
 
 def current_user_group(self, username):
