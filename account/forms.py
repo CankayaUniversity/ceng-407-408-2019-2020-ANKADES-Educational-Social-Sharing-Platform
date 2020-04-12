@@ -3,6 +3,8 @@ from django import forms
 
 
 # Users
+from django.contrib.auth.forms import UserCreationForm
+
 from account.models import Account
 
 
@@ -28,6 +30,12 @@ class AccountRegisterForm(forms.Form):
             # "captcha": captcha,
         }
         return values
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = Account
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2' )
 
 
 class AccountLoginForm(forms.Form):

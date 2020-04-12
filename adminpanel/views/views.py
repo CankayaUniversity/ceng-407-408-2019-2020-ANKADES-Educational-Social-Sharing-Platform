@@ -52,7 +52,7 @@ def login_admin(request):
             remember = request.POST.get("remember")
             try:
                 get_user = Account.objects.get(username=username)
-                if get_user.is_staff is not True and get_user.is_admin is not True:
+                if get_user.is_staff is not True or get_user.is_admin is not True:
                     messages.error(request, "Admin panele giriş yetkiniz yok.")
                     return redirect("index")
             except Account.DoesNotExist:

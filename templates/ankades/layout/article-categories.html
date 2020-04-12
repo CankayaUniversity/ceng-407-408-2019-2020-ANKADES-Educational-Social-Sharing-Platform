@@ -16,46 +16,45 @@
         </p>
     </a>
     <ul class="nav nav-treeview">
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Yabancı Dil</p>
-            </a>
-        </li>
-        <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>
-                    Yazılım
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
+        {% if articleCategories %}
+            {% for ac in articleCategories %}
+                <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="far fa-dot-circle nav-icon"></i>
-                        <p>Python</p>
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>
+                            {{ ac.title }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
+                    {% if articleSubCategories %}
+                        {% for asc in articleSubCategories %}
+                            {% if asc.parentId_id == ac.id %}
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>{{ asc.title }}<i class="right fas fa-angle-left"></i></p>
+                                        </a>
+                                        {% if articleLowerCategories %}
+                                            {% for alc in articleLowerCategories %}
+                                                {% if alc.parentId_id == asc.id %}
+                                                    <ul class="nav nav-treeview">
+                                                        <li class="nav-item">
+                                                            <a href="#" class="nav-link">
+                                                                <p>{{ alc.title }}</p>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-dot-circle nav-icon"></i>
-                        <p>C#</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-dot-circle nav-icon"></i>
-                        <p>C++</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Level 2</p>
-            </a>
-        </li>
+            {% endfor %}
+        {% endif %}
     </ul>
 </li>

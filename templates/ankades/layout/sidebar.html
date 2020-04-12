@@ -8,7 +8,7 @@
         <span class="brand-text font-weight-light">ANKACADEMY</span>
     </a>
     <div class="sidebar">
-        {% if currentUser.is_authenticated %}
+        {% if request.user.is_authenticated %}
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <img src="{{ currentUser.image.url }}" class="img-circle elevation-2" alt="User Image">
@@ -16,62 +16,18 @@
                 <div class="info">
                     <a href="{% url 'admin_my_account' currentUser.username %} "
                        class="d-block">
-                        {% if currentUser.first_name is not None %}{{ currentUser.get_full_name }}{% else %}
-                            {{ currentUser.username }}{% endif %}</a>
+                        {% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
+                            {{ request.user.username }}{% endif %}</a>
                 </div>
             </div>
         {% endif %}
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
+                {#article categories#}
                 {% include 'ankades/layout/article-categories.html' %}
+                {#question categories#}
                 {% include 'ankades/layout/question-categories.html' %}
-                <li class="nav-item has-treeview mt-3">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Makale
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{% url 'all_articles' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tüm Makaleler</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'article_categories' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Makale Kategorileri</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-question"></i>
-                        <p>
-                            Soru
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{% url 'all_questions' %}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tüm Sorular</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Soru Kategorileri</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                {#end categories categories#}
                 {% if currentUser.is_authenticated %}
                     <li class="nav-header">Paylaşım</li>
                     <li class="nav-item">
@@ -91,7 +47,5 @@
                 {% endif %}
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>

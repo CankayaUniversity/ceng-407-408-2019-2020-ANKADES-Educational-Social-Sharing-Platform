@@ -14,8 +14,8 @@ from rest_framework.reverse import reverse_lazy
 from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
     AccountLogs, SocialMedia, AccountFollower
-from article.models import Article, ArticleComment
-from question.models import Question
+from article.models import Article, ArticleComment, ArticleCategory
+from question.models import Question, QuestionCategory
 
 
 def index(request):
@@ -25,9 +25,21 @@ def index(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     context = {
         "currentUser": currentUser,
         "userGroup": userGroup,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
     }
     return render(request, "ankades/dashboard.html", context)
 
@@ -48,6 +60,12 @@ def account_detail(request, username):
         followings = AccountFollower.objects.filter(followerId__username=userDetail.username)
         articles = user_articles(request, username)
         questions = user_questions(request, username)
+        articleCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        questionCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
         context = {
             "userDetail": userDetail,
             "userDetailGroup": userDetailGroup,
@@ -57,6 +75,12 @@ def account_detail(request, username):
             "questions": questions,
             "followers": followers,
             "followings": followings,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
         }
         return render(request, "ankades/account/account-detail.html", context)
     except:
@@ -109,7 +133,7 @@ def login_account(request):
                 login(request, user)
             else:
                 messages.error(request, "Şifre hatalı.")
-                return redirect("login_admin")
+                return redirect("login_account")
             login(request, user)
             if remember:
                 request.session.set_expiry(1209600)
