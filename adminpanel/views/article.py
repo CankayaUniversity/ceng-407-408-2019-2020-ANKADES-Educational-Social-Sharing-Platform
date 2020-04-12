@@ -186,15 +186,13 @@ def admin_article_categories(request):
     :param request:
     :return:
     """
+    categories = ArticleCategory.objects.all()
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    categories = ArticleCategory.objects.all()
-    article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
     context = {
         "categories": categories,
-        "userGroup": userGroup,
-        "article_categories_limit": article_categories_limit,
         "currentUser": currentUser,
+        "userGroup": userGroup,
     }
     return render(request, "adminpanel/article/categories.html", context)
 

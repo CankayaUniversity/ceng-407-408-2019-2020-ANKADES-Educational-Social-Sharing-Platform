@@ -24,8 +24,8 @@ urlpatterns = [
     path('admins', account.admin_admins, name="admin_admins"),
     path('register', account.admin_register_account, name="admin_register_account"),
 
-    url(r'^block-user/(?P<username>\w+)$', account.admin_block_account, name="admin_block_account"),
-    url(r'^profile/(?P<username>[\w-]+)$', account.admin_my_account, name="admin_my_account"),
+    url(r'^block-user/(?P<username>\w+)/$', account.admin_block_account, name="admin_block_account"),
+    url(r'^profile/(?P<username>[\w-]+)/$', account.admin_my_account, name="admin_my_account"),
 
     # User Group
     path('add-group-to-user', account.admin_add_group_to_user, name="admin_add_group_to_user"),
@@ -40,14 +40,14 @@ urlpatterns = [
     path('isactive-group/<slug:slug>', group.admin_isactive_group,
          name="admin_isactive_group"),
 
-    #Question
+    # Question
     path('all-questions', question.admin_all_questions, name="admin_all_questions"),
-    path('all-questions/isactive-question/<slug:slug>', question.admin_isactive_question,
-         name="admin_isactive_question"),
-    path('all-questions/delete-question/<slug:slug>', question.admin_delete_question,
+    url(r'^all-questions/active/(?P<slug>[\w-]+)/$', question.admin_isactive_question,
+        name="admin_isactive_question"),
+    path(r'^all-questions/delete-question/(?P<slug>\w+)/$', question.admin_delete_question,
          name="admin_delete_question"),
     path('question-categories', question.admin_question_categories, name="admin_question_categories"),
-    path('isactive-question-categories<slug:slug>', question.admin_isactive_question_category,
+    path('isactive-question-categories/<slug:slug>', question.admin_isactive_question_category,
          name="admin_isactive_question_category"),
     path('delete-question-category/<slug:slug>', question.admin_delete_question_category,
          name="admin_delete_question_category"),
@@ -70,9 +70,9 @@ urlpatterns = [
     path('add-tag', views.admin_add_tag, name="admin_add_tag"),
 
     # Article Category
-    path('article-categories', article.admin_article_categories, name="admin_article_categories"),
-    path('isactive-article-categories<slug:slug>', article.admin_isactive_article_category,
-         name="admin_isactive_article_category"),
+    path('article-categories/', article.admin_article_categories, name="admin_article_categories"),
+    url(r'^article-categories/active/(?P<slug>[\w-]+)$', article.admin_isactive_article_category,
+        name="admin_isactive_article_category"),
     path('delete-article-category/<slug:slug>', article.admin_delete_article_category,
          name="admin_delete_article_category"),
     path('add-article-category', article.admin_add_article_category,
