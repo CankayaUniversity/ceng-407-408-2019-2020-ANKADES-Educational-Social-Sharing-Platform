@@ -47,7 +47,7 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="input-group mb-3 col-6">
-                        <input type="text" class="form-control" name="first_name" placeholder="Ad">
+                        <input type="text" class="form-control" name="first_name" placeholder="Ad" value="{% if first_name %}{{ first_name }}{% endif %}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3 col-6">
-                        <input type="text" class="form-control" name="last_name" placeholder="Soyad">
+                        <input type="text" class="form-control" name="last_name" placeholder="Soyad" value="{% if last_name %}{{ last_name }}{% endif %}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="row">
                     <div class="input-group mb-3 col-12">
-                        <input type="text" class="form-control" name="username" placeholder="Kullanıcı Adı">
+                        <input type="text" class="form-control" name="username" placeholder="Kullanıcı Adı" value="{% if username %}{{ username }}{% endif %}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="row">
                     <div class="input-group mb-3 col-12">
-                        <input type="email" class="form-control" name="email" placeholder="Email">
+                        <input type="email" class="form-control" name="email" placeholder="Email" value="{% if email %}{{ email }}{% endif %}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>

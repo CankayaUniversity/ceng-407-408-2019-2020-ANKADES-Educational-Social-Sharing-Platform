@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views.generic import RedirectView
 from rest_framework.generics import get_object_or_404
 
+from account.forms import SignUpForm
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
     AccountLogs, SocialMedia, AccountFollower
 from article.models import Article, ArticleCategory
@@ -196,15 +197,24 @@ def register_account(request):
             email = request.POST.get("email")
             password = request.POST.get("password")
             confirm_password = request.POST.get("confirm_password")
+            context = {
+                "first_name": first_name,
+                "last_name": last_name,
+                "username": username,
+                "email": email,
+            }
             if password and confirm_password and password != confirm_password:
                 messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
-                return render(request, "ankades/registration/register.html")
+                return render(request, "ankades/registration/register.html", context)
+            elif not username.isalnum():
+                messages.error(request, "Kullanıcı adı sadece harf ve rakamlardan oluşmalıdır, boşluk veya noktalama işaretleri kullanılamaz.")
+                return render(request, "ankades/registration/register.html", context)
             elif Account.objects.filter(email=email):
                 messages.error(request, "Bu email adresinde kullanıcı mevcut")
-                return render(request, "ankades/registration/register.html")
+                return render(request, "ankades/registration/register.html", context)
             elif Account.objects.filter(username=username):
                 messages.error(request, "Bu kullanıcı adı sistemimizde mevcut")
-                return render(request, "ankades/registration/register.html")
+                return render(request, "ankades/registration/register.html", context)
             else:
                 new_user = Account(first_name=first_name, last_name=last_name, email=email)
                 new_user.username = username.lower()

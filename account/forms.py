@@ -32,10 +32,31 @@ class AccountRegisterForm(forms.Form):
         return values
 
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2' )
+        fields = ('first_name', 'last_name', 'username', 'email', 'password')
+
+    def clean(self):
+        first_name = self.cleaned_data.get("first_name")
+        last_name = self.cleaned_data.get("last_name")
+        username = self.cleaned_data.get("username")
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+        confirm = self.cleaned_data.get("confirm")
+
+        if password and confirm and password != confirm:
+            raise forms.ValidationError("Girilen şifreler uyuşmuyor! Lütfen tekrar deneyin.")
+
+        values = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "username": username,
+            "email": email,
+            "password": password,
+            "confirm": confirm,
+        }
+        return values
 
 
 class AccountLoginForm(forms.Form):
