@@ -14,7 +14,7 @@
                     <img src="{{ currentUser.image.url }}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="{% url 'admin_my_account' currentUser.username %} "
+                    <a href="{% url 'account_detail' request.user.username %} "
                        class="d-block">
                         {% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
                             {{ request.user.username }}{% endif %}</a>

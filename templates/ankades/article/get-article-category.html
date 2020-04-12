@@ -1,0 +1,67 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | {{ articleCategory.title }}{% endblock %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load static %}
+{% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">{{ articleCategory.title }}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'all_articles' %}">Tüm Makaleler</a></li>
+                        {% if questionCategory.parentId.parentId.slug != "home" %}
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'article_category_page' articleCategory.parentId.parentId.slug %}">{{ articleCategory.parentId.parentId.title }}</a>
+                            </li>{% endif %}
+                        <li class="breadcrumb-item"><a
+                                href="{% url 'article_category_page' articleCategory.parentId.slug %}">{{ articleCategory.parentId.title }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ articleCategory.title }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                {% if articles %}
+                    {% for article in articles %}
+                        <div class="card-deck col-lg-3 col-md-3 col-xs-12 col-sm-12">
+                            <div class="card">
+                                {% if article.media %}
+                                    <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
+                                         width="504" height="180">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title"><a
+                                            href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                    </h5>
+                                    <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                    <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
+                                        Yorum</small>
+                                    <small class="text-muted ml-2 float-right">{{ article.likes.count }}
+                                        Beğeni</small>
+                                    <small class="text-muted float-right">{{ article.view }} Görüntülenme</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                        <h5>Üzgünüz :(</h5>
+
+                        <p>{{ articleCategory.title }} kategorisinde henüz bir makale paylaşılmamış.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

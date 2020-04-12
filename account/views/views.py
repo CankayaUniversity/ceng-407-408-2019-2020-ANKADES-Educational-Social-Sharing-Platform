@@ -1,20 +1,17 @@
 import datetime
+
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.functional import SimpleLazyObject
-from django.views.generic import RedirectView, FormView
+from django.views.generic import RedirectView
 from rest_framework.generics import get_object_or_404
-from rest_framework.reverse import reverse_lazy
 
-from account.forms import AccountUpdatePasswordForm
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
     AccountLogs, SocialMedia, AccountFollower
-from article.models import Article, ArticleComment, ArticleCategory
+from article.models import Article, ArticleCategory
 from question.models import Question, QuestionCategory
 
 
@@ -25,10 +22,12 @@ def index(request):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
     articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     context = {
@@ -60,10 +59,12 @@ def account_detail(request, username):
         followings = AccountFollower.objects.filter(followerId__username=userDetail.username)
         articles = user_articles(request, username)
         questions = user_questions(request, username)
-        articleCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        articleCategories = ArticleCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
         articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
         articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-        questionCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        questionCategories = QuestionCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
         questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
         questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
         context = {
@@ -94,7 +95,8 @@ def follow_account(request, username):
     try:
         getFollowing = Account.objects.get(username=username)
         try:
-            instance = AccountFollower.objects.get(followerId__username=currentUser, followingId__username=getFollowing.username)
+            instance = AccountFollower.objects.get(followerId__username=currentUser,
+                                                   followingId__username=getFollowing.username)
             instance.delete()
             return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
         except:
@@ -102,7 +104,8 @@ def follow_account(request, username):
             new_follower.followerId = currentUser
             new_follower.followingId = getFollowing
             new_follower.save()
-            messages.success(request, str(new_follower.followingId.get_full_name() + " kullanıcısını takip etmeye başladınız."))
+            messages.success(request,
+                             str(new_follower.followingId.get_full_name() + " kullanıcısını takip etmeye başladınız."))
             return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
     except:
         messages.error(request, "Böyle bir kullanıcı bulunamadı.")
@@ -212,8 +215,8 @@ def register_account(request):
                 getGroup = Group.objects.get(slug="uye")
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
-                new_user = authenticate(username=username, password=password)
-                login(request, new_user)
+                user = authenticate(username=new_user.username, password=new_user.password)
+                login(request, user)
                 activity.title = "Kayıt Olma"
                 activity.application = "ACCOUNT"
                 activity.method = "POST"
@@ -317,7 +320,6 @@ def get_social_media(self, slug):
     except:
         socialMedia = None
         return socialMedia
-
 
 # def get_user_timeline(request, username):
 #     currentUser = request.user

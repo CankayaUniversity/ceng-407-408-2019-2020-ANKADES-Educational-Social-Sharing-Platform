@@ -44,7 +44,7 @@ urlpatterns = [
     path('all-questions', question.admin_all_questions, name="admin_all_questions"),
     url(r'^all-questions/active/(?P<slug>[\w-]+)/$', question.admin_isactive_question,
         name="admin_isactive_question"),
-    url(r'^all-questions/delete-question/(?P<slug>\w+)/$', question.admin_delete_question,
+    url(r'^all-questions/delete/(?P<slug>[\w-]+)/$', question.admin_delete_question,
         name="admin_delete_question"),
     path('question-categories', question.admin_question_categories, name="admin_question_categories"),
     path('isactive-question-categories/<slug:slug>', question.admin_isactive_question_category,

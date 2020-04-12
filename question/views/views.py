@@ -1,6 +1,7 @@
 import datetime
 
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -9,6 +10,7 @@ from django.views.generic import RedirectView
 
 from account.models import AccountLogs
 from account.views.views import current_user_group
+from article.models import ArticleCategory
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
 
@@ -55,11 +57,60 @@ def add_question(request):
 def all_questions(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    context = {
-        "currentUser": currentUser,
-        "userGroup": userGroup,
-    }
-    return render(request, "ankades/question/all-questions.html", context)
+    questions_categories_lists = QuestionCategory.objects.filter(isActive=True)
+    questions_limit = Question.objects.filter(isActive=True).order_by('-createdDate')
+    questionComment = QuestionComment.objects.filter(isActive=True)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    page = request.GET.get('page', 1)
+    keyword = request.GET.get("keyword")
+    if keyword:
+        questions = Question.objects.filter(title__contains=keyword)
+        context = {
+            "questions": questions,
+            "questions_categories_lists": questions_categories_lists,
+            "questions_limit": questions_limit,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
+        }
+        return render(request, "ankades/question/all-questions.html", context)
+    else:
+        questions = Question.objects.filter(isActive=True)
+        paginator = Paginator(questions, 12)
+        try:
+            question_pagination = paginator.page(page)
+        except PageNotAnInteger:
+            question_pagination = paginator.page(1)
+        except EmptyPage:
+            question_pagination = paginator.page(paginator.num_pages)
+        context = {
+            "questions": questions,
+            "questionComment": questionComment,
+            "question_pagination": question_pagination,
+            "questions_categories_lists": questions_categories_lists,
+            "questions_limit": questions_limit,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
+        }
+        return render(request, "ankades/question/all-questions.html", context)
 
 
 def question_detail(request, slug, questionNumber):
@@ -68,6 +119,7 @@ def question_detail(request, slug, questionNumber):
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
         instance.view += 1
+        instance.save()
         questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, questionId__questionNumber=questionNumber, isRoot=True, isReply=False)
         answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False)
         try:
@@ -191,6 +243,23 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
 
 def delete_question(request, questionNumber):
     return None
+
+
+def question_category_page(request, slug):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    try:
+        questionCategory = QuestionCategory.objects.get(slug=slug)
+        questions = Question.objects.filter(categoryId=questionCategory)
+        context = {
+            "questionCategory": questionCategory,
+            "questions": questions,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+        }
+        return render(request, "ankades/question/get-question-category.html", context)
+    except:
+        return render(request, "404.html")
 
 
 class QuestionLikeToggle(RedirectView):

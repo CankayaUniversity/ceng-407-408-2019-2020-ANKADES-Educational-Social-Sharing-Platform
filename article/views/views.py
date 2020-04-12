@@ -37,8 +37,8 @@ def all_articles(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     articles_categories_lists = ArticleCategory.objects.all()
-    articles_limit = Article.objects.all().order_by('-createdDate')
-    articleComment = ArticleComment.objects.all()
+    articles_limit = Article.objects.filter(isActive=True).order_by('-createdDate')
+    articleComment = ArticleComment.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
     if keyword:
@@ -72,8 +72,24 @@ def all_articles(request):
         return render(request, "ankades/article/all-articles.html", context)
 
 
-@login_required(login_url="login_admin")
-def article_categories(request):
+def article_category_page(request, slug):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    try:
+        articleCategory = ArticleCategory.objects.get(slug=slug)
+        articles = Article.objects.filter(categoryId=articleCategory)
+        context = {
+            "articleCategory": articleCategory,
+            "articles": articles,
+            "currentUser": currentUser,
+            "userGroup": userGroup,
+        }
+        return render(request, "ankades/article/get-article-category.html", context)
+    except:
+        return render(request, "404.html")
+
+
+def all_article_categories(request):
     """
     :param request:
     :return:
@@ -200,31 +216,6 @@ def edit_article(request, slug):
         return render(request, "404.html")
 
 
-def article_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    keyword = request.GET.get("keyword")
-    if keyword:
-        searchCategories = ArticleCategory.objects.filter(title__contains=keyword)
-        context = {
-            "searchCategories": searchCategories,
-            "userGroup": userGroup,
-            "currentUser": currentUser,
-        }
-        return render(request, "ankades/article/categories.html", context)
-    categories = ArticleCategory.objects.all()
-    context = {
-        "categories": categories,
-        "userGroup": userGroup,
-        "currentUser": currentUser,
-    }
-    return render(request, "ankades/article/categories.html", context)
-
-
 def article_detail(request, username, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
@@ -286,11 +277,6 @@ def add_article_comment(request, slug):
         activity.save()
         messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
     return redirect("all_articles")
-
-
-def get_article_categories(request):
-    articleCategory = ArticleCategory.objects.filter(isRoot=False)
-    return None
 
 
 class ArticleLikeToggle(RedirectView):

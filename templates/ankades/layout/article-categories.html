@@ -40,7 +40,7 @@
                                                 {% if alc.parentId_id == asc.id %}
                                                     <ul class="nav nav-treeview">
                                                         <li class="nav-item">
-                                                            <a href="#" class="nav-link">
+                                                            <a href="{% url 'article_category_page' alc.slug %}" class="nav-link">
                                                                 <p>{{ alc.title }}</p>
                                                             </a>
                                                         </li>
