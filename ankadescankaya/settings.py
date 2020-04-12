@@ -163,14 +163,8 @@ STATICFILES_DIRS = [
 STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
-DEFAULT_FILE_STORAGE = 'ankadescankaya.storage_backends.PublicMediaStorage'
-
-AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
-PRIVATE_FILE_STORAGE = 'ankadescankaya.storage_backends.PrivateMediaStorage'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
-MEDIA_URL = '/mediafiles/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'account.Account'
 
@@ -306,3 +300,4 @@ CKEDITOR_CONFIGS = {
     }
 }
 CKEDITOR_UPLOAD_PATH = '/media/'
+
