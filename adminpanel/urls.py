@@ -25,6 +25,7 @@ urlpatterns = [
     path('register', account.admin_register_account, name="admin_register_account"),
 
     url(r'^block-user/(?P<username>\w+)/$', account.admin_block_account, name="admin_block_account"),
+    url(r'^delete-user/(?P<username>\w+)/$', account.admin_delete_account, name="admin_delete_account"),
     url(r'^profile/(?P<username>[\w-]+)/$', account.admin_my_account, name="admin_my_account"),
 
     # User Group

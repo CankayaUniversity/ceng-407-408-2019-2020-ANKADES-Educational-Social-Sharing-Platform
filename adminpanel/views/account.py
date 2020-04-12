@@ -297,6 +297,25 @@ def admin_block_account(request, username):
 
 
 @login_required(login_url="login_admin")
+def admin_delete_account(request, username):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    if userGroup == "admin":
+        try:
+            instance = Account.objects.get(username=username)
+            instance.delete()
+            messages.success(request, "Kullanıcı Başarıyla Silindi.")
+            return redirect("admin_all_users")
+        except:
+            messages.error(request, "Kullanıcı Bulunamadı.")
+            return redirect("admin_all_users")
+    else:
+        messages.success(request, "Yetkiniz Yok.")
+        return redirect("admin_all_users")
+
+
+
+@login_required(login_url="login_admin")
 def admin_register_account(request):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
