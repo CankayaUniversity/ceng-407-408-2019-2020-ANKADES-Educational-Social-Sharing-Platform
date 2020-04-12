@@ -16,6 +16,7 @@ from ankadescankaya.slug import slug_save
 from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
+from question.models import QuestionCategory
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -41,6 +42,14 @@ def all_articles(request):
     articleComment = ArticleComment.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     if keyword:
         articles = Article.objects.filter(title__contains=keyword)
         context = {
@@ -49,6 +58,12 @@ def all_articles(request):
             "articles_limit": articles_limit,
             "currentUser": currentUser,
             "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
         }
         return render(request, "ankades/article/all-articles.html", context)
     else:
@@ -68,6 +83,12 @@ def all_articles(request):
             "articles_limit": articles_limit,
             "currentUser": currentUser,
             "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
         }
         return render(request, "ankades/article/all-articles.html", context)
 
@@ -75,6 +96,14 @@ def all_articles(request):
 def article_category_page(request, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     try:
         articleCategory = ArticleCategory.objects.get(slug=slug)
         articles = Article.objects.filter(categoryId=articleCategory)
@@ -83,6 +112,12 @@ def article_category_page(request, slug):
             "articles": articles,
             "currentUser": currentUser,
             "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
         }
         return render(request, "ankades/article/get-article-category.html", context)
     except:
@@ -120,11 +155,25 @@ def add_article(request):
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = ArticleForm(request.POST or None)
     activity = AccountLogs()
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
         "form": form,
         "currentUser": currentUser,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
     }
     if request.method == "POST":
         value = request.POST['categoryId']
@@ -167,7 +216,15 @@ def edit_article(request, slug):
     """
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    formArticleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     activity = AccountLogs()
     try:
         instance = Article.objects.get(slug=slug)
@@ -206,10 +263,16 @@ def edit_article(request, slug):
                 return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
             context = {
                 "instance": instance,
-                "articleCategory": articleCategory,
+                "articleCategory": formArticleCategory,
                 "userGroup": userGroup,
                 "form": form,
                 "currentUser": currentUser,
+                "articleCategories": articleCategories,
+                "articleSubCategories": articleSubCategories,
+                "articleLowerCategories": articleLowerCategories,
+                "questionCategories": questionCategories,
+                "questionSubCategories": questionSubCategories,
+                "questionLowerCategories": questionLowerCategories,
             }
             return render(request, "ankades/account/posts/edit-article.html", context)
     except:
@@ -219,6 +282,14 @@ def edit_article(request, slug):
 def article_detail(request, username, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    articleCategories = ArticleCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    questionCategories = QuestionCategory.objects.filter(
+        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     try:
         instance = Article.objects.get(slug=slug)
         if instance.creator.username != username:
@@ -238,6 +309,11 @@ def article_detail(request, username, slug):
             "instance": instance,
             "currentUser": currentUser,
             "userGroup": userGroup,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
         }
         return render(request, "ankades/article/article-detail.html", context)
     except:
