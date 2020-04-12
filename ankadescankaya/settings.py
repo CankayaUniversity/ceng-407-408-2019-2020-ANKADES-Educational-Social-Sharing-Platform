@@ -169,8 +169,8 @@ DEFAULT_FILE_STORAGE = 'ankadescankaya.storage_backends.PublicMediaStorage'
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 PRIVATE_FILE_STORAGE = 'ankadescankaya.storage_backends.PrivateMediaStorage'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+MEDIA_URL = '/mediafiles/'
 
 AUTH_USER_MODEL = 'account.Account'
 
