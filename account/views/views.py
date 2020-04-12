@@ -125,7 +125,7 @@ def login_account(request):
             password = request.POST.get("password")
             remember = request.POST.get("remember")
             try:
-                get_user = Account.objects.get(username=username)
+                get_user = Account.objects.get(username=username.lower())
                 if not get_user.is_active:
                     messages.error(request, "Kullanıcı engelli olduğu için giriş yapılamadı.")
                     return redirect("login_account")
@@ -233,7 +233,7 @@ def register_account(request):
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kayıt oldu."
                 activity.save()
-                user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
+                user = authenticate(username=username.lower(), password=request.POST.get("password"))
                 login(request, user)
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("login_account")
