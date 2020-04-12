@@ -15,6 +15,7 @@ urlpatterns = [
     # User
     path('edit-profile', account.admin_edit_profile, name="admin_edit_profile"),
     path('all-users', account.admin_all_users, name="admin_all_users"),
+    path('all-active-users', account.admin_active_users, name="admin_active_users"),
     path('user-groups', account.admin_all_user_groups, name="admin_all_user_groups"),
     path('blocked-users', account.admin_blocked_users, name="admin_blocked_users"),
     path('students', account.admin_students, name="admin_students"),

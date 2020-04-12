@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
 from ankadescankaya.slug import slug_save
+from ankadescankaya.storage_backends import UserMediaStorage
 
 
 class Permission(models.Model):
@@ -69,7 +70,7 @@ class Account(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cv = RichTextField(null=True, blank=True)
     bio = models.TextField(null=True, blank=True, max_length=254)
-    image = models.FileField(default='default-user-image.png')
+    image = models.FileField(default='default-user-image.png', storage=UserMediaStorage())
     backgroundImage = models.FileField(default='photo1.png')
     view = models.PositiveIntegerField(default=0, null=True, blank=True)
     updatedDate = models.DateTimeField(null=True, blank=True)

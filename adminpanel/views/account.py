@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from online_users.models import OnlineUserActivity
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, Permission, AccountPermission
@@ -24,6 +25,19 @@ def admin_all_users(request):
         "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/all-users.html", context)
+
+
+@login_required(login_url="login_admin")
+def admin_active_users(request):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activeUsers = OnlineUserActivity.get_user_activities()
+    context = {
+        "userGroup": userGroup,
+        "currentUser": currentUser,
+        "activeUsers": activeUsers,
+    }
+    return render(request, "adminpanel/account/online-users.html", context)
 
 
 @login_required(login_url="login_admin")

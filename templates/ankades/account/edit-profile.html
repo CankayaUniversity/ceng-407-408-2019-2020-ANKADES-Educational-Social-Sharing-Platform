@@ -172,6 +172,7 @@
                                                                        value="
 
 
+
                                                                                {% if accountSocialMedia.socialMediaId.slug == socialMedia.slug %}{{ accountSocialMedia.url }}{% endif %}"
                                                                        placeholder="URL (https://{% if socialMedia.slug == 'google-drive' %}drive.google.com{% else %}www.{{ socialMedia.slug }}.com/{{ currentUser.username }}{% endif %})">
                                                                 <span class="input-group-append">

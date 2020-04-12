@@ -34,10 +34,7 @@ urlpatterns = [
     url(r'^Article/(?P<username>[\w-]+)/(?P<slug>[\w-]+)/Like/$', ArticleLikeAPIToggle.as_view(), name="article-like-api-toggle"),
     url(r'^Account/Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="group-active-api-toggle"),
     url(r'^Account/Login/$', AccountLoginAPIView.as_view(), name="login-api"),
-
-    # url(r'^Account/Profile/', UserProfileView.as_view()),
     url(r'^Account/Register/', AccountRegistrationView.as_view()),
-    # url(r'^Account/Group/', AccountGroupView.as_view()),
 
     # Question
     url(r'^Question/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/Like/$', QuestionLikeAPIToggle.as_view(),
