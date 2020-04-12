@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 from account.views import views, edit
@@ -11,6 +12,7 @@ urlpatterns = [
     path('ayarlar/kullanici-adi-duzenle', edit.edit_username, name="edit_username"),
     path('ayarlar/sifre-yenile', edit.edit_password, name="edit_password"),
     path('ayarlar/sosyal-medya-ekle', edit.add_social_media_to_user, name="add_social_media_to_user"),
+    url(r'^(?P<username>[\w-]+)/takip-et/$', views.follow_account, name="follow_account"),
     # path('sifre-sifirla/', edit.edit_password, name="edit_password"),
 
     # Login/Register

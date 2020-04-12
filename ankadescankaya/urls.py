@@ -16,7 +16,6 @@ urlpatterns = [
     path('', include("directmessage.urls")),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^(?P<username>[\w-]+)/$', views.account_detail, name="account_detail"),
-    url(r'^takip-et/(?P<username>[\w-]+)/$', views.follow_account, name="follow_account"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
