@@ -215,8 +215,6 @@ def register_account(request):
                 getGroup = Group.objects.get(slug="uye")
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
-                user = authenticate(username=new_user.username, password=new_user.password)
-                login(request, user)
                 activity.title = "Kayıt Olma"
                 activity.application = "ACCOUNT"
                 activity.method = "POST"
@@ -225,6 +223,8 @@ def register_account(request):
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kayıt oldu."
                 activity.save()
+                user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
+                login(request, user)
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
             return redirect("login_account")
         return render(request, "ankades/registration/register.html")
