@@ -8,14 +8,17 @@
                 <div class="card card-widget mt-3 p-3 col-lg-12">
                     <div class="card-header">
                         <div class="user-block">
-                            <img class="img-circle" src="{{ instance.creator.image.url }}" alt="{{ instance.creator.get_full_name }}">
-                            <span class="username"><a href="{% url 'account_detail' instance.creator %}">{{ instance.creator.get_full_name }}</a></span>
+                            <img class="img-circle" src="{{ instance.creator.image.url }}"
+                                 alt="{{ instance.creator.get_full_name }}">
+                            <span class="username"><a
+                                    href="{% url 'account_detail' instance.creator %}">{{ instance.creator.get_full_name }}</a></span>
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
                         </div>
                     </div>
                     <div class="card-body">
                         {% if instance.media != "no-image-available.png" %}
-                            <img class="img-fluid pad" src="{{ instance.media.url }}" alt="{{ instance.title }}" width="100%" style="height: 800px !important;">
+                            <img class="img-fluid pad" src="{{ instance.media.url }}" alt="{{ instance.title }}"
+                                 width="100%" style="height: 800px !important;">
                         {% endif %}
                         <div class="container-fluid container p-5" style="background: #f8f9fa">
                             <p style="font-size: 3em">{{ instance.title }}</p>
@@ -38,6 +41,10 @@
                                     Düzenle
                                 </a>
                             {% endif %}
+                            <a type="button" class="btn btn-warning btn-md" data-toggle="modal"
+                               data-target="#modal-default">
+                                Şikayet Et
+                            </a>
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ articleComments.count }} Yorum</span>
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">
@@ -136,6 +143,38 @@
                             </form>
                         </div>
                     {% endif %}
+                    <div class="modal fade" id="modal-default">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Şikayet Et</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form" method="post">
+                                        {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="title">Başlık</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                       placeholder="Başlık">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Açıklama</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                       placeholder="Açıklama">
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="submit" name="submit" class="btn btn-primary">Kaydet</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
