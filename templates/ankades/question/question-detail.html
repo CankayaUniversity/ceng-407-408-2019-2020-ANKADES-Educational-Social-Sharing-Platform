@@ -16,7 +16,7 @@
                         {% if instance.creator == request.user or userGroup == 'admin' %}
                             <span class="float-right">
                                 <a class="btn btn-danger btn-md"
-                                   href="{% url 'delete_question' instance.slug instance.questionNumber %}">
+                                   href="{% url 'delete_question' instance.slug %}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
                                     Soruyu Sil

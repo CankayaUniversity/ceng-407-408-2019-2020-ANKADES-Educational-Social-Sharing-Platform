@@ -328,7 +328,6 @@ def admin_delete_account(request, username):
         return redirect("admin_all_users")
 
 
-
 @login_required(login_url="login_admin")
 def admin_register_account(request):
     currentUser = request.user

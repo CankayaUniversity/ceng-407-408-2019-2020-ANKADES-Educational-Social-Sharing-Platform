@@ -71,9 +71,9 @@ class Question(models.Model):
 
 class QuestionComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    questionId = models.ForeignKey(Question, on_delete=models.PROTECT)
+    questionId = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, blank=True)
     answerNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
-    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
+    creator = models.ForeignKey(Account, on_delete=models.PROTECT, null=True)
     content = RichTextField(blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)

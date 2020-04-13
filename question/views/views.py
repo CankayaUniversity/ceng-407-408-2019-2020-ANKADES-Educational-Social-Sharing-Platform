@@ -352,28 +352,20 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
         return redirect("all_questions")
 
 
-def delete_question(request, slug, questionNumber):
+def delete_question(request, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    instance = get_object_or_404(Question, slug=slug)
+    instance.delete()
     activity = AccountLogs()
     activity.application = "Question"
     activity.creator = currentUser
     activity.title = "Soru Silme"
-    try:
-        instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
-        if request.user == instance.creator or userGroup == "admin" or userGroup == "moderator":
-            instance.delete()
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.description = "Soru silindi. İşlemi yapan kişi: " + str(
-                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
-            activity.save()
-            return redirect("all_questions")
-        else:
-            messages.error(request, "Hata !")
-            return render(request, "ankades/index.html")
-    except:
-        return render(request, "404.html")
+    activity.createdDate = datetime.datetime.now()
+    activity.method = "DELETE"
+    activity.description = "Soru silindi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+    activity.save()
+    return redirect("all_questions")
 
 
 def question_category_page(request, slug):
