@@ -43,14 +43,10 @@
                             {% if userDetail.username != currentUser.username %}
                                 <a type="button" href="{% url 'follow_account' userDetail.username %}"
                                    class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i>
-                                    {% if followings %}
-                                        {% for following in followings %}
-                                            {% if following.followingId == currentUser %}
-                                                Takibi Bırak
-                                            {% else %}
-                                                Takip
-                                            {% endif %}
-                                        {% endfor %}
+                                    {% if existFollower %}
+                                        Takibi Bırak
+                                    {% else %}
+                                        Takip Et
                                     {% endif %}
                                 </a>
                             {% endif %}

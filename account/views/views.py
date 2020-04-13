@@ -56,6 +56,7 @@ def account_detail(request, username):
     try:
         userDetail = Account.objects.get(username=username)
         userDetailGroup = user_group(request, username)
+        existFollower = get_user_follower(request, currentUser, userDetail)
         followers = AccountFollower.objects.filter(followingId__username=userDetail.username)
         followings = AccountFollower.objects.filter(followerId__username=userDetail.username)
         articles = user_articles(request, username)
@@ -73,6 +74,7 @@ def account_detail(request, username):
             "userDetailGroup": userDetailGroup,
             "userGroup": userGroup,
             "currentUser": currentUser,
+            "existFollower": existFollower,
             "articles": articles,
             "questions": questions,
             "followers": followers,
@@ -88,6 +90,16 @@ def account_detail(request, username):
     except:
         messages.error(request, "Böyle bir kullanıcı bulunamadı.")
         return render(request, "404.html")
+
+
+def get_user_follower(request, username, userDetail):
+    isFollowerExist = False
+    try:
+        AccountFollower.objects.get(followerId__username=username, followingId__username=userDetail)
+        isFollowerExist = True
+        return isFollowerExist
+    except:
+        return isFollowerExist
 
 
 @login_required(login_url="login_account")
