@@ -153,6 +153,24 @@ def question_detail(request, slug, questionNumber):
     return render(request, "ankades/question/question-detail.html", context)
 
 
+def confirm_answer(request, id):
+    currentUser = request.user
+    try:
+        getAnswer = QuestionComment.objects.get(id=id)
+        if getAnswer.questionId.creator.username == currentUser.username:
+            getAnswer.isCertified = True
+            getAnswer.save()
+            messages.success(request, "Sorunun cevabını doğruladığınız için teşekkür ederiz.")
+            return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+        else:
+            return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+    except:
+        messages.error(request, "Soru bulunamadı.")
+        return render(request, "404.html")
+
+
+
+
 def edit_question(request, slug, questionNumber):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)

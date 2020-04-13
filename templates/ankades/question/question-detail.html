@@ -28,12 +28,14 @@
                                data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
                                class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
                             </a>
+                            {% if instance.creator == request.user %}
                             <a class="btn btn-info btn-md"
                                href="{% url 'edit_question' instance.slug instance.questionNumber %}">
                                 <i class="fas fa-pencil-alt">
                                 </i>
                                 Düzenle
                             </a>
+                            {% endif %}
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ questionAnswers.count }} Yorum</span>
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">
@@ -72,7 +74,7 @@
                         {% if certifiedAnswer %}
                             <div class="timeline">
                                 <div class="time-label">
-                                    <span class="bg-success"><i class="fas fa-check"></i> {{ certifiedAnswer.content }}</span>
+                                    <span class="bg-success"><i class="fas fa-check"></i>  Doğru Cevap</span>
                                 </div>
                                 <div class="timeline-item card-footer card-comments">
                                     <div class="card-comment">
@@ -114,6 +116,7 @@
                                             <div class="timeline-footer">
                                                 <a class="btn btn-primary btn-sm">Oy ver</a>
                                                 <a class="btn btn-primary btn-sm">Cevapla</a>
+                                                {% if instance.creator.username == request.user.username %}<a href="{% url 'confirm_answer' answer.id %}" class="btn btn-primary btn-sm">Onayla</a>{% endif %}
                                             </div>
                                         </div>
                                     </div>
