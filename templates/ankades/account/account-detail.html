@@ -1,5 +1,5 @@
 {% extends 'ankades/layout/layout.html' %}
-{% block title %}Ankacademy | {{ userDetail.get_full_name }}{% endblock %}
+{% block title %}Ankacademy | {{ instance.get_full_name }}{% endblock %}
 {% block content %}
     <section class="content-header">
         <div class="container-fluid">
@@ -10,9 +10,9 @@
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle"
-                                     src="{{ userDetail.image.url }}" alt="{{ userDetail.get_full_name }}">
+                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}">
                             </div>
-                            <h3 class="profile-username text-center">{{ userDetail.get_full_name }}</h3>
+                            <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
 
                             <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
@@ -36,12 +36,9 @@
                                         {% endif %}
                                     </a>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Friends</b> <a class="float-right">13,287</a>
-                                </li>
                             </ul>
-                            {% if userDetail.username != currentUser.username %}
-                                <a type="button" href="{% url 'follow_account' userDetail.username %}"
+                            {% if instance.username != currentUser.username %}
+                                <a type="button" href="{% url 'follow_account' instance.username %}"
                                    class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i>
                                     {% if existFollower %}
                                         Takibi Bırak
@@ -63,7 +60,7 @@
                         <div class="card-body">
                             <strong><i class="fas fa-book mr-1"></i> Eğitim</strong>
                             <p class="text-muted">
-                                B.S. in Computer Science from the University of Tennessee at Knoxville
+                                {{ instance.graduate }}
                             </p>
                             <hr>
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
@@ -106,7 +103,7 @@
                                     <div class="post">
                                         <div class="user-block">
                                             <img class="img-circle img-bordered-sm"
-                                                 src="../../dist/img/user1-128x128.jpg" alt="user image">
+                                                 src="" alt="user image">
                                             <span class="username">
                                                 <a href="#">Jonathan Burke Jr.</a>
                                                 <a href="#" class="float-right btn-tool"><i
@@ -139,7 +136,7 @@
                                     <div class="post clearfix">
                                         <div class="user-block">
                                             <img class="img-circle img-bordered-sm"
-                                                 src="../../dist/img/user7-128x128.jpg" alt="User Image">
+                                                 src="" alt="User Image">
                                             <span class="username">
                                               <a href="#">Sarah Ross</a>
                                               <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
@@ -165,7 +162,7 @@
                                     <div class="post">
                                         <div class="user-block">
                                             <img class="img-circle img-bordered-sm"
-                                                 src="../../dist/img/user6-128x128.jpg" alt="User Image">
+                                                 src="" alt="User Image">
                                             <span class="username">
                                                 <a href="#">Adam Jones</a>
                                                 <a href="#" class="float-right btn-tool"><i
@@ -175,20 +172,20 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-sm-6">
-                                                <img class="img-fluid" src="../../dist/img/photo1.png" alt="Photo">
+                                                <img class="img-fluid" src="" alt="Photo">
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="row">
                                                     <div class="col-sm-6">
-                                                        <img class="img-fluid mb-3" src="../../dist/img/photo2.png"
+                                                        <img class="img-fluid mb-3" src=""
                                                              alt="Photo">
-                                                        <img class="img-fluid" src="../../dist/img/photo3.jpg"
+                                                        <img class="img-fluid" src=""
                                                              alt="Photo">
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <img class="img-fluid mb-3" src="../../dist/img/photo4.jpg"
+                                                        <img class="img-fluid mb-3" src=""
                                                              alt="Photo">
-                                                        <img class="img-fluid" src="../../dist/img/photo1.png"
+                                                        <img class="img-fluid" src=""
                                                              alt="Photo">
                                                     </div>
                                                 </div>

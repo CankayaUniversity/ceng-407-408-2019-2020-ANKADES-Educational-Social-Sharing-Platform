@@ -70,6 +70,7 @@ class Account(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cv = RichTextField(null=True, blank=True)
     bio = models.TextField(null=True, blank=True, max_length=254)
+    graduate = models.TextField(null=True, blank=True, max_length=254)
     image = models.FileField(default='default-user-image.png', storage=UserMediaStorage())
     backgroundImage = models.FileField(default='photo1.png')
     view = models.PositiveIntegerField(default=0, null=True, blank=True)

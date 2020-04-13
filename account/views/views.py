@@ -6,10 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.generic import RedirectView
 from rest_framework.generics import get_object_or_404
 
-from account.forms import SignUpForm
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
     AccountLogs, SocialMedia, AccountFollower
 from article.models import Article, ArticleCategory
@@ -21,8 +19,7 @@ def index(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     articleCategories = ArticleCategory.objects.filter(
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -32,7 +29,6 @@ def index(request):
     questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "articleCategories": articleCategories,
         "articleSubCategories": articleSubCategories,
@@ -51,14 +47,13 @@ def account_detail(request, username):
     :param username:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     try:
-        userDetail = Account.objects.get(username=username)
+        instance = Account.objects.get(username=username)
         userDetailGroup = user_group(request, username)
-        existFollower = get_user_follower(request, currentUser, userDetail)
-        followers = AccountFollower.objects.filter(followingId__username=userDetail.username)
-        followings = AccountFollower.objects.filter(followerId__username=userDetail.username)
+        existFollower = get_user_follower(request, request.user, instance)
+        followers = AccountFollower.objects.filter(followingId__username=instance.username)
+        followings = AccountFollower.objects.filter(followerId__username=instance.username)
         articles = user_articles(request, username)
         questions = user_questions(request, username)
         articleCategories = ArticleCategory.objects.filter(
@@ -70,10 +65,9 @@ def account_detail(request, username):
         questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
         questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
         context = {
-            "userDetail": userDetail,
+            "instance": instance,
             "userDetailGroup": userDetailGroup,
             "userGroup": userGroup,
-            "currentUser": currentUser,
             "existFollower": existFollower,
             "articles": articles,
             "questions": questions,
@@ -104,17 +98,16 @@ def get_user_follower(request, username, userDetail):
 
 @login_required(login_url="login_account")
 def follow_account(request, username):
-    currentUser = request.user
     try:
         getFollowing = Account.objects.get(username=username)
         try:
-            instance = AccountFollower.objects.get(followerId__username=currentUser,
+            instance = AccountFollower.objects.get(followerId__username=request.user,
                                                    followingId__username=getFollowing.username)
             instance.delete()
             return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
         except:
             new_follower = AccountFollower()
-            new_follower.followerId = currentUser
+            new_follower.followerId = request.user
             new_follower.followingId = getFollowing
             new_follower.save()
             messages.success(request,
@@ -176,8 +169,7 @@ def logout_account(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    instance = get_object_or_404(Account, username=currentUser)
+    instance = get_object_or_404(Account, username=request.user)
     activity = AccountLogs()
     if request.user.is_authenticated:
         logout(request)
@@ -185,7 +177,7 @@ def logout_account(request):
         activity.application = "Logout"
         activity.method = "UPDATE"
         activity.createdDate = datetime.datetime.now()
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı çıkış yaptı."
         activity.save()
@@ -259,7 +251,6 @@ def register_account(request):
 
 
 def get_requested_user(request, username):
-    currentUser = request.user
     userGroup = current_user_group(request, username)
     userDetail = get_object_or_404(Account, username=username)
     articleCategories = ArticleCategory.objects.filter(
@@ -273,7 +264,6 @@ def get_requested_user(request, username):
     context = {
         "userDetail": userDetail,
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "articleCategories": articleCategories,
         "articleSubCategories": articleSubCategories,
         "articleLowerCategories": articleLowerCategories,

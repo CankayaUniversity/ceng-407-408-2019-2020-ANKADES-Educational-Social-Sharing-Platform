@@ -11654,7 +11654,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 .user-panel img {
-  height: auto;
+  height: 34px;
   width: 2.1rem;
 }
 

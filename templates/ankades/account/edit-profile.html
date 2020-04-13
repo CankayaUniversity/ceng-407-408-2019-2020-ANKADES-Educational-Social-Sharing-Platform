@@ -2,20 +2,17 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-    {#    Main content#}
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    {#                    <!-- Profile Image -->#}
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle"
-                                     src="{{ userDetail.image.url }}" alt="{{ userDetail.get_full_name }}">
+                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}" style="max-height: 300px; width: 100%">
                             </div>
-                            <h3 class="profile-username text-center">{{ userDetail.get_full_name }}</h3>
-
+                            <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
                             <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
@@ -38,15 +35,9 @@
                                         {% endif %}
                                     </a>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Friends</b> <a class="float-right">13,287</a>
-                                </li>
                             </ul>
                         </div>
-                        {#                        <!-- /.card-body -->#}
                     </div>
-                    {#                    <!-- /.card -->#}
-                    {#                    <!-- About Me Box -->#}
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Hakkımda</h3>
@@ -55,7 +46,7 @@
                         <div class="card-body">
                             <strong><i class="fas fa-book mr-1"></i> Eğitim</strong>
                             <p class="text-muted">
-                                B.S. in Computer Science from the University of Tennessee at Knoxville
+                                {{ request.user.graduate }}
                             </p>
                             <hr>
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
@@ -70,13 +61,12 @@
                                 <span class="tag tag-primary">Node.js</span>
                             </p>
                             <hr>
-                            <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                                fermentum enim neque.</p>
+                            <strong><i class="far fa-file-alt mr-1"></i> Biyografi</strong>
+                            <p class="text-muted">
+                                {% if request.user.bio %}{{ request.user.bio }}{% endif %}
+                            </p>
                         </div>
-                        {#                        <!-- /.card-body -->#}
                     </div>
-                    {#                    <!-- /.card -->#}
                 </div>
                 <div class="col-md-9">
                     <div class="card">
@@ -86,6 +76,10 @@
                                                         data-toggle="tab">Düzenle</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#photo"
                                                         data-toggle="tab">Fotoğraf</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#graduate"
+                                                        data-toggle="tab">Eğitim</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#bio"
+                                                        data-toggle="tab">Biyografi</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#socialmedia"
                                                         data-toggle="tab">Sosyal Medya</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#email"
@@ -107,14 +101,14 @@
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="first_name"
                                                        name="first_name"
-                                                       placeholder="Ad" value="{{ currentUser.first_name }}" required>
+                                                       placeholder="Ad" value="{{ request.user.first_name }}" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="last_name" class="col-sm-2 col-form-label">Soyad:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="last_name" name="last_name"
-                                                       placeholder="Soyad" value="{{ currentUser.last_name }}" required>
+                                                       placeholder="Soyad" value="{{ request.user.last_name }}" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -129,11 +123,18 @@
                                           method="post" id="edit-photo"
                                           enctype="multipart/form-data">
                                         {% csrf_token %}
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="image"
-                                                   id="exampleInputFile">
-                                            <label class="custom-file-label" for="exampleInputFile">Dosya
-                                                seçin</label>
+                                        <div class="form-group">
+                                            <label for="exampleInputFile">Dosya Seçin</label>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="image"
+                                                           id="image">
+                                                    <label class="custom-file-label" for="image">{% if instance.image %}{{ instance.image }}{% else %}Dosya seçin{% endif %}</label>
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="">Yükle</span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
@@ -143,8 +144,45 @@
                                     </form>
                                 </div>
                                 {#                                end of tab content#}
-                                <div class="tab-pane {% if active_tab == 'socialmedia' %}active{% endif %}"
-                                     id="socialmedia">
+                                <div class="tab-pane" id="graduate">
+                                    <form class="form-horizontal" role="form" action="{% url 'edit_graduate' %}"
+                                          method="post" id="edit-graduate">
+                                        {% csrf_token %}
+                                        <div class="form-group row">
+                                            <label for="graduate" class="col-sm-2 col-form-label">Okulunuz:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="graduate" name="graduate"
+                                                       placeholder="Okulunuzun Adı" value="{% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" class="btn btn-success">Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                {#                                end of tab content#}
+                                <div class="tab-pane" id="bio">
+                                    <form class="form-horizontal" role="form" action="{% url 'edit_bio' %}"
+                                          method="post" id="edit-bio">
+                                        {% csrf_token %}
+                                        <div class="form-group row">
+                                            <label for="bio" class="col-sm-2 col-form-label">Okulunuz:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="bio" name="bio"
+                                                       placeholder="Kendinizi bize tanıtmak ister misiniz?" value="{% if request.user.bio != None %}{{ request.user.bio }}{% endif %}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" class="btn btn-success">Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                {#                                end of tab content#}
+                                <div class="tab-pane" id="socialmedia">
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                         <tr>

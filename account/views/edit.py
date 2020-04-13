@@ -5,10 +5,8 @@ from django.contrib.auth.hashers import check_password
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
-from account.forms import EditProfileForm
 from account.models import Account, AccountLogs, AccountSocialMedia, SocialMedia
 from account.views.views import current_user_group, get_social_media
 
@@ -34,7 +32,6 @@ def edit_profile(request):
     questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     userGroup = current_user_group(request, currentUser)
-    userDetail = currentUser
     instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
     sm = SocialMedia.objects.all()
@@ -43,7 +40,6 @@ def edit_profile(request):
     except:
         accountSocialMedia = None
     context = {
-        "userDetail": userDetail,
         "articleCategories": articleCategories,
         "articleSubCategories": articleSubCategories,
         "articleLowerCategories": articleLowerCategories,
@@ -68,7 +64,7 @@ def edit_profile(request):
         activity.creator = currentUser
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı hesabını güncelledi."
+            activity.creator) + " kullanıcısı adını/soyadını güncelledi."
         activity.save()
         messages.success(request, "Profil başarıyla güncellendi.")
         return redirect("edit_profile")
@@ -77,81 +73,51 @@ def edit_profile(request):
 
 @login_required(login_url="login_account")
 def edit_profile_photo(request):
-    currentUser = request.user
     try:
-        instance = Account.objects.get(username=currentUser)
-        if request.method == 'POST':
-            form = EditProfileForm(request.POST, request.FILES, instance=instance)
-            if form.is_valid():
-                form.save()
-                return redirect(reverse("account_detail", kwargs={"username": currentUser}))
-        else:
-            form = EditProfileForm()
-        return render(request, 'ankades/account/edit-profile.html', {"form": form})
+        instance = Account.objects.get(username=request.user.username)
+        if request.method == "POST":
+            if request.FILES:
+                if instance.image:
+                    instance.image = None
+                image = request.FILES.get('image')
+                fs = FileSystemStorage()
+                fs.save(image.name, image)
+                instance.image = image
+                instance.save()
+        return redirect('/ayarlar/')
     except:
-        messages.error(request, "Giriş yapmalısınız.")
-        return redirect("index")
+        messages.error(request, "Kullanıcı bulunamadı.")
+        return redirect('/ayarlar/')
 
 
 @login_required(login_url="login_admin")
 def add_social_media_to_user(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
-    sm = SocialMedia.objects.all()
-    try:
-        accountSocialMedia = AccountSocialMedia.objects.get(userId__username=currentUser)
-    except:
-        accountSocialMedia = None
-    context = {
-        "userGroup": userGroup,
-        "currentUser": currentUser,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "instance": instance,
-        "sm": sm,
-        "accountSocialMedia": accountSocialMedia,
-    }
     if request.method == "POST":
         facebook = request.POST.get('facebook')
+        linkedin = request.POST.get('linkedin')
         if facebook:
             fb = get_social_media(request, 'facebook')
-            new_fb = AccountSocialMedia(userId=currentUser, socialMediaId=fb)
+            new_fb = AccountSocialMedia(userId=request.user, socialMediaId=fb)
             new_fb.url = "https://facebook.com/" + str(facebook)
             new_fb.socialMediaUsername = str(facebook)
             new_fb.save()
-        linkedin = request.POST.get('linkedin')
         if linkedin:
             linked = get_social_media(request, 'linkedin')
-            new_linkedIn = AccountSocialMedia(userId=currentUser, socialMediaId=linked)
+            new_linkedIn = AccountSocialMedia(userId=request.user, socialMediaId=linked)
             new_linkedIn.url = "https://linkedin.com/" + str(linkedin)
             new_linkedIn.save()
         activity.title = "Sosyal Medya Hesabı Ekleme."
         activity.application = "Account"
         activity.method = "POST"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya hesabı ekledi."
         activity.save()
         messages.success(request, "Değişiklikler başarıyla kaydedildi.")
-        return redirect("index")
-        # return redirect("index")
-    # return render(request, "ankades/account/edit-profile.html", {'active_tab': 'socialmedia'})
-    return render(request, "ankades/account/edit-profile.html", context)
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')
 
 
 @login_required(login_url="login_account")
@@ -160,103 +126,62 @@ def edit_username(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    instance = get_object_or_404(Account, username=currentUser)
+    instance = get_object_or_404(Account, username=request.user)
     activity = AccountLogs()
-    getFollower = Account.objects.all()
     if request.method == "POST":
         username = request.POST.get("username")
         instance.username = username
         instance.save()
-        activity.title = "KUllanıcı Adı Güncelleme."
+        activity.title = "Kullanıcı Adı Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
         messages.success(request, "Kullanıcı adı başarıyla güncellendi.")
-        return render(request, "ankades/account/edit-profile.html", {'active_tab': 'username'})
-    context = {
-        "instance": instance,
-        "getFollower": getFollower,
-        "currentUser": currentUser,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "userGroup": userGroup,
-        "active_tab": 'username',
-    }
-    return render(request, "ankades/account/edit-profile.html", context)
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')
 
 
 @login_required(login_url="login_account")
 def edit_password(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    instance = get_object_or_404(Account, username=currentUser)
-    currentPassword = instance.password
-    activity = AccountLogs()
-    context = {
-        "currentUser": currentUser,
-        "userGroup": userGroup,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "instance": instance,
-    }
-    if request.method == "POST":
-        old_password = request.POST.get('old_password')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-        check_old = check_password(old_password, currentPassword)
-        if not check_old:
-            messages.error(request, "Eski şifrenizi yanlış girdiniz. Lütfen tekrar deneyin.")
-            return render(request, "ankades/account/edit-profile.html", {'active_tab': 'password'})
-        elif password and confirm_password and password != confirm_password:
-            messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
-            return render(request, "ankades/account/edit-profile.html", {'active_tab': 'password'})
-        else:
-            update_session_auth_hash(request, currentUser)
-            currentUser.set_password(password)
-            currentUser.save()
-            login_user = authenticate(username=currentUser, password=password)
-            login(request, login_user)
-            activity.title = "Parola Güncelleme."
-            activity.application = "Account"
-            activity.method = "UPDATE"
-            activity.creator = currentUser
-            activity.createdDate = datetime.datetime.now()
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı parolasını güncelledi."
-            activity.save()
-            messages.success(request, "Şifreniz başarıyla güncellendi.")
-            return redirect("index")
-    return render(request, "ankades/account/edit-profile.html", context)
+    try:
+        instance = Account.objects.get(username=request.user)
+        currentPassword = instance.password
+        activity = AccountLogs()
+        if request.method == "POST":
+            old_password = request.POST.get('old_password')
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            check_old = check_password(old_password, currentPassword)
+            if not check_old:
+                messages.error(request, "Eski şifrenizi yanlış girdiniz. Lütfen tekrar deneyin.")
+                return redirect('/ayarlar/')
+            elif password and confirm_password and password != confirm_password:
+                messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
+                return redirect('/ayarlar/')
+            else:
+                update_session_auth_hash(request, request.user)
+                request.user.set_password(password)
+                request.user.save()
+                login_user = authenticate(username=request.user, password=password)
+                login(request, login_user)
+                activity.title = "Şifre Güncelleme."
+                activity.application = "Account"
+                activity.method = "UPDATE"
+                activity.creator = request.user
+                activity.createdDate = datetime.datetime.now()
+                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı şifresini güncelledi."
+                activity.save()
+                messages.success(request, "Şifreniz başarıyla güncellendi.")
+                return redirect('/ayarlar/')
+        return redirect('/ayarlar/')
+    except:
+        messages.error(request, "Kullanıcı bulunamadı.")
+        return redirect('/ayarlar/')
 
 
 @login_required(login_url="login_account")
@@ -265,17 +190,7 @@ def edit_email(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    instance = get_object_or_404(Account, username=currentUser)
+    instance = get_object_or_404(Account, username=request.user)
     activity = AccountLogs()
     if request.method == "POST":
         email = request.POST.get("email")
@@ -284,22 +199,61 @@ def edit_email(request):
         activity.title = "Email Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı email adresini güncelledi."
         activity.save()
         messages.success(request, "Email başarıyla güncellendi.")
-        return render(request, "ankades/account/edit-profile.html", {'active_tab': 'email'})
-    context = {
-        "instance": instance,
-        "currentUser": currentUser.username,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "userGroup": userGroup,
-    }
-    return render(request, "ankades/account/edit-profile.html", context)
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')
+
+
+@login_required(login_url="login_account")
+def edit_graduate(request):
+    """
+    :param request:
+    :return:
+    """
+    instance = get_object_or_404(Account, username=request.user)
+    activity = AccountLogs()
+    if request.method == "POST":
+        graduate = request.POST.get("graduate")
+        instance.graduate = graduate
+        instance.save()
+        activity.title = "Okul Güncelleme."
+        activity.application = "Account"
+        activity.method = "UPDATE"
+        activity.creator = request.user
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı okulunu güncelledi."
+        activity.save()
+        messages.success(request, "Okulunuz başarıyla güncellendi.")
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')
+
+
+@login_required(login_url="login_account")
+def edit_bio(request):
+    """
+    :param request:
+    :return:
+    """
+    instance = get_object_or_404(Account, username=request.user)
+    activity = AccountLogs()
+    if request.method == "POST":
+        bio = request.POST.get("bio")
+        instance.bio = bio
+        instance.save()
+        activity.title = "Biyografi Güncelleme."
+        activity.application = "Account"
+        activity.method = "UPDATE"
+        activity.creator = request.user
+        activity.createdDate = datetime.datetime.now()
+        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+            activity.creator) + " kullanıcısı biyografisini güncelledi."
+        activity.save()
+        messages.success(request, "Biyografiniz başarıyla güncellendi.")
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')

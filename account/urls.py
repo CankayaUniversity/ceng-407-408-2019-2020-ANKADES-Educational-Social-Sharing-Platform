@@ -6,8 +6,10 @@ from account.views import views, edit
 
 urlpatterns = [
     # Current User
-    path('ayarlar', edit.edit_profile, name="edit_profile"),
+    path('ayarlar/', edit.edit_profile, name="edit_profile"),
     path('ayarlar/resim-ekle', edit.edit_profile_photo, name="edit_profile_photo"),
+    path('ayarlar/okul-ekle/', edit.edit_graduate, name="edit_graduate"),
+    path('ayarlar/biyografi-ekle/', edit.edit_bio, name="edit_bio"),
     path('ayarlar/email-duzenle', edit.edit_email, name="edit_email"),
     path('ayarlar/kullanici-adi-duzenle', edit.edit_username, name="edit_username"),
     path('ayarlar/sifre-yenile', edit.edit_password, name="edit_password"),
