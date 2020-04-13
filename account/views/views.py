@@ -341,7 +341,7 @@ def user_questions(self, username):
 def get_social_media(self, slug):
     try:
         socialMedia = get_object_or_404(SocialMedia, slug=slug)
-        return socialMedia.id
+        return socialMedia
     except:
         socialMedia = None
         return socialMedia

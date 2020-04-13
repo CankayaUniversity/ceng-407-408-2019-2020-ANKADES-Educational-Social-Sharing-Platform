@@ -12,8 +12,7 @@
                             <span class="username"><a href="{% url 'account_detail' instance.creator.username %}">{{ instance.creator.get_full_name }}</a></span>
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
                         </div>
-
-                        {% if instance.creator == request.user or userGroup == 'admin' %}
+                        {% if instance.creator == request.user or userGroup == 'admin' or userGroup == 'moderator' %}
                             <span class="float-right">
                                 <a class="btn btn-danger btn-md"
                                    href="{% url 'delete_question' instance.slug %}">

@@ -161,21 +161,25 @@
                                                         <form method="post"
                                                               action="{% url 'add_social_media_to_user' %}">
                                                             {% csrf_token %}
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control"
-                                                                       name="{{ socialMedia.slug }}"
-                                                                       value="
-
-
-
-
-
-                                                                               {% if accountSocialMedia.socialMediaId.slug == socialMedia.slug %}{{ accountSocialMedia.url }}{% endif %}"
-                                                                       placeholder="URL (https://{% if socialMedia.slug == 'google-drive' %}drive.google.com{% else %}www.{{ socialMedia.slug }}.com/{{ currentUser.username }}{% endif %})">
-                                                                <span class="input-group-append">
-                                                                        <button type="submit"
-                                                                                class="btn btn-success btn-md">Hesabı Ekle</button>
-                                                                    </span>
+                                                            <div class="form-group row">
+                                                                <label for="{{ socialMedia.slug }}"
+                                                                       class="col-sm-2 col-form-label">{{ socialMedia.url }}</label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           id="{{ socialMedia.slug }}"
+                                                                           name="{{ socialMedia.slug }}"
+                                                                           placeholder="kullaniciadiniz"
+                                                                            {% if accountSocialMedia.socialMediaId.slug == socialMedia.slug %}
+                                                                           value="{{ accountSocialMedia.socialMediaUsername }}"
+                                                                            {% endif %}>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="offset-sm-2 col-sm-10">
+                                                                    <button type="submit" class="btn btn-success">
+                                                                        Kaydet
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </form>
                                                     </td>

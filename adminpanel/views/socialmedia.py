@@ -116,10 +116,8 @@ def admin_add_social_media(request):
     activity = AdminLogs()
     if request.method == "POST" and request.FILES['media']:
         title = request.POST.get("title")
+        url = request.POST.get("url")
         isActive = request.POST.get("isActive") == 'on'
-        media = request.FILES['media']
-        fs = FileSystemStorage()
-        fs.save(media.name, media)
         if SocialMedia.objects.filter(title=title):
             activity.title = "Sosyal Medya Ekleme: " + str(currentUser)
             activity.application = "SocialMedia"
@@ -132,7 +130,7 @@ def admin_add_social_media(request):
             messages.error(request, "Bu sosyal medya daha önce eklenmiş")
             return redirect("admin_add_social_media")
         else:
-            new_sm = SocialMedia(title=title, media=media, isActive=isActive)
+            new_sm = SocialMedia(title=title, isActive=isActive, url=url)
             new_sm.save()
             activity.title = "Sosyal Medya Güncelleme: " + str(currentUser)
             activity.application = "Account"

@@ -129,28 +129,16 @@ def add_social_media_to_user(request):
         facebook = request.POST.get('facebook')
         if facebook:
             fb = get_social_media(request, 'facebook')
-            new_fb = AccountSocialMedia(userId=currentUser, socialMediaId_id=fb, url=facebook)
+            new_fb = AccountSocialMedia(userId=currentUser, socialMediaId=fb)
+            new_fb.url = "https://facebook.com/" + str(facebook)
+            new_fb.socialMediaUsername = str(facebook)
             new_fb.save()
-        twitter = request.POST.get('twitter')
-        if twitter:
-            tw = get_social_media(request, 'twitter')
-            new_tw = AccountSocialMedia(userId=currentUser, socialMediaId_id=tw, url=twitter)
-            new_tw.save()
-        youtube = request.POST.get('youtube')
-        if youtube:
-            yt = get_social_media(request, 'youtube')
-            new_yt = AccountSocialMedia(userId=currentUser, socialMediaId_id=yt, url=youtube)
-            new_yt.save()
-        github = request.POST.get('github')
-        if github:
-            git = get_social_media(request, 'github')
-            new_git = AccountSocialMedia(userId=currentUser, socialMediaId_id=git, url=github)
-            new_git.save()
-        bitbucket = request.POST.get('bitbucket')
-        medium = request.POST.get('medium')
-        google_drive = request.POST.get('google_drive')
         linkedin = request.POST.get('linkedin')
-        udemy = request.POST.get('udemy')
+        if linkedin:
+            linked = get_social_media(request, 'linkedin')
+            new_linkedIn = AccountSocialMedia(userId=currentUser, socialMediaId=linked)
+            new_linkedIn.url = "https://linkedin.com/" + str(linkedin)
+            new_linkedIn.save()
         activity.title = "Sosyal Medya Hesabı Ekleme."
         activity.application = "Account"
         activity.method = "POST"
@@ -162,7 +150,7 @@ def add_social_media_to_user(request):
         messages.success(request, "Değişiklikler başarıyla kaydedildi.")
         return redirect("index")
         # return redirect("index")
-        # return render(request, "ankades/account/edit-profile.html", {'active_tab': 'socialmedia'})
+    # return render(request, "ankades/account/edit-profile.html", {'active_tab': 'socialmedia'})
     return render(request, "ankades/account/edit-profile.html", context)
 
 

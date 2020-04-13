@@ -125,14 +125,14 @@ class SocialMedia(models.Model):
     isActive = models.BooleanField(default=True, null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    media = models.FileField(null=True, blank=True, default=None)
+    url = models.URLField(null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         db_table = "SocialMedia"
-        ordering = ["title"]
+        ordering = ["slug"]
 
 
 class AccountSocialMedia(models.Model):
@@ -140,6 +140,7 @@ class AccountSocialMedia(models.Model):
     userId = models.ForeignKey(Account, on_delete=models.PROTECT)
     socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.PROTECT)
     url = models.URLField(null=True, blank=True)
+    socialMediaUsername = models.CharField(null=True, blank=True, max_length=32)
 
     class Meta:
         db_table = "AccountSocialMedia"
