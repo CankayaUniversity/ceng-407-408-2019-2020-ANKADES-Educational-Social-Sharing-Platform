@@ -73,8 +73,8 @@ urlpatterns = [
 
     # Article Category
     path('article-categories/', article.admin_article_categories, name="admin_article_categories"),
-    path('isactive-article-category/<slug:slug>/', article.admin_isactive_article_category,
-         name="admin_isactive_article_category"),
+    url(r'^isactive-article-category/(?P<slug>[\w-]+)/$', article.admin_isactive_article_category,
+        name="admin_isactive_article_category"),
     path('delete-article-category/<slug:slug>/', article.admin_delete_article_category,
          name="admin_delete_article_category"),
     path('add-article-category', article.admin_add_article_category,

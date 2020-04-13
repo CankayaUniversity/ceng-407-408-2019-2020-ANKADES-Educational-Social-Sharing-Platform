@@ -188,9 +188,9 @@ def admin_article_categories(request):
     :param request:
     :return:
     """
-    categories = ArticleCategory.objects.all()
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
+    categories = ArticleCategory.objects.all()
     context = {
         "categories": categories,
         "currentUser": currentUser,
