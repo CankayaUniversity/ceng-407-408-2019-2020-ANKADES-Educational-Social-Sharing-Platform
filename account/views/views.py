@@ -218,6 +218,9 @@ def register_account(request):
             if password and confirm_password and password != confirm_password:
                 messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
                 return render(request, "ankades/registration/register.html", context)
+            elif 6 > username.length() > 16:
+                messages.error(request, "Kullanıcı 6-16 karakter arasında olmalıdır")
+                return render(request, "ankades/registration/register.html", context)
             elif not username.isalnum():
                 messages.error(request, "Kullanıcı adı sadece harf ve rakamlardan oluşmalıdır, boşluk veya noktalama işaretleri kullanılamaz.")
                 return render(request, "ankades/registration/register.html", context)
