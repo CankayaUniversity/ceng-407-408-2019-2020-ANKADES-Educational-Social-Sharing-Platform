@@ -29,12 +29,16 @@
                                class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
                             </a>
                             {% if instance.creator == request.user %}
-                            <a class="btn btn-info btn-md"
-                               href="{% url 'edit_question' instance.slug instance.questionNumber %}">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Düzenle
-                            </a>
+                                <a class="btn btn-info btn-md"
+                                   href="{% url 'edit_question' instance.slug instance.questionNumber %}">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Düzenle
+                                </a>
+                                {#                                <a href="https://twitter.com/share?url={{ request.get_full_path }}&amp;text={{ instance.title }}&amp;hashtags={{ instance.slug }}"#}
+                                {#                                   target="_blank">#}
+                                {#                                    <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter"/>#}
+                                {#                                </a>#}
                             {% endif %}
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ questionAnswers.count }} Yorum</span>
                             <div class="row">
@@ -114,9 +118,16 @@
                                                 {{ answer.content }}
                                             </div>
                                             <div class="timeline-footer">
-                                                <a class="btn btn-primary btn-sm">Oy ver</a>
-                                                <a class="btn btn-primary btn-sm">Cevapla</a>
-                                                {% if instance.creator.username == request.user.username %}<a href="{% url 'confirm_answer' answer.id %}" class="btn btn-primary btn-sm">Onayla</a>{% endif %}
+                                                {% if answer.creator.username != request.user.username %}
+                                                    <a class="btn btn-primary btn-sm">Oy ver</a>
+                                                {% endif %}
+                                                <a class="btn btn-info btn-sm">Cevapla</a>
+                                                {% if instance.creator.username == request.user.username %}
+                                                    <a href="{% url 'confirm_answer' answer.id %}"
+                                                       class="btn btn-success btn-sm">Onayla</a>{% endif %}
+                                                {% if answer.creator.username == request.user.username %}
+                                                    <a href="{% url 'delete_answer' answer.id %}"
+                                                       class="btn btn-danger btn-sm">Sil</a>{% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -124,9 +135,11 @@
                                         {% for reply in answerReply %}
                                             {% if reply.parentId_id == answer.id %}
                                                 <div>
-                                                    <div class="timeline-item p-2" style="background-color: #f8f9fa !important; border:none; box-shadow: none">
-                                                        <img class="img-circle img-sm" src="{{ reply.creator.image.url }}"
-                                                            alt="{{ reply.creator.get_full_name }}">
+                                                    <div class="timeline-item p-2"
+                                                         style="background-color: #f8f9fa !important; border:none; box-shadow: none">
+                                                        <img class="img-circle img-sm"
+                                                             src="{{ reply.creator.image.url }}"
+                                                             alt="{{ reply.creator.get_full_name }}">
                                                         <span class="time"><i
                                                                 class="fas fa-clock"></i> {{ reply.createdDate }}</span>
                                                         <h3 class="timeline-header"><a
@@ -144,6 +157,11 @@
                                     {% endif %}
                                 </div>
                             {% endfor %}
+                        {% else %}
+                            <div class="callout callout-danger col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                <h5>Üzgünüz :(</h5>
+                                <p>Herhangi bir cevap bulunamadı. İlk cevabı sen vermek ister misin ?</p>
+                            </div>
                         {% endif %}
                     </div>
                     <div class="container">
@@ -151,7 +169,7 @@
                               action="{% url 'add_question_answer' slug=instance.slug questionNumber=instance.questionNumber %}">
                             {% csrf_token %}
                             <p class="comment-form-comment form-group has-placeholder">
-                                <label for="content">Cevap</label>
+                                <label for="content">Bir Cevap Yaz</label>
                                 <i class="fa fa-edit color-main"></i>
                                 <textarea class="form-control" id="content" name="content"
                                           cols="45"

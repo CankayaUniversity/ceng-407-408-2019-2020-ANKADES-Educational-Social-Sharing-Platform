@@ -1,6 +1,7 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
@@ -158,10 +159,16 @@ def confirm_answer(request, id):
     try:
         getAnswer = QuestionComment.objects.get(id=id)
         if getAnswer.questionId.creator.username == currentUser.username:
-            getAnswer.isCertified = True
-            getAnswer.save()
-            messages.success(request, "Sorunun cevabını doğruladığınız için teşekkür ederiz.")
-            return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+            if getAnswer.isCertified:
+                getAnswer.isCertified = False
+                getAnswer.save()
+                messages.success(request, "Cevabın doğruluğunu iptal ettiniz.")
+                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+            else:
+                getAnswer.isCertified = True
+                getAnswer.save()
+                messages.success(request, "Cevabın doğruluğunu onayladınız.")
+                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
         else:
             return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
     except:
@@ -169,8 +176,26 @@ def confirm_answer(request, id):
         return render(request, "404.html")
 
 
+@login_required(login_url="login_account")
+def delete_answer(request, id):
+    currentUser = request.user
+    try:
+        instance = QuestionComment.objects.get(id=id)
+        slug = instance.questionId.slug
+        questionNumber = instance.questionId.questionNumber
+        if instance.questionId.creator == currentUser or instance.creator == currentUser:
+            instance.delete()
+            # getAnswer.save()
+            messages.success(request, "Sorunun cevabını doğruladığınız için teşekkür ederiz.")
+            return redirect(reverse("question_detail", kwargs={"slug": slug, "questionNumber": questionNumber}))
+        else:
+            return redirect("all_questions")
+    except:
+        messages.error(request, "Soru bulunamadı.")
+        return render(request, "404.html")
 
 
+@login_required(login_url="login_account")
 def edit_question(request, slug, questionNumber):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
