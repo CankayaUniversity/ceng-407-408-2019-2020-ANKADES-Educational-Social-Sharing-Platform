@@ -185,7 +185,6 @@ def delete_answer(request, id):
         questionNumber = instance.questionId.questionNumber
         if instance.questionId.creator == currentUser or instance.creator == currentUser:
             instance.delete()
-            # getAnswer.save()
             messages.success(request, "Sorunun cevabını doğruladığınız için teşekkür ederiz.")
             return redirect(reverse("question_detail", kwargs={"slug": slug, "questionNumber": questionNumber}))
         else:
@@ -280,7 +279,6 @@ def add_question_answer(request, slug, questionNumber):
             new_answer.isRoot = True
             new_answer.answerNumber = get_random_string(length=32)
             new_answer.save()
-            new_answer.parentId_id = new_answer.id
             new_answer.save()
             activity.description = "Soruya yeni bir cevap eklendi. İşlemi yapan kişi: " + str(
                 activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + " ."

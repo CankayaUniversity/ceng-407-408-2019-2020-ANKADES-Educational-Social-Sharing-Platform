@@ -125,7 +125,7 @@
                                                 {% if instance.creator.username == request.user.username %}
                                                     <a href="{% url 'confirm_answer' answer.id %}"
                                                        class="btn btn-success btn-sm">Onayla</a>{% endif %}
-                                                {% if answer.creator.username == request.user.username %}
+                                                {% if answer.creator.username == request.user.username or instance.creator.username == request.user.username %}
                                                     <a href="{% url 'delete_answer' answer.id %}"
                                                        class="btn btn-danger btn-sm">Sil</a>{% endif %}
                                             </div>
