@@ -32,7 +32,7 @@
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
                                         <a href="{% url 'question_category_page' qsc.slug %}" class="nav-link">
-                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <i style="margin-left: 1.5em; font-size: 1.0em" class="nav-icon far fa-dot-circle text-default"></i>
                                             <p>{{ qsc.title }}<i class="right fas fa-angle-left"></i></p>
                                         </a>
                                         {% if questionLowerCategories %}
@@ -40,7 +40,10 @@
                                                 {% if qlc.parentId_id == qsc.id %}
                                                     <ul class="nav nav-treeview">
                                                         <li class="nav-item">
-                                                            <a href="{% url 'question_category_page' qlc.slug %}" class="nav-link">
+                                                            <a href="{% url 'question_category_page' qlc.slug %}"
+                                                               class="nav-link">
+                                                                <i style="margin-left: 3em; font-size: 1.0em"
+                                                                   class="nav-icon far fa-circle text-success"></i>
                                                                 <p>{{ qlc.title }}</p>
                                                             </a>
                                                         </li>
