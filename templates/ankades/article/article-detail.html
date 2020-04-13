@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        {% if instance.media %}
+                        {% if instance.media != "no-image-available.png" %}
                             <img class="img-fluid pad" src="{{ instance.media.url }}" alt="{{ instance.title }}" width="100%" style="height: 800px !important;">
                         {% endif %}
                         <div class="container-fluid container p-5" style="background: #f8f9fa">

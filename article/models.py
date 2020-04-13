@@ -41,7 +41,7 @@ class Article(models.Model):
     title = models.CharField(max_length=254, null=False, blank=False)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = RichTextField(null=False, blank=False)
-    media = models.FileField(null=True, blank=True, storage=ArticleMediaStorage())
+    media = models.FileField(null=True, blank=True, storage=ArticleMediaStorage(), default="no-image-available.png")
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     view = models.PositiveIntegerField(default=0)

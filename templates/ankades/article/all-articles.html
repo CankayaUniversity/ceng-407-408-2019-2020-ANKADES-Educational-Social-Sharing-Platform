@@ -14,7 +14,7 @@
                                 <div class="card">
                                     {% if article.media %}
                                         <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
-                                             width="504" height="180">
+                                             width="504" height="250">
                                         <div class="card-body">
                                             <h5 class="card-title"><a
                                                     href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
