@@ -282,23 +282,23 @@ def edit_article(request, slug):
 def article_detail(request, username, slug):
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     try:
         instance = Article.objects.get(slug=slug)
+        articleCategories = ArticleCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        questionCategories = QuestionCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+
         if instance.creator.username != username:
             messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
             return render(request, "404.html")
         articles = Article.objects.all()
         relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
         articleComments = ArticleComment.objects.filter(articleId__slug=slug)
-        articleCategories = ArticleCategory.objects.all()
         instance.view += 1
         instance.save()
         context = {

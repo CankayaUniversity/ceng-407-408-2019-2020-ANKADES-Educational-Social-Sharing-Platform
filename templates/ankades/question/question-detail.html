@@ -8,10 +8,21 @@
                 <div class="card card-widget mt-3 p-3 col-lg-12">
                     <div class="card-header">
                         <div class="user-block">
-                            <img class="img-circle" src="{{ instance.creator.image.url }}" alt="User Image">
-                            <span class="username"><a href="#">{{ instance.creator.get_full_name }}</a></span>
+                            <img class="img-circle" src="{{ instance.creator.image.url }}" alt="{{ instance.creator.get_full_name }}">
+                            <span class="username"><a href="{% url 'account_detail' instance.creator.username %}">{{ instance.creator.get_full_name }}</a></span>
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
                         </div>
+
+                        {% if instance.creator == request.user or userGroup == 'admin' %}
+                            <span class="float-right">
+                                <a class="btn btn-danger btn-md"
+                                   href="{% url 'delete_question' instance.slug instance.questionNumber %}">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Soruyu Sil
+                                </a>
+                            </span>
+                        {% endif %}
                     </div>
                     <div class="card-body">
                         <div class="container-fluid container p-5"
@@ -109,11 +120,11 @@
                                         {% endif %}
                                         <div class="timeline-item p-2">
                                             <img class="img-circle img-sm" src="{{ answer.creator.image.url }}"
-                                                 alt="User Image">
+                                                 alt="{{ answer.creator.get_full_name }}">
                                             <span class="time"><i
                                                     class="fas fa-clock"></i> {{ answer.createdDate }}</span>
                                             <h3 class="timeline-header ml-2 no-border"><a
-                                                    href="#">{{ answer.creator.get_full_name }}</a></h3>
+                                                    href="{% url 'account_detail' answer.creator.username %}">{{ answer.creator.get_full_name }}</a></h3>
                                             <div class="timeline-body">
                                                 {{ answer.content }}
                                             </div>

@@ -133,6 +133,14 @@ def question_detail(request, slug, questionNumber):
     userGroup = current_user_group(request, currentUser)
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        articleCategories = ArticleCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        questionCategories = QuestionCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
         instance.view += 1
         instance.save()
         questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, questionId__questionNumber=questionNumber, isRoot=True, isReply=False)
@@ -150,6 +158,12 @@ def question_detail(request, slug, questionNumber):
         "questionAnswers": questionAnswers,
         "certifiedAnswer": certifiedAnswer,
         "answerReply": answerReply,
+        "articleCategories": articleCategories,
+        "articleSubCategories": articleSubCategories,
+        "articleLowerCategories": articleLowerCategories,
+        "questionCategories": questionCategories,
+        "questionSubCategories": questionSubCategories,
+        "questionLowerCategories": questionLowerCategories,
     }
     return render(request, "ankades/question/question-detail.html", context)
 
@@ -185,7 +199,7 @@ def delete_answer(request, id):
         questionNumber = instance.questionId.questionNumber
         if instance.questionId.creator == currentUser or instance.creator == currentUser:
             instance.delete()
-            messages.success(request, "Sorunun cevabını doğruladığınız için teşekkür ederiz.")
+            messages.success(request, "Cevap başarıyla silindi.")
             return redirect(reverse("question_detail", kwargs={"slug": slug, "questionNumber": questionNumber}))
         else:
             return redirect("all_questions")
@@ -338,8 +352,28 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
         return redirect("all_questions")
 
 
-def delete_question(request, questionNumber):
-    return None
+def delete_question(request, slug, questionNumber):
+    currentUser = request.user
+    userGroup = current_user_group(request, currentUser)
+    activity = AccountLogs()
+    activity.application = "Question"
+    activity.creator = currentUser
+    activity.title = "Soru Silme"
+    try:
+        instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
+        if request.user == instance.creator or userGroup == "admin" or userGroup == "moderator":
+            instance.delete()
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "DELETE"
+            activity.description = "Soru silindi. İşlemi yapan kişi: " + str(
+                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+            activity.save()
+            return redirect("all_questions")
+        else:
+            messages.error(request, "Hata !")
+            return render(request, "ankades/index.html")
+    except:
+        return render(request, "404.html")
 
 
 def question_category_page(request, slug):

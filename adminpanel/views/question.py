@@ -82,7 +82,7 @@ def admin_question_categories(request):
 
 
 @login_required(login_url="login_admin")
-def admin_delete_article_category(request, slug):
+def admin_delete_question_category(request, slug):
     """
     :param request:
     :param slug:

@@ -8,14 +8,14 @@
                 <div class="card card-widget mt-3 p-3 col-lg-12">
                     <div class="card-header">
                         <div class="user-block">
-                            <img class="img-circle" src="{{ instance.creator.image.url }}" alt="User Image">
+                            <img class="img-circle" src="{{ instance.creator.image.url }}" alt="{{ instance.creator.get_full_name }}">
                             <span class="username"><a href="{% url 'account_detail' instance.creator %}">{{ instance.creator.get_full_name }}</a></span>
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}</span>
                         </div>
                     </div>
                     <div class="card-body">
                         {% if instance.media %}
-                            <img class="img-fluid pad" src="{{ instance.media.url }}" alt="Photo" width="100%">
+                            <img class="img-fluid pad" src="{{ instance.media.url }}" alt="{{ instance.title }}" width="100%" style="height: 800px !important;">
                         {% endif %}
                         <div class="container-fluid container p-5" style="background: #f8f9fa">
                             <p style="font-size: 3em">{{ instance.title }}</p>
@@ -81,7 +81,7 @@
                                 <div class="card-footer card-comments">
                                     <div class="card-comment">
                                         <img class="img-circle img-sm" src="{{ ac.creator.image.url }}"
-                                             alt="User Image">
+                                             alt="{{ ac.creator.get_full_name }}">
                                         <div class="comment-text">
                                         <span class="username">
                                             <a href="{% url 'account_detail' ac.creator.username %}">{{ ac.creator.get_full_name }}</a>

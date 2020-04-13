@@ -15,21 +15,38 @@
                                     {% if article.media %}
                                         <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
                                              width="504" height="180">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><a
+                                                    href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                            </h5>
+                                            <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                            <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
+                                                Yorum</small>
+                                            <small class="text-muted ml-2 float-right">{{ article.likes.count }}
+                                                Beğeni</small>
+                                            <small class="text-muted float-right">{{ article.view }}
+                                                Görüntülenme</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="card-body">
+                                            <h5 class="card-title" style="margin-top: 177px"><a
+                                                    href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                            </h5>
+                                            <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                            <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
+                                                Yorum</small>
+                                            <small class="text-muted ml-2 float-right">{{ article.likes.count }}
+                                                Beğeni</small>
+                                            <small class="text-muted float-right">{{ article.view }}
+                                                Görüntülenme</small>
+                                        </div>
                                     {% endif %}
-                                    <div class="card-body">
-                                        <h5 class="card-title"><a
-                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
-                                        </h5>
-                                        <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
-                                        <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
-                                            Yorum</small>
-                                        <small class="text-muted ml-2 float-right">{{ article.likes.count }}
-                                            Beğeni</small>
-                                        <small class="text-muted float-right">{{ article.view }} Görüntülenme</small>
-                                    </div>
                                 </div>
                             </div>
                         {% endfor %}

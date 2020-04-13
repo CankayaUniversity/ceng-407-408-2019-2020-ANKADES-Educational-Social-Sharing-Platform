@@ -112,7 +112,6 @@ def admin_add_article_category(request):
             except:
                 instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
-                instance.parentId.nodeLeft = instance.id
                 # jsonField = {"childId": instance.id}
                 # instance.parentId.tree = json.dumps(jsonField)ç
                 instance.parentId_id = value
@@ -202,36 +201,43 @@ def admin_article_categories(request):
 
 @login_required(login_url="login_admin")
 def admin_isactive_article_category(request, slug):
-    instance = get_object_or_404(ArticleCategory, slug=slug)
     currentUser = request.user
     userGroup = current_user_group(request, currentUser)
     activity = AdminLogs()
-    if instance.isActive is True:
-        instance.isActive = False
-        instance.save()
-        activity.title = "Makale Kategorisini Aktifleştirme: " + str(currentUser)
-        activity.application = "Article"
-        activity.createdDate = datetime.datetime.now()
-        activity.method = "UPDATE"
-        activity.creator = currentUser
-        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı makale kategorisinin aktifliğini kaldırdı."
-        activity.save()
-        messages.success(request, "Makale kategorisi artık aktif değil.")
-        return redirect("admin_article_categories")
-    else:
-        instance.isActive = True
-        instance.save()
-        activity.title = "Makale Kategorisini Aktifleştirme: " + str(currentUser)
-        activity.application = "Article"
-        activity.createdDate = datetime.datetime.now()
-        activity.method = "UPDATE"
-        activity.creator = currentUser
-        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı makale kategorisini aktifleştirdi."
-        activity.save()
-        messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
-        return redirect("admin_article_categories")
+    try:
+        instance = ArticleCategory.objects.get(slug=slug)
+        if userGroup == 'admin':
+            if instance.isActive is True:
+                instance.isActive = False
+                instance.save()
+                activity.title = "Makale Kategorisini Aktifleştirme: " + str(currentUser)
+                activity.application = "Article"
+                activity.createdDate = datetime.datetime.now()
+                activity.method = "UPDATE"
+                activity.creator = currentUser
+                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı makale kategorisinin aktifliğini kaldırdı."
+                activity.save()
+                messages.success(request, "Makale kategorisi artık aktif değil.")
+                return redirect("admin_article_categories")
+            else:
+                instance.isActive = True
+                instance.save()
+                activity.title = "Makale Kategorisini Aktifleştirme: " + str(currentUser)
+                activity.application = "Article"
+                activity.createdDate = datetime.datetime.now()
+                activity.method = "UPDATE"
+                activity.creator = currentUser
+                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+                    activity.creator) + " kullanıcısı makale kategorisini aktifleştirdi."
+                activity.save()
+                messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
+                return redirect("admin_article_categories")
+        else:
+            messages.error(request, "Yetkiniz yok.")
+            return redirect("admin_article_categories")
+    except:
+        return render(request, "404.html")
 
 
 @login_required(login_url="login_admin")

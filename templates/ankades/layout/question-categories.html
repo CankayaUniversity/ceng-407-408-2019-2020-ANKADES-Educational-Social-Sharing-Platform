@@ -20,8 +20,8 @@
             {% for qc in questionCategories %}
                 <li class="nav-item has-treeview">
                     <a href="{% url 'question_category_page' qc.slug %}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
                         <p>
+                            <i style="margin-left: 0.5em; font-size: 1.0em" class="far fa-circle nav-icon"></i>
                             {{ qc.title }}
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -32,8 +32,12 @@
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
                                         <a href="{% url 'question_category_page' qsc.slug %}" class="nav-link">
-                                            <i style="margin-left: 1.5em; font-size: 1.0em" class="nav-icon far fa-dot-circle text-default"></i>
-                                            <p>{{ qsc.title }}<i class="right fas fa-angle-left"></i></p>
+                                            <p>
+                                                <i style="margin-left: 1.5em; font-size: 1.0em"
+                                                   class="nav-icon far fa-dot-circle text-default"></i>
+                                                {{ qsc.title }}<i
+                                                    class="right fas fa-angle-left"></i>
+                                            </p>
                                         </a>
                                         {% if questionLowerCategories %}
                                             {% for qlc in questionLowerCategories %}
@@ -42,9 +46,11 @@
                                                         <li class="nav-item">
                                                             <a href="{% url 'question_category_page' qlc.slug %}"
                                                                class="nav-link">
-                                                                <i style="margin-left: 3em; font-size: 1.0em"
-                                                                   class="nav-icon far fa-circle text-success"></i>
-                                                                <p>{{ qlc.title }}</p>
+                                                                <p>
+                                                                    <i style="margin-left: 3em; font-size: 1.0em"
+                                                                       class="nav-icon far fa-circle text-success"></i>
+                                                                    {{ qlc.title }}
+                                                                </p>
                                                             </a>
                                                         </li>
                                                     </ul>
