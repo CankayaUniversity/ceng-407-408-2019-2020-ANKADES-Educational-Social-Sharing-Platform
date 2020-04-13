@@ -184,6 +184,7 @@ def edit_username(request):
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     instance = get_object_or_404(Account, username=currentUser)
     activity = AccountLogs()
+    getFollower = Account.objects.all()
     if request.method == "POST":
         username = request.POST.get("username")
         instance.username = username
@@ -200,6 +201,7 @@ def edit_username(request):
         return render(request, "ankades/account/edit-profile.html", {'active_tab': 'username'})
     context = {
         "instance": instance,
+        "getFollower": getFollower,
         "currentUser": currentUser,
         "articleCategories": articleCategories,
         "articleSubCategories": articleSubCategories,

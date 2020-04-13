@@ -42,11 +42,6 @@
                                     <b>Friends</b> <a class="float-right">13,287</a>
                                 </li>
                             </ul>
-                            {% if userDetail.username != currentUser.username %}
-                                <a type="button" href="{% url 'follow_account' userDetail.username %}"
-                                   class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i> Takip
-                                </a>
-                            {% endif %}
                         </div>
                         {#                        <!-- /.card-body -->#}
                     </div>
@@ -170,6 +165,8 @@
                                                                 <input type="text" class="form-control"
                                                                        name="{{ socialMedia.slug }}"
                                                                        value="
+
+
 
 
 

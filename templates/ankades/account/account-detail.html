@@ -42,7 +42,16 @@
                             </ul>
                             {% if userDetail.username != currentUser.username %}
                                 <a type="button" href="{% url 'follow_account' userDetail.username %}"
-                                   class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i> Takip
+                                   class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i>
+                                    {% if followings %}
+                                        {% for following in followings %}
+                                            {% if following.followingId == currentUser %}
+                                                Takibi Bırak
+                                            {% else %}
+                                                Takip
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </a>
                             {% endif %}
                         </div>
