@@ -352,7 +352,7 @@ def add_article_comment(request, slug):
             activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
         activity.save()
         messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
-    return redirect("all_articles")
+    return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
 
 
 class ArticleLikeToggle(RedirectView):
