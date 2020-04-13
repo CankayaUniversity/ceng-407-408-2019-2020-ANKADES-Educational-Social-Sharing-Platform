@@ -112,6 +112,9 @@ def admin_add_article_category(request):
             except:
                 instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
+                instance.parentId.nodeLeft = instance.id
+                # jsonField = {"childId": instance.id}
+                # instance.parentId.tree = json.dumps(jsonField)ç
                 instance.parentId_id = value
                 instance.save()
                 activity.title = "Makale Kategorisi Ekleme: " + str(currentUser)

@@ -12,18 +12,18 @@
         <i class="nav-icon fas fa-circle"></i>
         <p>
             Kategoriler
-            <i class="right fas fa-angle-left"></i>
+            <i class="right fas fa-angle-right"></i>
         </p>
     </a>
     <ul class="nav nav-treeview">
         {% if articleCategories %}
             {% for ac in articleCategories %}
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{% url 'article_category_page' ac.slug %}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>
                             {{ ac.title }}
-                            <i class="right fas fa-angle-left"></i>
+                            <i class="right fas fa-angle-right"></i>
                         </p>
                     </a>
                     {% if articleSubCategories %}
@@ -31,19 +31,21 @@
                             {% if asc.parentId_id == ac.id %}
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="far fa-dot-circle nav-icon"></i>
-                                            <p>{{ asc.title }}<i class="right fas fa-angle-left"></i></p>
+                                        <a href="{% url 'article_category_page' asc.slug %}" class="nav-link">
+                                            <i style="margin-left: 1.5em; font-size: 1.0em" class="nav-icon far fa-dot-circle text-default"></i>
+                                            <p style="margin-left: 0.25em">{{ asc.title }}<i
+                                                    class="right fas fa-angle-right"></i></p>
                                         </a>
                                         {% if articleLowerCategories %}
                                             {% for alc in articleLowerCategories %}
                                                 {% if alc.parentId_id == asc.id %}
                                                     <ul class="nav nav-treeview">
-                                                        <li class="nav-item">
-                                                            <a href="{% url 'article_category_page' alc.slug %}" class="nav-link">
-                                                                <p>{{ alc.title }}</p>
-                                                            </a>
-                                                        </li>
+                                                        <a href="{% url 'article_category_page' alc.slug %}"
+                                                           class="nav-link">
+                                                            <i style="margin-left: 3em; font-size: 1.0em" class="nav-icon far fa-circle text-success"></i>
+                                                            <p>{{ alc.title }}<i
+                                                                    class="right fas fa-angle-right"></i></p>
+                                                        </a>
                                                     </ul>
                                                 {% endif %}
                                             {% endfor %}
