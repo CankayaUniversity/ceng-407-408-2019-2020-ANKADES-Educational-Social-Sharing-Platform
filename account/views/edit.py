@@ -71,6 +71,10 @@ def edit_profile(request):
 
 @login_required(login_url="login_account")
 def edit_profile_photo(request):
+    """
+    :param request:
+    :return:
+    """
     try:
         instance = Account.objects.get(username=request.user.username)
         if request.method == "POST":
@@ -90,6 +94,10 @@ def edit_profile_photo(request):
 
 @login_required(login_url="login_admin")
 def add_social_media_to_user(request):
+    """
+    :param request:
+    :return:
+    """
     activity = AccountLogs()
     if request.method == "POST":
         facebook = request.POST.get('facebook')
@@ -145,6 +153,10 @@ def edit_username(request):
 
 @login_required(login_url="login_account")
 def edit_password(request):
+    """
+    :param request:
+    :return:
+    """
     try:
         instance = Account.objects.get(username=request.user)
         currentPassword = instance.password

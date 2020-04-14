@@ -1,5 +1,3 @@
-import datetime
-
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -8,8 +6,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
-from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, \
-    AccountLogs, SocialMedia, AccountFollower
+from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, SocialMedia, AccountFollower
 from article.models import Article, ArticleCategory
 from question.models import Question, QuestionCategory
 
@@ -86,6 +83,12 @@ def account_detail(request, username):
 
 
 def get_user_follower(request, username, userDetail):
+    """
+    :param request:
+    :param username:
+    :param userDetail:
+    :return:
+    """
     isFollowerExist = False
     try:
         AccountFollower.objects.get(followerId__username=username, followingId__username=userDetail)
@@ -97,6 +100,11 @@ def get_user_follower(request, username, userDetail):
 
 @login_required(login_url="login_account")
 def follow_account(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     try:
         getFollowing = Account.objects.get(username=username)
         try:
@@ -220,6 +228,11 @@ def register_account(request):
 
 
 def get_requested_user(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     userGroup = current_user_group(request, username)
     userDetail = get_object_or_404(Account, username=username)
     articleCategories = ArticleCategory.objects.filter(
@@ -244,6 +257,11 @@ def get_requested_user(request, username):
 
 
 def current_user_group(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
     try:
         group = AccountGroup.objects.get(userId__username=username)
         return str(group.groupId)
@@ -253,6 +271,11 @@ def current_user_group(self, username):
 
 
 def user_group(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
     try:
         group = AccountGroup.objects.get(userId__username=username)
         return str(group.groupId)
@@ -262,6 +285,11 @@ def user_group(self, username):
 
 
 def current_user_permission(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
     try:
         userPermission = AccountPermission.objects.get(userId__username=username)
         return str(userPermission.permissionId)
@@ -271,6 +299,11 @@ def current_user_permission(self, username):
 
 
 def user_social_media(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
     try:
         usm = AccountSocialMedia.objects.get(userId__username=username)
         return str(usm)
@@ -280,6 +313,11 @@ def user_social_media(self, username):
 
 
 def user_articles(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
     try:
         articles = Article.objects.filter(creator__username=username)
         return articles
@@ -289,6 +327,11 @@ def user_articles(self, username):
 
 
 def user_questions(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
     try:
         questions = Question.objects.filter(creator__username=username)
         return questions
@@ -298,6 +341,11 @@ def user_questions(self, username):
 
 
 def get_social_media(self, slug):
+    """
+    :param self:
+    :param slug:
+    :return:
+    """
     try:
         socialMedia = get_object_or_404(SocialMedia, slug=slug)
         return socialMedia

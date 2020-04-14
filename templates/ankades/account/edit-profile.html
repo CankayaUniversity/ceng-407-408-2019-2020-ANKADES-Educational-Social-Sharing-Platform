@@ -144,7 +144,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                {#                                end of tab content#}
                                 <div class="tab-pane" id="graduate">
                                     <form class="form-horizontal" role="form" action="{% url 'edit_graduate' %}"
                                           method="post" id="edit-graduate">
@@ -163,7 +162,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                {#                                end of tab content#}
                                 <div class="tab-pane" id="bio">
                                     <form class="form-horizontal" role="form" action="{% url 'edit_bio' %}"
                                           method="post" id="edit-bio">
@@ -182,7 +180,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                {#                                end of tab content#}
                                 <div class="tab-pane" id="socialmedia">
                                     <p>Not: Şu anda sosyal medya hesaplarında sorun olduğundan dolayı düzgün çalışmıyor. Yakında güncellenecek.</p>
                                     <table class="table table-bordered table-striped">
@@ -234,7 +231,6 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                {#                                end of tab content#}
                                 <div class="tab-pane {% if active_tab == 'email' %}active{% endif %}" id="email">
                                     <form class="form-horizontal" role="form" method="post"
                                           action="{% url 'edit_email' %}"
@@ -255,7 +251,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                {#                                end of tab content#}
                                 <div class="tab-pane {% if active_tab == 'username' %}active{% endif %}" id="username">
                                     <p>
                                         <b>"{{ instance.username }}"</b> olan kullanıcı adınızı gerçekten değiştirmek
@@ -273,7 +268,6 @@
                                             data-target="#modal-edit-username">Değiştir
                                     </button>
                                 </div>
-                                {#                                end of tab content#}
                                 <div class="tab-pane {% if active_tab == 'password' %}active{% endif %}" id="password">
                                     <form class="form-horizontal" role="form" method="post" id="edit-password"
                                           action="{% url 'edit_password' %}">
@@ -304,7 +298,6 @@
                                                        placeholder="Yeni Şifreniz Tekrar" required>
                                             </div>
                                         </div>
-
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
                                                 <button type="submit" class="btn btn-success">Kaydet</button>
@@ -312,8 +305,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                {#                                end of tab content#}
-                                {#                                Modal for username#}
                                 <div class="modal fade"
                                      id="modal-edit-username">
                                     <div class="modal-dialog">
@@ -351,23 +342,13 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <!-- /.modal-content -->
                                     </div>
-                                    <!-- /.modal-dialog -->
                                 </div>
                             </div>
-                            <!-- /.tab-content -->
                         </div>
-                        <!-- /.tab-pane -->
-
-                    </div><!-- /.card-body -->
+                    </div>
                 </div>
-                <!-- /.nav-tabs-custom -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
-        </div><!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
 {% endblock %}

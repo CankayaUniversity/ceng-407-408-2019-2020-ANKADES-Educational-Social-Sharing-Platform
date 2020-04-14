@@ -16,6 +16,10 @@ from exam.models import School
 
 @login_required(login_url="login_admin")
 def admin_all_users(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     accounts = Account.objects.all().order_by('-date_joined')
     context = {
@@ -27,6 +31,10 @@ def admin_all_users(request):
 
 @login_required(login_url="login_admin")
 def admin_active_users(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     activeUsers = OnlineUserActivity.get_user_activities()
     context = {
@@ -38,6 +46,10 @@ def admin_active_users(request):
 
 @login_required(login_url="login_admin")
 def admin_all_user_groups(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
@@ -56,18 +68,11 @@ def admin_all_user_groups(request):
 
 
 @login_required(login_url="login_admin")
-def admin_my_account(request, username):
-    userDetail = get_object_or_404(Account, username=username)
-    userGroup = current_user_group(request, request.user)
-    context = {
-        "userDetail": userDetail,
-        "userGroup": userGroup,
-    }
-    return render(request, "adminpanel/account/my-profile.html", context)
-
-
-@login_required(login_url="login_admin")
 def admin_students(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
@@ -79,6 +84,10 @@ def admin_students(request):
 
 @login_required(login_url="login_admin")
 def admin_teachers(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     context = {
@@ -90,6 +99,10 @@ def admin_teachers(request):
 
 @login_required(login_url="login_admin")
 def admin_moderators(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     context = {
@@ -101,6 +114,10 @@ def admin_moderators(request):
 
 @login_required(login_url="login_admin")
 def admin_members(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
@@ -112,6 +129,10 @@ def admin_members(request):
 
 @login_required(login_url="login_admin")
 def admin_admins(request):
+    """
+    :param request:
+    :return:
+    """
     admins = AccountGroup.objects.filter(groupId__slug="admin")
     moderators = AccountGroup.objects.filter(groupId__slug="moderator")
     teachers = AccountGroup.objects.filter(groupId__slug="ogretmen")
@@ -129,6 +150,10 @@ def admin_admins(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_profile(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Account, username=request.user)
     schools = School.objects.filter(Q(isActive=False, isCategory=False))
@@ -161,6 +186,11 @@ def admin_edit_profile(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_username(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Account, username=username)
     activity = AdminLogs()
@@ -187,6 +217,11 @@ def admin_edit_username(request, username):
 
 @login_required(login_url="login_admin")
 def admin_edit_email(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Account, username=username)
     activity = AdminLogs()
@@ -224,6 +259,10 @@ def admin_edit_email(request, username):
 
 @login_required(login_url="login_admin")
 def admin_blocked_users(request):
+    """
+    :param request:
+    :return:
+    """
     activity = AdminLogs()
     blockedUsers = Account.objects.filter(is_active=False)
     userGroup = current_user_group(request, request.user)
@@ -248,6 +287,11 @@ def admin_blocked_users(request):
 
 @login_required(login_url="login_admin")
 def admin_block_account(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     user = get_object_or_404(Account, username=username)
     userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
@@ -285,6 +329,11 @@ def admin_block_account(request, username):
 
 @login_required(login_url="login_admin")
 def admin_delete_account(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
     user = get_object_or_404(Account, username=username)
     userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
@@ -311,6 +360,10 @@ def admin_delete_account(request, username):
 
 @login_required(login_url="login_admin")
 def admin_register_account(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     accountGroup = AccountGroup()
     groups = Group.objects.all()
@@ -359,6 +412,10 @@ def admin_register_account(request):
 
 @login_required(login_url="login_admin")
 def admin_add_group_to_user(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     groups = Group.objects.all()
     users = Account.objects.all()
@@ -403,6 +460,10 @@ def admin_add_group_to_user(request):
 
 @login_required(login_url="login_admin")
 def admin_add_permission_to_user(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     permissions = Permission.objects.all()
     users = Account.objects.all()

@@ -40,6 +40,10 @@ class ArticleCategoryViewSet(viewsets.ModelViewSet):
 
 
 def all_articles(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     articles_categories_lists = ArticleCategory.objects.all()
     articles_limit = Article.objects.filter(isActive=True).order_by('-createdDate')
@@ -103,6 +107,11 @@ def all_articles(request):
 
 
 def article_category_page(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     articleCategories = get_article_categories(request)
     articleSubCategories = get_article_sub_categories(request)

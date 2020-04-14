@@ -15,6 +15,10 @@ from course.models import Course
 
 @login_required(login_url="login_admin")
 def admin_dashboard(request):
+    """
+    :param request: 
+    :return: 
+    """
     userGroup = current_user_group(request, request.user)
     user_activity_objects = OnlineUserActivity.get_user_activities(datetime.timedelta(minutes=2))
     number_of_active_users = user_activity_objects.count()
@@ -83,6 +87,10 @@ def login_admin(request):
 
 @login_required(login_url="login_admin")
 def logout_admin(request):
+    """
+    :param request:
+    :return:
+    """
     activity = AdminLogs()
     if request.user.is_authenticated:
         logout(request)
