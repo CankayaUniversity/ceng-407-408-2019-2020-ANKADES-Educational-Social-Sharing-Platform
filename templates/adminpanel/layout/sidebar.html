@@ -15,7 +15,7 @@
             <div class="info">
                 <a href="{% url 'admin_my_account' request.user.username %} "
                    class="d-block">{% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
-                    {{ currentUser.username }}{% endif %}</a>
+                    {{ request.user.username }}{% endif %}</a>
             </div>
         </div>
         <nav class="mt-2">

@@ -16,25 +16,21 @@ from exam.models import School
 
 @login_required(login_url="login_admin")
 def admin_all_users(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     accounts = Account.objects.all().order_by('-date_joined')
     context = {
         "userGroup": userGroup,
         "accounts": accounts,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/all-users.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_active_users(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activeUsers = OnlineUserActivity.get_user_activities()
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "activeUsers": activeUsers,
     }
     return render(request, "adminpanel/account/online-users.html", context)
@@ -42,8 +38,7 @@ def admin_active_users(request):
 
 @login_required(login_url="login_admin")
 def admin_all_user_groups(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
@@ -51,7 +46,6 @@ def admin_all_user_groups(request):
     members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "admins": admins,
         "moderators": moderators,
         "teachers": teachers,
@@ -63,25 +57,21 @@ def admin_all_user_groups(request):
 
 @login_required(login_url="login_admin")
 def admin_my_account(request, username):
-    currentUser = request.user
     userDetail = get_object_or_404(Account, username=username)
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     context = {
         "userDetail": userDetail,
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/my-profile.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_students(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
         "students": students,
-        "currentUser": currentUser,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/account/group/students.html", context)
@@ -89,39 +79,33 @@ def admin_students(request):
 
 @login_required(login_url="login_admin")
 def admin_teachers(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     context = {
         "teachers": teachers,
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/group/teachers.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_moderators(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     context = {
         "moderators": moderators,
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/group/moderators.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_members(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
         "members": members,
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/group/members.html", context)
 
@@ -132,24 +116,21 @@ def admin_admins(request):
     moderators = AccountGroup.objects.filter(groupId__slug="moderator")
     teachers = AccountGroup.objects.filter(groupId__slug="ogretmen")
     students = AccountGroup.objects.filter(groupId__slug="ogrenci")
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     context = {
         "admins": admins,
         "moderators": moderators,
         "teachers": teachers,
         "students": students,
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/account/group/admins.html", context)
 
 
 @login_required(login_url="login_admin")
 def admin_edit_profile(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    instance = get_object_or_404(Account, username=currentUser)
+    userGroup = current_user_group(request, request.user)
+    instance = get_object_or_404(Account, username=request.user)
     schools = School.objects.filter(Q(isActive=False, isCategory=False))
     activity = AdminLogs()
     if request.method == "POST":
@@ -164,7 +145,7 @@ def admin_edit_profile(request):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
@@ -172,7 +153,6 @@ def admin_edit_profile(request):
         return redirect(reverse("admin_edit_profile", kwargs={"username": username}))
     context = {
         "instance": instance,
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "schools": schools,
     }
@@ -181,13 +161,11 @@ def admin_edit_profile(request):
 
 @login_required(login_url="login_admin")
 def admin_edit_username(request, username):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Account, username=username)
     activity = AdminLogs()
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "instance": instance
     }
     if request.method == "POST":
@@ -198,7 +176,7 @@ def admin_edit_username(request, username):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
@@ -209,13 +187,11 @@ def admin_edit_username(request, username):
 
 @login_required(login_url="login_admin")
 def admin_edit_email(request, username):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Account, username=username)
     activity = AdminLogs()
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "instance": instance
     }
     if request.method == "POST":
@@ -233,11 +209,11 @@ def admin_edit_email(request, username):
         else:
             instance = Account(email=email)
             instance.save()
-            activity.title = "E-mail Güncelleme: " + str(currentUser)
+            activity.title = "E-mail Güncelleme: " + str(request.user)
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı e-mail adresini güncelledi."
             activity.save()
@@ -250,12 +226,10 @@ def admin_edit_email(request, username):
 def admin_blocked_users(request):
     activity = AdminLogs()
     blockedUsers = Account.objects.filter(is_active=False)
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     context = {
         "users": blockedUsers,
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     if userGroup == 'admin':
         return render(request, "adminpanel/account/blocked-user.html", context)
@@ -264,7 +238,7 @@ def admin_blocked_users(request):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısının yetkisi yok."
         activity.save()
@@ -275,8 +249,7 @@ def admin_blocked_users(request):
 @login_required(login_url="login_admin")
 def admin_block_account(request, username):
     user = get_object_or_404(Account, username=username)
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     if userGroup == 'admin' or userGroup == 'moderator':
         if user.is_active is True:
@@ -286,7 +259,7 @@ def admin_block_account(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı engellendi."
             activity.save()
@@ -299,7 +272,7 @@ def admin_block_account(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı aktifleştirildi."
             activity.save()
@@ -338,14 +311,12 @@ def admin_delete_account(request, username):
 
 @login_required(login_url="login_admin")
 def admin_register_account(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     accountGroup = AccountGroup()
     groups = Group.objects.all()
     activity = AdminLogs()
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "groups": groups,
     }
     if request.method == "POST":
@@ -378,7 +349,7 @@ def admin_register_account(request):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı eklendi."
             activity.save()
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
@@ -388,12 +359,10 @@ def admin_register_account(request):
 
 @login_required(login_url="login_admin")
 def admin_add_group_to_user(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     groups = Group.objects.all()
     users = Account.objects.all()
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "groups": groups,
         "users": users,
@@ -416,7 +385,7 @@ def admin_add_group_to_user(request):
                 instance.groupId_id = groupId
                 instance.userId_id = userId
                 instance.save()
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.method = "POST"
                 activity.createdDate = datetime.datetime.now()
                 activity.application = "Account Group"
@@ -435,12 +404,10 @@ def admin_add_group_to_user(request):
 
 @login_required(login_url="login_admin")
 def admin_add_permission_to_user(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     permissions = Permission.objects.all()
     users = Account.objects.all()
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "permissions": permissions,
         "users": users,
@@ -460,7 +427,7 @@ def admin_add_permission_to_user(request):
                 instance.userId_id = userId
                 instance.permissionId_id = permissionId
                 instance.save()
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.method = "POST"
                 activity.createdDate = datetime.datetime.now()
                 activity.application = "Account Permission"

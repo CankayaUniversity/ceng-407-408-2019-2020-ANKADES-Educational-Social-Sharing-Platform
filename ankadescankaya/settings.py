@@ -123,6 +123,7 @@ STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
 
 AWS_MEDIA_LOCATION = 'media'
 AWS_ARTICLE_MEDIA_LOCATION = 'media/article'
+AWS_COURSE_MEDIA_LOCATION = 'media/course'
 AWS_USER_MEDIA_LOCATION = 'media/user'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)

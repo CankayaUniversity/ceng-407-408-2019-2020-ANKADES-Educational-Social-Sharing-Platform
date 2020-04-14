@@ -337,8 +337,7 @@ def get_social_media(self, slug):
         return socialMedia
 
 # def get_user_timeline(request, username):
-#     currentUser = request.user
-#     userGroup = current_user_group(request, currentUser)
+#     userGroup = current_user_group(request, request.user)
 #     try:
 #         AccountLogs = AccountLogs.objects.get(creator__username=username)
 #         context = {

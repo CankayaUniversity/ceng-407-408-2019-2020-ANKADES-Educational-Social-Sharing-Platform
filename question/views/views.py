@@ -20,8 +20,7 @@ from question.models import Question, QuestionComment, QuestionCategory
 
 
 def add_question(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     articleCategories = ArticleCategory.objects.filter(
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -44,11 +43,11 @@ def add_question(request):
         instance.title = title
         instance.description = description
         instance.questionNumber = get_random_string(length=32)
-        instance.creator = currentUser
+        instance.creator = request.user
         instance.createdDate = datetime.datetime.now()
         instance.save()
         activity.createdDate = datetime.datetime.now()
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.method = "POST"
         activity.application = "Question"
         activity.title = "Soru Sorma"
@@ -56,9 +55,9 @@ def add_question(request):
             activity.createdDate)
         activity.save()
         messages.success(request, "Soru başarıyla oluşturuldu")
-        return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
+        return redirect(
+            reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "questionCategory": questionCategory,
         "form": form,
@@ -73,8 +72,8 @@ def add_question(request):
 
 
 def all_questions(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    request.user = request.user
+    userGroup = current_user_group(request, request.user)
     questions_categories_lists = QuestionCategory.objects.filter(isActive=True)
     questions_limit = Question.objects.filter(isActive=True).order_by('-createdDate')
     questionComment = QuestionComment.objects.filter(isActive=True)
@@ -94,7 +93,6 @@ def all_questions(request):
             "questions": questions,
             "questions_categories_lists": questions_categories_lists,
             "questions_limit": questions_limit,
-            "currentUser": currentUser,
             "userGroup": userGroup,
             "articleCategories": articleCategories,
             "articleSubCategories": articleSubCategories,
@@ -119,7 +117,6 @@ def all_questions(request):
             "question_pagination": question_pagination,
             "questions_categories_lists": questions_categories_lists,
             "questions_limit": questions_limit,
-            "currentUser": currentUser,
             "userGroup": userGroup,
             "articleCategories": articleCategories,
             "articleSubCategories": articleSubCategories,
@@ -132,8 +129,8 @@ def all_questions(request):
 
 
 def question_detail(request, slug, questionNumber):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    request.user = request.user
+    userGroup = current_user_group(request, request.user)
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
         articleCategories = ArticleCategory.objects.filter(
@@ -146,16 +143,18 @@ def question_detail(request, slug, questionNumber):
         questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
         instance.view += 1
         instance.save()
-        questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, questionId__questionNumber=questionNumber, isRoot=True, isReply=False)
+        questionAnswers = QuestionComment.objects.filter(questionId__slug=slug,
+                                                         questionId__questionNumber=questionNumber, isRoot=True,
+                                                         isReply=False)
         answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False)
         try:
-            certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug, questionId__questionNumber=questionNumber, isCertified=True)
+            certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug,
+                                                          questionId__questionNumber=questionNumber, isCertified=True)
         except:
             certifiedAnswer = None
     except:
         return render(request, "404.html")
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "instance": instance,
         "questionAnswers": questionAnswers,
@@ -172,22 +171,25 @@ def question_detail(request, slug, questionNumber):
 
 
 def confirm_answer(request, id):
-    currentUser = request.user
+    request.user = request.user
     try:
         getAnswer = QuestionComment.objects.get(id=id)
-        if getAnswer.questionId.creator.username == currentUser.username:
+        if getAnswer.questionId.creator.username == request.user.username:
             if getAnswer.isCertified:
                 getAnswer.isCertified = False
                 getAnswer.save()
                 messages.success(request, "Cevabın doğruluğunu iptal ettiniz.")
-                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
+                                                                   "questionNumber": getAnswer.questionId.questionNumber}))
             else:
                 getAnswer.isCertified = True
                 getAnswer.save()
                 messages.success(request, "Cevabın doğruluğunu onayladınız.")
-                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
+                                                                   "questionNumber": getAnswer.questionId.questionNumber}))
         else:
-            return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug, "questionNumber": getAnswer.questionId.questionNumber}))
+            return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
+                                                               "questionNumber": getAnswer.questionId.questionNumber}))
     except:
         messages.error(request, "Soru bulunamadı.")
         return render(request, "404.html")
@@ -195,12 +197,12 @@ def confirm_answer(request, id):
 
 @login_required(login_url="login_account")
 def delete_answer(request, id):
-    currentUser = request.user
+    request.user = request.user
     try:
         instance = QuestionComment.objects.get(id=id)
         slug = instance.questionId.slug
         questionNumber = instance.questionId.questionNumber
-        if instance.questionId.creator == currentUser or instance.creator == currentUser:
+        if instance.questionId.creator == request.user or instance.creator == request.user:
             instance.delete()
             messages.success(request, "Cevap başarıyla silindi.")
             return redirect(reverse("question_detail", kwargs={"slug": slug, "questionNumber": questionNumber}))
@@ -213,8 +215,8 @@ def delete_answer(request, id):
 
 @login_required(login_url="login_account")
 def edit_question(request, slug, questionNumber):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    request.user = request.user
+    userGroup = current_user_group(request, request.user)
     articleCategories = ArticleCategory.objects.filter(
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -226,7 +228,7 @@ def edit_question(request, slug, questionNumber):
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
         form = EditQuestionForm(request.POST or None, instance=instance)
-        if instance.creator == currentUser:
+        if instance.creator == request.user:
             if request.method == "POST":
                 instance = form.save(commit=False)
                 value = request.POST['value']
@@ -238,7 +240,8 @@ def edit_question(request, slug, questionNumber):
                 instance.description = description
                 instance.save()
                 messages.success(request, "Sorunuz başarıyla güncellendi")
-                return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
+                return redirect(reverse("question_detail",
+                                        kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
         else:
             messages.error(request, "Bu soru size ait değil !")
             return redirect("index")
@@ -246,7 +249,6 @@ def edit_question(request, slug, questionNumber):
         return render(request, "404.html")
 
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "instance": instance,
         "form": form,
@@ -261,8 +263,8 @@ def edit_question(request, slug, questionNumber):
 
 
 def add_question_answer(request, slug, questionNumber):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    request.user = request.user
+    userGroup = current_user_group(request, request.user)
     articleCategories = ArticleCategory.objects.filter(
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -273,11 +275,10 @@ def add_question_answer(request, slug, questionNumber):
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     activity = AccountLogs()
     activity.application = "Question"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.title = "Soru Yorum Ekleme"
     activity.method = "POST"
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "articleCategories": articleCategories,
         "articleSubCategories": articleSubCategories,
@@ -301,15 +302,17 @@ def add_question_answer(request, slug, questionNumber):
                 activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + " ."
             activity.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
-        return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}), context)
+        return redirect(
+            reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}),
+            context)
     except:
         messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")
         return redirect("all_questions")
 
 
 def add_question_answer_reply(request, slug, questionNumber, answerNumber):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    request.user = request.user
+    userGroup = current_user_group(request, request.user)
     articleCategories = ArticleCategory.objects.filter(
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -320,10 +323,10 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     activity = AccountLogs()
     activity.application = "Question"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.title = "Soru Yorum Ekleme"
     context = {
-        "currentUser": currentUser,
+
         "userGroup": userGroup,
         "articleCategories": articleCategories,
         "articleSubCategories": articleSubCategories,
@@ -349,24 +352,26 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
                 activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
             activity.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
-        return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}), context)
+        return redirect(
+            reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}),
+            context)
     except:
         messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")
         return redirect("all_questions")
 
 
 def delete_question(request, slug):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Question, slug=slug)
     instance.delete()
     activity = AccountLogs()
     activity.application = "Question"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.title = "Soru Silme"
     activity.createdDate = datetime.datetime.now()
     activity.method = "DELETE"
-    activity.description = "Soru silindi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
+    activity.description = "Soru silindi. İşlemi yapan kişi: " + str(
+        activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
     activity.save()
     return redirect("all_questions")
 

@@ -22,7 +22,6 @@ def edit_profile(request):
     :param request:
     :return:
     """
-    currentUser = request.user
     articleCategories = ArticleCategory.objects.filter(
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -31,12 +30,12 @@ def edit_profile(request):
         Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
     questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    userGroup = current_user_group(request, currentUser)
-    instance = get_object_or_404(Account, username=currentUser)
+    userGroup = current_user_group(request, request.user)
+    instance = get_object_or_404(Account, username=request.user)
     activity = AccountLogs()
     sm = SocialMedia.objects.all()
     try:
-        accountSocialMedia = AccountSocialMedia.objects.get(userId__username=currentUser.username)
+        accountSocialMedia = AccountSocialMedia.objects.get(userId__username=request.user.username)
     except:
         accountSocialMedia = None
     context = {
@@ -47,7 +46,6 @@ def edit_profile(request):
         "questionSubCategories": questionSubCategories,
         "questionLowerCategories": questionLowerCategories,
         "instance": instance,
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "sm": sm,
         "accountSocialMedia": accountSocialMedia,
@@ -61,7 +59,7 @@ def edit_profile(request):
         activity.title = "Profil Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı adını/soyadını güncelledi."

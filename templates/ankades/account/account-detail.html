@@ -37,7 +37,7 @@
                                     </a>
                                 </li>
                             </ul>
-                            {% if instance.username != currentUser.username %}
+                            {% if instance.username != request.user.username %}
                                 <a type="button" href="{% url 'follow_account' instance.username %}"
                                    class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i>
                                     {% if existFollower %}

@@ -18,12 +18,10 @@ def admin_add_question_category(request):
     :return:
     """
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=True))
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
         "questionCategory": questionCategory,
     }
     if userGroup == 'admin':
@@ -44,11 +42,11 @@ def admin_add_question_category(request):
                 instance.creator = request.user
                 instance.parentId_id = categoryId
                 instance.save()
-                activity.title = "Soru Kategorisi Ekleme: " + str(currentUser)
+                activity.title = "Soru Kategorisi Ekleme: " + str(request.user)
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "POST"
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı sorular için kategori ekledi."
                 activity.save()
@@ -66,8 +64,7 @@ def admin_question_categories(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     categories = QuestionCategory.objects.all()
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=True))
     questionCategoryLimit = QuestionCategory.objects.all().order_by('-createdDate')[:5]
@@ -76,7 +73,6 @@ def admin_question_categories(request):
         "userGroup": userGroup,
         "questionCategory": questionCategory,
         "questionCategoryLimit": questionCategoryLimit,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/question/categories.html", context)
 
@@ -110,8 +106,7 @@ def admin_isactive_question(request, slug):
     """
     try:
         instance = Question.objects.get(slug=slug)
-        currentUser = request.user
-        userGroup = current_user_group(request, currentUser)
+        userGroup = current_user_group(request, request.user)
         activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
@@ -121,7 +116,7 @@ def admin_isactive_question(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru aktifliğini kaldırdı."
                 activity.save()
@@ -134,7 +129,7 @@ def admin_isactive_question(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru aktifleştirdi."
                 activity.save()
@@ -156,8 +151,7 @@ def admin_isactive_question_category(request, slug):
     """
     try:
         instance = QuestionCategory.objects.get(slug=slug)
-        currentUser = request.user
-        userGroup = current_user_group(request, currentUser)
+        userGroup = current_user_group(request, request.user)
         activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
@@ -167,7 +161,7 @@ def admin_isactive_question_category(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru kategorisinin aktifliğini kaldırdı."
                 activity.save()
@@ -180,7 +174,7 @@ def admin_isactive_question_category(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = currentUser
+                activity.creator = request.user
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru kategorisinin aktifleştirdi."
                 activity.save()
@@ -200,8 +194,7 @@ def admin_delete_question(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(Question, slug=slug)
@@ -210,7 +203,7 @@ def admin_delete_question(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru silme işleminde bulundu. Başarısız."
             activity.save()
@@ -222,7 +215,7 @@ def admin_delete_question(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru sildi."
             activity.save()
@@ -282,7 +275,6 @@ def admin_all_questions(request):
     userGroup = current_user_group(request, request.user)
     context = {
         "questions": questions,
-        "currentUser": request.user,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/question/all-questions.html", context)

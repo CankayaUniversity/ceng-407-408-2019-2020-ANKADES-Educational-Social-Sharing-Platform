@@ -12,8 +12,8 @@
                         {% for course in course_pagination %}
                             <div class="card-deck col-lg-3 col-md-3 col-xs-12 col-sm-12 mb-5">
                                 <div class="card">
-                                    {% if course.media %}
-                                        <img class="card-img-top" src="{{ course.media.url }}" alt="Card image cap"
+                                    {% if course.coursePicture %}
+                                        <img class="card-img-top" src="{{ course.coursePicture.url }}" alt="Card image cap"
                                              width="504" height="250">
                                         <div class="card-body">
                                             <h5 class="card-title"><a

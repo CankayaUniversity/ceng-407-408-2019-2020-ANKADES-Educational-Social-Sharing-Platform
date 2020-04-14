@@ -14,11 +14,9 @@ from adminpanel.models import AdminLogs
 @login_required(login_url="login_admin")
 def admin_all_social_medias(request):
     socialMedias = SocialMedia.objects.all()
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     context = {
         "socialMedias": socialMedias,
-        "currentUser": currentUser,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/social-media/social-medias.html", context)
@@ -27,16 +25,15 @@ def admin_all_social_medias(request):
 @login_required(login_url="login_admin")
 def admin_isactive_socialmedia(request, slug):
     instance = get_object_or_404(SocialMedia, slug=slug)
-    currentUser = request.user
     activity = AdminLogs()
     if instance.isActive is True:
         instance.isActive = False
         instance.save()
-        activity.title = "Sosyal Medya Aktifleştirme: " + str(currentUser)
+        activity.title = "Sosyal Medya Aktifleştirme: " + str(request.user)
         activity.application = "SocialMedia"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya aktifliğini kaldırdı."
         activity.save()
@@ -45,11 +42,11 @@ def admin_isactive_socialmedia(request, slug):
     else:
         instance.isActive = True
         instance.save()
-        activity.title = "Sosyal Medya Aktifleştirme: " + str(currentUser)
+        activity.title = "Sosyal Medya Aktifleştirme: " + str(request.user)
         activity.application = "SocialMedia"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya güncelledi."
         activity.save()
@@ -76,8 +73,7 @@ def admin_edit_social_media(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(SocialMedia, slug=slug)
     activity = AdminLogs()
     if request.method == "POST" and request.FILES['media']:
@@ -91,11 +87,11 @@ def admin_edit_social_media(request, slug):
         fs.save(media.name, media)
         instance.updatedDate = datetime.datetime.now()
         instance.save()
-        activity.title = "Sosyal Medya Güncelleme: " + str(currentUser)
+        activity.title = "Sosyal Medya Güncelleme: " + str(request.user)
         activity.application = "SocialMedia"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya güncelledi."
         activity.save()
@@ -103,7 +99,6 @@ def admin_edit_social_media(request, slug):
         return redirect("admin_all_social_medias")
     context = {
         "instance": instance,
-        "currentUser": currentUser,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/social-media/edit-social-media.html", context)
@@ -111,19 +106,18 @@ def admin_edit_social_media(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_add_social_media(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     if request.method == "POST" and request.FILES['media']:
         title = request.POST.get("title")
         url = request.POST.get("url")
         isActive = request.POST.get("isActive") == 'on'
         if SocialMedia.objects.filter(title=title):
-            activity.title = "Sosyal Medya Ekleme: " + str(currentUser)
+            activity.title = "Sosyal Medya Ekleme: " + str(request.user)
             activity.application = "SocialMedia"
             activity.createdDate = datetime.datetime.now()
             activity.method = "INSERT"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı sosyal medya ekledi."
             activity.save()
@@ -132,11 +126,11 @@ def admin_add_social_media(request):
         else:
             new_sm = SocialMedia(title=title, isActive=isActive, url=url)
             new_sm.save()
-            activity.title = "Sosyal Medya Güncelleme: " + str(currentUser)
+            activity.title = "Sosyal Medya Güncelleme: " + str(request.user)
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı sosyal medya güncelledi."
             activity.save()
@@ -144,6 +138,5 @@ def admin_add_social_media(request):
             return redirect("admin_all_social_medias")
     context = {
         "userGroup": userGroup,
-        "currentUser": currentUser,
     }
     return render(request, "adminpanel/social-media/add-social-media.html", context)

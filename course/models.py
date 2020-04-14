@@ -8,6 +8,7 @@ from django.db.models.signals import pre_save
 from account.models import Account
 from adminpanel.models import Tag
 from ankadescankaya.slug import slug_save
+from ankadescankaya.storage_backends import CourseMediaStorage
 
 
 class CourseCategory(models.Model):
@@ -42,7 +43,7 @@ class Course(models.Model):
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = RichTextField()
     introduction = models.CharField(max_length=254, null=True, blank=True)
-    coursePicture = models.FileField(null=True, blank=True)
+    coursePicture = models.FileField(null=True, blank=True, storage=CourseMediaStorage(), default="no-image-available.png")
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     view = models.PositiveIntegerField(default=0)

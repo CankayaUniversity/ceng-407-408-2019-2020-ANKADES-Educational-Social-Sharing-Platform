@@ -1,0 +1,72 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | Makale Ekle{% endblock %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Makale Paylaşma</h3>
+                        </div>
+                        <form role="form" method="post" action="{% url 'add_course' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="categoryId">Kategori*</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="categoryId" id="categoryId"
+                                            required>
+                                        <option disabled>Lütfen bir kategori seçiniz</option>
+                                        {% if courseCategory %}
+                                            {% for category in courseCategory %}
+                                                <option value="{{ category.id }}">{{ category.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="title">Başlık*</label>
+                                    <input type="text" id="title" class="form-control" name="title" placeholder="Başlık">
+                                </div>
+                                <div class="form-group">
+                                    <label for="introduction">Başlık*</label>
+                                    <input type="text" id="introduction" class="form-control" name="introduction" placeholder="Kurs Hakkında Kısa Bilgi">
+                                </div>
+                                <div class="form-group mb-0">
+                                    <div class="custom-control">
+                                        {{ form.description }}
+                                    </div>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="isPrivate" class="custom-control-input" id="isPrivate">
+                                        <label class="custom-control-label" for="isPrivate">Özellik</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Kurs İçin Bir Resim Seçin</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="coursePicture"
+                                                   id="coursePicture">
+                                            <label class="custom-file-label" for="coursePicture">Dosya seçin</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="">Yükle</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Gönder</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
