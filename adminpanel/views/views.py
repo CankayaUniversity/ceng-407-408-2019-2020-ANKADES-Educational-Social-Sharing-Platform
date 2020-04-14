@@ -11,6 +11,7 @@ from account.views.views import current_user_group
 from adminpanel.models import Tag, AdminLogs
 from article.models import Article
 from course.models import Course
+from question.models import Question
 
 
 @login_required(login_url="login_admin")
@@ -24,8 +25,9 @@ def admin_dashboard(request):
     number_of_active_users = user_activity_objects.count()
     userCount = Account.objects.all().count()
     articleCount = Article.objects.all().count()
+    questionCount = Question.objects.all().count()
     courseCount = Course.objects.all().count()
-    sum = articleCount + courseCount
+    sum = articleCount + courseCount + questionCount
     context = {
         "userGroup": userGroup,
         "userCount": userCount,

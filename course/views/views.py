@@ -6,6 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.utils.crypto import get_random_string
 
 from account.models import AccountLogs
 from account.views.views import current_user_group
@@ -95,6 +96,10 @@ def course_category_page(request, slug):
 
 @login_required(login_url="login_account")
 def add_course(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = CourseForm(request.POST or None)
@@ -139,6 +144,7 @@ def add_course(request):
             fs.save(coursePicture.name, coursePicture)
             instance.coursePicture = coursePicture
         instance.creator = request.user
+        instance.courseNumber = get_random_string(length=32)
         instance.isActive = False
         instance.categoryId_id = value
         instance.save()
@@ -153,6 +159,11 @@ def add_course(request):
         messages.success(request, "Kurs başarıyla eklendi.")
         return redirect("index")
     return render(request, "ankades/course/add-course.html", context)
+
+
+@login_required(login_url="login_account")
+def add_section(request, courseNumber):
+    return None
 
 
 @login_required(login_url="login_account")

@@ -1,4 +1,5 @@
 import uuid
+
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
@@ -47,7 +48,8 @@ class Article(models.Model):
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
     isPrivate = models.BooleanField(default=False, null=True, blank=True)
-    likes = models.ManyToManyField(Account, related_name="articleLikes", default=0, blank=True, db_table="AccountLikedArticle")
+    likes = models.ManyToManyField(Account, related_name="articleLikes", default=0, blank=True,
+                                   db_table="AccountLikedArticle")
     readTime = models.IntegerField(default=0)
     introduction = models.CharField(max_length=254, null=True, blank=True)
 
