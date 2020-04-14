@@ -93,6 +93,7 @@ def course_category_page(request, slug):
         return render(request, "404.html")
 
 
+@login_required(login_url="login_account")
 def add_course(request):
     userGroup = current_user_group(request, request.user)
     courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
@@ -152,6 +153,11 @@ def add_course(request):
         messages.success(request, "Kurs başarıyla eklendi.")
         return redirect("index")
     return render(request, "ankades/course/add-course.html", context)
+
+
+@login_required(login_url="login_account")
+def add_lecture(request, courseNumber):
+    return None
 
 
 def course_detail(request, slug):

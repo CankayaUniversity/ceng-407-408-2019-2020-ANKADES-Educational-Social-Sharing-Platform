@@ -145,7 +145,7 @@ def admin_edit_profile(request):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
@@ -176,7 +176,7 @@ def admin_edit_username(request, username):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
@@ -213,7 +213,7 @@ def admin_edit_email(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı e-mail adresini güncelledi."
             activity.save()
@@ -375,8 +375,7 @@ def admin_add_group_to_user(request):
             try:
                 getExistAccount = AccountGroup.objects.get(userId=userId)
                 if getExistAccount:
-                    getExistAccount.groupId = groupId
-                    getExistAccount.userId = userId
+                    getExistAccount.groupId_id = groupId
                     getExistAccount.save()
                     messages.success(request, "Kullanıcının grubu başarıyla değiştirildi.")
                     return redirect("admin_all_user_groups")

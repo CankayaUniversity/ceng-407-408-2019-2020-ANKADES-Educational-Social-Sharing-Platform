@@ -25,13 +25,13 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Kullanıcı Adı*</label>
-                                <select class="form-control select2bs4" style="width: 100%;" name="userId"
+                                <label for="userId">Kullanıcı Adı*</label>
+                                <select class="form-control select2bs4" id="userId" style="width: 100%;" name="userId"
                                         required>
                                     <option disabled>Lütfen bir kullanıcı seçiniz</option>
                                     {% if users %}
                                         {% for user in users %}
-                                            <option value="{{ user.id }}">{{ user.get_full_name }} - {{ user.username }}</option>
+                                            <option value="{{ user.id }}">{{ user.get_full_name }} - {{ user.username }} - {{ user.id }}</option>
                                         {% endfor %}
                                     {% endif %}
                                 </select>
