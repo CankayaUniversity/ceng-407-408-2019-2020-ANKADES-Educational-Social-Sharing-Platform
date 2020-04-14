@@ -1,5 +1,5 @@
 {% extends 'ankades/layout/layout.html' %}
-{% block title %}Ankacademy | Makale Ekle{% endblock %}
+{% block title %}Ankacademy | Kurs Ekle{% endblock %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 {% load static %}
@@ -10,7 +10,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Makale Paylaşma</h3>
+                            <h3 class="card-title">Kurs Paylaşma</h3>
                         </div>
                         <form role="form" method="post" action="{% url 'add_course' %}" enctype="multipart/form-data">
                             {% csrf_token %}
