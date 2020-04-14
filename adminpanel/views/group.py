@@ -18,15 +18,13 @@ def admin_all_groups(request, slug=None):
     :param request:
     :return:
     """
-    currentUser = request.user
     userGroup = 'Kullanıcı'
     activity = AdminLogs()
     if request.user.is_authenticated:
-        userGroup = current_user_group(request, currentUser)
+        userGroup = current_user_group(request, request.user)
     groups = Group.objects.all()
     context = {
         "groups": groups,
-        "currentUser": currentUser,
         "userGroup": userGroup,
     }
     if userGroup == 'admin':
@@ -37,7 +35,7 @@ def admin_all_groups(request, slug=None):
             new_group.save()
             activity.title = "Grup Oluşturma"
             activity.method = "POST"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.application = "Group"
             activity.createdDate = datetime.datetime.now()
             activity.description = "Yeni bir grup oluşturuldu. İşlemi yapan kişi: " + str(
@@ -59,17 +57,15 @@ def admin_edit_group(request, slug):
     :return:
     """
     instance = get_object_or_404(Group, slug=slug)
-    currentUser = request.user
     activity = AdminLogs()
     activity.application = "Group"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.title = "Grup Düzenleme"
     activity.method = "UPDATE"
     activity.createdDate = datetime.datetime.now()
     form = AdminEditGroupForm(request.POST or None, instance=instance)
     context = {
         "form": form,
-        "currentUser": currentUser,
     }
     if form.is_valid():
         title = form.cleaned_data.get("title")
@@ -90,11 +86,10 @@ def admin_add_group(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.application = "Group"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.title = "Grup Ekle"
     activity.method = "POST"
     activity.createdDate = datetime.datetime.now()
@@ -110,7 +105,6 @@ def admin_add_group(request):
             return redirect("admin_all_groups")
         context = {
             "userGroup": userGroup,
-            "currentUser": currentUser,
         }
         return render(request, "adminpanel/group/add-group.html", context)
     else:
@@ -128,12 +122,11 @@ def admin_delete_group(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.title = "Grup Silme"
     activity.method = "DELETE"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.application = "Group"
     activity.createdDate = datetime.datetime.now()
     try:
@@ -162,12 +155,11 @@ def admin_isactive_group(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.title = "Grup Aktifliği Düzenleme"
     activity.method = "UPDATE"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.application = "Group"
     activity.createdDate = datetime.datetime.now()
     try:

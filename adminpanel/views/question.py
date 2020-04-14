@@ -240,8 +240,7 @@ def admin_delete_question_category(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(QuestionCategory, slug=slug)
@@ -250,7 +249,7 @@ def admin_delete_question_category(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru kategorisini silme işleminde bulundu. Başarısız."
             activity.save()
@@ -262,7 +261,7 @@ def admin_delete_question_category(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = currentUser
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru kategorisini sildi."
             activity.save()
@@ -280,11 +279,10 @@ def admin_all_questions(request):
     :return:
     """
     questions = Question.objects.all()
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     context = {
         "questions": questions,
-        "currentUser": currentUser,
+        "currentUser": request.user,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/question/all-questions.html", context)

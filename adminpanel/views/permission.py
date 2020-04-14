@@ -15,11 +15,9 @@ def admin_all_permissions(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     permissions = Permission.objects.all()
     context = {
-        "currentUser": currentUser,
         "userGroup": userGroup,
         "permissions": permissions,
     }
@@ -32,11 +30,10 @@ def admin_add_permission(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.application = "Permission"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.title = "İzin Ekle"
     activity.method = "POST"
     activity.createdDate = datetime.datetime.now()
@@ -52,7 +49,6 @@ def admin_add_permission(request):
             messages.success(request, "İzin başarıyla oluşturuldu.")
             return redirect("admin_all_permissions")
         context = {
-            "currentUser": currentUser,
             "userGroup": userGroup,
         }
         return render(request, "adminpanel/permission/add-permission.html", context)
@@ -71,8 +67,7 @@ def admin_delete_permission(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     if userGroup == 'admin':
         try:
             instance = get_object_or_404(Permission, slug=slug)
@@ -94,12 +89,11 @@ def admin_isactive_permission(request, slug):
     :param slug:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.title = "Grup Aktifliği Düzenleme"
     activity.method = "UPDATE"
-    activity.creator = currentUser
+    activity.creator = request.user
     activity.application = "Group"
     activity.createdDate = datetime.datetime.now()
     try:
