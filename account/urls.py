@@ -18,9 +18,9 @@ urlpatterns = [
     # path('sifre-sifirla/', edit.edit_password, name="edit_password"),
 
     # Login/Register
-    path('giris-yap', views.login_account, name="login_account"),
-    path('cikis-yap', views.logout_account, name="logout_account"),
-    path('kayit-ol', views.register_account, name="register_account"),
+    path('giris-yap/', views.login_account, name="login_account"),
+    path('cikis-yap/', views.logout_account, name="logout_account"),
+    path('kayit-ol/', views.register_account, name="register_account"),
 
     # Requested User
     path('', views.index, name="index"),

@@ -40,7 +40,6 @@ def index(request):
     return render(request, "ankades/dashboard.html", context)
 
 
-@login_required(login_url="login_account")
 def account_detail(request, username):
     """
     :param request:
