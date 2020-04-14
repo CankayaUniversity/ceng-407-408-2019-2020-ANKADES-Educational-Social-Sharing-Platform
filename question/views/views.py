@@ -11,6 +11,9 @@ from django.views.generic import RedirectView
 
 from account.models import AccountLogs
 from account.views.views import current_user_group
+from ankadescankaya.views import get_article_categories, get_article_sub_categories, get_article_lower_categories, \
+    get_question_categories, get_question_sub_categories, get_question_lower_categories, get_course_categories, \
+    get_course_sub_categories, get_course_lower_categories
 from article.models import ArticleCategory
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
@@ -369,23 +372,22 @@ def delete_question(request, slug):
 
 
 def question_category_page(request, slug):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    userGroup = current_user_group(request, request.user)
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
     try:
         questionCategory = QuestionCategory.objects.get(slug=slug)
         questions = Question.objects.filter(categoryId=questionCategory)
         context = {
             "questionCategory": questionCategory,
             "questions": questions,
-            "currentUser": currentUser,
             "userGroup": userGroup,
             "articleCategories": articleCategories,
             "articleSubCategories": articleSubCategories,
@@ -393,6 +395,9 @@ def question_category_page(request, slug):
             "questionCategories": questionCategories,
             "questionSubCategories": questionSubCategories,
             "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
         }
         return render(request, "ankades/question/get-question-category.html", context)
     except:

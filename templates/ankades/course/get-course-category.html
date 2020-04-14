@@ -1,0 +1,65 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | Kurslar{% endblock %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load static %}
+{% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">{{ courseCategory.title }}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'all_courses' %}">Tüm Kurslar</a></li>
+                        {% if courseCategory.parentId.parentId.slug != "home" %}
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'course_category_page' courseCategory.parentId.parentId.slug %}">{{ courseCategory.parentId.parentId.title }}</a>
+                            </li>{% endif %}
+                        <li class="breadcrumb-item"><a
+                                href="{% url 'course_category_page' courseCategory.parentId.slug %}">{{ courseCategory.parentId.title }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ courseCategory.title }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                {% if courses %}
+                    {% for course in courses %}
+                        <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a
+                                            href="{% url 'course_detail' course.slug %}">{{ course.title }}</a>
+                                    </h5>
+                                    <p class="card-text">{{ course.description|safe|truncatechars:500 }}</p>
+                                    <small class="card-text">Kategori: {{ course.categoryId.title }}</small>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted float-left"><a
+                                            href="{% url 'account_detail' course.creator.username %}">{{ course.creator.get_full_name }}</a></small>
+                                    <small class="text-muted float-right ml-2">{{ course.coursecomment_set.count }}
+                                        Yorum</small>
+                                    <small class="text-muted ml-2 float-right">{{ course.likes.count }}
+                                        Beğeni</small>
+                                    <small class="text-muted float-right">{{ course.view }} Görüntülenme</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                        <h5>Üzgünüz :(</h5>
+
+                        <p>{{ courseCategory.title }} kategorisinde henüz bir soru sorulmamış.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

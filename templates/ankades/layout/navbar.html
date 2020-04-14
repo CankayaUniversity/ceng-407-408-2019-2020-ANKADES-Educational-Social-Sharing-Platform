@@ -107,7 +107,7 @@
                     <span class="badge badge-warning navbar-badge"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ currentUser.get_full_name }} !</span>
+                    <span class="dropdown-item dropdown-header">Hoş Geldiniz {{ request.user.get_full_name }} !</span>
                     <div class="dropdown-divider"></div>
                     <a href="{% url 'index' %}" class="dropdown-item">
                         <i class="fas fa-tachometer-alt mr-2" style="align-content: center"></i> Dashboard

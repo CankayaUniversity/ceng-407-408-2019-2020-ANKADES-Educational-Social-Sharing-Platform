@@ -1,6 +1,6 @@
 {% extends 'ankades/layout/layout.html' %}
 {% load static %}
-{% block title %}{{ instance.creator.get_full_name }} | {{ instance.title }}{% endblock %}
+{% block title %}{{ instance.title }} | {{ instance.creator.get_full_name }}{% endblock %}
 {% block content %}
     <section class="content">
         <div class="container-fluid">

@@ -112,8 +112,8 @@ class AccountPermission(models.Model):
 
 class AccountGroup(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
-    groupId = models.ForeignKey(Group, on_delete=models.PROTECT)
-    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
+    groupId = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, blank=True)
+    userId = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = "AccountGroup"

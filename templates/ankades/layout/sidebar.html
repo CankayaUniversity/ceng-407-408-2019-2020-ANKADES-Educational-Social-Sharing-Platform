@@ -27,8 +27,9 @@
                 {% include 'ankades/layout/article-categories.html' %}
                 {#question categories#}
                 {% include 'ankades/layout/question-categories.html' %}
-                {#end categories categories#}
-                {% if currentUser.is_authenticated %}
+                {#course categories#}
+                {% include 'ankades/layout/course-categories.html' %}
+                {% if request.user.is_authenticated %}
                     <li class="nav-header">Paylaşım</li>
                     <li class="nav-item">
                         <a href="{% url 'add_question' %}" class="nav-link">
@@ -41,6 +42,14 @@
                             <a href="{% url 'add_article' %}" class="nav-link">
                                 <i class="nav-icon far fa-circle text-info"></i>
                                 <p>Makale Paylaş</p>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'teacher' %}
+                        <li class="nav-item">
+                            <a href="{% url 'add_article' %}" class="nav-link">
+                                <i class="nav-icon far fa-circle text-primary"></i>
+                                <p>Kurs Paylaş</p>
                             </a>
                         </li>
                     {% endif %}

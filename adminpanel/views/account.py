@@ -312,19 +312,27 @@ def admin_block_account(request, username):
 
 @login_required(login_url="login_admin")
 def admin_delete_account(request, username):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
-    if userGroup == "admin":
-        try:
-            instance = Account.objects.get(username=username)
-            instance.delete()
-            messages.success(request, "Kullanıcı Başarıyla Silindi.")
+    user = get_object_or_404(Account, username=username)
+    userGroup = current_user_group(request, request.user)
+    activity = AdminLogs()
+    if userGroup == 'admin' or userGroup == 'moderator':
+        if user.is_active is True:
+            messages.error(request, "Kullanıcıyı silmek için engellemeniz gereklidir.")
             return redirect("admin_all_users")
-        except:
-            messages.error(request, "Kullanıcı Bulunamadı.")
+        else:
+            user.delete()
+            activity.title = "Kullanıcı Silme"
+            activity.application = "Account"
+            activity.createdDate = datetime.datetime.now()
+            activity.method = "DELETE"
+            activity.creator = request.user
+            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
+                activity.creator) + " kullanıcı sildi."
+            activity.save()
+            messages.success(request, "Kullanıcı başarıyla silindi.")
             return redirect("admin_all_users")
     else:
-        messages.success(request, "Yetkiniz Yok.")
+        messages.error(request, "Yetkiniz yok.")
         return redirect("admin_all_users")
 
 

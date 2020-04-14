@@ -2,114 +2,89 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.generics import get_object_or_404
 
-from article.models import ArticleCategory
-from course.models import Course, CourseCategory, CourseComment
-
-
-# class CourseViewSet(viewsets.ModelViewSet):
-#     queryset = Course.objects.all().order_by('-course_created_date')
-#     serializer_class = CourseSerializer
-#
-#
-# class CourseCategoryViewSet(viewsets.ModelViewSet):
-#     queryset = CourseCategory.objects.all()
-#     serializer_class = CourseCategorySerializer
-#
-#
-# class CourseSubToSubCategoryViewSet(viewsets.ModelViewSet):
-#     queryset = CourseSubToSubCategory.objects.all().order_by('-course_sub_to_sub_category_created_date')
-#     serializer_class = CourseSubToSubCategorySerializer
-from question.models import QuestionCategory
+from account.views.views import current_user_group
+from ankadescankaya.views import get_course_categories, get_course_sub_categories, get_course_lower_categories, \
+    get_article_categories, get_article_sub_categories, get_article_lower_categories, get_question_categories, \
+    get_question_sub_categories, get_question_lower_categories
+from course.models import Course, CourseComment, CourseCategory
 
 
 def all_courses(request):
+    userGroup = current_user_group(request, request.user)
+    courses_limit = Course.objects.filter(isActive=True).order_by('-createdDate')
+    courseComment = CourseComment.objects.filter(isActive=True)
+    page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
     if keyword:
-        coursePagination = Course.objects.filter(Q(title__contains=keyword) |
-                                                 Q(content__contains=keyword))
+        courses = Course.objects.filter(Q(title__contains=keyword) | Q(creator=keyword) | Q(categoryId=keyword))
         context = {
-            "coursePagination": coursePagination,
+            "courses": courses,
+            "courseComment": courseComment,
+            "courses_limit": courses_limit,
+            "userGroup": userGroup,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
+        }
+        return render(request, "ankades/course/all-courses.html", context)
+    else:
+        courses = Course.objects.filter(isActive=True)
+        paginator = Paginator(courses, 12)
+        try:
+            course_pagination = paginator.page(page)
+        except PageNotAnInteger:
+            course_pagination = paginator.page(1)
+        except EmptyPage:
+            course_pagination = paginator.page(paginator.num_pages)
+        context = {
+            "courses": courses,
+            "courseComment": courseComment,
+            "course_pagination": course_pagination,
+            "courses_limit": courses_limit,
+            "userGroup": userGroup,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
+        }
+    return render(request, "ankades/course/all-courses.html", context)
+
+
+def course_category_page(request, slug):
+    userGroup = current_user_group(request, request.user)
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
+    try:
+        courseCategory = CourseCategory.objects.get(slug=slug)
+        courses = Course.objects.filter(categoryId=courseCategory)
+        context = {
+            "courseCategory": courseCategory,
+            "courses": courses,
+            "userGroup": userGroup,
             "articleCategories": articleCategories,
             "articleSubCategories": articleSubCategories,
             "articleLowerCategories": articleLowerCategories,
             "questionCategories": questionCategories,
             "questionSubCategories": questionSubCategories,
             "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
         }
-        return render(request, "ankades/../templates/test/course/courses.html", context)
-
-    courses = Course.objects.all()
-    courseComments = CourseComment.objects.all()
-    courseLimit = Course.objects.all().order_by('-id')[:10]
-    courseCategories = CourseCategory.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(courses, 10)
-    try:
-        article_pagination = paginator.page(page)
-    except PageNotAnInteger:
-        article_pagination = paginator.page(1)
-    except EmptyPage:
-        article_pagination = paginator.page(paginator.num_pages)
-
-    context = {
-        "courses": courses,
-        "courseComments": courseComments,
-        "courseCategories": courseCategories,
-        "courseLimit": courseLimit,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-    }
-    return render(request, "ankades/../templates/test/course/courses.html", context)
-
-
-def course_categories(request):
-    keyword = request.GET.get("keyword")
-    if keyword:
-        searchCategories = CourseCategory.objects.filter(title__contains=keyword)
-        return render(request, "ankades/../templates/test/course/courses.html", {"searchCategories": searchCategories})
-    categories = CourseCategory.objects.all()
-    return render(request, "ankades/../templates/test/course/courses.html", {"categories": categories})
+        return render(request, "ankades/course/get-course-category.html", context)
+    except:
+        return render(request, "404.html")
 
 
 def course_detail(request, slug):
-    courseDetail = get_object_or_404(Course, slug=slug)
-    courses = Course.objects.all()
-    courseComments = CourseComment.objects.all()
-    courseCategories = CourseCategory.objects.all()
-    courseDetail.view += 1
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    context = {
-        "articleDetail": courseDetail,
-        "courses": courses,
-        "courseComments": courseComments,
-        "courseCategories": courseCategories,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-    }
-    return render(request, "ankades/../templates/test/course/course-detail.html", context)
+    return None

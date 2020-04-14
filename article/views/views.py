@@ -1,4 +1,5 @@
 import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
@@ -10,9 +11,13 @@ from django.urls import reverse
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
+
 from account.models import AccountLogs
 from account.views.views import current_user_group
 from ankadescankaya.slug import slug_save
+from ankadescankaya.views import get_article_categories, get_article_sub_categories, get_article_lower_categories, \
+    get_question_categories, get_question_sub_categories, get_question_lower_categories, get_course_categories, \
+    get_course_sub_categories, get_course_lower_categories
 from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
@@ -35,28 +40,27 @@ class ArticleCategoryViewSet(viewsets.ModelViewSet):
 
 
 def all_articles(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     articles_categories_lists = ArticleCategory.objects.all()
     articles_limit = Article.objects.filter(isActive=True).order_by('-createdDate')
     articleComment = ArticleComment.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
     if keyword:
         articles = Article.objects.filter(title__contains=keyword)
         context = {
             "articles": articles,
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
-            "currentUser": currentUser,
             "userGroup": userGroup,
             "articleCategories": articleCategories,
             "articleSubCategories": articleSubCategories,
@@ -64,6 +68,9 @@ def all_articles(request):
             "questionCategories": questionCategories,
             "questionSubCategories": questionSubCategories,
             "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
         }
         return render(request, "ankades/article/all-articles.html", context)
     else:
@@ -81,7 +88,6 @@ def all_articles(request):
             "article_pagination": article_pagination,
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
-            "currentUser": currentUser,
             "userGroup": userGroup,
             "articleCategories": articleCategories,
             "articleSubCategories": articleSubCategories,
@@ -89,6 +95,9 @@ def all_articles(request):
             "questionCategories": questionCategories,
             "questionSubCategories": questionSubCategories,
             "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
         }
         return render(request, "ankades/article/all-articles.html", context)
 
