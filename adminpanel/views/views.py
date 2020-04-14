@@ -15,8 +15,7 @@ from course.models import Course
 
 @login_required(login_url="login_admin")
 def admin_dashboard(request):
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     user_activity_objects = OnlineUserActivity.get_user_activities(datetime.timedelta(minutes=2))
     number_of_active_users = user_activity_objects.count()
     userCount = Account.objects.all().count()
@@ -29,7 +28,6 @@ def admin_dashboard(request):
         "articleCount": articleCount,
         "courseCount": courseCount,
         "sum": sum,
-        "currentUser": currentUser,
         "user_activity_objects": user_activity_objects,
         "number_of_active_users": number_of_active_users,
     }
@@ -85,14 +83,13 @@ def login_admin(request):
 
 @login_required(login_url="login_admin")
 def logout_admin(request):
-    currentUser = request.user
     activity = AdminLogs()
     if request.user.is_authenticated:
         logout(request)
         activity.title = "Çıkış Yapma."
         activity.application = "Logout"
         activity.method = "UPDATE"
-        activity.creator = currentUser
+        activity.creator = request.user
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı çıkış yaptı."
@@ -109,12 +106,10 @@ def admin_tags(request):
     :param request:
     :return:
     """
-    currentUser = request.user
-    userGroup = current_user_group(request, currentUser)
+    userGroup = current_user_group(request, request.user)
     tags = Tag.objects.all()
     context = {
         "tags": tags,
-        "currentUser": currentUser,
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/tags/all-tags.html", context)
