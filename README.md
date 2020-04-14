@@ -56,7 +56,7 @@ activate
 ### Installing
 
 ```
-python manage.py requirements.txt
+pip install -r requirements.txt
 ```
 
 ```
