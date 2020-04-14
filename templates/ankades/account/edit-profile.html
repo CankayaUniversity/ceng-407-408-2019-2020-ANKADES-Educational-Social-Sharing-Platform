@@ -169,7 +169,7 @@
                                           method="post" id="edit-bio">
                                         {% csrf_token %}
                                         <div class="form-group row">
-                                            <label for="bio" class="col-sm-2 col-form-label">Okulunuz:</label>
+                                            <label for="bio" class="col-sm-2 col-form-label">Kendiniz Hakkında Kısa Bilgi:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="bio" name="bio"
                                                        placeholder="Kendinizi bize tanıtmak ister misiniz?" value="{% if request.user.bio != None %}{{ request.user.bio }}{% endif %}" required>
