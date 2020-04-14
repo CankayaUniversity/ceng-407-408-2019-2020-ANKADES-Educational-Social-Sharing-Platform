@@ -145,7 +145,7 @@ def admin_edit_profile(request):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user.username
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
@@ -176,7 +176,7 @@ def admin_edit_username(request, username):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user.username
+        activity.creator = request.user
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
@@ -213,7 +213,7 @@ def admin_edit_email(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user.username
+            activity.creator = request.user
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı e-mail adresini güncelledi."
             activity.save()

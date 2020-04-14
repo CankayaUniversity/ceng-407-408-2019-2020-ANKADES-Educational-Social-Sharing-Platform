@@ -123,7 +123,6 @@ def login_account(request):
     :param request:
     :return:
     """
-    activity = AccountLogs()
     if not request.user.is_authenticated:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -148,13 +147,6 @@ def login_account(request):
                 request.session.set_expiry(1209600)
             else:
                 request.session.set_expiry(0)
-            activity.creator = user
-            activity.method = "POST"
-            activity.title = "Kullanıcı giriş yaptı"
-            activity.createdDate = datetime.datetime.now()
-            activity.application = "Account"
-            activity.description = "" + str(activity.creator.username) + " giriş yaptı."
-            activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("index")
         return render(request, "ankades/registration/login.html")
@@ -169,18 +161,8 @@ def logout_account(request):
     :param request:
     :return:
     """
-    instance = get_object_or_404(Account, username=request.user)
-    activity = AccountLogs()
     if request.user.is_authenticated:
         logout(request)
-        activity.title = "Çıkış Yapma."
-        activity.application = "Logout"
-        activity.method = "UPDATE"
-        activity.createdDate = datetime.datetime.now()
-        activity.creator = request.user.username
-        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı çıkış yaptı."
-        activity.save()
         messages.success(request, "Başarıyla çıkış yapıldı")
         return redirect("index")
     else:
@@ -193,7 +175,6 @@ def register_account(request):
     :return:
     """
     if not request.user.is_authenticated:
-        activity = AccountLogs()
         if request.method == "POST":
             first_name = request.POST.get("first_name")
             last_name = request.POST.get("last_name")
@@ -209,9 +190,6 @@ def register_account(request):
             }
             if password and confirm_password and password != confirm_password:
                 messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
-                return render(request, "ankades/registration/register.html", context)
-            elif 6 > username.length() > 16:
-                messages.error(request, "Kullanıcı 6-16 karakter arasında olmalıdır")
                 return render(request, "ankades/registration/register.html", context)
             elif not username.isalnum():
                 messages.error(request, "Kullanıcı adı sadece harf ve rakamlardan oluşmalıdır, boşluk veya noktalama işaretleri kullanılamaz.")
@@ -232,14 +210,6 @@ def register_account(request):
                 getGroup = Group.objects.get(slug="uye")
                 new_group = AccountGroup(userId=new_user, groupId=getGroup)
                 new_group.save()
-                activity.title = "Kayıt Olma"
-                activity.application = "ACCOUNT"
-                activity.method = "POST"
-                activity.creator = new_user
-                activity.createdDate = datetime.datetime.now()
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı kayıt oldu."
-                activity.save()
                 user = authenticate(username=username.lower(), password=request.POST.get("password"))
                 login(request, user)
             messages.success(request, "Kayıt işlemi başarıyla gerçekleştirildi.")
