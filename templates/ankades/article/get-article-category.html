@@ -13,11 +13,12 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'all_articles' %}">Tüm Makaleler</a></li>
-                        {% if questionCategory.parentId.parentId.slug != "home" %}
+                        {% if articleCategory.parentId.parentId.slug != "home" %}
                             <li class="breadcrumb-item"><a
                                     href="{% url 'article_category_page' articleCategory.parentId.parentId.slug %}">{{ articleCategory.parentId.parentId.title }}</a>
-                            </li>{% endif %}
-                        {% if questionCategory.parentId.slug != "home" %}
+                            </li>
+                        {% endif %}
+                        {% if article.parentId.slug != "home" %}
                             <li class="breadcrumb-item"><a
                                     href="{% url 'article_category_page' articleCategory.parentId.slug %}">{{ articleCategory.parentId.title }}</a>
                             </li>

@@ -104,14 +104,12 @@ def all_articles(request):
 
 def article_category_page(request, slug):
     userGroup = current_user_group(request, request.user)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
     try:
         articleCategory = ArticleCategory.objects.get(slug=slug)
         articles = Article.objects.filter(categoryId=articleCategory)
@@ -137,7 +135,7 @@ def all_article_categories(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True))
+    articleCategory = get_article_categories(request)
     categories = ArticleCategory.objects.all()
     article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
     context = {
