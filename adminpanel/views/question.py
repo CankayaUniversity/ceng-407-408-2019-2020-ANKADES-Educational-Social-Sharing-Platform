@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from account.models import AccountGroup
 from account.views.views import current_user_group
 from adminpanel.models import AdminLogs
+from course.models import Course
 from question.models import QuestionCategory, Question
 
 
@@ -278,3 +279,4 @@ def admin_all_questions(request):
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/question/all-questions.html", context)
+

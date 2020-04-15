@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question, permission
+from adminpanel.views import group, socialmedia, activity, question, permission, course
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -54,6 +54,30 @@ urlpatterns = [
          name="admin_delete_question_category"),
     path('add-question-category/', question.admin_add_question_category,
          name="admin_add_question_category"),
+
+
+    # Course
+    path('all-courses/', course.admin_all_courses, name="admin_all_courses"),
+    url(r'^all-courses/active/(?P<slug>[\w-]+)/$', course.admin_isactive_course,
+        name="admin_isactive_course"),
+    url(r'^all-courses/delete/(?P<slug>[\w-]+)/$', course.admin_delete_course,
+        name="admin_delete_course"),
+    path('course-categories/', course.admin_course_categories, name="admin_course_categories"),
+    path('isactive-course-categories/<slug:slug>/', course.admin_isactive_course_category,
+         name="admin_isactive_course_category"),
+    path('delete-course-category/<slug:slug>/', course.admin_delete_course_category,
+         name="admin_delete_course_category"),
+
+
+# Course Category
+    path('course-categories/', course.admin_course_categories, name="admin_course_categories"),
+    url(r'^isactive-course-category/(?P<slug>[\w-]+)/$', course.admin_isactive_course_category,
+        name="admin_isactive_course_category"),
+    path('delete-course-category/<slug:slug>/', course.admin_delete_course_category,
+         name="admin_delete_course_category"),
+    path('add-course-category/', course.admin_add_course_category,
+         name="admin_add_course_category"),
+
 
     # Permission
     path('permissions/', permission.admin_all_permissions, name="admin_all_permissions"),

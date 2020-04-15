@@ -25,6 +25,9 @@ def admin_all_logs(request):
 
 @login_required(login_url="login_admin")
 def admin_admin_logs(request):
+    """
+    :rtype: object
+    """
     userGroup = current_user_group(request, request.user)
     adminLogs = AdminLogs.objects.all().order_by('-createdDate')
     context = {
