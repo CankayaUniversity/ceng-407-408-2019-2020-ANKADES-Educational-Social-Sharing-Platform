@@ -144,6 +144,8 @@ def account_detail(request, username):
         existFollower = get_user_follower(request, request.user, instance)
         followers = AccountFollower.objects.filter(followingId__username=instance.username)
         followings = AccountFollower.objects.filter(followerId__username=instance.username)
+        getFollowerForFollow = get_user_follower(request, request.user, followers)
+        getFollowingForFollow = get_user_follower(request, request.user, followings)
         articles = user_articles(request, username)
         questions = user_questions(request, username)
         articleCategories = get_article_categories(request)
@@ -160,6 +162,8 @@ def account_detail(request, username):
             "userDetailGroup": userDetailGroup,
             "userGroup": userGroup,
             "existFollower": existFollower,
+            "getFollowerForFollow": getFollowerForFollow,
+            "getFollowingForFollow": getFollowingForFollow,
             "articles": articles,
             "questions": questions,
             "followers": followers,

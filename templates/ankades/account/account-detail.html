@@ -8,7 +8,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
+                                <img class="profile-user-img img-circle" width="508" height="508"
                                      src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}">
                             </div>
                             <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
@@ -238,7 +238,7 @@
                                                     İsim
                                                 </th>
                                                 <th>
-                                                    İşlemler
+                                                    Kullanıcı Adı
                                                 </th>
                                             </tr>
                                             </thead>
@@ -253,7 +253,7 @@
                                                             <ul class="list-inline">
                                                                 <li class="list-inline-item">
                                                                     <img alt="{{ follower.followerId.get_full_name }}"
-                                                                         class="table-avatar"
+                                                                         class="table-avatar" width="40" height="40"
                                                                          src="{{ follower.followerId.image.url }}">
                                                                 </li>
                                                             </ul>
@@ -263,21 +263,9 @@
                                                                 {{ follower.followerId.get_full_name }}
                                                             </a>
                                                         </td>
-                                                        <td class="project-actions">
-                                                            <a class="btn btn-primary btn-sm" href="#">
-                                                                <i class="fas fa-folder">
-                                                                </i>
-                                                                View
-                                                            </a>
-                                                            <a class="btn btn-info btn-sm" href="#">
-                                                                <i class="fas fa-pencil-alt">
-                                                                </i>
-                                                                Edit
-                                                            </a>
-                                                            <a class="btn btn-danger btn-sm" href="#">
-                                                                <i class="fas fa-trash">
-                                                                </i>
-                                                                Delete
+                                                        <td>
+                                                            <a href="{% url 'account_detail' follower.followerId.username %}">
+                                                                {{ follower.followerId.username }}
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -295,7 +283,7 @@
                                                         İsim
                                                     </th>
                                                     <th>
-                                                        İşlemler
+                                                        Kullanıcı Adı
                                                     </th>
                                                 </tr>
                                             </tfooter>
@@ -318,7 +306,7 @@
                                                     İsim
                                                 </th>
                                                 <th>
-                                                    İşlemler
+                                                    Kullanıcı Adı
                                                 </th>
                                             </tr>
                                             </thead>
@@ -333,7 +321,7 @@
                                                             <ul class="list-inline">
                                                                 <li class="list-inline-item">
                                                                     <img alt="{{ following.followerId.get_full_name }}"
-                                                                         class="table-avatar"
+                                                                         class="table-avatar" width="40" height="40"
                                                                          src="{{ following.followingId.image.url }}">
                                                                 </li>
                                                             </ul>
@@ -343,21 +331,9 @@
                                                                 {{ following.followingId.get_full_name }}
                                                             </a>
                                                         </td>
-                                                        <td class="project-actions">
-                                                            <a class="btn btn-primary btn-sm" href="#">
-                                                                <i class="fas fa-folder">
-                                                                </i>
-                                                                View
-                                                            </a>
-                                                            <a class="btn btn-info btn-sm" href="#">
-                                                                <i class="fas fa-pencil-alt">
-                                                                </i>
-                                                                Edit
-                                                            </a>
-                                                            <a class="btn btn-danger btn-sm" href="#">
-                                                                <i class="fas fa-trash">
-                                                                </i>
-                                                                Delete
+                                                        <td>
+                                                            <a href="{% url 'account_detail' following.followingId.username %}">
+                                                                {{ following.followingId.username }}
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -375,7 +351,7 @@
                                                         İsim
                                                     </th>
                                                     <th>
-                                                        İşlemler
+                                                        Kullanıcı Adı
                                                     </th>
                                                 </tr>
                                             </tfooter>
