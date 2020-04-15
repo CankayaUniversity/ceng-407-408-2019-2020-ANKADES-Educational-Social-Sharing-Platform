@@ -11,7 +11,7 @@
         {% if request.user.is_authenticated %}
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="{{ request.user.image.url }}" class="img-circle elevation-2" alt="User Image">
+                    <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
                     <a href="{% url 'account_detail' request.user.username %} "
@@ -29,6 +29,7 @@
                 {% include 'ankades/layout/question-categories.html' %}
                 {#course categories#}
                 {% include 'ankades/layout/course-categories.html' %}
+                {#end categories#}
                 {% if request.user.is_authenticated %}
                     <li class="nav-header">Paylaşım</li>
                     <li class="nav-item">
