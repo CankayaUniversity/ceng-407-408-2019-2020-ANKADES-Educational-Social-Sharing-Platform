@@ -369,6 +369,7 @@ def add_article_comment(request, slug):
         new_comment = ArticleComment(content=content, creator=request.user)
         new_comment.articleId = instance
         new_comment.save()
+        activity.method = "POST"
         activity.description = "Makaleye yeni bir yorum eklendi. İşlemi yapan kişi: " + str(
             activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
         activity.save()
