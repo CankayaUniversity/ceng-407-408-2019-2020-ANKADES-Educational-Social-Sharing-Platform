@@ -53,7 +53,7 @@ def admin_add_course_category(request):
                 activity.save()
                 messages.success(request, "Kurs kategorisi başarıyla eklendi !")
                 return redirect("admin_course_categories")
-        return render(request, "adminpanel/course/add-course.html", context)
+        return render(request, "adminpanel/course/add-course-category.html", context)
     else:
         messages.error(request, "Yetkiniz yok!")
         return redirect("admin_dashboard")
