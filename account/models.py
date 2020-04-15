@@ -103,8 +103,8 @@ class AccountFollower(models.Model):
 
 class AccountPermission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    permissionId = models.ForeignKey(Permission, on_delete=models.PROTECT, null=True)
-    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
+    permissionId = models.ForeignKey(Permission, on_delete=models.CASCADE, null=True)
+    userId = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "AccountPermission"
@@ -138,8 +138,8 @@ class SocialMedia(models.Model):
 
 class AccountSocialMedia(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
-    socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.PROTECT)
+    userId = models.ForeignKey(Account, on_delete=models.CASCADE)
+    socialMediaId = models.ForeignKey(SocialMedia, on_delete=models.CASCADE)
     url = models.URLField(null=True, blank=True)
     socialMediaUsername = models.CharField(null=True, blank=True, max_length=32)
 
@@ -153,7 +153,7 @@ class Zones(models.Model):
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    parentId = models.ForeignKey('self', on_delete=models.PROTECT)
+    parentId = models.ForeignKey('self', on_delete=models.CASCADE)
     isCountry = models.BooleanField(default=False)
     isCity = models.BooleanField(default=False)
     tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
@@ -169,8 +169,8 @@ class Zones(models.Model):
 
 class AccountZones(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    userId = models.ForeignKey(Account, on_delete=models.PROTECT)
-    zoneId = models.ForeignKey(Zones, on_delete=models.PROTECT)
+    userId = models.ForeignKey(Account, on_delete=models.CASCADE)
+    zoneId = models.ForeignKey(Zones, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "AccountZones"
@@ -178,7 +178,7 @@ class AccountZones(models.Model):
 
 class AccountLogs(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    creator = models.ForeignKey(Account, on_delete=models.PROTECT)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=254)
     application = models.CharField(max_length=254)
     description = models.CharField(max_length=254)

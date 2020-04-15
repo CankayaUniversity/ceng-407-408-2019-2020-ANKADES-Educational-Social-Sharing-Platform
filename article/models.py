@@ -37,8 +37,8 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    creator = models.ForeignKey(Account, on_delete=models.PROTECT)
-    categoryId = models.ForeignKey(ArticleCategory, on_delete=models.PROTECT, null=False)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE)
+    categoryId = models.ForeignKey(ArticleCategory, on_delete=models.CASCADE, null=False)
     title = models.CharField(max_length=254, null=False, blank=False)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = RichTextField(null=False, blank=False)
@@ -75,12 +75,12 @@ class Article(models.Model):
 
 class ArticleComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    articleId = models.ForeignKey(Article, on_delete=models.PROTECT)
-    creator = models.ForeignKey(Account, max_length=50, on_delete=models.PROTECT)
+    articleId = models.ForeignKey(Article, on_delete=models.CASCADE)
+    creator = models.ForeignKey(Account, max_length=50, on_delete=models.CASCADE)
     content = RichTextField(blank=False, null=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    parentId = models.ForeignKey('self', null=True, related_name="articleCommentId", on_delete=models.PROTECT)
+    parentId = models.ForeignKey('self', null=True, related_name="articleCommentId", on_delete=models.CASCADE)
     isRoot = models.BooleanField(default=False)
     isActive = models.BooleanField(default=True)
     view = models.PositiveIntegerField(default=0)
@@ -96,8 +96,8 @@ class ArticleComment(models.Model):
 
 class ArticleTag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    tagId = models.ForeignKey(Tag, on_delete=models.PROTECT)
-    articleId = models.ForeignKey(Article, on_delete=models.PROTECT)
+    tagId = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    articleId = models.ForeignKey(Article, on_delete=models.CASCADE)
     view = models.PositiveIntegerField(default=0)
     like = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)

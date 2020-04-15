@@ -24,7 +24,7 @@ class GroupMessages(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
     slug = models.SlugField(allow_unicode=True)
-    messageId = models.ForeignKey(Messages, on_delete=models.PROTECT)
+    messageId = models.ForeignKey(Messages, on_delete=models.CASCADE)
     users = models.ManyToManyField(Account, related_name="AccountGroupMessage", db_table="AccountGroupMessage")
     isBlocked = models.BooleanField(null=True, blank=True, default=False)
     isDeleted = models.BooleanField(default=False)
@@ -56,7 +56,7 @@ class DirectMessages(models.Model):
     isBlocked = models.BooleanField(null=True, blank=True, default=False)
     isDeleted = models.BooleanField(default=False)
     users = models.ManyToManyField(Account, related_name="AccountDirectMessage", db_table="AccountDirectMessage")
-    messageId = models.ForeignKey(Messages, on_delete=models.PROTECT)
+    messageId = models.ForeignKey(Messages, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "DirectMessages"

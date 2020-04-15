@@ -40,8 +40,8 @@ class Mail(models.Model):
 
 class AccountMail(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Id")
-    receiver = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="receiver")
-    sender = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="sender")
+    receiver = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="receiver")
+    sender = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="sender")
     mailId = models.ForeignKey(Mail)
 
     class Meta:

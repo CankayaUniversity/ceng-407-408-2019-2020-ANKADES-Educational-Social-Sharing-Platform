@@ -38,7 +38,7 @@ class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     courseNumber = models.CharField(unique=True, null=True, blank=True, max_length=32)
     categoryId = models.ForeignKey(CourseCategory, on_delete=models.CASCADE)
-    creator = models.ForeignKey(Account, on_delete=models.PROTECT)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=254)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = RichTextField()
