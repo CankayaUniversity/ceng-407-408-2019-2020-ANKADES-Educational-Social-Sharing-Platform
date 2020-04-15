@@ -47,7 +47,7 @@ def admin_add_question_category(request):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "POST"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı sorular için kategori ekledi."
                 activity.save()
@@ -117,7 +117,7 @@ def admin_isactive_question(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru aktifliğini kaldırdı."
                 activity.save()
@@ -130,7 +130,7 @@ def admin_isactive_question(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru aktifleştirdi."
                 activity.save()
@@ -162,7 +162,7 @@ def admin_isactive_question_category(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru kategorisinin aktifliğini kaldırdı."
                 activity.save()
@@ -175,7 +175,7 @@ def admin_isactive_question_category(request, slug):
                 activity.application = "Question"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı soru kategorisinin aktifleştirdi."
                 activity.save()
@@ -204,7 +204,7 @@ def admin_delete_question(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru silme işleminde bulundu. Başarısız."
             activity.save()
@@ -216,7 +216,7 @@ def admin_delete_question(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru sildi."
             activity.save()
@@ -243,7 +243,7 @@ def admin_delete_question_category(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru kategorisini silme işleminde bulundu. Başarısız."
             activity.save()
@@ -255,7 +255,7 @@ def admin_delete_question_category(request, slug):
             activity.application = "Question"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı soru kategorisini sildi."
             activity.save()

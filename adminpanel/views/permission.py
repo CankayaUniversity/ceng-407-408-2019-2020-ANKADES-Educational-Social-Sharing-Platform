@@ -33,7 +33,7 @@ def admin_add_permission(request):
     userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.application = "Permission"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.title = "İzin Ekle"
     activity.method = "POST"
     activity.createdDate = datetime.datetime.now()
@@ -93,7 +93,7 @@ def admin_isactive_permission(request, slug):
     activity = AdminLogs()
     activity.title = "Grup Aktifliği Düzenleme"
     activity.method = "UPDATE"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.application = "Group"
     activity.createdDate = datetime.datetime.now()
     try:

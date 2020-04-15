@@ -156,7 +156,7 @@ def add_course(request):
         activity.title = "Kurs Ekle"
         activity.application = "Course"
         activity.method = "POST"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kurs ekledi."

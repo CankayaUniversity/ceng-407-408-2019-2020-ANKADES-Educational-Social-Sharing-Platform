@@ -72,12 +72,12 @@ def login_admin(request):
                 request.session.set_expiry(1209600)
             else:
                 request.session.set_expiry(0)
-                activity.creator = user
+                activity.creator = request.user.username
                 activity.method = "POST"
                 activity.title = "Kullanıcı giriş yaptı"
                 activity.createdDate = datetime.datetime.now()
                 activity.application = "Login"
-                activity.description = "" + str(activity.creator.username) + " giriş yaptı."
+                activity.description = "" + str(activity.creator) + " giriş yaptı."
                 activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("admin_dashboard")
@@ -99,7 +99,7 @@ def logout_admin(request):
         activity.title = "Çıkış Yapma."
         activity.application = "Logout"
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı çıkış yaptı."

@@ -33,7 +33,7 @@ def admin_isactive_socialmedia(request, slug):
         activity.application = "SocialMedia"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya aktifliğini kaldırdı."
         activity.save()
@@ -46,7 +46,7 @@ def admin_isactive_socialmedia(request, slug):
         activity.application = "SocialMedia"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya güncelledi."
         activity.save()
@@ -91,7 +91,7 @@ def admin_edit_social_media(request, slug):
         activity.application = "SocialMedia"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya güncelledi."
         activity.save()
@@ -117,7 +117,7 @@ def admin_add_social_media(request):
             activity.application = "SocialMedia"
             activity.createdDate = datetime.datetime.now()
             activity.method = "INSERT"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı sosyal medya ekledi."
             activity.save()
@@ -130,7 +130,7 @@ def admin_add_social_media(request):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı sosyal medya güncelledi."
             activity.save()

@@ -211,7 +211,7 @@ def add_article(request):
         activity.title = "Makale Ekle"
         activity.application = "Article"
         activity.method = "POST"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale ekledi."
@@ -269,7 +269,7 @@ def edit_article(request, slug):
                 activity.application = "Article"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı makalesini güncelledi."
                 activity.save()
@@ -360,7 +360,7 @@ def add_article_comment(request, slug):
     request.user = request.user
     activity = AccountLogs()
     activity.application = "Article"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.createdDate = datetime.datetime.now()
     activity.title = "Makale Yorumu Ekle"
     instance = get_object_or_404(Article, slug=slug)

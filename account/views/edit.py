@@ -65,7 +65,7 @@ def edit_profile(request):
         activity.title = "Profil Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı adını/soyadını güncelledi."
@@ -122,7 +122,7 @@ def add_social_media_to_user(request):
         activity.title = "Sosyal Medya Hesabı Ekleme."
         activity.application = "Account"
         activity.method = "POST"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya hesabı ekledi."
@@ -147,7 +147,7 @@ def edit_username(request):
         activity.title = "Kullanıcı Adı Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
@@ -187,7 +187,7 @@ def edit_password(request):
                 activity.title = "Şifre Güncelleme."
                 activity.application = "Account"
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.createdDate = datetime.datetime.now()
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı şifresini güncelledi."
@@ -215,7 +215,7 @@ def edit_email(request):
         activity.title = "Email Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı email adresini güncelledi."
@@ -240,7 +240,7 @@ def edit_graduate(request):
         activity.title = "Okul Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı okulunu güncelledi."
@@ -265,7 +265,7 @@ def edit_bio(request):
         activity.title = "Biyografi Güncelleme."
         activity.application = "Account"
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı biyografisini güncelledi."

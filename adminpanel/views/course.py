@@ -47,7 +47,7 @@ def admin_add_course_category(request):
                 activity.application = "Course"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "POST"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kurslar için kategori ekledi."
                 activity.save()
@@ -117,7 +117,7 @@ def admin_isactive_course(request, slug):
                 activity.application = "Course"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kurs aktifliğini kaldırdı."
                 activity.save()
@@ -130,7 +130,7 @@ def admin_isactive_course(request, slug):
                 activity.application = "Course"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kurs aktifleştirdi."
                 activity.save()
@@ -162,7 +162,7 @@ def admin_isactive_course_category(request, slug):
                 activity.application = "Course"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kurs kategorisinin aktifliğini kaldırdı."
                 activity.save()
@@ -175,7 +175,7 @@ def admin_isactive_course_category(request, slug):
                 activity.application = "Course"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı kurs kategorisinin aktifleştirdi."
                 activity.save()
@@ -204,7 +204,7 @@ def admin_delete_course(request, slug):
             activity.application = "Course"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı kurs silme işleminde bulundu. Başarısız."
             activity.save()
@@ -216,7 +216,7 @@ def admin_delete_course(request, slug):
             activity.application = "Course"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı kurs sildi."
             activity.save()
@@ -243,7 +243,7 @@ def admin_delete_course_category(request, slug):
             activity.application = "Course"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı kurs kategorisini silme işleminde bulundu. Başarısız."
             activity.save()
@@ -255,7 +255,7 @@ def admin_delete_course_category(request, slug):
             activity.application = "Course"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı kurs kategorisini sildi."
             activity.save()

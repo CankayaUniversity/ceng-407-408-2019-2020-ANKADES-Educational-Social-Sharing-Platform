@@ -40,7 +40,7 @@ def admin_isactive_article(request, slug):
         activity.application = "Article"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makale aktifliği kaldırıldı."
         activity.save()
@@ -53,7 +53,7 @@ def admin_isactive_article(request, slug):
         activity.application = "Article"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı makaleyi aktifleştirdi."
         activity.save()
@@ -114,7 +114,7 @@ def admin_add_article_category(request):
                 activity.application = "Article"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "POST"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı makale için kategori ekledi."
                 activity.save()
@@ -163,7 +163,7 @@ def admin_edit_article(request, slug):
             instance.media = instance.media
         instance.save()
         activity.title = "Makale düzenlendi"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.method = "UPDATE"
         activity.application = "Article"
         activity.updatedDate = datetime.datetime.now()
@@ -205,7 +205,7 @@ def admin_isactive_article_category(request, slug):
                 activity.application = "Article"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı makale kategorisinin aktifliğini kaldırdı."
                 activity.save()
@@ -218,7 +218,7 @@ def admin_isactive_article_category(request, slug):
                 activity.application = "Article"
                 activity.createdDate = datetime.datetime.now()
                 activity.method = "UPDATE"
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                     activity.creator) + " kullanıcısı makale kategorisini aktifleştirdi."
                 activity.save()

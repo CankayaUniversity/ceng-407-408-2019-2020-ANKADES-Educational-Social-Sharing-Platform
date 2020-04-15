@@ -47,7 +47,7 @@ def add_question(request):
         instance.createdDate = datetime.datetime.now()
         instance.save()
         activity.createdDate = datetime.datetime.now()
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.method = "POST"
         activity.application = "Question"
         activity.title = "Soru Sorma"
@@ -275,7 +275,7 @@ def add_question_answer(request, slug, questionNumber):
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     activity = AccountLogs()
     activity.application = "Question"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.title = "Soru Yorum Ekleme"
     activity.method = "POST"
     context = {
@@ -323,7 +323,7 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     activity = AccountLogs()
     activity.application = "Question"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.title = "Soru Yorum Ekleme"
     context = {
 
@@ -366,7 +366,7 @@ def delete_question(request, slug):
     instance.delete()
     activity = AccountLogs()
     activity.application = "Question"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.title = "Soru Silme"
     activity.createdDate = datetime.datetime.now()
     activity.method = "DELETE"

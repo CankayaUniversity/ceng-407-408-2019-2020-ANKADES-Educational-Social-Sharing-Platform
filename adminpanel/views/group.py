@@ -35,7 +35,7 @@ def admin_all_groups(request, slug=None):
             new_group.save()
             activity.title = "Grup Oluşturma"
             activity.method = "POST"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.application = "Group"
             activity.createdDate = datetime.datetime.now()
             activity.description = "Yeni bir grup oluşturuldu. İşlemi yapan kişi: " + str(
@@ -59,7 +59,7 @@ def admin_edit_group(request, slug):
     instance = get_object_or_404(Group, slug=slug)
     activity = AdminLogs()
     activity.application = "Group"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.title = "Grup Düzenleme"
     activity.method = "UPDATE"
     activity.createdDate = datetime.datetime.now()
@@ -89,7 +89,7 @@ def admin_add_group(request):
     userGroup = current_user_group(request, request.user)
     activity = AdminLogs()
     activity.application = "Group"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.title = "Grup Ekle"
     activity.method = "POST"
     activity.createdDate = datetime.datetime.now()
@@ -126,7 +126,7 @@ def admin_delete_group(request, slug):
     activity = AdminLogs()
     activity.title = "Grup Silme"
     activity.method = "DELETE"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.application = "Group"
     activity.createdDate = datetime.datetime.now()
     try:
@@ -159,7 +159,7 @@ def admin_isactive_group(request, slug):
     activity = AdminLogs()
     activity.title = "Grup Aktifliği Düzenleme"
     activity.method = "UPDATE"
-    activity.creator = request.user
+    activity.creator = request.user.username
     activity.application = "Group"
     activity.createdDate = datetime.datetime.now()
     try:

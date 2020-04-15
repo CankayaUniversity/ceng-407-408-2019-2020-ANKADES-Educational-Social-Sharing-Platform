@@ -170,7 +170,7 @@ def admin_edit_profile(request):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı hesabını güncelledi."
         activity.save()
@@ -206,7 +206,7 @@ def admin_edit_username(request, username):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı kullanıcı adını güncelledi."
         activity.save()
@@ -248,7 +248,7 @@ def admin_edit_email(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı e-mail adresini güncelledi."
             activity.save()
@@ -277,7 +277,7 @@ def admin_blocked_users(request):
         activity.application = "Account"
         activity.createdDate = datetime.datetime.now()
         activity.method = "UPDATE"
-        activity.creator = request.user
+        activity.creator = request.user.username
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısının yetkisi yok."
         activity.save()
@@ -303,7 +303,7 @@ def admin_block_account(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı engellendi."
             activity.save()
@@ -316,7 +316,7 @@ def admin_block_account(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcısı aktifleştirildi."
             activity.save()
@@ -347,7 +347,7 @@ def admin_delete_account(request, username):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "DELETE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
                 activity.creator) + " kullanıcı sildi."
             activity.save()
@@ -402,7 +402,7 @@ def admin_register_account(request):
             activity.application = "Account"
             activity.createdDate = datetime.datetime.now()
             activity.method = "UPDATE"
-            activity.creator = request.user
+            activity.creator = request.user.username
             activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(activity.creator) + " kullanıcısı eklendi."
             activity.save()
             messages.success(request, "Yeni kullanıcı başarıyla eklendi.")
@@ -441,7 +441,7 @@ def admin_add_group_to_user(request):
                 instance.groupId_id = groupId
                 instance.userId_id = userId
                 instance.save()
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.method = "POST"
                 activity.createdDate = datetime.datetime.now()
                 activity.application = "Account Group"
@@ -487,7 +487,7 @@ def admin_add_permission_to_user(request):
                 instance.userId_id = userId
                 instance.permissionId_id = permissionId
                 instance.save()
-                activity.creator = request.user
+                activity.creator = request.user.username
                 activity.method = "POST"
                 activity.createdDate = datetime.datetime.now()
                 activity.application = "Account Permission"
