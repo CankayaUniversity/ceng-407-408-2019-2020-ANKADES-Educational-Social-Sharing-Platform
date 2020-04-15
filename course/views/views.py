@@ -62,6 +62,11 @@ def all_courses(request):
 
 
 def course_category_page(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     articleCategories = get_article_categories(request)
     articleSubCategories = get_article_sub_categories(request)
