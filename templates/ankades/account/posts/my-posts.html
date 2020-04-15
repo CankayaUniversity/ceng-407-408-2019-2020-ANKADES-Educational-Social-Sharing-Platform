@@ -18,7 +18,7 @@
                             <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Takipçiler</b>
+                                    <a href="{% url 'account_follower' instance.username %}"><b>Takipçiler</b></a>
                                     <a class="float-right">
                                         {% if followers %}
                                             {{ followers.count }}
@@ -28,7 +28,7 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Takip Edilen</b>
+                                    <a href="{% url 'account_following' instance.username %}"><b>Takip Edilen</b></a>
                                     <a class="float-right">
                                         {% if followings %}
                                             {{ followings.count }}

@@ -67,6 +67,70 @@ def index(request):
     return render(request, "ankades/dashboard.html", context)
 
 
+def account_follower(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
+    followers = AccountFollower.objects.filter(followingId__username=username)  # takipçiler
+    followings = AccountFollower.objects.filter(followerId__username=username)  # takip edilen
+    try:
+        instance = Account.objects.get(username=username)
+        existFollower = get_user_follower(request, request.user, instance)
+        context = {
+            "instance": instance,
+            "existFollower": existFollower,
+            "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
+            "followers": followers,
+            "followings": followings,
+        }
+        return render(request, "ankades/account/following/user-followers.html", context)
+    except:
+        context = {
+            "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
+        }
+        messages.error(request, "Kullanıcı bulunamadı.")
+        return render(request, "404.html", context)
+
+
+def account_following(request, username):
+    """
+    :param request:
+    :param username:
+    :return:
+    """
+    return render(request, "ankades/account/following/user-following.html")
+
+
 def account_detail(request, username):
     """
     :param request:

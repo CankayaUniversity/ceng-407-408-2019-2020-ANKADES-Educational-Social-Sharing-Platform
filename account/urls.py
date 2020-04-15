@@ -17,6 +17,8 @@ urlpatterns = [
     path('ayarlar/sosyal-medya-ekle/', edit.add_social_media_to_user, name="add_social_media_to_user"),
     url(r'^(?P<username>[\w-]+)/takip-et/$', views.follow_account, name="follow_account"),
     path('paylasimlarim/', posts.my_posts, name="my_posts"),
+    url(r'^(?P<username>[\w-]+)/takipciler/$', views.account_follower, name="account_follower"),
+    url(r'^(?P<username>[\w-]+)/takip-edilen/$', views.account_following, name="account_following"),
     # path('sifre-sifirla/', edit.edit_password, name="edit_password"),
 
     # Login/Register

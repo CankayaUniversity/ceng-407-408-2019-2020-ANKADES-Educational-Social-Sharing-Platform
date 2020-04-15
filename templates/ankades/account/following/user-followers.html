@@ -1,0 +1,103 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block title %}{{ instance.get_full_name }} | Takipçiler{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid img-circle"
+                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}">
+                            </div>
+                            <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
+                            <p class="text-muted text-center">{{ userDetailGroup.title }}</p>
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <a href="{% url 'account_follower' instance.username %}"><b>Takipçiler</b></a>
+                                    <a class="float-right">
+                                        {% if followers %}
+                                            {{ followers.count }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="{% url 'account_following' instance.username %}"><b>Takip Edilen</b></a>
+                                    <a class="float-right">
+                                        {% if followings %}
+                                            {{ followings.count }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            </ul>
+                            {% if instance.username != request.user.username %}
+                                <a type="button" href="{% url 'follow_account' instance.username %}"
+                                   class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i>
+                                    {% if existFollower %}
+                                        Takibi Bırak
+                                    {% else %}
+                                        Takip Et
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Hakkımda</h3>
+                        </div>
+                        <div class="card-body">
+                            <strong><i class="fas fa-book mr-1"></i> Eğitim</strong>
+                            <p class="text-muted">
+                                {{ instance.graduate }}
+                            </p>
+                            <hr>
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+                            <p class="text-muted">Malibu, California</p>
+                            <hr>
+                            <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+                            <p class="text-muted">
+                                <span class="tag tag-danger">UI Design</span>
+                                <span class="tag tag-success">Coding</span>
+                                <span class="tag tag-info">Javascript</span>
+                                <span class="tag tag-warning">PHP</span>
+                                <span class="tag tag-primary">Node.js</span>
+                            </p>
+                            <hr>
+                            <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                                fermentum enim neque.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link active" href="#followers"
+                                                        data-toggle="tab">Takipçiler</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#followings"
+                                                        data-toggle="tab">Takip Edilen</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="followers">
+{#                                    Takipçiler#}
+                                </div>
+                                <div class="tab-pane" id="followings">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
