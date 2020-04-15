@@ -115,7 +115,6 @@
                                                             <td>{% if article.updatedDate == None %}Güncelleme
                                                                 Yapılmamış{% else %}
                                                                 {{ article.updatedDate }}{% endif %}</td>
-                                                            <td>{{ article.isActive }}</td>
                                                             <td>
                                                                 <a type="button"
                                                                    href="{% url 'edit_article' article.slug %}"
@@ -172,7 +171,6 @@
                                                         <td>{% if course.updatedDate == None %}Güncelleme
                                                             Yapılmamış{% else %}
                                                             {{ course.updatedDate }}{% endif %}</td>
-                                                        <td>{{ course.isActive }}</td>
                                                         <td>
                                                             <a type="button"
                                                                href="{% url 'delete_article' course.slug %}"

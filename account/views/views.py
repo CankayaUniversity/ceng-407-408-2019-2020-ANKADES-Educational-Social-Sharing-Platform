@@ -7,6 +7,9 @@ from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, SocialMedia, AccountFollower
+from ankadescankaya.views import get_article_categories, get_article_sub_categories, get_article_lower_categories, \
+    get_question_categories, get_question_sub_categories, get_question_lower_categories, get_course_categories, \
+    get_course_sub_categories, get_course_lower_categories
 from article.models import Article, ArticleCategory
 from question.models import Question, QuestionCategory
 
@@ -17,23 +20,50 @@ def index(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    context = {
-        "userGroup": userGroup,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-    }
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
+    try:
+        instance = Account.objects.get(username=request.user.username)
+        existFollower = get_user_follower(request, request.user, instance)
+        followers = AccountFollower.objects.filter(followingId__username=instance.username) # takipçiler
+        followings = AccountFollower.objects.filter(followerId__username=request.user.username) # takip edilen
+        articles = Article.objects.all()
+        context = {
+            "articles": articles,
+            "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
+            "existFollower": existFollower,
+            "followers": followers,
+            "followings": followings,
+        }
+    except:
+        context = {
+            "userGroup": userGroup,
+            "articleCategories": articleCategories,
+            "articleSubCategories": articleSubCategories,
+            "articleLowerCategories": articleLowerCategories,
+            "questionCategories": questionCategories,
+            "questionSubCategories": questionSubCategories,
+            "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
+        }
     return render(request, "ankades/dashboard.html", context)
 
 
@@ -52,14 +82,15 @@ def account_detail(request, username):
         followings = AccountFollower.objects.filter(followerId__username=instance.username)
         articles = user_articles(request, username)
         questions = user_questions(request, username)
-        articleCategories = ArticleCategory.objects.filter(
-            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-        questionCategories = QuestionCategory.objects.filter(
-            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        articleCategories = get_article_categories(request)
+        articleSubCategories = get_article_sub_categories(request)
+        articleLowerCategories = get_article_lower_categories(request)
+        questionCategories = get_question_categories(request)
+        questionSubCategories = get_question_sub_categories(request)
+        questionLowerCategories = get_question_lower_categories(request)
+        courseCategories = get_course_categories(request)
+        courseSubCategories = get_course_sub_categories(request)
+        courseLowerCategories = get_course_lower_categories(request)
         context = {
             "instance": instance,
             "userDetailGroup": userDetailGroup,
@@ -75,6 +106,9 @@ def account_detail(request, username):
             "questionCategories": questionCategories,
             "questionSubCategories": questionSubCategories,
             "questionLowerCategories": questionLowerCategories,
+            "courseCategories": courseCategories,
+            "courseSubCategories": courseSubCategories,
+            "courseLowerCategories": courseLowerCategories,
         }
         return render(request, "ankades/account/account-detail.html", context)
     except:
@@ -235,14 +269,15 @@ def get_requested_user(request, username):
     """
     userGroup = current_user_group(request, username)
     userDetail = get_object_or_404(Account, username=username)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    articleCategories = get_article_categories(request)
+    articleSubCategories = get_article_sub_categories(request)
+    articleLowerCategories = get_article_lower_categories(request)
+    questionCategories = get_question_categories(request)
+    questionSubCategories = get_question_sub_categories(request)
+    questionLowerCategories = get_question_lower_categories(request)
+    courseCategories = get_course_categories(request)
+    courseSubCategories = get_course_sub_categories(request)
+    courseLowerCategories = get_course_lower_categories(request)
     context = {
         "userDetail": userDetail,
         "userGroup": userGroup,
@@ -252,6 +287,9 @@ def get_requested_user(request, username):
         "questionCategories": questionCategories,
         "questionSubCategories": questionSubCategories,
         "questionLowerCategories": questionLowerCategories,
+        "courseCategories": courseCategories,
+        "courseSubCategories": courseSubCategories,
+        "courseLowerCategories": courseLowerCategories,
     }
     return render(request, "ankades/account/account-profile.html", context)
 

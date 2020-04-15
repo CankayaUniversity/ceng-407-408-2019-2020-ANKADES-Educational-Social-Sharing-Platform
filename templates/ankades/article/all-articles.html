@@ -22,7 +22,7 @@
                                             <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
                                         </div>
                                         <div class="card-footer">
-                                            <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                            <small class="text-muted float-left"><a href="{% url 'account_detail' article.creator %}">{{ article.creator.get_full_name }}</a></small>
                                             <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
                                                 Yorum</small>
                                             <small class="text-muted ml-2 float-right">{{ article.likes.count }}

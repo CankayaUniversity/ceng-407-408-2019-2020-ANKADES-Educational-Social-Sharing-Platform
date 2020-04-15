@@ -2,6 +2,60 @@
 {% block title %}Ankacademy | Dashboard{% endblock %}
 {% load static %}
 {% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                {% if articles %}
+                    {% for article in articles %}
+                        <div class="card-deck col-lg-3 col-md-3 col-xs-12 col-sm-12 mb-5">
+                            <div class="card">
+                                {% if article.media %}
+                                    <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
+                                         width="504" height="250">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a
+                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                        </h5>
+                                        <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                        <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
+                                            Yorum</small>
+                                        <small class="text-muted ml-2 float-right">{{ article.likes.count }}
+                                            Beğeni</small>
+                                        <small class="text-muted float-right">{{ article.view }}
+                                            Görüntülenme</small>
+                                    </div>
+                                {% else %}
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="margin-top: 177px"><a
+                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                        </h5>
+                                        <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted float-left">{{ article.creator.get_full_name }}</small>
+                                        <small class="text-muted float-left ml-2">{{ article.articlecomment_set.count }}
+                                            Yorum</small>
+                                        <small class="text-muted ml-2 float-right">{{ article.likes.count }}
+                                            Beğeni</small>
+                                        <small class="text-muted float-right">{{ article.view }}
+                                            Görüntülenme</small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                        <h5>Üzgünüz :(</h5>
+                        <p>Takip ettiğiniz kimse makale paylaşımında bulunmamış.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
     <section class="content">
         <div class="container-fluid">
             <div class="row">
