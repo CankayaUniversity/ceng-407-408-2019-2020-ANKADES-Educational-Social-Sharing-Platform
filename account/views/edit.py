@@ -122,13 +122,13 @@ def add_social_media_to_user(request):
         activity.title = "Sosyal Medya Hesabı Ekleme."
         activity.application = "Account"
         activity.method = "POST"
-        activity.creator = request.user.username
+        activity.creator = request.user
         activity.createdDate = datetime.datetime.now()
         activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
             activity.creator) + " kullanıcısı sosyal medya hesabı ekledi."
         activity.save()
         messages.success(request, "Değişiklikler başarıyla kaydedildi.")
-        return redirect('/ayarlar/')
+        return redirect('/ayarlar/sosyal-medya-ekle/')
     return redirect('/ayarlar/')
 
 
