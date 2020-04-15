@@ -229,8 +229,6 @@ def edit_article(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-
-    articleCategories = all_article_categories(request)
     articleSubCategories = get_article_sub_categories(request)
     articleLowerCategories = get_article_lower_categories(request)
     questionCategories = get_question_categories(request)
@@ -239,7 +237,7 @@ def edit_article(request, slug):
     courseCategories = get_course_categories(request)
     courseSubCategories = get_course_sub_categories(request)
     courseLowerCategories = get_course_lower_categories(request)
-    formArticleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     activity = AccountLogs()
     try:
         instance = Article.objects.get(slug=slug)
@@ -253,6 +251,8 @@ def edit_article(request, slug):
                 if form.is_valid():
                     description = form.cleaned_data.get("description")
                 if request.FILES:
+                    if instance.media:
+                        instance.media = None
                     media = request.FILES.get('media')
                     fs = FileSystemStorage()
                     fs.save(media.name, media)
@@ -278,10 +278,9 @@ def edit_article(request, slug):
                 return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
             context = {
                 "instance": instance,
-                "articleCategory": formArticleCategory,
+                "articleCategory": articleCategory,
                 "userGroup": userGroup,
                 "form": form,
-                "articleCategories": articleCategories,
                 "articleSubCategories": articleSubCategories,
                 "articleLowerCategories": articleLowerCategories,
                 "questionCategories": questionCategories,
@@ -297,6 +296,12 @@ def edit_article(request, slug):
 
 
 def article_detail(request, username, slug):
+    """
+    :param request:
+    :param username:
+    :param slug:
+    :return:
+    """
     request.user = request.user
     userGroup = current_user_group(request, request.user)
     try:

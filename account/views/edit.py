@@ -7,8 +7,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from account.models import Account, AccountLogs, AccountSocialMedia, SocialMedia
-from account.views.views import current_user_group, get_social_media
+from account.models import Account, AccountLogs, AccountSocialMedia, SocialMedia, AccountFollower
+from account.views.views import current_user_group, get_social_media, get_user_follower
 
 import datetime
 
@@ -32,6 +32,9 @@ def edit_profile(request):
     questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
     userGroup = current_user_group(request, request.user)
     instance = get_object_or_404(Account, username=request.user)
+    existFollower = get_user_follower(request, request.user, instance)
+    followers = AccountFollower.objects.filter(followingId__username=instance.username)
+    followings = AccountFollower.objects.filter(followerId__username=instance.username)
     activity = AccountLogs()
     sm = SocialMedia.objects.all()
     try:
@@ -49,6 +52,9 @@ def edit_profile(request):
         "userGroup": userGroup,
         "sm": sm,
         "accountSocialMedia": accountSocialMedia,
+        "existFollower": existFollower,
+        "followers": followers,
+        "followings": followings,
     }
     if request.method == "POST":
         first_name = request.POST.get("first_name")

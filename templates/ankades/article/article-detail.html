@@ -41,10 +41,12 @@
                                     Düzenle
                                 </a>
                             {% endif %}
-                            <a type="button" class="btn btn-warning btn-md" data-toggle="modal"
-                               data-target="#modal-default">
-                                Şikayet Et
-                            </a>
+                            {% if instance.creator != request.user %}
+                                <a type="button" class="btn btn-warning btn-md" data-toggle="modal"
+                                   data-target="#modal-default" style="color: white;">
+                                    Şikayet Et
+                                </a>
+                            {% endif %}
                             <span class="float-right text-muted">{{ instance.likes.count }} Beğeni - {{ instance.view }} Gösterim - {{ articleComments.count }} Yorum</span>
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 col-12 mt-5">

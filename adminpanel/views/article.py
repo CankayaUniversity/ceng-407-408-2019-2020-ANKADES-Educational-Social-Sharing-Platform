@@ -133,7 +133,6 @@ def admin_edit_article(request, slug):
     :param slug:
     :return:
     """
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     instance = Article.objects.get(slug=slug)

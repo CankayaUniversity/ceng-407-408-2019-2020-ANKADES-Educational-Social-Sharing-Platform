@@ -10,7 +10,7 @@
                     <div class="card card-primary p-5">
                         <div class="card-header">{{ instance.title }}
                         </div>
-                        <form role="form" method="post" action="{% url 'edit_article' instance.slug %}">
+                        <form role="form" method="post" action="{% url 'edit_article' instance.slug %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">
@@ -44,7 +44,7 @@
                                                 {% if instance.media %}{{ instance.media }}{% endif %}</label>
                                         </div>
                                         <div class="input-group-append">
-                                            <span class="input-group-text" id="">Bilgisayarda Ara</span>
+                                            <span class="input-group-text">Bilgisayarda Ara</span>
                                         </div>
                                     </div>
                                 </div>
