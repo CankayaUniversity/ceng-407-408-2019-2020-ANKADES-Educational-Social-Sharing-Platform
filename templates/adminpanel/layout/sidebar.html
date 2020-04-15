@@ -14,8 +14,9 @@
             </div>
             <div class="info">
                 <a href="{% url 'admin_dashboard' %} "
-                   class="d-block">{% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
-                    {{ request.user.username }}{% endif %}</a>
+                   class="d-block">
+                    {% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
+                        {{ request.user.username }}{% endif %}</a>
             </div>
         </div>
         <nav class="mt-2">
@@ -167,6 +168,46 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="{% url 'admin_add_question_category' %}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Ekle</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Kurslar
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'admin_all_courses' %}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Liste</p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Kategoriler
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'admin_course_categories' %}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Liste</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'admin_add_course_category' %}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Ekle</p>
                                     </a>
