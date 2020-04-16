@@ -1,9 +1,5 @@
-import datetime
-
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from rest_framework.generics import get_object_or_404
+from django.shortcuts import render
 
 from account.models import AccountLogs
 from ankadescankaya.views import current_user_group

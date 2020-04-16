@@ -8,7 +8,7 @@ from online_users.models import OnlineUserActivity
 
 from account.models import Account
 from ankadescankaya.views import current_user_group
-from adminpanel.models import Tag, AdminLogs
+from adminpanel.models import Tag
 from article.models import Article
 from course.models import Course
 from question.models import Question

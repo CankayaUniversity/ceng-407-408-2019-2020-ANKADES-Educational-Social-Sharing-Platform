@@ -5,10 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
-from account.models import AccountGroup
 from ankadescankaya.views import current_user_group
-from adminpanel.models import AdminLogs
-from course.models import Course
 from question.models import QuestionCategory, Question
 
 
@@ -20,7 +17,6 @@ def admin_add_question_category(request):
     """
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=True))
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "questionCategory": questionCategory,
@@ -43,14 +39,6 @@ def admin_add_question_category(request):
                 instance.creator = request.user
                 instance.parentId_id = categoryId
                 instance.save()
-                activity.title = "Soru Kategorisi Ekleme: " + str(request.user)
-                activity.application = "Question"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "POST"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı sorular için kategori ekledi."
-                activity.save()
                 messages.success(request, "Soru kategorisi başarıyla eklendi !")
                 return redirect("admin_question_categories")
         return render(request, "adminpanel/question/add-category.html", context)
@@ -108,32 +96,15 @@ def admin_isactive_question(request, slug):
     try:
         instance = Question.objects.get(slug=slug)
         userGroup = current_user_group(request, request.user)
-        activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
                 instance.save()
-                activity.title = "Soru Aktifleştirme"
-                activity.application = "Question"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı soru aktifliğini kaldırdı."
-                activity.save()
                 messages.success(request, "Soru kategorisi artık aktif değil.")
                 return redirect("admin_all_questions")
             else:
                 instance.isActive = True
                 instance.save()
-                activity.title = "Soru Aktifleştirme"
-                activity.application = "Question"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı soru aktifleştirdi."
-                activity.save()
                 messages.success(request, "Soru başarıyla aktifleştirildi.")
                 return redirect("admin_all_questions")
         else:
@@ -153,32 +124,15 @@ def admin_isactive_question_category(request, slug):
     try:
         instance = QuestionCategory.objects.get(slug=slug)
         userGroup = current_user_group(request, request.user)
-        activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
                 instance.save()
-                activity.title = "Soru Kategorisini Aktifleştirme"
-                activity.application = "Question"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı soru kategorisinin aktifliğini kaldırdı."
-                activity.save()
                 messages.success(request, "Soru kategorisi artık aktif değil.")
                 return redirect("admin_question_categories")
             else:
                 instance.isActive = True
                 instance.save()
-                activity.title = "Soru Kategorisini Aktifleştirme"
-                activity.application = "Question"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı soru kategorisinin aktifleştirdi."
-                activity.save()
                 messages.success(request, "Soru kategorisi başarıyla aktifleştirildi.")
                 return redirect("admin_question_categories")
         else:
@@ -196,30 +150,13 @@ def admin_delete_question(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(Question, slug=slug)
         if instance.isActive is True:
-            activity.title = "Soru Silme"
-            activity.application = "Question"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı soru silme işleminde bulundu. Başarısız."
-            activity.save()
             messages.error(request, "Soru aktif olduğu için silme işlemi gerçekleştirilemedi.")
             return redirect("admin_question_categories")
         else:
             instance.delete()
-            activity.title = "Soru Silme"
-            activity.application = "Question"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı soru sildi."
-            activity.save()
             messages.success(request, "Soru başarıyla silindi.")
             return redirect("admin_all_questions")
     else:
@@ -235,30 +172,13 @@ def admin_delete_question_category(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(QuestionCategory, slug=slug)
         if instance.isActive is True:
-            activity.title = "Soru Kategori Silme"
-            activity.application = "Question"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı soru kategorisini silme işleminde bulundu. Başarısız."
-            activity.save()
             messages.error(request, "Soru kategorisi aktif olduğu için silme işlemi gerçekleştirilemedi.")
             return redirect("admin_question_categories")
         else:
             instance.delete()
-            activity.title = "Soru Kategori Silme"
-            activity.application = "Question"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı soru kategorisini sildi."
-            activity.save()
             messages.success(request, "Soru kategorisi başarıyla silindi.")
             return redirect("admin_question_categories")
     else:

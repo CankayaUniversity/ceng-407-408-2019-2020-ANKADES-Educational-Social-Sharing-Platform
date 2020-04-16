@@ -5,10 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
-from account.models import AccountGroup
 from ankadescankaya.views import current_user_group
-from adminpanel.models import AdminLogs
-from course.models import Course
 from course.models import CourseCategory, Course
 
 
@@ -20,7 +17,6 @@ def admin_add_course_category(request):
     """
     courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=True))
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
     context = {
         "userGroup": userGroup,
         "courseCategory": courseCategory,
@@ -39,18 +35,10 @@ def admin_add_course_category(request):
                     return redirect("admin_add_course_category")
             except:
                 instance = CourseCategory(title=title, isActive=isActive,
-                                            isCategory=isCategory)
+                                          isCategory=isCategory)
                 instance.creator = request.user
                 instance.parentId_id = categoryId
                 instance.save()
-                activity.title = "Kurs Kategorisi Ekleme: " + str(request.user)
-                activity.application = "Course"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "POST"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı kurslar için kategori ekledi."
-                activity.save()
                 messages.success(request, "Kurs kategorisi başarıyla eklendi !")
                 return redirect("admin_course_categories")
         return render(request, "adminpanel/course/add-course-category.html", context)
@@ -108,32 +96,15 @@ def admin_isactive_course(request, slug):
     try:
         instance = Course.objects.get(slug=slug)
         userGroup = current_user_group(request, request.user)
-        activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
                 instance.save()
-                activity.title = "Kurs Aktifleştirme"
-                activity.application = "Course"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı kurs aktifliğini kaldırdı."
-                activity.save()
                 messages.success(request, "Kurs kategorisi artık aktif değil.")
                 return redirect("admin_all_courses")
             else:
                 instance.isActive = True
                 instance.save()
-                activity.title = "Kurs Aktifleştirme"
-                activity.application = "Course"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı kurs aktifleştirdi."
-                activity.save()
                 messages.success(request, "Kurs başarıyla aktifleştirildi.")
                 return redirect("admin_all_courses")
         else:
@@ -153,32 +124,15 @@ def admin_isactive_course_category(request, slug):
     try:
         instance = CourseCategory.objects.get(slug=slug)
         userGroup = current_user_group(request, request.user)
-        activity = AdminLogs()
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
                 instance.save()
-                activity.title = "Kurs Kategorisini Aktifleştirme"
-                activity.application = "Course"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı kurs kategorisinin aktifliğini kaldırdı."
-                activity.save()
                 messages.success(request, "Kurs kategorisi artık aktif değil.")
                 return redirect("admin_course_categories")
             else:
                 instance.isActive = True
                 instance.save()
-                activity.title = "Kurs Kategorisini Aktifleştirme"
-                activity.application = "Course"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı kurs kategorisinin aktifleştirdi."
-                activity.save()
                 messages.success(request, "Kurs kategorisi başarıyla aktifleştirildi.")
                 return redirect("admin_course_categories")
         else:
@@ -196,30 +150,13 @@ def admin_delete_course(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(Course, slug=slug)
         if instance.isActive is True:
-            activity.title = "Kurs Silme"
-            activity.application = "Course"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı kurs silme işleminde bulundu. Başarısız."
-            activity.save()
             messages.error(request, "Kurs aktif olduğu için silme işlemi gerçekleştirilemedi.")
             return redirect("admin_course_categories")
         else:
             instance.delete()
-            activity.title = "Kurs Silme"
-            activity.application = "Course"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı kurs sildi."
-            activity.save()
             messages.success(request, "Kurs başarıyla silindi.")
             return redirect("admin_all_courses")
     else:
@@ -235,30 +172,13 @@ def admin_delete_course_category(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
     if userGroup == 'admin':
         instance = get_object_or_404(CourseCategory, slug=slug)
         if instance.isActive is True:
-            activity.title = "Kurs Kategori Silme"
-            activity.application = "Course"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı kurs kategorisini silme işleminde bulundu. Başarısız."
-            activity.save()
             messages.error(request, "Kurs kategorisi aktif olduğu için silme işlemi gerçekleştirilemedi.")
             return redirect("admin_course_categories")
         else:
             instance.delete()
-            activity.title = "Kurs Kategori Silme"
-            activity.application = "Course"
-            activity.createdDate = datetime.datetime.now()
-            activity.method = "DELETE"
-            activity.creator = request.user.username
-            activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-                activity.creator) + " kullanıcısı kurs kategorisini sildi."
-            activity.save()
             messages.success(request, "kurs kategorisi başarıyla silindi.")
             return redirect("admin_course_categories")
     else:
@@ -279,4 +199,3 @@ def admin_all_courses(request):
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/course/all-courses.html", context)
-

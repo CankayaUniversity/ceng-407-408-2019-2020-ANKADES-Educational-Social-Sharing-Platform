@@ -6,7 +6,6 @@ from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
 from account.models import Permission
 from ankadescankaya.views import current_user_group
-from adminpanel.models import AdminLogs
 
 
 @login_required(login_url="login_admin")
@@ -31,12 +30,6 @@ def admin_add_permission(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
-    activity.application = "Permission"
-    activity.creator = request.user.username
-    activity.title = "İzin Ekle"
-    activity.method = "POST"
-    activity.createdDate = datetime.datetime.now()
     if userGroup == 'admin':
         if request.method == "POST":
             title = request.POST.get("title")
@@ -44,8 +37,6 @@ def admin_add_permission(request):
             isActive = request.POST.get("isActive") == 'on'
             new_group = Permission(title=title, description=description, isActive=isActive)
             new_group.save()
-            activity.description = "Yeni bir izin eklendi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-            activity.save()
             messages.success(request, "İzin başarıyla oluşturuldu.")
             return redirect("admin_all_permissions")
         context = {
@@ -53,9 +44,6 @@ def admin_add_permission(request):
         }
         return render(request, "adminpanel/permission/add-permission.html", context)
     else:
-        activity.description = "Yeni bir grup ekleme başarısız. İşlemi yapan kişi: " + str(
-            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
-        activity.save()
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_dashboard")
 
@@ -90,12 +78,6 @@ def admin_isactive_permission(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
-    activity.title = "Grup Aktifliği Düzenleme"
-    activity.method = "UPDATE"
-    activity.creator = request.user.username
-    activity.application = "Group"
-    activity.createdDate = datetime.datetime.now()
     try:
         instance = Permission.objects.get(slug=slug)
         if userGroup == 'admin':
@@ -103,18 +85,12 @@ def admin_isactive_permission(request, slug):
                 instance.updatedDate = datetime.datetime.now()
                 instance.isActive = False
                 instance.save()
-                activity.description = "İzin aktifliği kaldırıldı. İşlemi yapan kişi: " + str(
-                    activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-                activity.save()
                 messages.success(request, "Group artık aktif değil.")
                 return redirect("admin_all_groups")
             else:
                 instance.isActive = True
                 instance.updatedDate = datetime.datetime.now()
                 instance.save()
-                activity.description = "İzin başarıyla aktifleştirildi. İşlemi yapan kişi: " + str(
-                    activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-                activity.save()
                 messages.success(request, "İzin aktifleştirildi.")
                 return redirect("admin_all_groups")
         else:

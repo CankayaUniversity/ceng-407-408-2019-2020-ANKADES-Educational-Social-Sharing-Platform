@@ -8,7 +8,6 @@ from rest_framework.generics import get_object_or_404
 from account.models import Group
 from ankadescankaya.views import current_user_group
 from adminpanel.forms import AdminEditGroupForm
-from adminpanel.models import AdminLogs
 
 
 @login_required(login_url="login_admin")
@@ -19,7 +18,6 @@ def admin_all_groups(request, slug=None):
     :return:
     """
     userGroup = 'Kullanıcı'
-    activity = AdminLogs()
     if request.user.is_authenticated:
         userGroup = current_user_group(request, request.user)
     groups = Group.objects.all()
@@ -33,14 +31,6 @@ def admin_all_groups(request, slug=None):
             isActive = request.POST.get("isActive") == 'on'
             new_group = Group(title=title, isActive=isActive)
             new_group.save()
-            activity.title = "Grup Oluşturma"
-            activity.method = "POST"
-            activity.creator = request.user.username
-            activity.application = "Group"
-            activity.createdDate = datetime.datetime.now()
-            activity.description = "Yeni bir grup oluşturuldu. İşlemi yapan kişi: " + str(
-                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-            activity.save()
             messages.success(request, "Grup başarıyla oluşturuldu.")
             return redirect("admin_add_group")
         return render(request, "adminpanel/group/all-groups.html", context)
@@ -57,12 +47,6 @@ def admin_edit_group(request, slug):
     :return:
     """
     instance = get_object_or_404(Group, slug=slug)
-    activity = AdminLogs()
-    activity.application = "Group"
-    activity.creator = request.user.username
-    activity.title = "Grup Düzenleme"
-    activity.method = "UPDATE"
-    activity.createdDate = datetime.datetime.now()
     form = AdminEditGroupForm(request.POST or None, instance=instance)
     context = {
         "form": form,
@@ -72,9 +56,6 @@ def admin_edit_group(request, slug):
     if request.method == "POST":
         instance.updatedDate = datetime.datetime.now()
         instance.save()
-        activity.description = "Grup düzenlendi. İşlemi yapan kişi: " + str(
-            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-        activity.save()
         messages.success(request, "Grup başarıyla düzenlendi.")
         return render(request, "adminpanel/group/edit-group.html", {'form': form})
     return redirect("admin_edit_group")
@@ -87,20 +68,12 @@ def admin_add_group(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
-    activity.application = "Group"
-    activity.creator = request.user.username
-    activity.title = "Grup Ekle"
-    activity.method = "POST"
-    activity.createdDate = datetime.datetime.now()
     if userGroup == 'admin':
         if request.method == "POST":
             title = request.POST.get("title")
             isActive = request.POST.get("isActive") == 'on'
             new_group = Group(title=title, isActive=isActive)
             new_group.save()
-            activity.description = "Yeni bir grup eklendi. İşlemi yapan kişi: " + str(activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-            activity.save()
             messages.success(request, "Grup başarıyla oluşturuldu.")
             return redirect("admin_all_groups")
         context = {
@@ -108,9 +81,6 @@ def admin_add_group(request):
         }
         return render(request, "adminpanel/group/add-group.html", context)
     else:
-        activity.description = "Yeni bir grup ekleme başarısız. İşlemi yapan kişi: " + str(
-            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-        activity.save()
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_dashboard")
 
@@ -123,24 +93,13 @@ def admin_delete_group(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
-    activity.title = "Grup Silme"
-    activity.method = "DELETE"
-    activity.creator = request.user.username
-    activity.application = "Group"
-    activity.createdDate = datetime.datetime.now()
     try:
         instance = Group.objects.get(slug=slug)
         if userGroup == 'admin':
             instance.delete()
-            activity.description = "Grup silme işlemi başarıyla gerçekleştirildi. İşlemi yapan kişi: " + str(activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-            activity.save()
             messages.success(request, "Grup başarıyla silindi.")
             return redirect("admin_all_groups")
         else:
-            activity.description = "Grup silme işlemi gerçekleştirilemedi. İşlemi yapan kişi: " + str(
-                activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-            activity.save()
             messages.error(request, "Yetkiniz yok.")
             return redirect("admin_dashboard")
     except:
@@ -156,12 +115,6 @@ def admin_isactive_group(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    activity = AdminLogs()
-    activity.title = "Grup Aktifliği Düzenleme"
-    activity.method = "UPDATE"
-    activity.creator = request.user.username
-    activity.application = "Group"
-    activity.createdDate = datetime.datetime.now()
     try:
         instance = get_object_or_404(Group, slug=slug)
         if userGroup == 'admin':
@@ -169,18 +122,12 @@ def admin_isactive_group(request, slug):
                 instance.updatedDate = datetime.datetime.now()
                 instance.isActive = False
                 instance.save()
-                activity.description = "Grup aktifliği kaldırıldı. İşlemi yapan kişi: " + str(
-                    activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-                activity.save()
                 messages.success(request, "Group artık aktif değil.")
                 return redirect("admin_all_groups")
             else:
                 instance.isActive = True
                 instance.updatedDate = datetime.datetime.now()
                 instance.save()
-                activity.description = "Grup başarıyla aktifleştirildi. İşlemi yapan kişi: " + str(
-                    activity.creator) + ". İşleminin gerçekleştirildiği tarih: " + str(activity.createdDate) + ""
-                activity.save()
                 messages.success(request, "Group aktifleştirildi.")
                 return redirect("admin_all_groups")
         else:
