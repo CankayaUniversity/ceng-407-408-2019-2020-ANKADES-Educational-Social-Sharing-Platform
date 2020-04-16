@@ -18,6 +18,7 @@
                             <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
+                                        <b>Takipçiler</b>
                                     <a class="float-right">
                                         {% if followers %}
                                             {{ followers.count }}
@@ -27,6 +28,7 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item">
+                                    <b>Takip Edilen</b>
                                     <a class="float-right">
                                         {% if followings %}
                                             {{ followings.count }}
@@ -42,7 +44,6 @@
                         <div class="card-header">
                             <h3 class="card-title">Hakkımda</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <strong><i class="fas fa-book mr-1"></i> Eğitim</strong>
                             <p class="text-muted">
@@ -175,8 +176,7 @@
                                                 Bilgi:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="bio" name="bio"
-                                                       placeholder="Kendinizi bize tanıtmak ister misiniz?" value="
-                                                        {% if request.user.bio != None %}{{ request.user.bio }}{% endif %}"
+                                                       placeholder="Kendinizi bize tanıtmak ister misiniz?" value="{% if request.user.bio != None %}{{ request.user.bio }}{% endif %}"
                                                        required>
                                             </div>
                                         </div>
@@ -239,7 +239,7 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                <div class="tab-pane {% if active_tab == 'email' %}active{% endif %}" id="email">
+                                <div class="tab-pane" id="email">
                                     <form class="form-horizontal" role="form" method="post"
                                           action="{% url 'edit_email' %}"
                                           enctype="multipart/form-data">
@@ -259,7 +259,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="tab-pane {% if active_tab == 'username' %}active{% endif %}" id="username">
+                                <div class="tab-pane" id="username">
                                     <p>
                                         <b>"{{ instance.username }}"</b> olan kullanıcı adınızı gerçekten değiştirmek
                                         istediğinize emin misiniz?
@@ -276,7 +276,7 @@
                                             data-target="#modal-edit-username">Değiştir
                                     </button>
                                 </div>
-                                <div class="tab-pane {% if active_tab == 'password' %}active{% endif %}" id="password">
+                                <div class="tab-pane" id="password">
                                     <form class="form-horizontal" role="form" method="post" id="edit-password"
                                           action="{% url 'edit_password' %}">
                                         {% csrf_token %}

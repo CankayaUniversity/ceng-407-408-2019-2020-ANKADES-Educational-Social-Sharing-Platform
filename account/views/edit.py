@@ -3,19 +3,13 @@ from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.core.files.storage import FileSystemStorage
-from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, AccountSocialMedia, SocialMedia, AccountFollower
 from account.views.views import get_social_media, get_user_follower
-from ankadescankaya.views import current_user_group
-
-import datetime
-
 from ankadescankaya.views import Categories
-from article.models import ArticleCategory
-from question.models import QuestionCategory
+from ankadescankaya.views import current_user_group
 
 
 @login_required(login_url="login_account")
@@ -84,8 +78,7 @@ def edit_profile_photo(request):
             return redirect('/ayarlar/')
         return redirect('/ayarlar/')
     except:
-        messages.error(request, "Kullanıcı bulunamadı.")
-        return redirect('/ayarlar/')
+        return redirect("404")
 
 
 @login_required(login_url="login_admin")
@@ -109,7 +102,7 @@ def add_social_media_to_user(request):
             new_linkedIn.url = "https://linkedin.com/" + str(linkedin)
             new_linkedIn.save()
         messages.success(request, "Değişiklikler başarıyla kaydedildi.")
-        return redirect('/ayarlar/#sosyal-medya')
+        return redirect('/ayarlar/')
     return redirect('/ayarlar/')
 
 
@@ -159,8 +152,7 @@ def edit_password(request):
                 return redirect('/ayarlar/')
         return redirect('/ayarlar/')
     except:
-        messages.error(request, "Kullanıcı bulunamadı.")
-        return redirect('/ayarlar/')
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
@@ -185,6 +177,7 @@ def edit_graduate(request):
     :param request:
     :return:
     """
+    active = "edit_graduate"
     instance = get_object_or_404(Account, username=request.user)
     if request.method == "POST":
         graduate = request.POST.get("graduate")
