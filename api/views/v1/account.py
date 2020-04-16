@@ -1,14 +1,10 @@
-from django.contrib.auth import login, authenticate
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, authentication, permissions, viewsets
-from rest_framework.generics import CreateAPIView, get_object_or_404, RetrieveAPIView
+from rest_framework import status
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from account.models import Account, AccountGroup
-from api.serializers.account import RegisterSerializer, LoginSerializer, UserSerializer
+from api.serializers.account import RegisterSerializer, LoginSerializer
 
 
 class AccountRegistrationView(CreateAPIView):

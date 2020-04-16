@@ -9,7 +9,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Çağrı</h3>
                     </div>
-                    <form role="form" enctype="multipart/form-data" action="{% url 'admin_edit_social_media' instance.slug %}" method="post">
+                    <form role="form" enctype="multipart/form-data" action="{% url 'edit_social_media' instance.slug %}" method="post">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">

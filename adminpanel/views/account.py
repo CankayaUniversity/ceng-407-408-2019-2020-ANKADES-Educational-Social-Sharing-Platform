@@ -2,13 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from online_users.models import OnlineUserActivity
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, Permission, AccountPermission
 from ankadescankaya.views import current_user_group
-from exam.models import School
 
 
 @login_required(login_url="login_admin")
@@ -143,88 +141,6 @@ def admin_admins(request):
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/account/group/admins.html", context)
-
-
-@login_required(login_url="login_admin")
-def admin_edit_profile(request):
-    """
-    :param request:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    instance = get_object_or_404(Account, username=request.user)
-    schools = School.objects.filter(Q(isActive=False, isCategory=False))
-    if request.method == "POST":
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        username = request.POST.get("username")
-        instance.first_name = first_name
-        instance.last_name = last_name
-        instance.username = username
-        instance.save()
-        messages.success(request, "Profil başarıyla güncellendi.")
-        return redirect(reverse("admin_edit_profile", kwargs={"username": username}))
-    context = {
-        "instance": instance,
-        "userGroup": userGroup,
-        "schools": schools,
-    }
-    return render(request, "adminpanel/account/edit-profile.html", context)
-
-
-@login_required(login_url="login_admin")
-def admin_edit_username(request, username):
-    """
-    :param request:
-    :param username:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    instance = get_object_or_404(Account, username=username)
-    context = {
-        "userGroup": userGroup,
-        "instance": instance
-    }
-    if request.method == "POST":
-        username = request.POST.get('username')
-        instance = Account(username=username)
-        instance.save()
-        messages.success(request, "Kullanıcı adınız başarıyla güncellendi.")
-        return redirect("admin_edit_username")
-    return render(request, "adminpanel/account/edit-username.html", context)
-
-
-@login_required(login_url="login_admin")
-def admin_edit_email(request, username):
-    """
-    :param request:
-    :param username:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    instance = get_object_or_404(Account, username=username)
-    context = {
-        "userGroup": userGroup,
-        "instance": instance
-    }
-    if request.method == "POST":
-        email = request.POST.get('email')
-        confirm_email = request.POST.get('confirm_email')
-        context = {
-            "email": email,
-            "confirm_email": confirm_email,
-            "userGroup": userGroup,
-            "instance": instance
-        }
-        if email != confirm_email:
-            messages.error(request, "E-mail adresleri uyuşmuyor. Lütfen tekrar deneyin")
-            return render(request, "adminpanel/account/edit-email.html", context)
-        else:
-            instance = Account(email=email)
-            instance.save()
-            messages.success(request, "Email adresiniz başarıyla güncellendi.")
-            return redirect("admin_edit_profile")
-    return render(request, "adminpanel/account/edit-email.html", context)
 
 
 @login_required(login_url="login_admin")

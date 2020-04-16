@@ -29,6 +29,7 @@ def add_question(request):
         instance = Question(isActive=True)
         instance.categoryId_id = value
         instance.title = title
+        instance.isActive = False
         instance.description = description
         instance.questionNumber = get_random_string(length=32)
         instance.creator = request.user

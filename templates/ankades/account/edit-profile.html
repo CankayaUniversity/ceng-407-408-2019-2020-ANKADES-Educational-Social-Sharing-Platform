@@ -155,8 +155,7 @@
                                             <label for="graduate" class="col-sm-2 col-form-label">Okulunuz:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="graduate" name="graduate"
-                                                       placeholder="Okulunuzun Adı" value="
-                                                        {% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
+                                                       placeholder="Okulunuzun Adı" value="{% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
                                                        required>
                                             </div>
                                         </div>

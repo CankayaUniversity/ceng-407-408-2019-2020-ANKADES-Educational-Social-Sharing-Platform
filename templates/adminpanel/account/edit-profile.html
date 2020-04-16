@@ -59,7 +59,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="settings">
-                                    <form class="form-horizontal" action="{% url 'admin_edit_profile' request.user %}" role="form" method="post" id="edit-profile" enctype="multipart/form-data">
+                                    <form class="form-horizontal" action="{% url 'edit_profile' request.user %}" role="form" method="post" id="edit-profile" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Ad:</label>
@@ -91,7 +91,7 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="socialMedia">
-                                    <form class="form-horizontal" action="{% url 'admin_edit_profile' request.user %}" role="form" method="post" id="edit-profile" enctype="multipart/form-data">
+                                    <form class="form-horizontal" action="{% url 'edit_profile' %}" role="form" method="post" id="edit-profile" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Ad:</label>

@@ -13,7 +13,6 @@ urlpatterns = [
     path('logout/', views.logout_admin, name="logout_admin"),
 
     # User
-    path('edit-profile/', account.admin_edit_profile, name="admin_edit_profile"),
     path('all-users/', account.admin_all_users, name="admin_all_users"),
     path('all-active-users/', account.admin_active_users, name="admin_active_users"),
     path('user-groups/', account.admin_all_user_groups, name="admin_all_user_groups"),
@@ -69,7 +68,7 @@ urlpatterns = [
          name="admin_delete_course_category"),
 
 
-# Course Category
+    # Course Category
     path('course-categories/', course.admin_course_categories, name="admin_course_categories"),
     url(r'^isactive-course-category/(?P<slug>[\w-]+)/$', course.admin_isactive_course_category,
         name="admin_isactive_course_category"),

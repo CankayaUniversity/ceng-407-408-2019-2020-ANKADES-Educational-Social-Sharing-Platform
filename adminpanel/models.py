@@ -39,6 +39,7 @@ class Tag(models.Model):
         db_table = "Tag"
         ordering = ['-createdDate']
 
+
 class Report(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=254, unique=True)
