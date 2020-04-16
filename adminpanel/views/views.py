@@ -85,17 +85,8 @@ def logout_admin(request):
     :param request:
     :return:
     """
-    activity = AdminLogs()
     if request.user.is_authenticated:
         logout(request)
-        activity.title = "Çıkış Yapma."
-        activity.application = "Logout"
-        activity.method = "UPDATE"
-        activity.creator = request.user.username
-        activity.createdDate = datetime.datetime.now()
-        activity.description = "" + str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı çıkış yaptı."
-        activity.save()
         messages.success(request, "Başarıyla çıkış yapıldı")
         return redirect("login_admin")
     else:
