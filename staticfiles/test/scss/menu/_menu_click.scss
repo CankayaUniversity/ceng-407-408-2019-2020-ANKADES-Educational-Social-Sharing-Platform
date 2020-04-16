@@ -1,0 +1,133 @@
+/* side clickable menu styles */
+.menu-click {
+  padding: 0;
+  i {
+    text-align: center;
+  }
+  .toggle_submenu {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 8px;
+    font-size: 8px;
+    text-align: center;
+    opacity: 0.9;
+    transform: rotate(-90deg);
+    transition: .25s ease-in-out;
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+    line-height: 3em;
+    &:before {
+      top: 0;
+      left: 0;
+      position: absolute;
+      width: 3em;
+      height: 3em;
+      line-height: 3em;
+      font-family: 'FontAwesome';
+      content: "\f078";
+    }
+  }
+
+  //all levels
+  ul {
+    padding: 0;
+  }
+
+  li {
+    position: relative;
+    list-style: none;
+    //for .nav flex
+    width: 100%;
+  }
+  //first level
+  & > li {
+    transition: 0.3s ease-in-out;
+  }
+  a {
+    display: block;
+    padding: 10px 40px;
+    @include small-text();
+    &:hover {
+      background-color: $universalBackgroundColor;
+    }
+  }
+
+  .active-submenu {
+    & > a {
+      background-color: $universalBackgroundColor;
+    }
+    & > .toggle_submenu {
+      transform: rotate(0deg);
+    }
+
+  }
+
+  //for scrollspy
+  li.active > a {
+    color: $colorMain;
+  }
+
+  //2nd level menu
+  ul {
+    opacity: 0;
+    height: 0;
+    a {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      padding-left: 50px;
+    }
+    //3nd level menu
+    ul {
+      a {
+        padding-left: 60px;
+      }
+
+      //4nd level menu
+      ul {
+        a {
+          padding-left: 70px;
+        }
+        //5nd level menu
+        ul {
+          a {
+            padding-left: 80px;
+          }
+        }
+      }
+    }
+  }
+
+  //for mega menu
+  .active-submenu > div.mega-menu {
+    height: auto;
+  }
+  .active-submenu > ul,
+  .active-submenu > div.mega-menu > ul {
+    opacity: 1;
+    height: auto;
+  }
+  ul, div.mega-menu {
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.6s, margin-top 0.4s, margin-bottom 0.4s, height 0.3s ease-in-out;
+  }
+
+  ul li.sfHover > .mega-menu ul {
+    display: block;
+    height: 100%;
+  }
+  div.mega-menu > ul {
+    margin-right: 0;
+    height: auto;
+  }
+}
+
+.active-side-slide-header:after {
+  visibility: visible;
+  opacity: 1; 
+  background-color: rgba(91, 131, 205, 0.5);
+  z-index: 1050;  
+  cursor: pointer;
+}

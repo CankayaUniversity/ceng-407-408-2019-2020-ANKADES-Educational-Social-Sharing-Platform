@@ -1,0 +1,184 @@
+/*
+** Dark Section background and Dark Muted background sections - .ds and .ds.ms
+*/
+/* dark grey background section - .ds */
+.ds {
+  background-color: $darkgreyColor;
+  color: #fff;
+  & * & {
+    background-color: darken($darkgreyColor, 5%);
+
+  }
+}
+
+/* dark background section - .ds.ms */
+.ds.ms {
+  background-color: lighten(#4c4c4c, 10%);
+  & & {
+    background-color: lighten($darkColor, 2%);
+  }
+}
+
+/* dark section blue - .ds.bs */
+.ds.bs {
+  background-color: $darkBlueColorLighter;
+}
+
+.ds {
+  a:not(.btn) {
+    color: $lightColor;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $lightColor;
+    a {
+      color: $lightColor;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  //light section in dark section - .ds .ls
+  .ls {
+    background-color: $lightColor;
+    color: $fontColor;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: $darkgreyColor;
+      a {
+        color: inherit;
+        &:hover {
+          color: $colorMain;
+        }
+      }
+    }
+    a:not(.btn) {
+      color: $darkgreyColor;
+      &:hover {
+        color: $colorMain;
+      }
+    }
+  }
+  //end of .ls inside .ds
+
+  label {
+    color: $lightColor;
+  }
+
+  hr {
+    border-color: $darkBorderColor;
+    background-color: $darkBorderColor;
+  }
+  blockquote, .blockquote {
+    color: $lightColor;
+  }
+
+  pre {
+    color: $darkFontColor;
+  }
+
+  .muted-bg,
+  .hero-bg {
+    background-color: $darkBackgroundColor;
+  }
+
+  .bordered {
+    border-color: $darkBorderColor;
+  }
+  .color-main {
+    color: $colorMain;
+  }
+  .color-main2 {
+    color: $colorMain2;
+  }
+  .color-dark,
+  .color-darkgrey {
+    color: $lightColor;
+    border-color: $lightColor;
+  }
+
+  .links-maincolor a {
+    color: $colorMain;
+    &:hover {
+      color: $lightColor;
+    }
+  }
+  .links-maincolor2 a {
+    color: $colorMain2;
+    &:hover {
+      color: $lightColor;
+    }
+  }
+  .links-maincolor3 a {
+    color: $colorMain3;
+    &:hover {
+      color: $lightColor;
+    }
+  }
+
+  .links-grey a {
+    color: $darkFontColor;
+    &:hover {
+      color: $lightColor;
+    }
+  }
+
+  .links-darkgrey a {
+    color: $lightColor;
+    &:hover {
+      color: $colorMain;
+    }
+  }
+  //sections with borders
+  &.s-bordertop:before,
+  &.s-borderbottom:after,
+  &.s-bordertop-container .container:before,
+  &.s-borderbottom-container .container:after {
+    background-color: $darkBorderColor;
+
+  }
+  &.s-bordered-columns {
+    [class*='col-'] + [class*='col-']:before {
+      background-color: $darkBorderColor;
+    }
+  }
+
+  //social icons
+  a.fa {
+    color: $lightColor;
+    border-color: $darkBorderColor;
+  }
+  a.bg-icon {
+    background-color: $darkBackgroundColor;
+  }
+
+  .fa.color-icon:hover {
+    color: $lightColor;
+  }
+
+  .color-icon.bg-icon {
+    background-color: $darkBackgroundColor;
+  }
+  .color-icon.bg-icon:hover {
+    color: $lightColor;
+  }
+
+  .color-bg-icon:hover {
+    background-color: $colorMain;
+  }
+}
+

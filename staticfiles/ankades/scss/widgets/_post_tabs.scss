@@ -1,0 +1,16 @@
+/*.widget_post_tabs*/
+
+.widget_post_tabs {
+  h5:first-child {
+    font-weight: 400;
+    text-transform: none;
+    line-height: 1;
+    margin-bottom: 0.3em;
+  }
+  .vertical-item {
+    margin-bottom: 2em;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

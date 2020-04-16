@@ -1,0 +1,44 @@
+.go-top {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  position: fixed;
+  bottom: 60px;
+  right: 10px;
+  z-index: 77;
+  font-size: 18px;
+  text-align: center;
+  background: darken(@heading, 4%);
+  color: #fff !important;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.go-top.go-top-visible {
+  /* the button becomes visible */
+  visibility: visible;
+  opacity: 1;
+}
+
+.go-top.go-topfade-out {
+  opacity: 1;
+}
+
+
+@media (max-width: @screen-sm-max) {
+  .go-top {
+    right: 20px;
+    bottom: 20px;
+  }
+}
+@media (min-width: @screen-md-min) {
+  .go-top {
+    height: 60px;
+    width: 60px;
+    line-height: 60px;
+    right: 30px;
+    bottom: 60px;
+  }
+}

@@ -1,0 +1,92 @@
+///////////////////
+//theme variables//
+///////////////////
+
+//Colors
+
+//Monochrome colors
+
+//text color in light section (.ls)
+$fontColor: #808080;
+//background color for light section (.ls) and font color in dark section (.ds)
+$lightColor: #ffffff;
+//text color for headings in light section (.ls) and background color for dark section (.ds)
+$darkgreyColor: #4c4c4c;
+//background color for light grey background light section (grey - .ls.ms)
+$greyColor: #f2f2f2;
+//background color for dark muted section (.ds.ms)
+$darkColor: #252525;
+//border colors for elements in light section (.ls) (and .bordered elements)
+$borderColor: #e1e1e1;
+//rgba variant for bordered elements
+$borderColorRGBA: rgba(#000, 0.1);
+//background color for hero background elements in light section (.hero-bg)
+$backgroundColor: #f5f5f5;
+
+$boxShadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+
+//section specific variables
+
+// dark section - .ds
+
+//font color in dark section (.ds)
+$darkFontColor: #9a9a9a;
+//border colors in dark section (.ds)
+$darkBorderColor: #454545;
+//background color for elements with background (.hero-bg etc.)
+$darkBackgroundColor: rgba(#fff, 0.05);
+
+//color section - .cs
+
+//border colors in color section (.cs)
+$colorBorderColor: rgba(#fff, 0.15);
+$colorBackgroundColor: rgba(#fff, 0.1);
+
+//dark grey background dark blue section - (.ds.bs)
+$darkBlueColor: #253138;
+$darkBlueColorLighter: #2f3e47;
+
+//Accent Color schemes
+//theme accent colors
+$styleNumber: '' !default;
+$colorMain: #8073b2!default;
+$colorMain2: #c280bf !default;
+$colorMain3: #CF423C !default;
+$colorMain4: #650B1B !default;
+
+//////bootstrap colors
+//orange - warning
+$colorPrimary: $colorMain !default;
+//green
+$colorSuccess: #4db19e !default;
+//blue
+$colorInfo: #007ebd !default;
+//orange
+$colorWarning: #eeb269 !default;
+//red
+$colorDanger: #dc5753 !default;
+
+//Layout
+$grid-breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+//_horizontal spacers
+//reverse for smaller gutters has priority
+$columns-horizontal-gutters-sum: 100 80 60 50 30 25 20 15 10 5 2 1 0;
+$container-horizontal-padding: 0 1 5 10 20 30;
+
+//_vertical spacers - vertical margins and padding for sections and columns
+$section-vertical-padding: 0 1 2 3 5 10 15 20 25 30 50 75 100 130;
+$columns-vertical-margins: 0 1 2 5 10 15 20 25 30 50 60;
+
+//top and bottom borders height for sections with borders - 1px by default
+$section-borders-height: 2 3 5;
+
+//font size helpers - fs-xx
+$font-size-helpers: 12 14 16 18 20 24 28 32 36 40 56;
+
+$dividers-height: 0 10 20 30 40 50 60 80 100 120;

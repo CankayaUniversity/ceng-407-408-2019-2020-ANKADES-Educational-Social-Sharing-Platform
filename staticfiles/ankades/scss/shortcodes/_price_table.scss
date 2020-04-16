@@ -1,0 +1,122 @@
+.pricing-plan {
+  text-align: center;
+  padding: 40px 40px 10px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+  transition: 0.5s;
+  .price-wrap {
+    font-size: 20px;
+    line-height: 0.7;
+    margin: 42px 0 3px;
+    align-items: center;
+    justify-content: center;
+    &[class*='bg-'] {
+      padding: 30px 30px 10px;
+      margin-top: 50px;
+      margin-bottom: 0;
+    }
+
+    .plan-price {
+      font-size: 40px;
+      font-weight: 700;
+      padding: 0 6px;
+    }
+  }
+  [class*='bg-'] {
+    padding: 10px 30px 27px;
+    margin-left: -41px;
+    margin-right: -41px;
+  }
+  .plan-name {
+    &[class*='bg-'] {
+      padding-top: 30px;
+      margin-top: -40px;
+    }
+    h3 {
+      font-size: 24px;
+      letter-spacing: 0.2em;
+      line-height: 1;
+    }
+  }
+
+  @media(min-width: 1200px) {
+    padding: 57px 60px 10px;
+    [class*='bg-'] {
+      margin-left: -61px;
+      margin-right: -61px;
+    }
+    .plan-name[class*='bg-'] {
+      margin-top: -57px;
+    }
+    &.plan-featured [class*='bg-'] {
+      margin-left: -60px;
+      margin-right: -60px;
+    }
+  }
+
+  .plan-features {
+    margin: 38px 0 0;
+  }
+
+  .plan-button {
+    position: relative;
+    top: 38px;
+  }
+
+  //featured border
+  &.plan-featured {
+    border: 5px solid $colorMain3;
+    transform: translateY(-10px);
+    .plan-button {
+      top: 48px;
+    }
+  }
+}
+
+.pricing-plan.rounded .plan-name {
+  border-radius: 5px 5px 0 0;
+}
+
+.plan-desc {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  @media (max-width: 767px) {
+    justify-content: space-around !important;
+  }
+   @media (max-width: 991px) {
+    justify-content: center;
+  }
+  @media (min-width: 991px) and (max-width: 1200px) {
+    margin: 40px -15px 0;
+  }
+ h4 {
+    margin: 0; 
+    font-weight: 200;
+    letter-spacing: 5px;
+    line-height: 1.3;
+  }
+  .price-icon {
+    transform: translateX(7%);
+  }
+  p {
+    line-height: 0;
+  }
+  .plan-content {
+    margin-top: 10px;
+    @media (max-width: 767px) {
+      margin-top: 25px;
+    }
+  }
+}
+
+.ls .pricing-plan {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 991px) {
+  .pricing-plan.pricing-plan:hover {
+    transform: scale(1.1);
+  }
+}

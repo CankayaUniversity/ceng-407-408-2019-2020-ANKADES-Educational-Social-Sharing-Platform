@@ -1,0 +1,231 @@
+/*
+** Bootstrap Overrides
+*/
+@import 'override_bootstrap/breadcrumbs';
+@import 'override_bootstrap/forms';
+@import 'override_bootstrap/carousel';
+@import 'override_bootstrap/tabs';
+@import 'override_bootstrap/collapse';
+@import 'override_bootstrap/dropdowns';
+
+//making container 1170px width for wide screens
+@media (min-width: 1300px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+//other bootstrap elements
+/* modal */
+.modal-open {
+  padding-right: 0 !important;
+}
+
+.modal-backdrop.show {
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+  transition: background .5s ease;
+}
+
+.modal-content {
+  border-radius: 1px;
+  [class*="col-"]:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* bootstrap buttons */
+.btn {
+  padding: 2px; 
+  height: 60px;
+  width: 180px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border: 0;
+  span {
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    transition: background .5s ease;
+  }
+  &.small-btn {
+    height: 40px;
+    width: 140px;
+  }
+}
+
+/* media elements */
+.media > img {
+  display: block;
+}
+
+.media-body {
+  h3, h4 {
+    line-height: 1;
+    margin-top: 0.3em;
+    margin-bottom: 0.2em;
+  }
+
+  * + &,
+  & + * {
+    margin-left: 20px;
+  }
+}
+
+//for media component inside table - for dashboard
+td .media-body {
+  width: auto;
+}
+
+// our custom video placeholser
+.embed-responsive-3by2 {
+  //height property removed in v4
+  height: 0;
+  padding-bottom: 66.666%;
+  background-color: $colorMain;
+  border-radius: 5px 5px 0 0;
+}
+
+.embed-placeholder {
+  &:after {
+    transition: all 0.3s ease-in-out;
+    content: "\f04b";
+    font-family: 'FontAwesome';
+    position: absolute;
+    color: $lightColor;
+    font-size: 14px;
+    line-height: 56px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    border: 2px solid $lightColor;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    margin-left: -30px;
+    margin-top: -30px;
+  }
+  &:hover:after {
+    opacity: 1;
+  }
+}
+
+.alert {
+  border-radius: 0;
+  border-width: 0 0 0 4px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.mark, mark {
+  background-color: transparent;
+}
+
+button.close {
+  min-width: 0;
+}
+
+/* small in headings */
+.h1 .small,
+.h1 small,
+.h2 .small,
+.h2 small,
+.h3 .small,
+.h3 small,
+.h4 .small,
+.h4 small,
+.h5 .small,
+.h5 small,
+.h6 .small,
+.h6 small,
+h1 .small,
+h1 small,
+h2 .small,
+h2 small,
+h3 .small,
+h3 small,
+h4 .small,
+h4 small,
+h5 .small,
+h5 small,
+h6 .small,
+h6 small {
+  color: inherit;
+  font-weight: 300;
+}
+
+/* labels */
+.label-success {
+  color: $lightColor;
+  background-color: $colorSuccess;
+}
+
+.label-info {
+  color: $lightColor;
+  background-color: $colorInfo;
+}
+
+.label-warning {
+  color: $lightColor;
+  background-color: $colorWarning;
+}
+
+.label-danger {
+  color: $lightColor;
+  background-color: $colorDanger;
+}
+
+/*
+/*progress bars*/
+p + .progress {
+  margin-top: -10px;
+}
+
+.progress {
+  overflow: visible;
+  height: 4px;
+  margin-bottom: 20px;
+  position: relative;
+  border-radius: 0;
+  background-color: #e5e5e5;
+  box-shadow: none;
+  border: none;
+  margin-top: 2px;
+}
+
+.progress:last-child {
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  color: inherit;
+  box-shadow: none;
+  height: 4px;
+  border-radius: 5px;
+}
+
+.progress-bar span {
+  position: absolute;
+  right: 0;
+  top: -35px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #4c4c4c;
+}
+
+.progress-title {
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 15px;
+}
+

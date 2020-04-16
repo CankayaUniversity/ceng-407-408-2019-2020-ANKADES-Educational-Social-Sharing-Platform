@@ -1,0 +1,52 @@
+//import google fonts - only for HTML, not WP
+@import 'import_fonts';
+//accent colors variables
+//Theme Variables
+@import 'variables_template';
+//table of contents and colors comments
+@import 'table_of_contents';
+//common styles for elements
+@import 'common';
+//styled lists
+@import 'lists';
+//override for bootstrap
+@import 'override';
+//main jQuery plugins - owl, flexslider, photoswipe etc.
+@import 'plugins';
+//bootstrap addons
+@import 'addons';
+@import 'sections_corners';
+//addons common .ls and .ls.ms
+@import 'color_sections/ls';
+//theme .ls and .ls.ms
+@import 'section_light';
+@import 'section_grey';
+//addons common .ds
+@import 'color_sections/ds';
+//theme .ds
+@import 'section_dark';
+//addons common .cs
+@import 'color_sections/cs';
+//theme .cs
+@import 'section_color';
+//common components helpers - bootstrap addons
+@import 'helpers';
+@import 'shortcodes';
+@import 'widgets';
+@import 'social_icons';
+@import 'wordpress/required';
+@import 'wordpress/pagination';
+//@import 'shop';
+@import 'menu';
+@import 'header';
+@import 'header_side';
+@import 'intro';
+@import 'subpages';
+@import 'template';
+//@import 'dashboard';
+@import 'switcher_styles';
+
+@if $switcher == true {
+  @include switcherStyles;
+}
+

@@ -1,0 +1,78 @@
+.fw-price-table {
+  display: flex;
+  margin: 0 -15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  > * {
+    flex: 1;
+    border: 1px solid $borderColor;
+    margin: 30px 15px;
+    min-width: 208px;
+    max-width: 380px;
+  }
+
+  //description
+  > [class*='caption'] {
+    text-align: right;
+    border-color: transparent;
+    [class*='row'] {
+      border-color: transparent;
+    }
+  }
+
+  //default plan
+  > [class*='package'] {
+    //name and price
+    text-align: center;
+    [class*='head'] {
+      background: $colorMain;
+      margin: -1px -1px 2px -1px;
+    }
+    [class*='amount'] {
+
+    }
+
+    //featured plan
+    &[class*='active'] {
+      //background: blue;
+    }
+  }
+  //eof default plan
+
+  [class*='price-desc'] {
+    display: block;
+    font-style: italic;
+  }
+
+  //name and price
+  [class*='head'] {
+    height: 70px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  [class*='amount'] {
+    height: 80px;
+    overflow: hidden;
+  }
+
+  [class*='row'] {
+    padding: 5px 15px;
+    border-top: 1px solid $borderColor;
+  }
+
+  //pricing plan name and description name
+  h2,
+  h3 {
+    padding: 0 15px;
+    font-size: 1.5em;
+  }
+  i[class*='yes']:before {
+    content: "\f00c";
+  }
+  i[class*='no']:before {
+    content: "\f00d";
+  }
+
+}

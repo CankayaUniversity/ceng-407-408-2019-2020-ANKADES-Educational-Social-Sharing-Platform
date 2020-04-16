@@ -1,0 +1,115 @@
+/* access_press */
+// http://demo.accesspressthemes.com/wordpress-plugins/accesspress-social-counter/
+.apsc-facebook-icon {
+  background-color: #3b5998;
+}
+
+.apsc-twitter-icon {
+  background-color: #1dcaff;
+}
+
+.apsc-youtube-icon {
+  background-color: #e52d27;
+}
+
+.apsc-soundcloud-icon {
+  background-color: #ff8800;
+}
+
+.apsc-dribble-icon {
+  background-color: #ea4c89;
+}
+
+.apsc-comment-icon {
+  background-color: #464646;
+}
+
+.apsc-edit-icon {
+  background-color: #837d7d;
+}
+
+.apsc-google-plus-icon {
+  background-color: #dd4b39;
+}
+
+.apsc-instagram-icon {
+  background-color: #3f729b;
+}
+
+.apsc-each-profile a {
+  color: white !important;
+}
+
+.apsc-each-profile a:hover {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.apsc-theme-4 {
+  .apsc-each-profile {
+    margin-bottom: 10px;
+  }
+
+  .apsc-inner-block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .social-icon {
+    display: inline-block;
+    margin-right: auto;
+    padding: 4px 0;
+
+    transition: all 0.5s ease-in-out;
+  }
+
+  .apsc-each-profile a {
+    display: block;
+    position: relative;
+    padding: 20px 18px 20px 70px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  //icon
+  .apsc-each-profile a .fa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-right: 1px solid rgba($lightColor, 0.4);
+    width: 60px;
+    font-size: 16px;
+    transform: none;
+    transition: all 0.5s ease-in-out;
+  }
+
+
+  .apsc-count {
+    border-radius: 0;
+    color: #fff;
+    display: inline-block;
+    font-size: inherit;
+    text-align: center;
+    position: relative;
+    padding: 4px 4px;
+    transition: all 0.5s ease-in-out;
+
+  }
+
+  .apsc-media-type {
+    display: inline-block;
+    padding: 4px 0;
+  }
+}
+

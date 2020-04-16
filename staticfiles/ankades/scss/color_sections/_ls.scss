@@ -1,0 +1,105 @@
+/*
+** Light Background Section - .ls
+*/
+.ls {
+  background-color: $lightColor;
+  color: #7f7f7f;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #4c4c4c;
+  }
+}
+
+/*
+** Grey Background Section - light section, muted section - .ls.ms
+*/
+.ls.ms {
+  background-color: #f7f6fb;
+  color: #808080;
+
+  .links-grey a {
+    color: darken($fontColor, 7%);
+  }
+
+  .hero-bg {
+    background-color: $lightColor;
+    hr {
+      background-color: $borderColor;
+    }
+  }
+
+  hr {
+    background-color: $lightColor;
+  }
+
+  //forms
+  input[type="text"],
+  input[type="email"],
+  input[type="url"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select,
+  .form-control {
+    background-color: $lightColor;
+  }
+
+  // .ls:not(.ms),
+  .hero-bg {
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="number"],
+    textarea,
+    select,
+    .form-control {
+      border-color: $borderColor;
+      background-color: $greyColor;
+    }
+  }
+  td,
+  th,
+  .bordered {
+    border-color: darken($borderColor, 5%);
+  }
+
+  .btn-secondary {
+    border-color: $lightColor;
+    &:hover {
+      border-color: darken($greyColor, 6%);
+      background-color: darken($greyColor, 6%);
+    }
+  }
+}
+
+.ls.ms, 
+.hero-bg {
+  .btn-outline-maincolor,
+  .btn-outline-maincolor2,
+  .btn-outline-maincolor3 {
+    &:hover span {
+      background: transparent;
+      color: #f7f6fb;
+    }
+    span {
+      background-color: #f7f6fb;
+    }
+  }
+  .btn-maincolor,
+  .btn-maincolor2,
+  .btn-maincolor3 {
+    color: #f7f6fb;
+    &:hover span {
+      background: #f7f6fb;
+    }
+  }
+}

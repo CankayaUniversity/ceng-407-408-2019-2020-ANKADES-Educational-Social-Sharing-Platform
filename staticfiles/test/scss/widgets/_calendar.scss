@@ -1,0 +1,142 @@
+/* widget_calendar */
+.calendar_wrap {
+  width: 100%;
+  margin-bottom: 0;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+
+  @media (min-width: 768px) and (max-width: 992px) {
+    & {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  }
+}
+
+.widget_calendar {
+  table {
+    margin: 0;
+    position: relative;
+    text-align: center;
+    max-width: 370px;
+
+    //experiment
+    display: flex;
+    flex-direction: column;
+  }
+
+  caption {
+    line-height: 1;
+    padding: 22px 0 22px;
+    text-align: center;
+    color: $lightColor;
+    background-color: $colorMain;
+  }
+  thead {
+    background-color: $darkgreyColor;
+    color: $lightColor;
+
+    th {
+
+      &:first-child {
+        padding-left: 20px;
+      }
+      &:last-child {
+        padding-right: 20px;
+      }
+      text-align: center;
+      width: 100px;
+    }
+  }
+
+  tbody {
+    border: 1px solid $borderColor;
+    border-top: none;
+    tr {
+      &:first-child {
+        td {
+          padding-top: 30px;
+        }
+      }
+      &:last-child {
+        td {
+          padding-bottom: 30px;
+        }
+      }
+    }
+    td {
+      padding: 10px 4px;
+      position: relative;
+      width: 100px;
+      &:first-child {
+        padding-left: 20px;
+      }
+      &:last-child {
+        padding-right: 20px;
+      }
+      a {
+        font-weight: 700;
+      }
+    }
+  }
+
+  th {
+    color: inherit;
+  }
+
+  tfoot {
+    td {
+      position: absolute;
+      top: 0;
+      a {
+        //uncomment to hide text near arrows
+        //font-size: 0;
+        //width: 60px;
+
+        text-align: center;
+        height: 60px;
+        line-height: 60px;
+        display: inline-block;
+        padding: 0 25px;
+        font-size: 0;
+        color: transparent;
+        &:hover {
+          background-color: $colorMain;
+          border-color: $colorMain;
+        }
+        &:before,
+        &:after {
+          color: $lightColor;
+          font-size: 14px;
+          font-family: 'FontAwesome';
+        }
+      }
+      &.pad {
+        display: none;
+      }
+    }
+
+    //prev
+    td:first-child {
+      left: 0;
+      padding: 0;
+      a {
+        border-right: 1px solid rgba($lightColor, 0.2);
+        &:before {
+          content: '\f053';
+        }
+      }
+    }
+    //next
+    td:last-child {
+      right: 0;
+      padding: 0;
+      a {
+        border-left: 1px solid rgba($lightColor, 0.2);
+        &:after {
+          content: '\f054';
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+/*
+** Number Card
+*/
+.number-card {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  margin: 30px 0;
+  .card-number {
+    span {
+      position: relative;
+      display: block;
+      margin-left: -0.32em;
+      margin-top: -0.14em;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 60px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      &:after {
+        font-size: 0.62em;
+        content: '•';
+        position: absolute;
+        right: -0.4em;
+        bottom: -0.09em;
+      }
+
+      @media (min-width: 992px) {
+        font-size: 100px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 238px;
+      }
+    }
+  }
+  .card-content {
+    padding: 36px 36px 46px;
+    @media (min-width: 992px) {
+      padding: 56px 60px 66px 100px;
+    }
+    h4 {
+      margin: 0;
+      line-height: 1;
+    }
+    h3 {
+      line-height: 1;
+      margin: 6px 0 25px;
+      font-weight: 900;
+      @media(min-width: 500px) {
+        font-size: 38px;
+      }
+    }
+  }
+  @media (max-width:499px) {
+    .card-number {
+      position: absolute;
+      span {
+        font-size: 36px;
+      }
+    }
+    h3,h4 {
+      display: inline-block;
+    }
+  }
+}

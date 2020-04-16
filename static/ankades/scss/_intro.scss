@@ -1,0 +1,325 @@
+/* 
+** Intro Section Styles
+*/
+
+.page_slider {
+  position: relative;
+  overflow: hidden;
+  //fix slider bug on small screens
+  clear: both;
+  & > img {
+    width: 100%;
+  }
+  h2 {
+    font-size: 3em;
+    margin: 0;
+    line-height: 1;
+  }
+  h3 {
+    font-size: 2em;
+    margin: 0;
+    line-height: 1;
+  }
+  h4 {
+    font-size: 1.5em;
+    margin: 0;
+  }
+  p {
+    font-size: 14px;
+  }
+
+  @media(min-width: 767px) {
+    h2 {
+      font-size: 6em;
+    }
+    h3 {
+      font-size: 3em;
+    }
+    h4 {
+      font-size: 2.5em;
+    }
+    h5 {
+      font-size: 24px;
+      line-height: 30px;
+      letter-spacing: 0.4em;
+    }
+    p {
+      font-size: 12px;
+      letter-spacing: 0.42em;
+      font-weight: 500;
+    }
+  }
+  
+    @media(max-width: 767px) {
+    h5 {
+      font-size: 12px !important;
+      letter-spacing: 0 !important;
+    }
+  }
+  
+  @media(max-width: 991px) {
+    h5 {
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: 0.4em;
+      width: 100%;
+    }
+  }
+
+  @media(min-width: 991px) and (max-width: 1200px) {
+    h5 {
+      font-size: 20px;
+      margin-top: 30px;
+    }
+  }
+
+  .flex-direction-nav .flex-prev {
+    left: 2%;
+    opacity: 1;
+  }
+  .flex-direction-nav .flex-next {
+    right: 2%;
+    opacity: 1;
+  }
+
+  .flexslider {
+    .intro_layer img {
+      width: auto;
+    }
+    //uncomment if you need a shadow on your slider
+    &.slider-shadow {
+      padding-bottom: 50px;
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        background: transparent;
+        z-index: 1;
+        bottom: 65px;
+        left: 10px;
+        width: 50%;
+        height: 20%;
+        max-width: 400px;
+        box-shadow: 0 25px 20px rgba(0, 0, 0, 0.3);
+        transform: rotate(-3deg);
+      }
+      &:after {
+        right: 10px;
+        left: auto;
+        transform: rotate(3deg);
+      }
+    }
+  }
+
+  .intro_layers_wrapper {
+    display: flex;
+  }
+
+  .intro_layers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 0;
+
+  }
+
+  //dots - horizontal
+  .flex-control-nav {
+    position: absolute;
+    width: 100%;
+    display: block;
+    flex-direction: unset;
+    justify-content: center;
+    top: 50%;
+
+    li {
+      display: block;
+      padding-top: 6px;
+      padding-bottom: 6px;
+      margin-bottom: 24px;
+      @media(max-width: 991px) {
+        display: inline-block;
+        margin: 0;
+        padding: 0 10px;
+      }
+      a {
+        &.flex-active {
+          opacity: 1;
+          text-decoration: line-through;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  //lg and bigger layout
+  @media(min-width: 300px) {
+    .cs,
+    .ds {
+      background-color: transparent;
+    }
+
+    //description alignment
+    //for intro with testimonials,
+    //for static intro
+    //.flexslider prefix removed
+    .container-fluid,
+    .container,
+    img + .container {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+
+    }
+
+    [class*="col-"] {
+      position: static;
+      min-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+
+    }
+
+    // center alignment for slide description
+    .intro_layers_wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 15px;
+      left: 23px;
+      height: 100%;
+      transform: translateY(1.5%);
+      @media (min-width: 600px) {
+        .boxed & {
+          padding-left: 60px;
+          padding-right: 60px;
+        }
+      }
+    }
+
+    .intro_text_top .intro_layers {
+      justify-content: flex-start;
+    }
+    .intro_text_bottom .intro_layers {
+      justify-content: flex-end;
+    }
+
+  }
+  @media (min-width: 992px) {
+    .flex-direction-nav {
+      display: none;
+    }
+
+    .intro_layers_wrapper {
+      padding: 100px 0;
+      padding-left: 60px;
+    }
+  }
+  //md and smaller - static container on small device
+  @media (min-width: 1600px) {
+    .intro_layers_wrapper {
+      padding-left: 0;
+    }
+  }
+}
+
+
+
+.intro-absolute {
+  position: absolute;
+  left: 39%;
+  top: 19.3%;
+  @media (max-width: 767px) {
+    top: 0 !important;
+  }
+  @media (max-width: 991px) {
+    top: 6px;
+  }
+}
+
+.intro_after_featured_word {
+  margin-top: 26px;
+  margin-left: 7px;
+  @media (max-width: 767px) {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+}
+
+
+.intro_featured_word {
+  font-weight: 900;
+  font-size: 140px;
+  line-height: 0.73;
+  text-transform: uppercase;
+  letter-spacing: -8px;
+  -webkit-clip-path: polygon(10% 0, 100% 0, 100% 53%, 75% 100%, 0 100%, 0 21%);
+  clip-path: polygon(10% 0, 100% 0, 100% 53%, 75% 100%, 0 100%, 0 21%);
+  @media (max-width: 767px) {
+    font-size: 50px !important;
+    font-weight: 700 !important;
+    letter-spacing: -4px;
+  }
+  @media (max-width: 991px) {
+    font-size: 60px;
+    font-weight: 900;
+    letter-spacing: -4px;
+  }
+   @media (min-width: 992px) and (max-width: 1200px) {
+    font-size: 120px;
+  }
+}
+
+.slide2 .intro_featured_word {
+  letter-spacing: -7px;
+}
+
+.slide3 {
+  .intro_featured_word {
+  letter-spacing: -9px;
+  padding-right: 10px;
+  -webkit-clip-path: polygon(17% 0, 100% 0, 100% 100%, 75% 100%, 0 100%, 0 21%);
+  clip-path: polygon(17% 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 21%);
+  }
+  .intro-absolute {
+    position: absolute;
+    left: 55%;
+    top: 43.3%;
+    margin-right: -50%;
+    @media (max-width: 767px) {
+      left: 56% !important;
+      top: 22.3% !important;
+    }
+     @media (max-width: 991px) {
+      left: 50%;
+      top: 28.3%;
+      font-size: 12px;
+    }
+    @media (min-width: 991px) and (max-width: 1600px) {
+      left: 58%;
+      top: 44.3%;
+      font-size: 16px;
+      margin-right: -30%;
+    }
+  }
+}
+
+#myVideo {
+  min-width: 100%;
+  min-height: 100%;
+  margin-bottom: -10px;
+  @media (max-width: 991px) {
+    height: 500px;
+  }
+}
+
+.flex-bg.s-overlay:before {
+  background: linear-gradient(to right, #8073b2 0%, #c280bf 100%);
+  opacity: 0.6;
+  border-radius: 0;
+}
+

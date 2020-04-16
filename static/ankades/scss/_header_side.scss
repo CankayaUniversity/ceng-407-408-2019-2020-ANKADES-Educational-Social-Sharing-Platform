@@ -1,0 +1,265 @@
+/*
+** Side Header
+*/
+/* side header layout */
+
+body {
+  &:after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(91, 131, 205, 0.5);
+    z-index: 1001;
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+body,
+body:after,
+#canvas,
+.page_header_side {
+  transition: $headerTransition;
+}
+
+#canvas {
+  left: 0;
+  transition-property: left, margin-left;
+}
+
+//push side header
+body.active-side-header {
+
+  //disable scrolling when push_header is active
+  overflow: hidden;
+
+  #canvas {
+    //transition-property: left;
+    left: $sideHeaderWidth;
+  }
+
+  .page_header_side {
+    left: 0;
+  }
+  &:after {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+html.html-active-push-header {
+  overflow: hidden;
+}
+
+/////////////
+//left layout
+.page_header_side {
+  z-index: 1102;
+  position: fixed;
+  width: 340px;
+  left: -$sideHeaderWidth;
+  top: 0;
+  bottom: 0;
+
+  //shadow for slide header
+  &.active-slide-side-header {
+    box-shadow: 0 0 4px 3px rgba(50, 50, 50, 0.05);
+  }
+
+  //hidding regular menu toggler in side header exists
+  & ~ .page_toplogo {
+    .toggle_menu {
+      display: none;
+    }
+  }
+  a.logo {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    img {
+      max-width: 100%;
+    }
+  }
+  .widget {
+    margin-top: 60px;
+    padding-left: $sideHeaderLeftRightPadding;
+    padding-right: $sideHeaderLeftRightPadding;
+  }
+
+  .widget_icons_list li + li {
+    margin-top: 1em;
+  }
+
+  .social-icons {
+    display: block;
+    margin-top: 43px;
+    a.border-icon,
+    a.bg-icon,
+    a.color-bg-icon {
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+  }
+
+  //making toggler not overlap on top sections
+  @media (min-width: 1200px) {
+    & ~ .page_topline .container-fluid,
+    & ~ .page_toplogo .container-fluid,
+    & ~ div .page_header .container-fluid {
+      padding-left: 65px;
+      padding-right: 65px;
+    }
+  }
+  @media (max-width: 1199px) {
+    & ~ .page_topline [class*="container"],
+    & ~ .page_toplogo [class*="container"],
+    & ~ div .page_header [class*="container"] {
+      padding-left: 65px;
+      padding-right: 65px;
+    }
+  }
+}
+
+.side_header_inner {
+  padding: 26px 0 60px;
+}
+
+//side header toggler
+.toggle_menu_side {
+  transition: right 0.3s ease-in-out;
+  position: absolute;
+  top: 0;
+  right: -60px;
+  margin: 0;
+
+  @media(max-width: 370px) {
+    &.active {
+      right: 0;
+      opacity: 0.4;
+    }
+  }
+
+  &:before,
+  & span:before,
+  & span:after,
+  & span {
+    background-color: $lightColor !important;
+  }
+
+  .ds & {
+    background-color: $colorMain;
+  }
+
+  .bs & {
+    background-color: $colorMain;
+  }
+  .ls & {
+    background-color: $colorMain;
+  }
+}
+
+
+
+//toggler for sticked left header
+.page_header_side.header_side_sticked .toggle_menu_side {
+  transition: $headerTransition;
+  right: -60px;
+  top: 0;
+}
+
+.page_header_side.active-slide-side-header {
+  left: 0;
+}
+
+//fix for animation on affix header with push side header
+.active-side-header .boxed .header_push ~ div .page_header,
+.active-side-header .header_push ~ div .page_header.affix {
+  margin-left: $sideHeaderWidth;
+}
+
+.active-side-header.slide-right .boxed .header_push ~ div .page_header,
+.active-side-header.slide-right .header_push ~ div .page_header.affix {
+  margin-left: -$sideHeaderWidth;
+}
+
+//right layout
+.page_header_side.header_side_right {
+  left: auto;
+    right: -340px;
+  &.active-slide-side-header {
+    right: 0;
+  }
+  .toggle_menu_side {
+    right: auto;
+    transition: left 0.3s ease-in-out;
+    left: -60px;
+    @media(max-width: 370px) {
+      &.active {
+        left: 0;
+      }
+    }
+  }
+}
+
+body.active-side-header.slide-right {
+  #canvas {
+    left: -$sideHeaderWidth;
+  }
+  .page_header_side {
+    left: auto;
+    right: 0;
+  }
+}
+
+
+@media (min-width: 600px) {
+  .page_header_side.header_side_sticked.active-slide-side-header {
+    left: 0;
+  }
+  .header_side_sticked ~ * {
+    transition: margin $headerTransition;
+    .container-fluid {
+      padding-left: 80px;
+    }
+
+  }
+
+  .header_side_sticked ~ div .page_header {
+    width: auto;
+  }
+
+  .header_side_sticked.active-slide-side-header ~ *,
+  .header_side_sticked.active-slide-side-header ~ div .page_header {
+    margin-left: $sideHeaderWidth;
+  }
+
+  .boxed .header_side_sticked.active-slide-side-header ~ *,
+  .boxed .header_side_sticked.active-slide-side-header ~ div .page_header {
+    margin-left: 0;
+  }
+
+  .header_side_sticked ~ .page_header_wrapper {
+    margin: 0 !important;
+  }
+
+  //right sticked layout
+  .page_header_side.header_side_sticked.header_side_right.active-slide-side-header {
+    left: auto;
+  }
+  .header_side_sticked.header_side_right.active-slide-side-header ~ *,
+  .header_side_sticked.header_side_right.active-slide-side-header ~ div .page_header {
+    margin-left: 0;
+    margin-right: $sideHeaderWidth;
+  }
+}
+
+.light-logo-text {
+.logo {
+    color: $colorMain7 !important;
+    .logo-text {
+      border: 2px solid $colorMain7 !important;
+    }
+  }
+}

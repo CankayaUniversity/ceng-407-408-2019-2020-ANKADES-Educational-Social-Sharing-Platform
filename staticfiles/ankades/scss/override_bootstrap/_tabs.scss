@@ -1,0 +1,96 @@
+/* bootstrap tabs*/
+.nav-tabs {
+  border-bottom: none;
+  margin-bottom: 1px;
+  @media (max-width: 575px) {
+    display: block;
+  }
+  .nav-item {
+    @media (max-width: 767px) {
+      margin: 0;
+    }
+  }
+  .nav-link {
+    border: 0;
+    border-radius: 5px 5px 0 0;
+    margin-right: 2px;
+    background-color: #f7f6fb;
+   @media (max-width: 991px) {
+      border-radius: 0;
+    }
+    &:hover {
+      color: $colorMain3;
+    }
+  }
+
+  .nav-item.show .nav-link,
+  .nav-link.active {
+    background-image: linear-gradient(to right, $colorMain 0%, $colorMain2 100%);
+    color: #fff;
+  }
+}
+
+.nav-link {
+  font-size: 12px;
+  line-height: 1.6em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  padding: 30px 10px;
+  min-width: 250px;
+  text-align: center;
+  @media (max-width: 767px) {
+    margin-right: 0 !important;
+  }
+  @media (max-width: 1199px) {
+    padding: 15px 10px;
+    letter-spacing: 0.2em;
+    min-width: auto;
+  }
+  color: $colorMain2;
+  .small-tabs & {
+    padding: 10px 15px;
+  }
+}
+
+.small-tabs .tab-content {
+  padding: 30px;
+}
+
+.tab-content {
+  border: 1px solid #ededed;
+  padding: 40px 60px 40px 90px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+  @media (max-width: 767px) {
+    padding: 30px 30px 30px 50px;
+  }
+}
+
+.tab-pane {
+  .media {
+    img {
+      max-width: 40%;
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+    h3, h4, h5 {
+      font-weight: 900;
+    }
+  }
+}
+
+.tab-block {
+  padding: 10px 0;
+}
+
+.tab-side {
+  padding-left: 40px;
+}
+
+
+.tab-content.tab-media {
+  @media (max-width: 991px) {
+    padding: 30px;
+  }
+}

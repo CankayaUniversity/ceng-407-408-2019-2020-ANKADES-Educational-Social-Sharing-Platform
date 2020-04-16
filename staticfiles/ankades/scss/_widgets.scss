@@ -1,0 +1,229 @@
+/*
+** Widgets
+*/
+aside h2 {
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+aside > * + * {
+  margin-top: 56px;
+}
+
+.widget {
+  position: relative;
+  & > h4,
+  .widget-title {
+    @include widget-title();
+  }
+
+  //for shortcodes demo
+  & > h2:last-child {
+    line-height: 1;
+  }
+
+  //our custom widgets with bootstrap .media element
+  li.media {
+    margin-bottom: 20px;
+    @media(max-width: 767px) {
+      font-size: 14px;
+    }
+    img {
+      border-radius: 5px;
+      max-width: 100px;
+    }
+    h3, h4 {
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 0.5em;
+      text-transform: none;
+      font-size: inherit;
+    }
+    p {
+      line-height: 1.4;
+      margin-bottom: 0.5em;
+      color: $colorMain2;
+      @media(max-width: 767px) {
+        font-size: 14px;
+      }
+    }
+  }
+  .media-body {
+    margin-top: 5px;
+  }
+}
+
+.widget-title.next-image-background {
+  position: relative;
+  z-index: 2;
+  & + img {
+    position: absolute;
+    left: 0;
+    top: -15px;
+    opacity: 0.5;
+  }
+  .text-center & + img {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media(max-width: 991px) {
+  aside {
+    margin: 60px auto 0;
+    max-width: 100%;
+    .widget_search form {
+      max-width: 100%;
+    }
+    .widget_search input {
+      max-width: 100%;
+    }
+  }
+}
+
+/* affix-aside */
+.affix-aside {
+  position: relative;
+  &.affix {
+    position: fixed;
+    //oriented header height
+    top: 100px;
+  }
+  &.affix-bottom {
+    position: absolute !important;
+  }
+  &.affix-top {
+    width: inherit !important;
+    left: auto !important;
+  }
+
+  @media(max-width: 991px) {
+    &,
+    &.affix-top,
+    &.affix,
+    &.affix-bottom {
+      position: static !important;
+      width: 100% !important;
+    }
+  }
+}
+
+//p.stars removed
+.stars {
+  & > span {
+    display: flex;
+  }
+
+  a {
+    position: relative;
+    width: 1em;
+    color: transparent;
+    text-indent: -999em;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      text-indent: 0;
+      font-family: 'FontAwesome';
+    }
+    &:before,
+    &:hover ~ a:before {
+      color: $fontColor;
+      content: "\f006"
+    }
+  }
+  &.selected a.active:before,
+  &:hover a:before {
+    content: "\f005";
+    color: $colorMain;
+    opacity: 1;
+  }
+  &.selected {
+    a.active ~ a:before {
+      content: "\f005";
+      color: $fontColor;
+      opacity: .75
+    }
+    a:not(.active):before {
+      content: "\f005";
+      color: $colorMain;
+      opacity: 1
+    }
+  }
+}
+
+.star-rating {
+  overflow: hidden;
+  position: relative;
+  height: 1em;
+  line-height: 1;
+  font-size: 13px;
+  width: 5em;
+  letter-spacing: 0.1em;
+  font-family: 'FontAwesome';
+  color: $colorMain2;
+
+  &:before {
+    content: '\f006\f006\f006\f006\f006';
+    float: left;
+    top: 0;
+    left: 0;
+    position: absolute
+  }
+
+  span {
+    overflow: hidden;
+    float: left;
+    top: 0;
+    left: 0;
+    position: absolute;
+    padding-top: 1.5em;
+
+    &:before {
+      content: '\f005\f005\f005\f005\f005';
+      top: 0;
+      position: absolute;
+      left: 0
+    }
+
+  }
+}
+
+.widget.widget_portfolio {
+  .photo {
+    display: inline-block;
+    img {
+      margin: 5px; 
+      border-radius: 5px;
+      max-width: 100px;
+      max-height: 100px;
+    }
+  }
+}
+
+.widget.widget_post_tabs.small-tabs {
+  .nav-link {
+    min-width: auto;
+    @media(max-width: 767px) {
+      padding: 10px;
+    }
+  }
+}
+
+
+@import 'widgets/search_mailchimp';
+@import 'widgets/nav_cat_arch_meta_pages';
+@import 'widgets/calendar';
+@import 'widgets/rss';
+@import 'widgets/tag_cloud';
+@import 'widgets/flickr';
+@import 'widgets/instagram';
+@import 'widgets/access_press';
+@import 'widgets/twitter';
+@import 'widgets/post_slider';
+@import 'widgets/post_tabs';
+@import 'widgets/post_2cols';

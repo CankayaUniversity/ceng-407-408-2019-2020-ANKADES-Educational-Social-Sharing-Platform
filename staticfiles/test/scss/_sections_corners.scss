@@ -1,0 +1,177 @@
+$cornerHeight: 70px;
+$cornerHeightMobile: 30px;
+
+.corner {
+  position: relative;
+  height: 0;
+  padding-bottom: $cornerHeight;
+  background-color: transparent !important;
+  //if corner used as section divider, not inside section
+  overflow: visible !important;
+  z-index: 3;
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  &:after {
+    border-left: 50vw solid transparent;
+    border-right: 50vw solid transparent;
+    border-top: $cornerHeight solid $lightColor;
+  }
+
+  &.corner-outside {
+    position: absolute;
+    &:first-child {
+      top: -$cornerHeight;
+    }
+    &:last-child {
+      bottom: -$cornerHeight;
+    }
+  }
+  &.corner-half {
+    &:after {
+      border-left-width: 100vw;
+      border-right-width: 0;
+    }
+    &.corner-half-inverse {
+      &:after {
+        border-left-width: 0;
+        border-right-width: 100vw;
+      }
+    }
+  }
+
+  &.corner-mirror {
+    &:after {
+      border-left-width: 0;
+    }
+    &:before {
+      border-left: 50vw solid transparent;
+      border-top: $cornerHeight solid $lightColor;
+      left: 50vw;
+    }
+  }
+
+  &.corner-inverse {
+    &:before,
+    &:after {
+      border-top: none;
+      border-bottom: $cornerHeight solid $lightColor;
+    }
+  }
+
+  //small screens
+  @media (max-width: 1199px) {
+    & {
+      padding-bottom: $cornerHeightMobile;
+
+      &:after {
+        border-top-width: $cornerHeightMobile;
+      }
+
+      &.corner-outside {
+        position: absolute;
+        &:first-child {
+          top: -$cornerHeightMobile;
+        }
+        &:last-child {
+          bottom: -$cornerHeightMobile;
+        }
+      }
+
+      &.corner-mirror {
+        &:before {
+          border-top-width: $cornerHeightMobile;
+        }
+      }
+
+      &.corner-inverse {
+        &:before,
+        &:after {
+          border-bottom-width: $cornerHeightMobile;
+
+        }
+      }
+    }
+  }
+
+  //////////
+  //colors//
+  //////////
+  &.ls.ms {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $greyColor;
+      border-bottom-color: $greyColor;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $greyColor;
+    }
+  }
+  &.ds {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $darkgreyColor;
+      border-bottom-color: $darkgreyColor;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $darkgreyColor;
+    }
+  }
+  &.ds.ms {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $darkColor;
+      border-bottom-color: $darkColor;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $darkColor;
+    }
+  }
+  &.ds.bs {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $darkBlueColorLighter;
+      border-bottom-color: $darkBlueColorLighter;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $darkBlueColorLighter;
+    }
+  }
+  &.cs {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $colorMain;
+      border-bottom-color: $colorMain;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $colorMain;
+    }
+  }
+
+  &.cs.cs2 {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $colorMain2;
+      border-bottom-color: $colorMain2;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $colorMain2;
+    }
+  }
+  &.cs.cs3 {
+    &.corner-mirror:before,
+    &:after {
+      border-top-color: $colorMain3;
+      border-bottom-color: $colorMain3;
+    }
+    &.corner-inverse:after {
+      border-bottom-color: $colorMain3;
+    }
+  }
+}

@@ -1,0 +1,107 @@
+/*search modal*/
+#search_modal {
+  padding: 0 !important;
+  .widget {
+    padding: 20px 0;
+    background-color: $lightColor;
+    @media (min-width: 1200px) {
+      a.logo {
+        position: absolute;
+        top: 0;
+        left: 30px;
+        height: 100px;
+        width: 100%;
+        color: $colorMain;
+        .logo-text {
+          border-color: $colorMain;
+        }
+      }
+    }
+  }
+  .search-form {
+    margin: 0 auto;
+    max-width: 960px;
+    padding: 0 100px 0 0;
+  }
+  a {
+    @include small-text();
+    color: $lightColor;
+    &:hover {
+      color: $colorMain;
+      opacity: 1;
+    }
+  }
+  .searchform-respond {
+    width: 300px;
+    margin: 20px auto;
+    color: $lightColor;
+  }
+  .form-group {
+    margin-bottom: 0;
+  }
+  .form-control {
+    border: 1px solid #e1e1e1;
+    background-color: transparent;
+    height: 60px;
+    color: $darkgreyColor;
+    width: 100%;
+    max-width: none;
+    font-size: 28px;
+    font-style: italic;
+  }
+  .form-control:-moz-placeholder {
+    color: $fontColor;
+    opacity: 1;
+  }
+  .form-control::-moz-placeholder {
+    color: $fontColor;
+    opacity: 1;
+  }
+
+  .form-control:-ms-input-placeholder {
+    color: $fontColor;
+  }
+
+  .form-control::-webkit-input-placeholder {
+    color: $fontColor;
+  }
+  .btn {
+    color: $darkgreyColor;
+    width: auto;
+    font-size: 0;
+    width: 60px;
+    margin: 0 60px 0 0;
+    &:hover {
+      opacity: 1;
+    }
+    &:before {
+      font-size: 18px;
+      color: $darkgreyColor;
+
+    }
+  }
+  .close {
+    text-align: center;
+    line-height: 60px;
+    position: absolute;
+    top: 18px;
+    right: 0;
+    min-width: 60px;
+    color: $darkgreyColor;
+    text-shadow: none;
+    opacity: 1;
+    z-index: 2;
+    font-size: 30px;
+  }
+
+  .active-side-header & {
+    right: $sideHeaderWidth;
+  }
+}
+
+.search_modal_button {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 0 0 10px;
+}

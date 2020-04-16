@@ -1,0 +1,46 @@
+/* bootstrap dropdown menu */
+.dropdown-menu {
+  border: none;
+  border-top: 3px solid $colorMain;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  border-radius: 0;
+  z-index: 1001;
+  margin-top: 0;
+  padding: 40px;
+
+  background-color: $lightColor;
+
+  font-size: inherit;
+  line-height: 1.5;
+  > a {
+    display: block;
+    white-space: nowrap;
+    //for language flags
+    > img {
+      max-width: none;
+    }
+  }
+
+  > a + a {
+    margin-top: 1.5em;
+  }
+
+  .dropdown & label,
+  .dropdown & h3,
+  .dropdown & h4 {
+    color: $darkgreyColor;
+  }
+  .dropdown.show & input {
+    border: 1px solid $borderColor;
+  }
+}
+
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+  color: $darkgreyColor;
+  background-color: transparent;
+}
+
+.dropdwon-menu-title {
+  padding: 10px 30px;
+}
