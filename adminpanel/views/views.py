@@ -48,7 +48,6 @@ def login_admin(request):
     :param request:
     :return:
     """
-    activity = AdminLogs()
     if not request.user.is_authenticated:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -72,13 +71,6 @@ def login_admin(request):
                 request.session.set_expiry(1209600)
             else:
                 request.session.set_expiry(0)
-                activity.creator = request.user.username
-                activity.method = "POST"
-                activity.title = "Kullanıcı giriş yaptı"
-                activity.createdDate = datetime.datetime.now()
-                activity.application = "Login"
-                activity.description = "" + str(activity.creator) + " giriş yaptı."
-                activity.save()
             messages.success(request, "Başarıyla giriş yapıldı.")
             return redirect("admin_dashboard")
         return render(request, "adminpanel/registration/login.html")
