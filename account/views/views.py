@@ -7,11 +7,9 @@ from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, SocialMedia, AccountFollower
-from ankadescankaya.views import get_article_categories, get_article_sub_categories, get_article_lower_categories, \
-    get_question_categories, get_question_sub_categories, get_question_lower_categories, get_course_categories, \
-    get_course_sub_categories, get_course_lower_categories
-from article.models import Article, ArticleCategory
-from question.models import Question, QuestionCategory
+from ankadescankaya.views import Categories, current_user_group
+from article.models import Article
+from question.models import Question
 
 
 def index(request):
@@ -20,115 +18,43 @@ def index(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     try:
         instance = Account.objects.get(username=request.user.username)
         existFollower = get_user_follower(request, request.user, instance)
         followers = AccountFollower.objects.filter(followingId__username=instance.username) # takipçiler
         followings = AccountFollower.objects.filter(followerId__username=request.user.username) # takip edilen
-        articles = Article.objects.all()
+        articles = Article.objects.filter(isActive=True)
         context = {
             "articles": articles,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
             "existFollower": existFollower,
             "followers": followers,
             "followings": followings,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
     except:
         context = {
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
     return render(request, "ankades/dashboard.html", context)
-
-
-def account_follower(request, username):
-    """
-    :param request:
-    :param username:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
-    followers = AccountFollower.objects.filter(followingId__username=username)  # takipçiler
-    followings = AccountFollower.objects.filter(followerId__username=username)  # takip edilen
-    try:
-        instance = Account.objects.get(username=username)
-        existFollower = get_user_follower(request, request.user, instance)
-        context = {
-            "instance": instance,
-            "existFollower": existFollower,
-            "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
-            "followers": followers,
-            "followings": followings,
-        }
-        return render(request, "ankades/account/following/user-followers.html", context)
-    except:
-        context = {
-            "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
-        }
-        messages.error(request, "Kullanıcı bulunamadı.")
-        return render(request, "404.html", context)
-
-
-def account_following(request, username):
-    """
-    :param request:
-    :param username:
-    :return:
-    """
-    return render(request, "ankades/account/following/user-following.html")
 
 
 def account_detail(request, username):
@@ -137,9 +63,10 @@ def account_detail(request, username):
     :param username:
     :return:
     """
-    userGroup = current_user_group(request, request.user)
     try:
         instance = Account.objects.get(username=username)
+        userGroup = current_user_group(request, request.user)
+        categories = Categories.all_categories()
         userDetailGroup = user_group(request, username)
         existFollower = get_user_follower(request, request.user, instance)
         followers = AccountFollower.objects.filter(followingId__username=instance.username)
@@ -148,15 +75,6 @@ def account_detail(request, username):
         getFollowingForFollow = get_user_follower(request, request.user, followings)
         articles = user_articles(request, username)
         questions = user_questions(request, username)
-        articleCategories = get_article_categories(request)
-        articleSubCategories = get_article_sub_categories(request)
-        articleLowerCategories = get_article_lower_categories(request)
-        questionCategories = get_question_categories(request)
-        questionSubCategories = get_question_sub_categories(request)
-        questionLowerCategories = get_question_lower_categories(request)
-        courseCategories = get_course_categories(request)
-        courseSubCategories = get_course_sub_categories(request)
-        courseLowerCategories = get_course_lower_categories(request)
         context = {
             "instance": instance,
             "userDetailGroup": userDetailGroup,
@@ -168,20 +86,19 @@ def account_detail(request, username):
             "questions": questions,
             "followers": followers,
             "followings": followings,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/account/account-detail.html", context)
     except:
-        messages.error(request, "Böyle bir kullanıcı bulunamadı.")
-        return render(request, "404.html")
+        return redirect("404")
 
 
 def get_user_follower(request, username, userDetail):
@@ -213,6 +130,7 @@ def follow_account(request, username):
             instance = AccountFollower.objects.get(followerId__username=request.user,
                                                    followingId__username=getFollowing.username)
             instance.delete()
+            messages.success(request, instance.followingId.get_full_name() + "kullanıcısını takipten çıktınız.")
             return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
         except:
             new_follower = AccountFollower()
@@ -223,8 +141,7 @@ def follow_account(request, username):
                              str(new_follower.followingId.get_full_name() + " kullanıcısını takip etmeye başladınız."))
             return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
     except:
-        messages.error(request, "Böyle bir kullanıcı bulunamadı.")
-        return render(request, "404.html")
+        return redirect("404")
 
 
 def login_account(request):
@@ -336,44 +253,25 @@ def get_requested_user(request, username):
     :return:
     """
     userGroup = current_user_group(request, username)
-    userDetail = get_object_or_404(Account, username=username)
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
-    context = {
-        "userDetail": userDetail,
-        "userGroup": userGroup,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "courseCategories": courseCategories,
-        "courseSubCategories": courseSubCategories,
-        "courseLowerCategories": courseLowerCategories,
-    }
-    return render(request, "ankades/account/account-profile.html", context)
-
-
-def current_user_group(self, username):
-    """
-    :param self:
-    :param username:
-    :return:
-    """
+    categories = Categories.all_categories()
     try:
-        group = AccountGroup.objects.get(userId__username=username)
-        return str(group.groupId)
+        userDetail = Account.objects.get(username=username)
+        context = {
+            "userDetail": userDetail,
+            "userGroup": userGroup,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
+        }
+        return render(request, "ankades/account/account-profile.html", context)
     except:
-        group = None
-        return group
+        return redirect("404")
 
 
 def user_group(self, username):
@@ -458,6 +356,7 @@ def get_social_media(self, slug):
     except:
         socialMedia = None
         return socialMedia
+
 
 # def get_user_timeline(request, username):
 #     userGroup = current_user_group(request, request.user)

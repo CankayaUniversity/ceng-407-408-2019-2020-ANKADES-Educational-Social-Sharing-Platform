@@ -8,29 +8,28 @@
         <div class="container-fluid">
             <div class="row">
                 {% if questions %}
-                    {% if question_pagination %}
-                        {% for question in question_pagination %}
-                            <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><a
-                                                href="{% url 'question_detail' question.slug question.questionNumber %}">{{ question.title }}</a>
-                                        </h5>
-                                        <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
-                                        <small class="card-text">Kategori: {{ question.categoryId.title }}</small>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted float-left"><a href="{% url 'account_detail' question.creator.username %}">{{ question.creator.get_full_name }}</a></small>
-                                        <small class="text-muted float-right ml-2">{{ question.questioncomment_set.count }}
-                                            Yorum</small>
-                                        <small class="text-muted ml-2 float-right">{{ question.likes.count }}
-                                            Beğeni</small>
-                                        <small class="text-muted float-right">{{ question.view }} Görüntülenme</small>
-                                    </div>
+                    {% for question in questions %}
+                        <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a
+                                            href="{% url 'question_detail' question.slug question.questionNumber %}">{{ question.title }}</a>
+                                    </h5>
+                                    <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
+                                    <small class="card-text">Kategori: {{ question.categoryId.title }}</small>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted float-left"><a
+                                            href="{% url 'account_detail' question.creator %}">{{ question.creator.get_full_name }}</a></small>
+                                    <small class="text-muted float-right ml-2">{{ question.questioncomment_set.count }}
+                                        Yorum</small>
+                                    <small class="text-muted ml-2 float-right">{{ question.likes.count }}
+                                        Beğeni</small>
+                                    <small class="text-muted float-right">{{ question.view }} Görüntülenme</small>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
+                        </div>
+                    {% endfor %}
                 {% else %}
                     <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
                         <h5>Üzgünüz :(</h5>

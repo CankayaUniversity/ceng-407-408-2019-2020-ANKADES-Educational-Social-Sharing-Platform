@@ -1,87 +1,63 @@
 from django.db.models import Q
+from django.shortcuts import render
+from django.views.generic import DetailView
 
+from account.models import AccountGroup
 from article.models import ArticleCategory
 from course.models import CourseCategory
 from question.models import QuestionCategory
 
 
-def get_article_categories(request):
+class Categories(DetailView):
+
+    @staticmethod
+    def all_categories():
+        articleCategories = ArticleCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        questionCategories = QuestionCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        courseCategories = CourseCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
+        courseSubCategories = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
+        courseLowerCategories = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        return [
+            articleCategories, articleSubCategories, articleLowerCategories,
+            questionCategories, questionSubCategories, questionLowerCategories,
+            courseCategories, courseSubCategories, courseLowerCategories
+        ]
+
+
+def current_user_group(self, username):
     """
-    :param request:
+    :param self:
+    :param username:
     :return:
     """
-    articleCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    return articleCategories
+    try:
+        group = AccountGroup.objects.get(userId__username=username)
+        return str(group.groupId)
+    except:
+        group = None
+        return group
 
 
-def get_article_sub_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    return articleSubCategories
-
-
-def get_article_lower_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    return articleLowerCategories
-
-
-def get_question_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    return questionCategories
-
-
-def get_question_sub_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    return questionSubCategories
-
-
-def get_question_lower_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    return questionLowerCategories
-
-
-def get_course_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    courseCategories = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    return courseCategories
-
-
-def get_course_sub_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    courseSubCategories = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    return courseSubCategories
-
-
-def get_course_lower_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    courseLowerCategories = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    return courseLowerCategories
+def get_404(request):
+    categories = Categories.all_categories()
+    userGroup = current_user_group(request, request.user)
+    context = {
+        "userGroup": userGroup,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "404.html", context)

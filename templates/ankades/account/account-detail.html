@@ -8,7 +8,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-circle" width="508" height="508"
+                                <img class="img-circle" style="max-height: 250px !important;"
                                      src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}">
                             </div>
                             <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
@@ -54,7 +54,11 @@
                         <div class="card-body">
                             <strong><i class="fas fa-book mr-1"></i> Eğitim</strong>
                             <p class="text-muted">
-                                {{ instance.graduate }}
+                                {% if instance.graduate %}
+                                    {{ instance.graduate }}
+                                {% else %}
+                                    {{ instance.get_full_name }} eğitim bilgilerini henüz paylaşmamış
+                                {% endif %}
                             </p>
                             <hr>
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
@@ -69,9 +73,10 @@
                                 <span class="tag tag-primary">Node.js</span>
                             </p>
                             <hr>
-                            <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                                fermentum enim neque.</p>
+                            <strong><i class="far fa-file-alt mr-1"></i> Biyografi</strong>
+                            <p class="text-muted">
+                                {% if instance.bio %}{{ instance.bio }}{% else %}{{ instance.get_full_name }} henüz
+                                    biyografisini paylaşmamış{% endif %}</p>
                         </div>
                     </div>
                 </div>
@@ -223,6 +228,9 @@
 
                                     </div>
                                 {% endif %}
+                                <div class="tab-pane" id="questions">
+
+                                </div>
                                 <div class="tab-pane" id="followers">
                                     <div class="card-body p-0">
                                         <table class="table table-striped projects">

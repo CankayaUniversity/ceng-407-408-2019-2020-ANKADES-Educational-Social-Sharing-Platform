@@ -1,5 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def all_departments(request):
-    return render(request, "ankades/../../templates/test/department/departments.html")
+    return redirect("404")

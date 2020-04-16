@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from online_users.models import OnlineUserActivity
 
 from account.models import Account
-from account.views.views import current_user_group
+from ankadescankaya.views import current_user_group
 from adminpanel.models import Tag, AdminLogs
 from article.models import Article
 from course.models import Course

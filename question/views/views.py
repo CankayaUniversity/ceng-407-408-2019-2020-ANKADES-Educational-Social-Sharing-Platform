@@ -9,28 +9,16 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 
-from account.models import AccountLogs
-from account.views.views import current_user_group
-from ankadescankaya.views import get_article_categories, get_article_sub_categories, get_article_lower_categories, \
-    get_question_categories, get_question_sub_categories, get_question_lower_categories, get_course_categories, \
-    get_course_sub_categories, get_course_lower_categories
-from article.models import ArticleCategory
+from ankadescankaya.views import Categories
+from ankadescankaya.views import current_user_group
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
 
 
 def add_question(request):
     userGroup = current_user_group(request, request.user)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    categories = Categories.all_categories()
     form = QuestionForm(request.POST or None)
-    activity = AccountLogs()
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=False))
     description = None
     if request.method == "POST":
@@ -46,14 +34,6 @@ def add_question(request):
         instance.creator = request.user
         instance.createdDate = datetime.datetime.now()
         instance.save()
-        activity.createdDate = datetime.datetime.now()
-        activity.creator = request.user.username
-        activity.method = "POST"
-        activity.application = "Question"
-        activity.title = "Soru Sorma"
-        activity.description = str(instance.creator) + " yeni bir soru sordu. İşlemin gerçekleştirildiği tarih: " + str(
-            activity.createdDate)
-        activity.save()
         messages.success(request, "Soru başarıyla oluşturuldu")
         return redirect(
             reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
@@ -61,30 +41,25 @@ def add_question(request):
         "userGroup": userGroup,
         "questionCategory": questionCategory,
         "form": form,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
     }
     return render(request, "ankades/question/add-question.html", context)
 
 
 def all_questions(request):
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
     questions_categories_lists = QuestionCategory.objects.filter(isActive=True)
     questions_limit = Question.objects.filter(isActive=True).order_by('-createdDate')
     questionComment = QuestionComment.objects.filter(isActive=True)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    categories = Categories.all_categories()
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
     if keyword:
@@ -94,12 +69,15 @@ def all_questions(request):
             "questions_categories_lists": questions_categories_lists,
             "questions_limit": questions_limit,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/question/all-questions.html", context)
     else:
@@ -118,29 +96,24 @@ def all_questions(request):
             "questions_categories_lists": questions_categories_lists,
             "questions_limit": questions_limit,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/question/all-questions.html", context)
 
 
 def question_detail(request, slug, questionNumber):
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
-        articleCategories = ArticleCategory.objects.filter(
-            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-        questionCategories = QuestionCategory.objects.filter(
-            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+        categories = Categories.all_categories()
         instance.view += 1
         instance.save()
         questionAnswers = QuestionComment.objects.filter(questionId__slug=slug,
@@ -152,26 +125,28 @@ def question_detail(request, slug, questionNumber):
                                                           questionId__questionNumber=questionNumber, isCertified=True)
         except:
             certifiedAnswer = None
+        context = {
+            "userGroup": userGroup,
+            "instance": instance,
+            "questionAnswers": questionAnswers,
+            "certifiedAnswer": certifiedAnswer,
+            "answerReply": answerReply,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
+        }
+        return render(request, "ankades/question/question-detail.html", context)
     except:
-        return render(request, "404.html")
-    context = {
-        "userGroup": userGroup,
-        "instance": instance,
-        "questionAnswers": questionAnswers,
-        "certifiedAnswer": certifiedAnswer,
-        "answerReply": answerReply,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-    }
-    return render(request, "ankades/question/question-detail.html", context)
+        return redirect("404")
 
 
 def confirm_answer(request, id):
-    request.user = request.user
     try:
         getAnswer = QuestionComment.objects.get(id=id)
         if getAnswer.questionId.creator.username == request.user.username:
@@ -191,13 +166,11 @@ def confirm_answer(request, id):
             return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
                                                                "questionNumber": getAnswer.questionId.questionNumber}))
     except:
-        messages.error(request, "Soru bulunamadı.")
-        return render(request, "404.html")
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
 def delete_answer(request, id):
-    request.user = request.user
     try:
         instance = QuestionComment.objects.get(id=id)
         slug = instance.questionId.slug
@@ -209,22 +182,13 @@ def delete_answer(request, id):
         else:
             return redirect("all_questions")
     except:
-        messages.error(request, "Soru bulunamadı.")
-        return render(request, "404.html")
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
 def edit_question(request, slug, questionNumber):
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
+    categories = Categories.all_categories()
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
         form = EditQuestionForm(request.POST or None, instance=instance)
@@ -245,47 +209,39 @@ def edit_question(request, slug, questionNumber):
         else:
             messages.error(request, "Bu soru size ait değil !")
             return redirect("index")
+        context = {
+            "userGroup": userGroup,
+            "instance": instance,
+            "form": form,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
+        }
+        return render(request, "ankades/question/edit-question.html", context)
     except:
         return render(request, "404.html")
 
-    context = {
-        "userGroup": userGroup,
-        "instance": instance,
-        "form": form,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-    }
-    return render(request, "ankades/question/edit-question.html", context)
-
 
 def add_question_answer(request, slug, questionNumber):
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    activity = AccountLogs()
-    activity.application = "Question"
-    activity.creator = request.user.username
-    activity.title = "Soru Yorum Ekleme"
-    activity.method = "POST"
+    categories = Categories.all_categories()
     context = {
         "userGroup": userGroup,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
     }
     try:
         instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
@@ -297,43 +253,28 @@ def add_question_answer(request, slug, questionNumber):
             new_answer.isRoot = True
             new_answer.answerNumber = get_random_string(length=32)
             new_answer.save()
-            new_answer.save()
-            activity.description = "Soruya yeni bir cevap eklendi. İşlemi yapan kişi: " + str(
-                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate) + " ."
-            activity.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
         return redirect(
             reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}),
             context)
     except:
-        messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")
-        return redirect("all_questions")
+        return redirect("404")
 
 
 def add_question_answer_reply(request, slug, questionNumber, answerNumber):
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
-    articleCategories = ArticleCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    questionCategories = QuestionCategory.objects.filter(
-        Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-    questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-    questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-    activity = AccountLogs()
-    activity.application = "Question"
-    activity.creator = request.user.username
-    activity.title = "Soru Yorum Ekleme"
+    categories = Categories.all_categories()
     context = {
-
         "userGroup": userGroup,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
     }
     try:
         instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
@@ -346,11 +287,8 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
             new_answer.parentId.answerNumber = parentAnswer.answerNumber
             new_answer.isActive = True
             new_answer.isRoot = False
-            new_answer.save()
             new_answer.parentId_id = new_answer.id
-            activity.description = "Soruya yeni bir cevap eklendi. İşlemi yapan kişi: " + str(
-                activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
-            activity.save()
+            new_answer.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
         return redirect(
             reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}),
@@ -362,31 +300,17 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
 
 def delete_question(request, slug):
     userGroup = current_user_group(request, request.user)
-    instance = get_object_or_404(Question, slug=slug)
-    instance.delete()
-    activity = AccountLogs()
-    activity.application = "Question"
-    activity.creator = request.user.username
-    activity.title = "Soru Silme"
-    activity.createdDate = datetime.datetime.now()
-    activity.method = "DELETE"
-    activity.description = "Soru silindi. İşlemi yapan kişi: " + str(
-        activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
-    activity.save()
-    return redirect("all_questions")
+    try:
+        instance = get_object_or_404(Question, slug=slug)
+        instance.delete()
+        return redirect("all_questions")
+    except:
+        return redirect("404")
 
 
 def question_category_page(request, slug):
     userGroup = current_user_group(request, request.user)
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     try:
         questionCategory = QuestionCategory.objects.get(slug=slug)
         questions = Question.objects.filter(categoryId=questionCategory)
@@ -394,19 +318,19 @@ def question_category_page(request, slug):
             "questionCategory": questionCategory,
             "questions": questions,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/question/get-question-category.html", context)
     except:
-        return render(request, "404.html")
+        return redirect("404")
 
 
 class QuestionLikeToggle(RedirectView):

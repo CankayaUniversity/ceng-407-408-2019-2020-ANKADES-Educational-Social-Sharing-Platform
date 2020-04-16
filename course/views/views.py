@@ -8,11 +8,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.utils.crypto import get_random_string
 
-from account.models import AccountLogs
-from account.views.views import current_user_group
-from ankadescankaya.views import get_course_categories, get_course_sub_categories, get_course_lower_categories, \
-    get_article_categories, get_article_sub_categories, get_article_lower_categories, get_question_categories, \
-    get_question_sub_categories, get_question_lower_categories
+from ankadescankaya.views import current_user_group
+from ankadescankaya.views import Categories
 from course.forms import CourseForm
 from course.models import Course, CourseComment, CourseCategory
 
@@ -23,24 +20,27 @@ def all_courses(request):
     courseComment = CourseComment.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     if keyword:
-        courses = Course.objects.filter(Q(title__contains=keyword) | Q(creator=keyword) | Q(categoryId=keyword))
+        courses = Course.objects.filter(Q(title__contains=keyword, isActive=True) | Q(creator=keyword, isActive=True) | Q(categoryId=keyword, isActive=Tru))
         context = {
             "courses": courses,
             "courseComment": courseComment,
             "courses_limit": courses_limit,
             "userGroup": userGroup,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/course/all-courses.html", context)
     else:
-        # courses = Course.objects.filter(isActive=True)
-        courses = Course.objects.all()
+        courses = Course.objects.filter(isActive=True)
         paginator = Paginator(courses, 12)
         try:
             course_pagination = paginator.page(page)
@@ -53,10 +53,15 @@ def all_courses(request):
             "courseComment": courseComment,
             "course_pagination": course_pagination,
             "courses_limit": courses_limit,
-            "userGroup": userGroup,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
     return render(request, "ankades/course/all-courses.html", context)
 
@@ -68,15 +73,7 @@ def course_category_page(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     try:
         courseCategory = CourseCategory.objects.get(slug=slug)
         courses = Course.objects.filter(categoryId=courseCategory)
@@ -84,19 +81,19 @@ def course_category_page(request, slug):
             "courseCategory": courseCategory,
             "courses": courses,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/course/get-course-category.html", context)
     except:
-        return render(request, "404.html")
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
@@ -108,29 +105,20 @@ def add_course(request):
     userGroup = current_user_group(request, request.user)
     courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = CourseForm(request.POST or None)
-    activity = AccountLogs()
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     context = {
         "courseCategory": courseCategory,
         "userGroup": userGroup,
         "form": form,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "courseCategories": courseCategories,
-        "courseSubCategories": courseSubCategories,
-        "courseLowerCategories": courseLowerCategories,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
     }
     if request.method == "POST":
         value = request.POST['categoryId']
@@ -153,14 +141,6 @@ def add_course(request):
         instance.isActive = False
         instance.categoryId_id = value
         instance.save()
-        activity.title = "Kurs Ekle"
-        activity.application = "Course"
-        activity.method = "POST"
-        activity.creator = request.user.username
-        activity.createdDate = datetime.datetime.now()
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı kurs ekledi."
-        activity.save()
         messages.success(request, "Kurs başarıyla eklendi.")
         return redirect("index")
     return render(request, "ankades/course/add-course.html", context)
@@ -178,6 +158,3 @@ def add_lecture(request, courseNumber):
 
 def course_detail(request, slug):
     return None
-
-
-

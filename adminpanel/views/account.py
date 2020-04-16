@@ -9,7 +9,7 @@ from online_users.models import OnlineUserActivity
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, Permission, AccountPermission
-from account.views.views import current_user_group
+from ankadescankaya.views import current_user_group
 from adminpanel.models import AdminLogs
 from exam.models import School
 

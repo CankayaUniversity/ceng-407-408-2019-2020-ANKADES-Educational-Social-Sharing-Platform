@@ -60,13 +60,13 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("article_detail", kwargs={"username": self.creator.username, "slug": self.slug})
+        return reverse("article_detail", kwargs={"username": self.creator, "slug": self.slug})
 
     def get_like_url(self):
-        return reverse("article-like-toggle", kwargs={"username": self.creator.username, "slug": self.slug})
+        return reverse("article-like-toggle", kwargs={"username": self.creator, "slug": self.slug})
 
     def get_api_like_url(self):
-        return reverse("article-like-api-toggle", kwargs={"username": self.creator.username, "slug": self.slug})
+        return reverse("article-like-api-toggle", kwargs={"username": self.creator, "slug": self.slug})
 
     class Meta:
         db_table = "Article"

@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
 from account.models import AccountGroup
-from account.views.views import current_user_group
+from ankadescankaya.views import current_user_group
 from adminpanel.models import AdminLogs
 from course.models import Course
 from course.models import CourseCategory, Course

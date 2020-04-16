@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
 from account.models import Permission
-from account.views.views import current_user_group
+from ankadescankaya.views import current_user_group
 from adminpanel.models import AdminLogs
 
 

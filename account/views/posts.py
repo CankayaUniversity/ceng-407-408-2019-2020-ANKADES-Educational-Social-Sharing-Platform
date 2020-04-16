@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from account.models import Account, AccountFollower
-from account.views.views import current_user_group, get_user_follower
+from account.views.views import get_user_follower
+from ankadescankaya.views import current_user_group
+from ankadescankaya.views import Categories
 from article.models import Article
 from course.models import Course
 from question.models import Question
@@ -21,6 +23,7 @@ def my_posts(request):
         existFollower = get_user_follower(request, request.user, instance)
         followers = AccountFollower.objects.filter(followingId__username=instance.username)
         followings = AccountFollower.objects.filter(followerId__username=instance.username)
+        categories = Categories.all_categories()
         context = {
             "myCourses": myCourses,
             "myArticles": myArticles,
@@ -30,6 +33,15 @@ def my_posts(request):
             "existFollower": existFollower,
             "followers": followers,
             "followings": followings,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/account/posts/my-posts.html", context)
     except:

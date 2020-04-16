@@ -10,7 +10,6 @@ from rest_framework.generics import get_object_or_404
 
 from account.models import Account
 from directmessage.forms import MessageForm
-from directmessage.models import DirectMessage
 
 
 def send_message(request, username):

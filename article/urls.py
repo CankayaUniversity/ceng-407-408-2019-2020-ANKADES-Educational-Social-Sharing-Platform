@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^(?P<username>[\w-]+)/(?P<slug>[\w-]+)/$', views.article_detail, name="article_detail"),
     path('makaleler/', views.all_articles, name="all_articles"),
     path('makaleler/kategoriler/<slug:slug>', views.article_category_page, name="article_category_page"),
-    path('makale-kategorileri/', views.all_article_categories, name="all_article_categories"),
     path('makale-ekle/', views.add_article, name="add_article"),
     path('makale/sil/<slug:slug>/', views.delete_article, name="delete_article"),
     url(r'^makale/(?P<slug>[\w-]+)/duzenle/$', views.edit_article, name="edit_article"),

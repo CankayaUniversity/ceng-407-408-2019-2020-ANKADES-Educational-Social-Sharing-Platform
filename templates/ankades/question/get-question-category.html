@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <small class="text-muted float-left"><a
-                                            href="{% url 'account_detail' question.creator.username %}">{{ question.creator.get_full_name }}</a></small>
+                                            href="{% url 'account_detail' question.creator %}">{{ question.creator.get_full_name }}</a></small>
                                     <small class="text-muted float-right ml-2">{{ question.questioncomment_set.count }}
                                         Yorum</small>
                                     <small class="text-muted ml-2 float-right">{{ question.likes.count }}

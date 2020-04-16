@@ -12,16 +12,12 @@ from django.views.generic import RedirectView
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
-from account.models import AccountLogs
-from account.views.views import current_user_group
+from ankadescankaya.views import current_user_group
 from ankadescankaya.slug import slug_save
-from ankadescankaya.views import get_article_categories, get_article_sub_categories, get_article_lower_categories, \
-    get_question_categories, get_question_sub_categories, get_question_lower_categories, get_course_categories, \
-    get_course_sub_categories, get_course_lower_categories
+from ankadescankaya.views import Categories
 from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
-from question.models import QuestionCategory
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -45,40 +41,32 @@ def all_articles(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articles_categories_lists = ArticleCategory.objects.all()
+    articles_categories_lists = ArticleCategory.objects.filter(isActive=True)
     articles_limit = Article.objects.filter(isActive=True).order_by('-createdDate')
     articleComment = ArticleComment.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
     keyword = request.GET.get("keyword")
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     if keyword:
-        articles = Article.objects.filter(title__contains=keyword)
+        articles = Article.objects.filter(Q(title__contains=keyword, isActive=True)).order_by('-createdDate')
         context = {
             "articles": articles,
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/article/all-articles.html", context)
     else:
-        articles = Article.objects.filter(isActive=True)
+        articles = Article.objects.filter(isActive=True).order_by('-createdDate')
         paginator = Paginator(articles, 12)
         try:
             article_pagination = paginator.page(page)
@@ -93,15 +81,15 @@ def all_articles(request):
             "articles_categories_lists": articles_categories_lists,
             "articles_limit": articles_limit,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
-            "courseCategories": courseCategories,
-            "courseSubCategories": courseSubCategories,
-            "courseLowerCategories": courseLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/article/all-articles.html", context)
 
@@ -113,12 +101,7 @@ def article_category_page(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
+    categories = Categories.all_categories()
     try:
         articleCategory = ArticleCategory.objects.get(slug=slug)
         articles = Article.objects.filter(categoryId=articleCategory)
@@ -126,34 +109,19 @@ def article_category_page(request, slug):
             "articleCategory": articleCategory,
             "articles": articles,
             "userGroup": userGroup,
-            "articleCategories": articleCategories,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/article/get-article-category.html", context)
     except:
-        return render(request, "404.html")
-
-
-def all_article_categories(request):
-    """
-    :param request:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    articleCategory = get_article_categories(request)
-    categories = ArticleCategory.objects.all()
-    article_categories_limit = ArticleCategory.objects.all().order_by('-createdDate')[:5]
-    context = {
-        "categories": categories,
-        "userGroup": userGroup,
-        "article_categories_limit": article_categories_limit,
-        "articleCategory": articleCategory,
-    }
-    return render(request, "adminpanel/article/categories.html", context)
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
@@ -165,29 +133,20 @@ def add_article(request):
     userGroup = current_user_group(request, request.user)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = ArticleForm(request.POST or None)
-    activity = AccountLogs()
-    articleCategories = get_article_categories(request)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
         "form": form,
-        "articleCategories": articleCategories,
-        "articleSubCategories": articleSubCategories,
-        "articleLowerCategories": articleLowerCategories,
-        "questionCategories": questionCategories,
-        "questionSubCategories": questionSubCategories,
-        "questionLowerCategories": questionLowerCategories,
-        "courseCategories": courseCategories,
-        "courseSubCategories": courseSubCategories,
-        "courseLowerCategories": courseLowerCategories,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
     }
     if request.method == "POST":
         value = request.POST['categoryId']
@@ -208,14 +167,6 @@ def add_article(request):
         instance.categoryId_id = value
         instance.isActive = True
         instance.save()
-        activity.title = "Makale Ekle"
-        activity.application = "Article"
-        activity.method = "POST"
-        activity.creator = request.user.username
-        activity.createdDate = datetime.datetime.now()
-        activity.description = str(activity.createdDate) + " tarihinde, " + str(
-            activity.creator) + " kullanıcısı makale ekledi."
-        activity.save()
         messages.success(request, "Makale başarıyla eklendi !")
         return redirect("index")
     return render(request, "ankades/article/add-article.html", context)
@@ -229,16 +180,8 @@ def edit_article(request, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    articleSubCategories = get_article_sub_categories(request)
-    articleLowerCategories = get_article_lower_categories(request)
-    questionCategories = get_question_categories(request)
-    questionSubCategories = get_question_sub_categories(request)
-    questionLowerCategories = get_question_lower_categories(request)
-    courseCategories = get_course_categories(request)
-    courseSubCategories = get_course_sub_categories(request)
-    courseLowerCategories = get_course_lower_categories(request)
+    categories = Categories.all_categories()
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
-    activity = AccountLogs()
     try:
         instance = Article.objects.get(slug=slug)
         form = EditArticleForm(request.POST or None, instance=instance)
@@ -265,14 +208,6 @@ def edit_article(request, slug):
                 instance.updatedDate = datetime.datetime.now()
                 instance.isActive = False
                 instance.save()
-                activity.title = "Makale Güncelleme"
-                activity.application = "Article"
-                activity.createdDate = datetime.datetime.now()
-                activity.method = "UPDATE"
-                activity.creator = request.user.username
-                activity.description = str(activity.createdDate) + " tarihinde, " + str(
-                    activity.creator) + " kullanıcısı makalesini güncelledi."
-                activity.save()
                 pre_save.connect(slug_save, sender=edit_article)
                 messages.success(request, "Makale başarıyla güncellendi.")
                 return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
@@ -281,18 +216,19 @@ def edit_article(request, slug):
                 "articleCategory": articleCategory,
                 "userGroup": userGroup,
                 "form": form,
-                "articleSubCategories": articleSubCategories,
-                "articleLowerCategories": articleLowerCategories,
-                "questionCategories": questionCategories,
-                "questionSubCategories": questionSubCategories,
-                "questionLowerCategories": questionLowerCategories,
-                "courseCategories": courseCategories,
-                "courseSubCategories": courseSubCategories,
-                "courseLowerCategories": courseLowerCategories,
+                "articleCategories": categories[0],
+                "articleSubCategories": categories[1],
+                "articleLowerCategories": categories[2],
+                "questionCategories": categories[3],
+                "questionSubCategories": categories[4],
+                "questionLowerCategories": categories[5],
+                "courseCategories": categories[6],
+                "courseSubCategories": categories[7],
+                "courseLowerCategories": categories[8],
             }
             return render(request, "ankades/account/posts/edit-article.html", context)
     except:
-        return render(request, "404.html")
+        return redirect("404")
 
 
 def article_detail(request, username, slug):
@@ -302,23 +238,14 @@ def article_detail(request, username, slug):
     :param slug:
     :return:
     """
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
     try:
         instance = Article.objects.get(slug=slug)
-        articleCategories = ArticleCategory.objects.filter(
-            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-        articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-        articleLowerCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-        questionCategories = QuestionCategory.objects.filter(
-            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
-        questionSubCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
-        questionLowerCategories = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=False))
-
         if instance.creator.username != username:
             messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
             return render(request, "404.html")
-        articles = Article.objects.all()
+        articles = Article.objects.filter(isActive=True)
         relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
         articleComments = ArticleComment.objects.filter(articleId__slug=slug)
         instance.view += 1
@@ -326,19 +253,22 @@ def article_detail(request, username, slug):
         context = {
             "articles": articles,
             "relatedPosts": relatedPosts,
-            "articleComments": articleComments,
-            "articleCategories": articleCategories,
             "instance": instance,
             "userGroup": userGroup,
-            "articleSubCategories": articleSubCategories,
-            "articleLowerCategories": articleLowerCategories,
-            "questionCategories": questionCategories,
-            "questionSubCategories": questionSubCategories,
-            "questionLowerCategories": questionLowerCategories,
+            "articleComments": articleComments,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/article/article-detail.html", context)
     except:
-        return render(request, "404.html")
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
@@ -358,21 +288,12 @@ def delete_article(request, slug):
 @login_required(login_url="login_account")
 def add_article_comment(request, slug):
     request.user = request.user
-    activity = AccountLogs()
-    activity.application = "Article"
-    activity.creator = request.user.username
-    activity.createdDate = datetime.datetime.now()
-    activity.title = "Makale Yorumu Ekle"
     instance = get_object_or_404(Article, slug=slug)
     if request.method == "POST":
         content = request.POST.get("content")
         new_comment = ArticleComment(content=content, creator=request.user)
         new_comment.articleId = instance
         new_comment.save()
-        activity.method = "POST"
-        activity.description = "Makaleye yeni bir yorum eklendi. İşlemi yapan kişi: " + str(
-            activity.creator) + ". İşlemin gerçekleştirildiği tarih: " + str(activity.createdDate)
-        activity.save()
         messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
     return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
 

@@ -11,13 +11,13 @@
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle"
-                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}" style="max-height: 300px; width: 100%">
+                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}"
+                                     style="max-height: 300px; width: 100%">
                             </div>
                             <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
                             <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <a href="{% url 'account_follower' instance.username %}"><b>Takipçiler</b></a>
                                     <a class="float-right">
                                         {% if followers %}
                                             {{ followers.count }}
@@ -27,7 +27,6 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="{% url 'account_following' instance.username %}"><b>Takip Edilen</b></a>
                                     <a class="float-right">
                                         {% if followings %}
                                             {{ followings.count }}
@@ -109,7 +108,8 @@
                                             <label for="last_name" class="col-sm-2 col-form-label">Soyad:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="last_name" name="last_name"
-                                                       placeholder="Soyad" value="{{ request.user.last_name }}" required>
+                                                       placeholder="Soyad" value="{{ request.user.last_name }}"
+                                                       required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -130,7 +130,9 @@
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input" name="image"
                                                            id="image">
-                                                    <label class="custom-file-label" for="image">{% if instance.image %}{{ instance.image }}{% else %}Dosya seçin{% endif %}</label>
+                                                    <label class="custom-file-label" for="image">
+                                                        {% if instance.image %}{{ instance.image }}{% else %}Dosya
+                                                            seçin{% endif %}</label>
                                                 </div>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="">Yükle</span>
@@ -152,7 +154,9 @@
                                             <label for="graduate" class="col-sm-2 col-form-label">Okulunuz:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="graduate" name="graduate"
-                                                       placeholder="Okulunuzun Adı" value="{% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}" required>
+                                                       placeholder="Okulunuzun Adı" value="
+                                                        {% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
+                                                       required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -167,10 +171,13 @@
                                           method="post" id="edit-bio">
                                         {% csrf_token %}
                                         <div class="form-group row">
-                                            <label for="bio" class="col-sm-2 col-form-label">Kendiniz Hakkında Kısa Bilgi:</label>
+                                            <label for="bio" class="col-sm-2 col-form-label">Kendiniz Hakkında Kısa
+                                                Bilgi:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="bio" name="bio"
-                                                       placeholder="Kendinizi bize tanıtmak ister misiniz?" value="{% if request.user.bio != None %}{{ request.user.bio }}{% endif %}" required>
+                                                       placeholder="Kendinizi bize tanıtmak ister misiniz?" value="
+                                                        {% if request.user.bio != None %}{{ request.user.bio }}{% endif %}"
+                                                       required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -181,7 +188,8 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="socialmedia">
-                                    <p>Not: Şu anda sosyal medya hesaplarında sorun olduğundan dolayı düzgün çalışmıyor. Yakında güncellenecek.</p>
+                                    <p>Not: Şu anda sosyal medya hesaplarında sorun olduğundan dolayı düzgün çalışmıyor.
+                                        Yakında güncellenecek. {{ request.get_url }}</p>
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                         <tr>

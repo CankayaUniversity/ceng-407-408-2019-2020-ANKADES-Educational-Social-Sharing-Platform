@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <small class="text-muted float-left"><a
-                                            href="{% url 'account_detail' course.creator.username %}">{{ course.creator.get_full_name }}</a></small>
+                                            href="{% url 'account_detail' course.creator %}">{{ course.creator.get_full_name }}</a></small>
                                     <small class="text-muted float-right ml-2">{{ course.coursecomment_set.count }}
                                         Yorum</small>
                                     <small class="text-muted ml-2 float-right">{{ course.likes.count }}

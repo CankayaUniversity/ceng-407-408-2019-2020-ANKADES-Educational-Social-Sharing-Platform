@@ -93,7 +93,7 @@
                                              alt="{{ ac.creator.get_full_name }}">
                                         <div class="comment-text">
                                         <span class="username">
-                                            <a href="{% url 'account_detail' ac.creator.username %}">{{ ac.creator.get_full_name }}</a>
+                                            <a href="{% url 'account_detail' ac.creator %}">{{ ac.creator.get_full_name }}</a>
                                             <span class="text-muted float-right">{{ ac.createdDate }}</span>
                                         </span>
                                             {{ ac.content }}

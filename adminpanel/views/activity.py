@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
 from account.models import AccountLogs
-from account.views.views import current_user_group
+from ankadescankaya.views import current_user_group
 from adminpanel.models import AdminLogs
 
 
