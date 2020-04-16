@@ -21,7 +21,7 @@
                 <li class="nav-item has-treeview">
                     <a href="{% url 'question_category_page' questionCategory.slug %}" class="nav-link">
                         <p>
-                            <i style="margin-left: 0.5em; font-size: 1.0em" class="far fa-circle nav-icon"></i>
+                            <i style="font-size: 1.0em;" class="far fa-circle nav-icon"></i>
                             {{ questionCategory.title }}
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -33,7 +33,7 @@
                                     <li class="nav-item">
                                         <a href="{% url 'question_category_page' questionSubCategory.slug %}" class="nav-link">
                                             <p>
-                                                <i style="margin-left: 1.5em; font-size: 1.0em"
+                                                <i style="font-size: 1.0em;"
                                                    class="nav-icon far fa-dot-circle text-default"></i>
                                                 {{ questionSubCategory.title }}<i
                                                     class="right fas fa-angle-left"></i>
@@ -47,7 +47,7 @@
                                                             <a href="{% url 'question_category_page' questionLowerCategory.slug %}"
                                                                class="nav-link">
                                                                 <p>
-                                                                    <i style="margin-left: 3em; font-size: 1.0em"
+                                                                    <i style="font-size: 1.0em;"
                                                                        class="nav-icon far fa-circle text-success"></i>
                                                                     {{ questionLowerCategory.title }}
                                                                 </p>

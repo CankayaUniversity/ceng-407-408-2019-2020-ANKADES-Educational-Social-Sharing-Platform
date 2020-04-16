@@ -21,7 +21,7 @@
                 <li class="nav-item has-treeview">
                     <a href="{% url 'article_category_page' ac.slug %}" class="nav-link">
                         <p>
-                            <i style="margin-left: 0.5em; font-size: 1.0em" class="far fa-circle nav-icon"></i>
+                            <i style="font-size: 1.0em;" class="far fa-circle nav-icon"></i>
                             {{ ac.title }}
                             <i class="float-right right fas fa-angle-right"></i>
                         </p>
@@ -32,7 +32,7 @@
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
                                         <a href="{% url 'article_category_page' asc.slug %}" class="nav-link">
-                                            <i style="margin-left: 1.5em; font-size: 1.0em"
+                                            <i style="font-size: 1.0em;"
                                                class="nav-icon far fa-dot-circle text-default"></i>
                                             <p style="margin-left: 0.25em">{{ asc.title }}<i
                                                     class="right fas fa-angle-right"></i></p>
@@ -45,7 +45,7 @@
                                                             <a href="{% url 'article_category_page' alc.slug %}"
                                                                class="nav-link">
                                                                 <p>
-                                                                    <i style="margin-left: 3em; font-size: 1.0em"
+                                                                    <i style="font-size: 1.0em;"
                                                                        class="nav-icon far fa-circle text-success"></i>
                                                                     {{ alc.title }}
                                                                 </p>
