@@ -38,7 +38,7 @@
                             <p class="text">Soru Sor</p>
                         </a>
                     </li>
-                    {% if userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'teacher' %}
+                    {% if userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'ogretmen' %}
                         <li class="nav-item">
                             <a href="{% url 'add_article' %}" class="nav-link">
                                 <i class="nav-icon far fa-circle text-info"></i>
