@@ -11,7 +11,7 @@
         {% if request.user.is_authenticated %}
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;" class="img-circle elevation-2" alt="User Image">
+                    <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;" class="img-circle elevation-2" alt="{{ request.user.get_full_name }}">
                 </div>
                 <div class="info">
                     <a href="{% url 'account_detail' request.user.username %} "
@@ -32,8 +32,7 @@
                 {#end categories#}
                 {% if request.user.is_authenticated %}
                     <li class="nav-header">Paylaşım</li>
-                    <li class="nav-item">
-                        <a href="{% url 'add_question' %}" class="nav-link">
+                    <li class="nav-item"><a href="{% url 'add_question' %}" class="nav-link">
                             <i class="nav-icon far fa-circle text-danger"></i>
                             <p class="text">Soru Sor</p>
                         </a>
