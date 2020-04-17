@@ -95,7 +95,7 @@ def admin_add_article_category(request):
         return render(request, "adminpanel/article/add-category.html", context)
     else:
         messages.error(request, "Yetkiniz yok!")
-        return redirect("admin_dashboard")
+        return redirect("admin_article_categories")
 
 
 @login_required(login_url="login_admin")
