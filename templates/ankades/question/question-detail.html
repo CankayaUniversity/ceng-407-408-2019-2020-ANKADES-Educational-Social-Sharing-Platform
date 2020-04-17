@@ -143,7 +143,7 @@
                                                 <a class="btn btn-info btn-sm">Cevapla</a>
                                                 {% if instance.creator == request.user %}
                                                     <a href="{% url 'confirm_answer' answer.answerNumber %}"
-                                                       class="btn btn-success btn-sm">Onayla</a>{% endif %}
+                                                       class="btn btn-success btn-sm">{% if answer.questionId.isSolved %}Onayı Kaldır{% else %}{% if answer.questionId.isSolved == False %}Onayla{% endif %}{% endif %}</a>{% endif %}
                                                 {% if answer.creator == request.user or instance.creator == request.user %}
                                                     <a href="{% url 'delete_answer' answer.id %}"
                                                        class="btn btn-danger btn-sm">Sil</a>{% endif %}
