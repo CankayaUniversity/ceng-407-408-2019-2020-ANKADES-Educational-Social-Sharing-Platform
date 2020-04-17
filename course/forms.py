@@ -1,5 +1,6 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
+from django.forms import formset_factory
 
 from article.models import ArticleComment
 

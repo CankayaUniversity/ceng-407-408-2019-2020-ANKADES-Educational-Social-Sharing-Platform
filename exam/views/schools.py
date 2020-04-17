@@ -1,30 +1,28 @@
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from rest_framework.generics import get_object_or_404
+from django.shortcuts import render
+from django.views.generic import DetailView
 
-from ankadescankaya.views import current_user_group
-from ankadescankaya.views import Categories
-from article.models import ArticleCategory
-from question.models import QuestionCategory
+from ankadescankaya.views import current_user_group, Categories
+from exam.models import ExamCategory
 
-#
-# def all_schools(request):
-#     schools = School.objects.filter(isActive=True)
-#     userGroup = current_user_group(request, request.user)
-#     exams = Exam.objects.filter(isActive=True)
-#     categories = Categories.all_categories()
-#     context = {
-#         "schools": schools,
-#         "exams": exams,
-#         "userGroup": userGroup,
-#         "articleCategories": categories[0],
-#         "articleSubCategories": categories[1],
-#         "articleLowerCategories": categories[2],
-#         "questionCategories": categories[3],
-#         "questionSubCategories": categories[4],
-#         "questionLowerCategories": categories[5],
-#         "courseCategories": categories[6],
-#         "courseSubCategories": categories[7],
-#         "courseLowerCategories": categories[8],
-#     }
-#     return redirect("404")
+
+# TODO
+def all_schools(request):
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    schools = ExamCategory.objects.filter(isActive=True, isSchool=True).order_by('title')
+    departments = ExamCategory.objects.filter(isActive=True, isDepartment=True).order_by('title')
+    context = {
+        "userGroup": userGroup,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+        "schools": schools,
+        "departments": departments,
+    }
+    return render(request, "ankades/exam/all-schools.html", context)

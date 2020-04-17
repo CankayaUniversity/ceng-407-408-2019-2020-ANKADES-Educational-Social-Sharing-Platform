@@ -36,9 +36,8 @@ def add_question(request):
         instance.createdDate = datetime.datetime.now()
         instance.updatedDate = datetime.datetime.now()
         instance.save()
-        messages.success(request, "Soru başarıyla oluşturuldu")
-        return redirect(
-            reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
+        messages.success(request, "Soru başarıyla oluşturuldu. Moderatörlerimiz tarafından incelendikten sonra yayına alınacak.")
+        return redirect("all_questions")
     context = {
         "userGroup": userGroup,
         "questionCategory": questionCategory,
@@ -148,33 +147,38 @@ def question_detail(request, slug, questionNumber):
         return redirect("404")
 
 
-def confirm_answer(request, id):
+def confirm_answer(request, answerNumber):
     try:
-        getAnswer = QuestionComment.objects.get(id=id)
-        if getAnswer.questionId.creator.username == request.user.username:
-            if getAnswer.isCertified:
-                getAnswer.isCertified = False
-                getAnswer.save()
+        instance = QuestionComment.objects.get(answerNumber=answerNumber)
+        question = Question.objects.get(questionNumber=instance.questionId.questionNumber)
+        if instance.questionId.creator.username == request.user.username:
+            if instance.isCertified:
+                instance.isCertified = False
+                question.isSolved = False
+                instance.save()
+                question.save()
                 messages.success(request, "Cevabın doğruluğunu iptal ettiniz.")
-                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
-                                                                   "questionNumber": getAnswer.questionId.questionNumber}))
+                return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
+                                                                   "questionNumber": instance.questionId.questionNumber}))
             else:
-                getAnswer.isCertified = True
-                getAnswer.save()
+                instance.isCertified = True
+                question.isSolved = True
+                instance.save()
+                question.save()
                 messages.success(request, "Cevabın doğruluğunu onayladınız.")
-                return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
-                                                                   "questionNumber": getAnswer.questionId.questionNumber}))
+                return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
+                                                                   "questionNumber": instance.questionId.questionNumber}))
         else:
-            return redirect(reverse("question_detail", kwargs={"slug": getAnswer.questionId.slug,
-                                                               "questionNumber": getAnswer.questionId.questionNumber}))
+            return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
+                                                               "questionNumber": instance.questionId.questionNumber}))
     except:
         return redirect("404")
 
 
 @login_required(login_url="login_account")
-def delete_answer(request, id):
+def delete_answer(request, answerNumber):
     try:
-        instance = QuestionComment.objects.get(id=id)
+        instance = QuestionComment.objects.get(answerNumber=answerNumber)
         slug = instance.questionId.slug
         questionNumber = instance.questionId.questionNumber
         if instance.questionId.creator == request.user or instance.creator == request.user:
@@ -334,6 +338,20 @@ def question_category_page(request, slug):
         return render(request, "ankades/question/get-question-category.html", context)
     except:
         return redirect("404")
+
+
+class QuestionAnswerVoteToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        answerNumber = self.kwargs.get("answerNumber")
+        obj = get_object_or_404(QuestionComment, answerNumber=answerNumber)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            if user in obj.votes.all():
+                obj.votes.remove(user)
+            else:
+                obj.votes.add(user)
+            return url_
 
 
 class QuestionLikeToggle(RedirectView):

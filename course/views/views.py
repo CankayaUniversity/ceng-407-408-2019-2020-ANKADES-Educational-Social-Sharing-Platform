@@ -6,6 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 
 from ankadescankaya.views import current_user_group
@@ -96,6 +97,8 @@ def course_category_page(request, slug):
         return redirect("404")
 
 
+# TODO
+# Yönlendirme yapılacak -> Bölüm Ekle
 @login_required(login_url="login_account")
 def add_course(request):
     """
@@ -142,19 +145,40 @@ def add_course(request):
         instance.categoryId_id = value
         instance.save()
         messages.success(request, "Kurs başarıyla eklendi.")
-        return redirect("index")
+        return redirect(reverse("add_section", kwargs={"courseNumber": instance.courseNumber}))
     return render(request, "ankades/course/add-course.html", context)
 
 
+# TODO
 @login_required(login_url="login_account")
 def add_section(request, courseNumber):
-    return None
+    userGroup = current_user_group(request, request.user)
+    courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
+    form = CourseForm(request.POST or None)
+    categories = Categories.all_categories()
+    context = {
+        "courseCategory": courseCategory,
+        "userGroup": userGroup,
+        "form": form,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return redirect(request, "ankades/course/add-section.html", context)
 
 
+# TODO
 @login_required(login_url="login_account")
 def add_lecture(request, courseNumber):
     return None
 
 
+# TODO
 def course_detail(request, slug):
     return None

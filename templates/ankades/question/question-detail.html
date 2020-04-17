@@ -137,14 +137,14 @@
                                                 {{ answer.content }}
                                             </div>
                                             <div class="timeline-footer">
-                                                {% if answer.creator != request.user.username %}
+                                                {% if answer.creator != request.user %}
                                                     <a class="btn btn-primary btn-sm">Oy ver</a>
                                                 {% endif %}
                                                 <a class="btn btn-info btn-sm">Cevapla</a>
-                                                {% if instance.creator == request.user.username %}
-                                                    <a href="{% url 'confirm_answer' answer.id %}"
+                                                {% if instance.creator == request.user %}
+                                                    <a href="{% url 'confirm_answer' answer.answerNumber %}"
                                                        class="btn btn-success btn-sm">Onayla</a>{% endif %}
-                                                {% if answer.creator == request.user or instance.creator.username == request.user %}
+                                                {% if answer.creator == request.user or instance.creator == request.user %}
                                                     <a href="{% url 'delete_answer' answer.id %}"
                                                        class="btn btn-danger btn-sm">Sil</a>{% endif %}
                                             </div>

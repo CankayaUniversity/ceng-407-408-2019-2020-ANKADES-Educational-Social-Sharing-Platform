@@ -5,6 +5,7 @@ from django.views.generic import DetailView
 from account.models import AccountGroup
 from article.models import ArticleCategory
 from course.models import CourseCategory
+from exam.models import ExamCategory
 from question.models import QuestionCategory
 
 

@@ -62,5 +62,4 @@ class Exam(models.Model):
         db_table = "Exam"
 
 
-pre_save.connect(slug_save, sender=ExamCategory)
 pre_save.connect(slug_save, sender=Exam)

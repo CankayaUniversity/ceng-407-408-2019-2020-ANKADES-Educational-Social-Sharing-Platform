@@ -53,7 +53,7 @@ class Course(models.Model):
                                              db_table="AccountEnrolledCourse")
 
     def __str__(self):
-        return self.slug
+        return self.courseNumber
 
     class Meta:
         db_table = "Course"

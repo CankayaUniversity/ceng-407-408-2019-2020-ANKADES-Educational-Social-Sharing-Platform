@@ -44,6 +44,7 @@ class Question(models.Model):
     description = RichTextField(null=False, blank=False)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
+    isSolved = models.BooleanField(null=True, blank=True, default=False)
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
     likes = models.ManyToManyField(Account, related_name="questionLikes", default=0, blank=True,
@@ -80,9 +81,9 @@ class QuestionComment(models.Model):
     parentId = models.ForeignKey('self', null=True, related_name="questionCommentId", on_delete=models.CASCADE)
     isRoot = models.BooleanField(default=True)
     isCertified = models.BooleanField(default=False)
+    votes = models.ManyToManyField(Account, related_name="questionCommentVotes", default=0, blank=True, db_table="VotedAnswers")
     isActive = models.BooleanField(default=True)
     isReply = models.BooleanField(default=False)
-    view = models.PositiveIntegerField(default=0)
     likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True, db_table="AccountLikedQuestionComment")
 
     def __str__(self):
@@ -92,10 +93,13 @@ class QuestionComment(models.Model):
         return reverse("question_detail", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
 
     def get_like_url(self):
-        return reverse("question-like-comment-toggle", kwargs={"questionNumber": self.answerNumber})
+        return reverse("question-like-comment-toggle", kwargs={"answerNumber": self.answerNumber})
+
+    def get_vote_url(self):
+        return reverse("question-vote-answer-toggle", kwargs={"answerNumber": self.answerNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-comment-api-toggle", kwargs={"questionNumber": self.answerNumber})
+        return reverse("question-like-comment-api-toggle", kwargs={"answerNumber": self.answerNumber})
 
     class Meta:
         db_table = "QuestionComment"
