@@ -53,7 +53,8 @@
                                 {#                                </a>#}
                             {% endif %}
                             {% if instance.creator != request.user %}
-                                <a type="button" style="color: white !important;" class="btn btn-warning btn-md" data-toggle="modal"
+                                <a type="button" style="color: white !important;" class="btn btn-warning btn-md"
+                                   data-toggle="modal"
                                    data-target="#modal-default">
                                     Şikayet Et
                                 </a>
@@ -110,6 +111,10 @@
                                             {{ certifiedAnswer.content }}
                                         </div>
                                     </div>
+                                        <a href="{% url 'confirm_answer' certifiedAnswer.answerNumber %}"
+                                           class="btn btn-danger float-right btn-sm">
+                                            Onayı Kaldır
+                                        </a>
                                 </div>
                             </div>
                         {% endif %}
@@ -142,8 +147,20 @@
                                                 {% endif %}
                                                 <a class="btn btn-info btn-sm">Cevapla</a>
                                                 {% if instance.creator == request.user %}
-                                                    <a href="{% url 'confirm_answer' answer.answerNumber %}"
-                                                       class="btn btn-success btn-sm">{% if answer.questionId.isSolved %}Onayı Kaldır{% else %}{% if answer.questionId.isSolved == False %}Onayla{% endif %}{% endif %}</a>{% endif %}
+                                                    {% if answer.questionId.isSolved == False and answer.isCertified == False %}
+                                                        <a href="{% url 'confirm_answer' answer.answerNumber %}"
+                                                           class="btn btn-success btn-sm">
+                                                            Onayla
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if answer.isCertified %}
+                                                        <a href="{% url 'confirm_answer' answer.answerNumber %}"
+                                                           class="btn btn-success btn-sm">
+                                                            Onayı Kaldır
+                                                        </a>
+                                                    {% else %}
+                                                    {% endif %}
+                                                {% endif %}
                                                 {% if answer.creator == request.user or instance.creator == request.user %}
                                                     <a href="{% url 'delete_answer' answer.id %}"
                                                        class="btn btn-danger btn-sm">Sil</a>{% endif %}

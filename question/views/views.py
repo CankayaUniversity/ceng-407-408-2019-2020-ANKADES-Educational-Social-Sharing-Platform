@@ -161,6 +161,9 @@ def confirm_answer(request, answerNumber):
                 return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
                                                                    "questionNumber": instance.questionId.questionNumber}))
             else:
+                if question.isSolved:
+                    messages.error(request, "Sorunun, onaylanmış cevabı bulunduğu için, işlem gerçekleştirilemedi. Lütfen önce onayı kaldırın.")
+                    return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug, "questionNumber": instance.questionId.questionNumber}))
                 instance.isCertified = True
                 question.isSolved = True
                 instance.save()
