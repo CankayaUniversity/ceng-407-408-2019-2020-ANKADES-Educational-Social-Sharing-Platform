@@ -34,6 +34,7 @@ def add_question(request):
         instance.questionNumber = get_random_string(length=32)
         instance.creator = request.user
         instance.createdDate = datetime.datetime.now()
+        instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Soru başarıyla oluşturuldu")
         return redirect(
@@ -203,6 +204,7 @@ def edit_question(request, slug, questionNumber):
                 instance.categoryId_id = value
                 instance.title = title
                 instance.description = description
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Sorunuz başarıyla güncellendi")
                 return redirect(reverse("question_detail",
