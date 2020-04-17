@@ -109,13 +109,13 @@ urlpatterns = [
          name="admin_edit_social_media"),
     path('isactive-social-media/<slug:slug>/', socialmedia.admin_isactive_socialmedia,
          name="admin_isactive_socialmedia"),
-    path('delete-social-media/<slug:slug>', socialmedia.admin_delete_socialmedia,
+    path('delete-social-media/<slug:slug>/', socialmedia.admin_delete_socialmedia,
          name="admin_delete_socialmedia"),
 
     # Admin Log Urls
     path('logs/', activity.admin_all_logs, name="admin_all_logs"),
-    path('logs/admins', activity.admin_admin_logs, name="admin_admin_logs"),
-    path('logs/accounts', activity.admin_account_logs, name="admin_account_logs"),
+    path('logs/admins/', activity.admin_admin_logs, name="admin_admin_logs"),
+    path('logs/accounts/', activity.admin_account_logs, name="admin_account_logs"),
 ]
 
 if settings.DEBUG:
