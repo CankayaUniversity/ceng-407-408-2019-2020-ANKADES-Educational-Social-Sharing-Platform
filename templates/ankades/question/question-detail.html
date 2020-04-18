@@ -106,7 +106,8 @@
                                         <div class="comment-text">
                                         <span class="username">
                                             <a href="{% url 'account_detail' certifiedAnswer.creator %}">{{ certifiedAnswer.creator.get_full_name }}</a>
-                                            <span class="text-muted float-right">{{ certifiedAnswer.createdDate }}</span>
+                                            <span class="text-muted float-right ml-2">{{ certifiedAnswer.createdDate }}</span>
+                                            <span class="text-muted float-right">Toplam Onaylanma: {{ certifiedAnswer.votes.count }}</span>
                                         </span>
                                             {{ certifiedAnswer.content }}
                                         </div>
@@ -137,6 +138,7 @@
                                                  alt="{{ answer.creator.get_full_name }}">
                                             <span class="time"><i
                                                     class="fas fa-clock"></i> {{ answer.createdDate }}</span>
+                                            <span class="time">Toplam Onaylanma: {{ answer.votes.count }}</span>
                                             <h3 class="timeline-header ml-2 no-border"><a
                                                     href="{% url 'account_detail' answer.creator %}">{{ answer.creator.get_full_name }}</a>
                                             </h3>
@@ -145,7 +147,9 @@
                                             </div>
                                             <div class="timeline-footer">
                                                 {% if answer.creator != request.user %}
-                                                    <a class="btn btn-primary btn-sm">Oy ver</a>
+                                                    <a class="btn btn-primary btn-sm"
+                                                       href="{% url 'question_vote_comment' answer.answerNumber %}">Oy
+                                                        ver</a>
                                                 {% endif %}
                                                 <a class="btn btn-info btn-sm">Cevapla</a>
                                                 {% if instance.creator == request.user %}
@@ -165,10 +169,11 @@
                                                 {% if answer.creator == request.user or instance.creator == request.user %}
                                                     <a href="{% url 'delete_answer' answer.id %}"
                                                        class="btn btn-danger btn-sm">Sil</a>{% endif %}
+
                                             </div>
                                         </div>
                                     </div>
-{#                                TODO Yoruma yorum ekleme#}
+                                    {#                                TODO Yoruma yorum ekleme#}
                                     <div>
 
                                     </div>

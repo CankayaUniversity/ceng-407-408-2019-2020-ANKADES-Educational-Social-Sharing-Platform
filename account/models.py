@@ -147,7 +147,7 @@ class AccountSocialMedia(models.Model):
         db_table = "AccountSocialMedia"
 
 
-class Zones(models.Model):
+class Zone(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=254)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
@@ -163,17 +163,17 @@ class Zones(models.Model):
         return self.title
 
     class Meta:
-        db_table = "Zones"
+        db_table = "Zone"
         ordering = ['-createdDate']
 
 
-class AccountZones(models.Model):
+class AccountZone(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     userId = models.ForeignKey(Account, on_delete=models.CASCADE)
-    zoneId = models.ForeignKey(Zones, on_delete=models.CASCADE)
+    zoneId = models.ForeignKey(Zone, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = "AccountZones"
+        db_table = "AccountZone"
 
 
 class AccountLogs(models.Model):
@@ -208,6 +208,31 @@ class Notification(models.Model):
     class Meta:
         db_table = "Notification"
         ordering = ['-createdDate']
+
+
+class Skill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=254)
+    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "Skill"
+        ordering = ['-createdDate']
+
+
+class AccountSkill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    userId = models.ForeignKey(Account, on_delete=models.CASCADE)
+    skillId = models.ForeignKey(Skill, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "AccountSkill"
 
 
 pre_save.connect(slug_save, sender=SocialMedia)

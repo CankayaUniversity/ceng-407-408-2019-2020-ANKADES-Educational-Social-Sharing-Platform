@@ -21,8 +21,8 @@ urlpatterns = [
         name="question-like-toggle"),
     url(r'^cevap/(?P<answerNumber>[\w-]+)/begen/$', QuestionLikeCommentToggle.as_view(),
         name="question-like-comment-toggle"),
-    url(r'^cevap/(?P<answerNumber>[\w-]+)/oyla/$', QuestionAnswerVoteToggle.as_view(),
-        name="question-answer-vote-toggle"),
+    url(r'^cevap/(?P<answerNumber>[\w-]+)/oyla/$', views.question_vote_comment,
+        name="question_vote_comment"),
 ]
 
 if settings.DEBUG:

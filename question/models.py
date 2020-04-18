@@ -1,4 +1,5 @@
 import uuid
+
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
@@ -81,25 +82,28 @@ class QuestionComment(models.Model):
     parentId = models.ForeignKey('self', null=True, related_name="questionCommentId", on_delete=models.CASCADE)
     isRoot = models.BooleanField(default=True)
     isCertified = models.BooleanField(default=False)
-    votes = models.ManyToManyField(Account, related_name="questionCommentVotes", default=0, blank=True, db_table="VotedAnswers")
+    votes = models.ManyToManyField(Account, related_name="questionCommentVotes", default=0, blank=True,
+                                   db_table="VotedAnswers")
     isActive = models.BooleanField(default=True)
     isReply = models.BooleanField(default=False)
-    likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True, db_table="AccountLikedQuestionComment")
+    likes = models.ManyToManyField(Account, related_name="questionCommentLikes", default=0, blank=True,
+                                   db_table="AccountLikedQuestionComment")
 
     def __str__(self):
         return self.answerNumber
 
     def get_absolute_url(self):
-        return reverse("question_detail", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
+        return reverse("question_detail",
+                       kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
 
     def get_like_url(self):
-        return reverse("question-like-comment-toggle", kwargs={"answerNumber": self.answerNumber})
+        return reverse("question-like-comment-toggle", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
 
     def get_vote_url(self):
         return reverse("question-vote-answer-toggle", kwargs={"answerNumber": self.answerNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-comment-api-toggle", kwargs={"answerNumber": self.answerNumber})
+        return reverse("question-like-comment-api-toggle", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
 
     class Meta:
         db_table = "QuestionComment"

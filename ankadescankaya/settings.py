@@ -11,7 +11,7 @@ DEBUG = config('DEBUG', cast=bool)
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']
 
 AUTH_USER_MODEL = 'account.Account'
-
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 INSTALLED_APPS = [
     'account',
     'adminpanel',

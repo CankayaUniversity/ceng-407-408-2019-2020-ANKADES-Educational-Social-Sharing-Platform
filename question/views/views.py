@@ -36,7 +36,8 @@ def add_question(request):
         instance.createdDate = datetime.datetime.now()
         instance.updatedDate = datetime.datetime.now()
         instance.save()
-        messages.success(request, "Soru başarıyla oluşturuldu. Moderatörlerimiz tarafından incelendikten sonra yayına alınacak.")
+        messages.success(request,
+                         "Soru başarıyla oluşturuldu. Moderatörlerimiz tarafından incelendikten sonra yayına alınacak.")
         return redirect("all_questions")
     context = {
         "userGroup": userGroup,
@@ -147,6 +148,7 @@ def question_detail(request, slug, questionNumber):
         return redirect("404")
 
 
+@login_required(login_url="login_account")
 def confirm_answer(request, answerNumber):
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
@@ -162,8 +164,10 @@ def confirm_answer(request, answerNumber):
                                                                    "questionNumber": instance.questionId.questionNumber}))
             else:
                 if question.isSolved:
-                    messages.error(request, "Sorunun, onaylanmış cevabı bulunduğu için, işlem gerçekleştirilemedi. Lütfen önce onayı kaldırın.")
-                    return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug, "questionNumber": instance.questionId.questionNumber}))
+                    messages.error(request,
+                                   "Sorunun, onaylanmış cevabı bulunduğu için, işlem gerçekleştirilemedi. Lütfen önce onayı kaldırın.")
+                    return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
+                                                                       "questionNumber": instance.questionId.questionNumber}))
                 instance.isCertified = True
                 question.isSolved = True
                 instance.save()
@@ -238,6 +242,7 @@ def edit_question(request, slug, questionNumber):
         return render(request, "404.html")
 
 
+@login_required(login_url="login_account")
 def add_question_answer(request, slug, questionNumber):
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
@@ -271,6 +276,7 @@ def add_question_answer(request, slug, questionNumber):
         return redirect("404")
 
 
+@login_required(login_url="login_account")
 def add_question_answer_reply(request, slug, questionNumber, answerNumber):
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
@@ -308,6 +314,7 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
         return redirect("all_questions")
 
 
+@login_required(login_url="login_account")
 def delete_question(request, slug):
     userGroup = current_user_group(request, request.user)
     try:
@@ -343,6 +350,26 @@ def question_category_page(request, slug):
         return redirect("404")
 
 
+@login_required(login_url="login_account")
+def question_vote_comment(request, answerNumber):
+    try:
+        instance = QuestionComment.objects.get(answerNumber=answerNumber)
+        user = request.user
+        if user in instance.votes.all():
+            instance.votes.remove(user)
+            messages.success(request, "Verdiğiniz oy başarıyla silindi.")
+            return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
+                                                               "questionNumber": instance.questionId.questionNumber}))
+        else:
+            instance.votes.add(user)
+            messages.success(request, "Cevap oylamanız başarıyla gerçekleştirildi")
+            return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
+                                                               "questionNumber": instance.questionId.questionNumber}))
+    except:
+        messages.error(request, "Cevap bulunamadı.")
+        return redirect("all_questions")
+
+
 class QuestionAnswerVoteToggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         answerNumber = self.kwargs.get("answerNumber")
@@ -354,6 +381,10 @@ class QuestionAnswerVoteToggle(RedirectView):
                 obj.votes.remove(user)
             else:
                 obj.votes.add(user)
+            messages.error(self, "Beğenildi.")
+            return url_
+        else:
+            messages.error(self, "Giriş yapmalısınız.")
             return url_
 
 
