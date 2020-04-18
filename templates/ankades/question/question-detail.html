@@ -111,10 +111,12 @@
                                             {{ certifiedAnswer.content }}
                                         </div>
                                     </div>
+                                    {% if certifiedAnswer.questionId.creator == request.user or userGroup == "moderator" or userGroup == "admin" %}
                                         <a href="{% url 'confirm_answer' certifiedAnswer.answerNumber %}"
                                            class="btn btn-danger float-right btn-sm">
                                             Onayı Kaldır
                                         </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endif %}

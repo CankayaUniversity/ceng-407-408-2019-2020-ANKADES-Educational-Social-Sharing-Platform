@@ -154,7 +154,7 @@ def admin_delete_question(request, slug):
         instance = get_object_or_404(Question, slug=slug)
         if instance.isActive is True:
             messages.error(request, "Soru aktif olduğu için silme işlemi gerçekleştirilemedi.")
-            return redirect("admin_question_categories")
+            return redirect("admin_all_questions")
         else:
             instance.delete()
             messages.success(request, "Soru başarıyla silindi.")
@@ -162,28 +162,6 @@ def admin_delete_question(request, slug):
     else:
         messages.error(request, "Yetkiniz Yok")
         return redirect("admin_all_questions")
-
-
-@login_required(login_url="login_admin")
-def admin_delete_question_category(request, slug):
-    """
-    :param request:
-    :param slug:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    if userGroup == 'admin':
-        instance = get_object_or_404(QuestionCategory, slug=slug)
-        if instance.isActive is True:
-            messages.error(request, "Soru kategorisi aktif olduğu için silme işlemi gerçekleştirilemedi.")
-            return redirect("admin_question_categories")
-        else:
-            instance.delete()
-            messages.success(request, "Soru kategorisi başarıyla silindi.")
-            return redirect("admin_question_categories")
-    else:
-        messages.error(request, "Yetkiniz Yok")
-        return redirect("admin_question_categories")
 
 
 @login_required(login_url="login_admin")

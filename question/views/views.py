@@ -111,9 +111,9 @@ def all_questions(request):
 
 
 def question_detail(request, slug, questionNumber):
-    userGroup = current_user_group(request, request.user)
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        userGroup = current_user_group(request, request.user)
         categories = Categories.all_categories()
         instance.view += 1
         instance.save()
