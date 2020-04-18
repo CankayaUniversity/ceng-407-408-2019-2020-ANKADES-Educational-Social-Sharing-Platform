@@ -7,6 +7,7 @@ from django.urls import reverse
 from account.models import Account
 from adminpanel.models import Tag
 from ankadescankaya.slug import slug_save
+from ankadescankaya.storage_backends import ExamMediaStorage
 
 
 class ExamCategory(models.Model):
@@ -21,7 +22,6 @@ class ExamCategory(models.Model):
     isSchool = models.BooleanField(default=False)
     isDepartment = models.BooleanField(default=False)
     isTerm = models.BooleanField(default=False)
-    isLecture = models.BooleanField(default=False)
     tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
     isActive = models.BooleanField(default=True)
 
@@ -34,14 +34,14 @@ class ExamCategory(models.Model):
 
 class Exam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lectureCode = models.CharField(unique=True, null=False, blank=False, max_length=4)
+    lectureCode = models.CharField(null=False, blank=False, max_length=50)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     categoryId = models.ForeignKey(ExamCategory, on_delete=models.CASCADE, null=False)
     title = models.CharField(max_length=254, null=False, blank=False)
-    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     isActive = models.BooleanField(default=True)
+    media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
 
     def __str__(self):
         return self.lectureCode

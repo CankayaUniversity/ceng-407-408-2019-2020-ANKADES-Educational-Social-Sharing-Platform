@@ -1,0 +1,37 @@
+{% extends 'ankades/layout/layout.html' %}
+{% load static %}
+{% block title %}Ankacademy | Okullar{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Okullar</h3>
+                        </div>
+                        <div class="card-body">
+                            {# TODO -> s3 table.js e yeni id eklenecek - desc olarak sıralanacak #}
+                            <table id="account-logs" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Okul Adı</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if schools %}
+                                    {% for school in schools %}
+                                        <tr>
+                                            <td><a href="#" style="font-size: 18px;">{{ school.title }}</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

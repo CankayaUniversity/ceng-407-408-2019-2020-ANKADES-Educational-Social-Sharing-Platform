@@ -11,6 +11,11 @@ class ArticleMediaStorage(S3Boto3Storage):
     file_overwrite = False
 
 
+class ExamMediaStorage(S3Boto3Storage):
+    location = settings.AWS_EXAM_MEDIA_LOCATION
+    file_overwrite = False
+
+
 class CourseMediaStorage(S3Boto3Storage):
     location = settings.AWS_COURSE_MEDIA_LOCATION
     file_overwrite = False

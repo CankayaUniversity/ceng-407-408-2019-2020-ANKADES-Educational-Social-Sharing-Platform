@@ -12,9 +12,14 @@
                         <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title"><a
+                                    <h5 class="float-left card-title"><a
                                             href="{% url 'question_detail' question.slug question.questionNumber %}">
-                                        {{ question.title }} {% if question.isSolved %}[ÇÖZÜLDÜ]{% endif %}
+                                        {{ question.title }}
+                                    </a>
+                                    </h5>
+                                    <h5 class="float-right card-title"><a
+                                            href="{% url 'question_detail' question.slug question.questionNumber %}">
+                                        {% if question.isSolved %}[ÇÖZÜLDÜ]{% endif %}
                                     </a>
                                     </h5>
                                     <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
