@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from account.models import Account, AccountSocialMedia, SocialMedia, AccountFollower
+from account.models import Account, AccountSocialMedia, SocialMedia, AccountFollower, AccountZone
 from account.views.views import get_social_media, get_user_follower
 from ankadescankaya.views import Categories
 from ankadescankaya.views import current_user_group
@@ -200,5 +200,38 @@ def edit_bio(request):
         instance.bio = bio
         instance.save()
         messages.success(request, "Biyografiniz başarıyla güncellendi.")
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')
+
+
+@login_required(login_url="login_account")
+def edit_zone(request):
+    """
+    :param request:
+    :return:
+    """
+    instance = get_object_or_404(Account, username=request.user)
+    zone = AccountZone.objects.filter(userId__username=instance.username)
+    if request.method == "POST":
+        zone = request.POST.get("zone")
+        instance.zone = zone
+        instance.save()
+        messages.success(request, "Konumunuz başarıyla güncellendi.")
+        return redirect('/ayarlar/')
+    return redirect('/ayarlar/')
+
+
+@login_required(login_url="login_account")
+def edit_cv(request):
+    """
+    :param request:
+    :return:
+    """
+    instance = get_object_or_404(Account, username=request.user)
+    if request.method == "POST":
+        cv = request.POST.get("cv")
+        instance.cv = cv
+        instance.save()
+        messages.success(request, "Yetenekleriniz başarıyla güncellendi.")
         return redirect('/ayarlar/')
     return redirect('/ayarlar/')
