@@ -9,6 +9,7 @@ from rest_framework.generics import get_object_or_404
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, SocialMedia, AccountFollower
 from ankadescankaya.views import Categories, current_user_group
 from article.models import Article
+from course.models import Course
 from question.models import Question
 
 
@@ -73,8 +74,9 @@ def account_detail(request, username):
         followings = AccountFollower.objects.filter(followerId__username=instance.username)
         getFollowerForFollow = get_user_follower(request, request.user, followers)
         getFollowingForFollow = get_user_follower(request, request.user, followings)
-        articles = user_articles(request, username)
-        questions = user_questions(request, username)
+        articles = user_articles(request, username).order_by('-createdDate__day')
+        questions = user_questions(request, username).order_by('-createdDate__day')
+        courses = user_courses(request, username).order_by('-createdDate__day')
         context = {
             "instance": instance,
             "userDetailGroup": userDetailGroup,
@@ -84,6 +86,7 @@ def account_detail(request, username):
             "getFollowingForFollow": getFollowingForFollow,
             "articles": articles,
             "questions": questions,
+            "courses": courses,
             "followers": followers,
             "followings": followings,
             "articleCategories": categories[0],
