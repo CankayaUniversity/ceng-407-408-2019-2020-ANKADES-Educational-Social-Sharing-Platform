@@ -11,7 +11,8 @@
         {% if request.user.is_authenticated %}
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;" class="img-circle elevation-2" alt="{{ request.user.get_full_name }}">
+                    <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;"
+                         class="img-circle elevation-2" alt="{{ request.user.get_full_name }}">
                 </div>
                 <div class="info">
                     <a href="{% url 'account_detail' request.user.username %} "
@@ -30,14 +31,22 @@
                 {#course categories#}
                 {% include 'ankades/layout/course-categories.html' %}
                 {#course categories#}
-                {% include 'ankades/layout/schools.html' %}
+                <li class="nav-header">SINAV ARŞİVİ</li>
+                <li class="nav-item has-treeview">
+                    <a href="{% url 'all_schools' %}" class="nav-link">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>
+                            Tüm Okullar
+                        </p>
+                    </a>
+                </li>
                 {#end categories#}
                 {% if request.user.is_authenticated %}
                     <li class="nav-header">Paylaşım</li>
                     <li class="nav-item"><a href="{% url 'add_question' %}" class="nav-link">
-                            <i class="nav-icon far fa-circle text-danger"></i>
-                            <p class="text">Soru Sor</p>
-                        </a>
+                        <i class="nav-icon far fa-circle text-danger"></i>
+                        <p class="text">Soru Sor</p>
+                    </a>
                     </li>
                     {% if userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'ogretmen' %}
                         <li class="nav-item">

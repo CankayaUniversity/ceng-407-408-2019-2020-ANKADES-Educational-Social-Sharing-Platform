@@ -45,5 +45,5 @@ def my_posts(request):
         }
         return render(request, "ankades/account/posts/my-posts.html", context)
     except:
-        messages.error(request, "Giriş yapmalısınız.")
-        return redirect("login_account")
+        messages.error(request, "Bir sorun oluştu.")
+        return redirect("404")

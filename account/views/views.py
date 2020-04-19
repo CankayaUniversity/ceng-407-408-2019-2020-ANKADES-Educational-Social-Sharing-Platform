@@ -323,7 +323,7 @@ def user_articles(self, username):
     :return:
     """
     try:
-        articles = Article.objects.filter(creator__username=username)
+        articles = Article.objects.filter(creator__username=username, isActive=True)
         return articles
     except:
         articles = None
@@ -337,11 +337,25 @@ def user_questions(self, username):
     :return:
     """
     try:
-        questions = Question.objects.filter(creator__username=username)
+        questions = Question.objects.filter(creator__username=username, isActive=True)
         return questions
     except:
         questions = None
         return questions
+
+
+def user_courses(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
+    try:
+        courses = Course.objects.filter(creator__username=username, isActive=True)
+        return courses
+    except:
+        courses = None
+        return courses
 
 
 def get_social_media(self, slug):
