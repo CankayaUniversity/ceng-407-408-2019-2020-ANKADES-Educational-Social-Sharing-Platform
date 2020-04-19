@@ -19,7 +19,8 @@
                                     </h5>
                                     <h5 class="float-right card-title" style="background-color:lightskyblue"><a
                                             href="{% url 'question_detail' question.slug question.questionNumber %}">
-                                        {% if question.isSolved %}[ÇÖZÜLDÜ]{% endif %}
+                                        {% if question.isSolved %}[ÇÖZÜLDÜ]
+                                        {% else %}<a style="background-color:lightpink" >[HENÜZ ÇÖZÜLMEDİ]</a>{% endif %}
                                     </a>
                                     </h5>
                                     <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
