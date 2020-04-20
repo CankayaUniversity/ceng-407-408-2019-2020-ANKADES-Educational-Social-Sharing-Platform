@@ -175,29 +175,29 @@
                                             <div class="timeline-footer">
                                                 {% if answer.creator != request.user %}
                                                     <a class="btn btn-primary btn-sm"
-                                                       href="{% url 'question_vote_comment' answer.answerNumber %}">Oy
+                                                       href="{% url 'question_vote_comment' answer.answerNumber %}"><i class="fas fa-thumbs-up"></i> Oy
                                                         ver</a>
                                                 {% endif %}
                                                 <a class="btn btn-info btn-sm"
-                                                   onclick="reply{{ forloop.counter }}()">Cevapla</a>
+                                                   onclick="reply{{ forloop.counter }}()"><i class="fas fa-reply"></i> Cevapla</a>
                                                 {% if instance.creator == request.user %}
                                                     {% if answer.questionId.isSolved == False and answer.isCertified == False %}
                                                         <a href="{% url 'confirm_answer' answer.answerNumber %}"
                                                            class="btn btn-success btn-sm">
-                                                            Onayla
+                                                            <i class="fas fa-check"></i> Onayla
                                                         </a>
                                                     {% endif %}
                                                     {% if answer.isCertified %}
                                                         <a href="{% url 'confirm_answer' answer.answerNumber %}"
                                                            class="btn btn-success btn-sm">
-                                                            Onayı Kaldır
+                                                            <i class="fas fa-window-close"></i> Onayı Kaldır
                                                         </a>
                                                     {% endif %}
                                                 {% endif %}
                                                 {% if answer.creator == request.user or instance.creator == request.user %}
                                                     <a href="{% url 'delete_answer' answer.answerNumber %}"
-                                                       class="btn btn-danger btn-sm">Sil</a>{% endif %}
-
+                                                       class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Sil</a>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -218,7 +218,10 @@
                                                             {{ reply.content }}
                                                         </div>
                                                         <div class="timeline-footer">
-                                                            <a class="btn btn-primary btn-sm">Oy ver</a>
+                                                        {% if reply.creator == request.user or instance.creator == request.user %}
+                                                            <a href="{% url 'delete_answer' reply.answerNumber %}"
+                                                               class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Sil</a>
+                                                        {% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
