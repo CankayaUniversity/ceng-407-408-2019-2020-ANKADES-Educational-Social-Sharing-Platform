@@ -277,7 +277,7 @@ def add_question_answer(request, slug, questionNumber):
 
 
 @login_required(login_url="login_account")
-def add_question_answer_reply(request, slug, questionNumber, answerNumber):
+def add_question_answer_reply(request, answerNumber):
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     context = {
@@ -293,21 +293,20 @@ def add_question_answer_reply(request, slug, questionNumber, answerNumber):
         "courseLowerCategories": categories[8],
     }
     try:
-        instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
-        parentAnswer = QuestionComment.objects.get(answerNumber=answerNumber)
+        instance = QuestionComment.objects.get(answerNumber=answerNumber)
         if request.method == "POST":
-            content = request.POST.get("content")
-            new_answer = QuestionComment(content=content, creator=request.user)
-            new_answer.questionId = instance
+            reply = request.POST.get("reply")
+            new_answer = QuestionComment(content=reply, creator=request.user)
+            new_answer.questionId = instance.questionId
             new_answer.answerNumber = get_random_string(length=32)
-            new_answer.parentId.answerNumber = parentAnswer.answerNumber
+            new_answer.parentId_id = instance.id
             new_answer.isActive = True
             new_answer.isRoot = False
-            new_answer.parentId_id = new_answer.id
+            new_answer.isReply = True
             new_answer.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
         return redirect(
-            reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}),
+            reverse("question_detail", kwargs={"slug": instance.questionId.slug, "questionNumber": instance.questionId.questionNumber}),
             context)
     except:
         messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")

@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/duzenle/$', views.edit_question, name="edit_question"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/yorum-yap/$', views.add_question_answer,
         name="add_question_answer"),
+    url(r'^cevap/(?P<answerNumber>[\w-]+)/cevapla/$', views.add_question_answer_reply,
+        name="add_question_answer_reply"),
     path('soru-sil/<slug:slug>/', views.delete_question, name="delete_question"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/begen/$', QuestionLikeToggle.as_view(),
         name="question-like-toggle"),

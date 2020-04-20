@@ -178,7 +178,8 @@
                                                        href="{% url 'question_vote_comment' answer.answerNumber %}">Oy
                                                         ver</a>
                                                 {% endif %}
-                                                <a class="btn btn-info btn-sm">Cevapla</a>
+                                                <a class="btn btn-info btn-sm"
+                                                   onclick="reply{{ forloop.counter }}()">Cevapla</a>
                                                 {% if instance.creator == request.user %}
                                                     {% if answer.questionId.isSolved == False and answer.isCertified == False %}
                                                         <a href="{% url 'confirm_answer' answer.answerNumber %}"
@@ -194,22 +195,18 @@
                                                     {% endif %}
                                                 {% endif %}
                                                 {% if answer.creator == request.user or instance.creator == request.user %}
-                                                    <a href="{% url 'delete_answer' answer.id %}"
+                                                    <a href="{% url 'delete_answer' answer.answerNumber %}"
                                                        class="btn btn-danger btn-sm">Sil</a>{% endif %}
 
                                             </div>
                                         </div>
-                                    </div>
-                                    {#                                TODO Yoruma yorum ekleme#}
-                                    <div>
-
                                     </div>
                                     {% if answerReply %}
                                         {% for reply in answerReply %}
                                             {% if reply.parentId_id == answer.id %}
                                                 <div>
                                                     <div class="timeline-item p-2"
-                                                         style="background-color: #f8f9fa !important; border:none; box-shadow: none">
+                                                         style="background-color: #f8f9fa !important; border:none; box-shadow: none;">
                                                         <img class="img-circle img-sm"
                                                              src="{{ reply.creator.image.url }}"
                                                              alt="{{ reply.creator.get_full_name }}">
@@ -227,8 +224,39 @@
                                                 </div>
                                             {% endif %}
                                         {% endfor %}
+                                        <div class="timeline" id="{{ forloop.counter }}answer" style="display:none;">
+                                            <div class="timeline-item">
+                                                <form method="post" class="comment-form p-3"
+                                                      action="{% url 'add_question_answer_reply' answer.answerNumber %}">
+                                                    {% csrf_token %}
+                                                    <p class="comment-form-comment form-group has-placeholder">
+                                                        <label>Yanıt ver</label>
+                                                        <i class="fa fa-edit color-main"></i>
+                                                        <textarea class="form-control" name="reply"
+                                                                  cols="10"
+                                                                  rows="3" maxlength="65525" aria-required="true"
+                                                                  required="required" placeholder=""></textarea>
+                                                    </p>
+                                                    <p class="form-submit">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <span>Gönder</span>
+                                                        </button>
+                                                    </p>
+                                                </form>
+                                            </div>
+                                        </div>
                                     {% endif %}
                                 </div>
+                                <script>
+                                    function reply{{ forloop.counter }}() {
+                                        let open = document.getElementById("{{ forloop.counter }}answer");
+                                        if (open.style.display === "none") {
+                                            open.style.display = "block";
+                                        } else {
+                                            open.style.display = "none";
+                                        }
+                                    }
+                                </script>
                             {% endfor %}
                         {% else %}
                             <div class="callout callout-danger col-lg-12 col-sm-12 col-xs-12 col-md-12">
