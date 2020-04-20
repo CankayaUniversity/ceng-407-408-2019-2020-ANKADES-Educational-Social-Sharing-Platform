@@ -13,17 +13,18 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="float-left card-title">
-                                        {{ question.title }}
+                                        <a href="{% url 'question_detail' slug=question.slug questionNumber=question.questionNumber %}">{{ question.title|safe|truncatewords:20 }}</a>
                                     </h5>
-                                    <h5 class="float-right card-title" style="background-color:lightskyblue"><a
+                                    <h5 class="float-right card-title"><a
                                             href="{% url 'question_detail' question.slug question.questionNumber %}">
                                         {% if question.isSolved %}
                                             (ÇÖZÜLDÜ)
+                                            {% elif question.questioncomment_set.count == 0 %}(Cevap Bekliyor)
                                         {% endif %}
                                     </a>
                                     </h5>
                                     <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
-                                    <small class="card-text">Kategori: {{ question.categoryId.title }}</small>
+                                    <small class="card-text">Kategori: <a href="{% url 'question_category_page' question.categoryId.slug  %}">{{ question.categoryId.title }}</small>
                                 </div>
                                 <div class="card-footer">
                                     <small class="text-muted float-left"><a
