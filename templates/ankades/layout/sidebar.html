@@ -16,9 +16,10 @@
                 </div>
                 <div class="info">
                     <a href="{% url 'account_detail' request.user.username %} "
-                       class="d-block">
+                       class="d-block" style="color: #fff;">
                         {% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
                             {{ request.user.username }}{% endif %}</a>
+                        <span style="font-size: 14px; color: #C2C7D0;">{{ userGroup.title }}</span>
                 </div>
             </div>
         {% endif %}

@@ -14,10 +14,11 @@
                      class="img-circle elevation-2" alt="{{ request.user.get_full_name }}">
             </div>
             <div class="info">
-                <a href="{% url 'admin_dashboard' %} "
-                   class="d-block">
+                <a href="{% url 'account_detail' request.user.username %} "
+                   class="d-block" style="color: #fff;">
                     {% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
                         {{ request.user.username }}{% endif %}</a>
+                <span style="font-size: 14px; color: #C2C7D0;">{{ userGroup.title }}</span>
             </div>
         </div>
         <nav class="mt-2">
