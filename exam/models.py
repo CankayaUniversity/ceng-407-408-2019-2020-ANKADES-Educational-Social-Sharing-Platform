@@ -14,7 +14,7 @@ class ExamCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=254, unique=True)
-    slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    slug = models.SlugField(max_length=254, allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     parentId = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
@@ -34,6 +34,7 @@ class ExamCategory(models.Model):
 
 class Exam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    term = models.PositiveIntegerField()
     lectureCode = models.CharField(null=False, blank=False, max_length=50)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     categoryId = models.ForeignKey(ExamCategory, on_delete=models.CASCADE, null=False)

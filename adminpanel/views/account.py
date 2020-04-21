@@ -196,7 +196,7 @@ def admin_delete_account(request, username):
     """
     user = get_object_or_404(Account, username=username)
     userGroup = current_user_group(request, request.user)
-    if userGroup == 'admin' or userGroup == 'moderator':
+    if userGroup == 'admin':
         if user.is_active is True:
             messages.error(request, "Kullanıcıyı silmek için engellemeniz gereklidir.")
             return redirect("admin_all_users")

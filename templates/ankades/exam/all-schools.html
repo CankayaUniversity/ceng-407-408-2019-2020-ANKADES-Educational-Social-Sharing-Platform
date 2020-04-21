@@ -12,21 +12,33 @@
                             <h3 class="card-title">Okullar</h3>
                         </div>
                         <div class="card-body">
-                            {# TODO -> s3 table.js e yeni id eklenecek - desc olarak sıralanacak #}
                             <table id="account-logs" class="table">
                                 <thead>
                                 <tr>
-                                    <th>Okul Adı</th>
+                                    <th>Okul</th>
+                                    <th>Bölüm</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% if schools %}
-                                    {% for school in schools %}
+                                {% if departments %}
+                                    {% for department in departments %}
                                         <tr>
-                                            <td><a href="#" style="font-size: 18px;">{{ school.title }}</a></td>
+                                            <td>
+                                                <a href="#" style="font-size: 18px;">{{ department.parentId.title }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="#" style="font-size: 18px;">{{ department.title }}</a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Okul</th>
+                                    <th>Bölüm</th>
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

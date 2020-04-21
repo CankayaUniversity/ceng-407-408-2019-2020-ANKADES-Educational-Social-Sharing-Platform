@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
@@ -12,7 +13,7 @@ urlpatterns = [
     path('kurs-ders-ekle/', views.add_lecture, name="add_lecture"),
     path('kurs/<slug:slug>/', views.course_detail, name="course_detail"),
 
-    path('bolum-ekle/', views.add_section, name="add_section")
+    url(r'^(?P<courseNumber>[\w-]+)/bolum-ekle/$', views.add_section, name="add_section")
     # path('kurs/<slug:slug>', views.course_detail, name="course_detail"),
 ]
 

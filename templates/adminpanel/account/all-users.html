@@ -20,10 +20,11 @@
                                     <th>Email</th>
                                     <th>Kayıt Tarihi</th>
                                     <th>Son Giriş</th>
-                                    <th>Takipçi</th>
                                     <th>Aktiflik</th>
                                     <th>İşlemler</th>
-                                    <th>Sil</th>
+                                    {% if userGroup == "admin" %}
+                                        <th>Sil</th>
+                                    {% endif %}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -36,10 +37,16 @@
                                             <td>{{ account.email }}</td>
                                             <td>{{ account.date_joined }}</td>
                                             <td>{{ account.last_login }}</td>
-                                            <td>{{ account.follower.count }}</td>
                                             <td>{% if account.is_active %}Aktif{% else %}Engelli{% endif %}</td>
-                                            <td><a style="color: #fff" type="button" class="btn btn-sm btn-warning" href="{% url 'admin_block_account' account.username %}">{% if account.is_active %}Engelle{% else %}Aktifleştir{% endif %}</a></td>
-                                            <td><a style="color: #fff" type="button" class="btn btn-sm btn-danger" href="{% url 'admin_delete_account' account.username %}">Sil</a></td>
+                                            <td><a style="color: #fff" type="button" class="btn btn-sm btn-warning"
+                                                   href="{% url 'admin_block_account' account.username %}">
+                                                {% if account.is_active %}Engelle{% else %}Aktifleştir{% endif %}</a>
+                                            </td>
+                                            {% if userGroup == "admin" %}
+                                                <td><a style="color: #fff;" type="button" class="btn btn-sm btn-danger"
+                                                       href="{% url 'admin_delete_account' account.username %}">Sil</a>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
@@ -51,10 +58,11 @@
                                     <th>Email</th>
                                     <th>Kayıt Tarihi</th>
                                     <th>Son Giriş</th>
-                                    <th>Takipçi</th>
                                     <th>Aktiflik</th>
                                     <th>İşlemler</th>
-                                    <th>Sil</th>
+                                    {% if userGroup == "admin" %}
+                                        <th>Sil</th>
+                                    {% endif %}
                                 </tr>
                                 </tfoot>
                             </table>

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question, permission, course
+from adminpanel.views import group, socialmedia, activity, question, permission, course, exam
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -116,6 +116,10 @@ urlpatterns = [
     path('logs/', activity.admin_all_logs, name="admin_all_logs"),
     path('logs/admins/', activity.admin_admin_logs, name="admin_admin_logs"),
     path('logs/accounts/', activity.admin_account_logs, name="admin_account_logs"),
+
+    #Exam
+    path('okul-ekle/', exam.admin_add_school, name="admin_add_school"),
+    path('okullar/', exam.admin_all_schools, name="admin_all_schools"),
 ]
 
 if settings.DEBUG:

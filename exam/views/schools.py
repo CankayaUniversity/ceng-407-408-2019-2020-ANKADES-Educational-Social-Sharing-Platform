@@ -1,12 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import DetailView
 
 from ankadescankaya.views import current_user_group, Categories
 from exam.models import ExamCategory
 
 
-# TODO
 def all_schools(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     schools = ExamCategory.objects.filter(isActive=True, isSchool=True).order_by('title')

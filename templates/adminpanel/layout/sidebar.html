@@ -1,5 +1,5 @@
 {% load static %}
-<aside class="main-sidebar sidebar-dark-blue elevation-4" style="background: #0e396c; color: #fff">
+<aside class="main-sidebar sidebar-dark-blue elevation-4" style="background: #0e396c; color: #fff;">
     <a href="{% url 'index' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}"
              alt="AdminLTE Logo"
@@ -10,7 +10,8 @@
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ request.user.image.url }}" style="width: 40px !important; height: 40px !important;"
+                     class="img-circle elevation-2" alt="{{ request.user.get_full_name }}">
             </div>
             <div class="info">
                 <a href="{% url 'admin_dashboard' %} "
@@ -215,6 +216,40 @@
                             </ul>
                         </li>
                     </ul>
+                </li>
+
+                <li class="nav-header">Okullar</li>
+                <li class="nav-item has-treeview">
+                    <a href="{% url 'admin_all_schools' %}" class="nav-link">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Liste
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_add_school' %}" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            Okul Ekle
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            Bölüm Ekle
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            Sınav Ekle
+                        </p>
+                    </a>
                 </li>
                 {% if userGroup == 'admin' %}
                     <li class="nav-header">Admin</li>

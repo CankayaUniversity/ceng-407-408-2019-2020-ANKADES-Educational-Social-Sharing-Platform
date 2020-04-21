@@ -5,13 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 
-from ankadescankaya.views import current_user_group
 from ankadescankaya.views import Categories
-from course.forms import CourseForm
+from ankadescankaya.views import current_user_group
+from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm
 from course.models import Course, CourseComment, CourseCategory
 
 
@@ -23,7 +23,9 @@ def all_courses(request):
     keyword = request.GET.get("keyword")
     categories = Categories.all_categories()
     if keyword:
-        courses = Course.objects.filter(Q(title__contains=keyword, isActive=True) | Q(creator=keyword, isActive=True) | Q(categoryId=keyword, isActive=Tru))
+        courses = Course.objects.filter(
+            Q(title__contains=keyword, isActive=True) | Q(creator=keyword, isActive=True) | Q(categoryId=keyword,
+                                                                                              isActive=Tru))
         context = {
             "courses": courses,
             "courseComment": courseComment,
@@ -145,21 +147,39 @@ def add_course(request):
         instance.categoryId_id = value
         instance.save()
         messages.success(request, "Kurs başarıyla eklendi.")
-        return redirect(reverse("add_section", kwargs={"courseNumber": instance.courseNumber}))
+        # return redirect(reverse("add_section", kwargs={"courseNumber": instance.courseNumber}))
+        return redirect(request, "add_section", instance.courseNumber)
     return render(request, "ankades/course/add-course.html", context)
 
 
-# TODO
 @login_required(login_url="login_account")
 def add_section(request, courseNumber):
+    lectureformset = None
+    sectionform = None
+    getCourse = get_object_or_404(Course, courseNumber=courseNumber)
     userGroup = current_user_group(request, request.user)
     courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
-    form = CourseForm(request.POST or None)
     categories = Categories.all_categories()
+    if request.method == 'GET':
+        sectionform = CourseSectionModelForm(request.GET or None)
+        lectureformset = CourseLectureFormSet()
+    elif request.method == 'POST':
+        sectionform = CourseSectionModelForm(request.POST)
+        lectureformset = CourseLectureFormSet(request.POST)
+        if sectionform.is_valid() and lectureformset.is_valid():
+            section = sectionform.save(commit=False)
+            section.title = sectionform.cleaned_data.get("title")
+            section.courseId = getCourse
+            section.save()
+
+            for form in lectureformset:
+                lecture = form.save(commit=False)
+                lecture.sectionId = section
+                lecture.save()
+            return redirect(reverse("add_section", kwargs={"courseNumber": courseNumber}))
     context = {
         "courseCategory": courseCategory,
         "userGroup": userGroup,
-        "form": form,
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
         "articleLowerCategories": categories[2],
@@ -169,8 +189,10 @@ def add_section(request, courseNumber):
         "courseCategories": categories[6],
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
+        "lectureformset": lectureformset,
+        "sectionform": sectionform,
     }
-    return redirect(request, "ankades/course/add-section.html", context)
+    return render(request, "ankades/course/add-section.html", context)
 
 
 # TODO
