@@ -18,7 +18,7 @@
                             <p class="text-muted text-center">{{ userGroup.title }}</p>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                <b>Takipçiler</b>
+                                    <b>Takipçiler</b>
                                     <a class="float-right">
                                         {% if followers %}
                                             {{ followers.count }}
@@ -73,23 +73,27 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                {% if userGroup != 'uye' %}
-                                    <li class="nav-item"><a class="nav-link active" href="#articles"
-                                                            data-toggle="tab">Makaleler</a></li>
+                                {% if userGroup != 'uye' and userGroup != "ogrenci" %}
+                                    <li class="nav-item"><a
+                                            class="nav-link {% if userGroup != 'uye' and userGroup != "ogrenci" %}active{% endif %}"
+                                            href="#articles"
+                                            data-toggle="tab">Makaleler</a></li>
                                 {% endif %}
-                                {% if userGroup != 'uye' %}
+                                {% if userGroup != 'uye' and userGroup != "ogrenci" %}
                                     <li class="nav-item"><a class="nav-link" href="#courses"
                                                             data-toggle="tab">Kurslarım</a></li>
                                 {% endif %}
-                                <li class="nav-item"><a class="nav-link {% if userGroup == 'uye' %}active{% endif %}"
-                                                        href="#questions"
-                                                        data-toggle="tab">Sorularım</a></li>
+                                <li class="nav-item"><a
+                                        class="nav-link {% if userGroup == 'uye' or userGroup == "ogrenci" %}active{% endif %}"
+                                        href="#questions"
+                                        data-toggle="tab">Sorularım</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-                                {% if userGroup != 'uye' %}
-                                    <div class="tab-pane active" id="articles">
+                                {% if userGroup != 'uye' and userGroup != "ogrenci" %}
+                                    <div class="tab-pane {% if userGroup != 'uye' and userGroup != "ogrenci" %}active{% endif %}"
+                                         id="articles">
                                         <div class="card-body">
                                             <table id="all-articles" class="table table-bordered table-striped">
                                                 <thead>
@@ -115,6 +119,8 @@
                                                             <td>{% if article.updatedDate == None %}Güncelleme
                                                                 Yapılmamış{% else %}
                                                                 {{ article.updatedDate }}{% endif %}</td>
+                                                            <td>{% if article.isActive %}Aktif{% else %}
+                                                                Kapalı{% endif %}</td>
                                                             <td>
                                                                 <a type="button"
                                                                    href="{% url 'edit_article' article.slug %}"
@@ -146,8 +152,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                {% endif %}
-                                {% if userGroup != 'uye' %}
                                     <div class="tab-pane" id="courses">
                                         <table id="all-courses" class="table table-bordered table-striped">
                                             <thead>
@@ -171,6 +175,8 @@
                                                         <td>{% if course.updatedDate == None %}Güncelleme
                                                             Yapılmamış{% else %}
                                                             {{ course.updatedDate }}{% endif %}</td>
+                                                        <td>{% if course.isActive %}Aktif{% else %}
+                                                            Kapalı{% endif %}</td>
                                                         <td>
                                                             <a type="button"
                                                                href="{% url 'delete_article' course.slug %}"
@@ -202,7 +208,60 @@
                                         </table>
                                     </div>
                                 {% endif %}
-                                <div class="tab-pane {% if userGroup == 'uye' %}active{% endif %}" id="questions">
+                                <div class="tab-pane {% if userGroup == 'uye' or userGroup == 'ogrenci' %}active{% endif %}"
+                                     id="questions">
+                                    <table id="all-courses" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <th>Başlık</th>
+                                            <th>Oluşturulduğu Tarih</th>
+                                            <th>Son Güncelleme</th>
+                                            <th>Aktiflik</th>
+                                            <th>İşlemler</th>
+                                            <th>Sil</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if myQuestions %}
+                                            {% for question in myQuestions %}
+                                                <tr>
+                                                    <td>{{ question.categoryId.title }}</td>
+                                                    <td>{{ question.title }}</td>
+                                                    <td>{{ question.createdDate }}</td>
+                                                    <td>{% if question.updatedDate == None %}Güncelleme
+                                                        Yapılmamış{% else %}
+                                                        {{ question.updatedDate }}{% endif %}</td>
+                                                    <td>{% if question.isActive %}Aktif{% else %}Kapalı{% endif %}</td>
+                                                    <td>
+                                                        <a type="button"
+                                                           href="{% url 'edit_question' question.slug question.questionNumber %}"
+                                                           class="btn btn-success">
+                                                            Düzenle
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a type="button"
+                                                           href="{% url 'delete_question' question.slug %}"
+                                                           class="btn btn-danger">
+                                                            Sil
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <tfoot>
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <th>Başlık</th>
+                                            <th>Oluşturulduğu Tarih</th>
+                                            <th>Son Güncelleme</th>
+                                            <th>Aktiflik</th>
+                                            <th>İşlemler</th>
+                                            <th>Sil</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>

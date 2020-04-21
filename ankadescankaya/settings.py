@@ -269,3 +269,11 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+#SMTP Configuration
+
+# EMAIL_BACKEND = ''
+# EMAIL_HOST = ' '
+# EMAIL_PORT = ''
+# EMAIL_USE_TLS = ''
+
+
