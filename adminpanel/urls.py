@@ -119,6 +119,7 @@ urlpatterns = [
 
     #Exam
     path('okul-ekle/', exam.admin_add_school, name="admin_add_school"),
+    path('bolum-ekle/', exam.admin_add_department, name="admin_add_department"),
     path('okullar/', exam.admin_all_schools, name="admin_all_schools"),
 ]
 

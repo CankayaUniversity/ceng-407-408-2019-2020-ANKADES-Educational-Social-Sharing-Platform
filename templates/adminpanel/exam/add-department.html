@@ -1,5 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Add School{% endblock %}
+{% block title %}Ankacademy | Add Department{% endblock %}
 {% load static %}
 {% block content %}
     <div class="container-fluid">
@@ -7,15 +7,28 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Okul Ekle</h3>
+                        <h3 class="card-title">Grup Ekle</h3>
                     </div>
-                    <form role="form" action="{% url 'admin_add_school' %}" method="post">
+                    <form role="form" action="{% url 'admin_add_department' %}" method="post">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="title">Okul Adı</label>
+                                <label for="school">Okul*</label>
+                                <select id="school" class="form-control select2bs4" style="width: 100%;" value="Seçiniz"
+                                        name="categoryId"
+                                        required>
+                                    <option disabled>Lütfen bir okul seçiniz</option>
+                                    {% if schools %}
+                                        {% for school in schools %}
+                                            <option value="{{ school.id }}">{{ school.title }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Bölüm Adı</label>
                                 <input type="text" name="title" class="form-control" id="title"
-                                       placeholder="Okul Adı">
+                                       placeholder="Bölüm Adı">
                             </div>
                             <div class="form-group">
                                 <label for="slug">Slug</label>

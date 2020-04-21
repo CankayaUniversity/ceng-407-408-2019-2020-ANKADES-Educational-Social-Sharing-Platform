@@ -45,6 +45,48 @@ def admin_add_school(request):
     return render(request, "adminpanel/exam/add-school.html", context)
 
 
+def admin_add_department(request):
+    """
+    :param request:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    schools = ExamCategory.objects.filter(isSchool=True).order_by('title')
+    context = {
+        "userGroup": userGroup,
+        "schools": schools,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    if request.method == "POST":
+        instance = ExamCategory()
+        categoryId = request.POST["categoryId"]
+        title = request.POST.get("title")
+        slug = request.POST.get("slug")
+        instance.title = title
+        instance.slug = slug
+        instance.isActive = True
+        instance.creator = request.user
+        instance.createdDate = datetime.datetime.now()
+        instance.updatedDate = datetime.datetime.now()
+        instance.isRoot = False
+        instance.parentId_id = categoryId
+        instance.isSchool = False
+        instance.isDepartment = True
+        instance.save()
+        messages.success(request, "Bölüm başarıyla eklendi.")
+        return redirect("admin_add_department")
+    return render(request, "adminpanel/exam/add-department.html", context)
+
+
 def admin_all_schools(request):
     """
     :param request:

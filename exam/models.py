@@ -13,7 +13,7 @@ from ankadescankaya.storage_backends import ExamMediaStorage
 class ExamCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    title = models.CharField(max_length=254, unique=True)
+    title = models.CharField(max_length=254)
     slug = models.SlugField(max_length=254, allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
@@ -21,7 +21,6 @@ class ExamCategory(models.Model):
     isRoot = models.BooleanField(default=False)
     isSchool = models.BooleanField(default=False)
     isDepartment = models.BooleanField(default=False)
-    isTerm = models.BooleanField(default=False)
     tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
     isActive = models.BooleanField(default=True)
 
@@ -34,7 +33,7 @@ class ExamCategory(models.Model):
 
 class Exam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    term = models.PositiveIntegerField()
+    term = models.PositiveIntegerField(default=1)
     lectureCode = models.CharField(null=False, blank=False, max_length=50)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     categoryId = models.ForeignKey(ExamCategory, on_delete=models.CASCADE, null=False)
@@ -49,15 +48,6 @@ class Exam(models.Model):
 
     def __unicode__(self):
         return self.lectureCode
-
-    def get_absolute_url(self):
-        return reverse("exam_detail", kwargs={"slug": self.slug, "lectureCode": self.lectureCode})
-
-    def get_like_url(self):
-        return reverse("exam-like-toggle", kwargs={"slug": self.slug, "lectureCode": self.lectureCode})
-
-    def get_api_like_url(self):
-        return reverse("exam-like-api-toggle", kwargs={"slug": self.slug, "lectureCode": self.lectureCode})
 
     class Meta:
         db_table = "Exam"

@@ -101,6 +101,28 @@ class AccountFollower(models.Model):
         db_table = "AccountFollow"
 
 
+class Skill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(null=False, blank=False, max_length=100)
+    slug = models.CharField(unique=True, blank=False, null=False, max_length=254)
+    isActive = models.BooleanField(null=True, blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "Skill"
+        ordering = ["-createdDate"]
+
+
+class AccountSkill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    skillId = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name="skillId")
+    userId = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="userId")
+
+    class Meta:
+        db_table = "AccountSkill"
+
+
 class AccountPermission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     permissionId = models.ForeignKey(Permission, on_delete=models.CASCADE, null=True)
