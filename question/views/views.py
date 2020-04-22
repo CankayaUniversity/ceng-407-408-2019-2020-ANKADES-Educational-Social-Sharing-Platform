@@ -112,6 +112,12 @@ def all_questions(request):
 
 
 def question_detail(request, slug, questionNumber):
+    """
+    :param request:
+    :param slug:
+    :param questionNumber:
+    :return:
+    """
     try:
         instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
         userGroup = current_user_group(request, request.user)
