@@ -243,7 +243,6 @@ def article_detail(request, username, slug):
     try:
         instance = Article.objects.get(slug=slug)
         if instance.creator.username != username:
-            messages.error(request, "Aradığınız makale ile kullanıcı eşleştirilemedi.")
             return render(request, "404.html")
         articles = Article.objects.filter(isActive=True)
         relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
@@ -273,40 +272,64 @@ def article_detail(request, username, slug):
 
 @login_required(login_url="login_account")
 def delete_article(request, slug):
-    instance = get_object_or_404(Article, slug=slug)
-    request.user = request.user
-    if instance.creator == request.user:
-        if instance.isActive:
-            instance.isActive = False
-            messages.success(request, "Makale başarıyla silindi.")
-            return redirect(reverse("account_detail", kwargs={"username": request.user}))
-    else:
-        messages.error(request, "Bu makale size ait değil")
-        return redirect(reverse("account_detail", kwargs={"username": request.user}))
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    try:
+        instance = Article.objects.get(slug=slug)
+        request.user = request.user
+        if instance.creator == request.user:
+            if instance.isActive:
+                instance.isActive = False
+                messages.success(request, "Makale başarıyla silindi.")
+                return redirect(reverse("account_detail", kwargs={"username": request.user}))
+            else:
+                return redirect(reverse("account_detail", kwargs={"username": request.user}))
+        else:
+            return redirect("404")
+    except:
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
 def add_article_comment(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     request.user = request.user
-    instance = get_object_or_404(Article, slug=slug)
-    if request.method == "POST":
-        content = request.POST.get("content")
-        new_comment = ArticleComment(content=content, creator=request.user)
-        new_comment.articleId = instance
-        new_comment.save()
-        messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
-    return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
+    try:
+        instance = Article.objects.get(slug=slug)
+        if request.method == "POST":
+            content = request.POST.get("content")
+            new_comment = ArticleComment(content=content, creator=request.user)
+            new_comment.articleId = instance
+            new_comment.save()
+            messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
+    except:
+        return redirect("404")
 
 
 class ArticleLikeToggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
+        """
+        :param args:
+        :param kwargs:
+        :return:
+        """
         slug = self.kwargs.get("slug")
-        obj = get_object_or_404(Article, slug=slug)
-        url_ = obj.get_absolute_url()
-        user = self.request.user
-        if user.is_authenticated:
-            if user in obj.likes.all():
-                obj.likes.remove(user)
-            else:
-                obj.likes.add(user)
-        return url_
+        try:
+            obj = Article.objects.get(slug=slug)
+            url_ = obj.get_absolute_url()
+            user = self.request.user
+            if user.is_authenticated:
+                if user in obj.likes.all():
+                    obj.likes.remove(user)
+                else:
+                    obj.likes.add(user)
+            return url_
+        except:
+            return redirect("404")

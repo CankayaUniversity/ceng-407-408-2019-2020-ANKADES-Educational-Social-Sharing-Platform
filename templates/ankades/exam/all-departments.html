@@ -1,0 +1,42 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | Bölümler{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <h1 class="m-0 text-dark">Tüm Bölümler</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                {% if departments %}
+                    {% for department in departments %}
+                        <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="float-left card-title">
+                                        <a href="#">{{ department.title|safe|truncatewords:20 }} - Derslere Git</a>
+                                    </h5>
+                                    </br>
+                                    <hr>
+                                    <small class="card-text">Okul: {{ department.parentId.title }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                        <h5>Üzgünüz :(</h5>
+                        <p>Henüz okula ait bölümler sisteme kayıt edilmemiş.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

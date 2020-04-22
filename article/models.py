@@ -28,7 +28,7 @@ class ArticleCategory(models.Model):
     isCategory = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         db_table = "ArticleCategory"
