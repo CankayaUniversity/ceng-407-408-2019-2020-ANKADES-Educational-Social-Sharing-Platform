@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
@@ -101,6 +100,7 @@ def account_detail(request, username):
         }
         return render(request, "ankades/account/account-detail.html", context)
     except:
+        messages.error(request, "Böyle bir kullanıcı bulunamadı.")
         return redirect("404")
 
 

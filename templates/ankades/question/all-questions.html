@@ -4,6 +4,15 @@
 {% load crispy_forms_field %}
 {% load static %}
 {% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <h1 class="m-0 text-dark">Tüm Sorular</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
@@ -19,12 +28,14 @@
                                             href="{% url 'question_detail' question.slug question.questionNumber %}">
                                         {% if question.isSolved %}
                                             (ÇÖZÜLDÜ)
-                                            {% elif question.questioncomment_set.count == 0 %}(Cevap Bekliyor)
+                                        {% elif question.questioncomment_set.count == 0 %}(Cevap Bekliyor)
                                         {% endif %}
                                     </a>
                                     </h5>
                                     <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
-                                    <small class="card-text">Kategori: <a href="{% url 'question_category_page' question.categoryId.slug  %}">{{ question.categoryId.title }}</small>
+                                    <small class="card-text">Kategori: <a
+                                            href="{% url 'question_category_page' question.categoryId.slug %}">{{ question.categoryId.title }}
+                                    </small>
                                 </div>
                                 <div class="card-footer">
                                     <small class="text-muted float-left"><a

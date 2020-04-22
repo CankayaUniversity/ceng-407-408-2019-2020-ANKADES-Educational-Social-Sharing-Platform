@@ -16,6 +16,8 @@ def admin_all_users(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     accounts = Account.objects.all().order_by('-date_joined')
     context = {
         "userGroup": userGroup,
@@ -31,6 +33,8 @@ def admin_active_users(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     activeUsers = OnlineUserActivity.get_user_activities()
     context = {
         "userGroup": userGroup,
@@ -46,6 +50,8 @@ def admin_all_user_groups(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     admins = AccountGroup.objects.filter(Q(groupId__slug="admin"))
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
@@ -69,6 +75,8 @@ def admin_students(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     students = AccountGroup.objects.filter(Q(groupId__slug="ogrenci"))
     context = {
         "students": students,
@@ -84,6 +92,8 @@ def admin_teachers(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     teachers = AccountGroup.objects.filter(Q(groupId__slug="ogretmen"))
     context = {
         "teachers": teachers,
@@ -99,6 +109,8 @@ def admin_moderators(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     moderators = AccountGroup.objects.filter(Q(groupId__slug="moderator"))
     context = {
         "moderators": moderators,
@@ -114,6 +126,8 @@ def admin_members(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     members = AccountGroup.objects.filter(Q(groupId__slug="uye"))
     context = {
         "members": members,
@@ -128,11 +142,13 @@ def admin_admins(request):
     :param request:
     :return:
     """
+    userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     admins = AccountGroup.objects.filter(groupId__slug="admin")
     moderators = AccountGroup.objects.filter(groupId__slug="moderator")
     teachers = AccountGroup.objects.filter(groupId__slug="ogretmen")
     students = AccountGroup.objects.filter(groupId__slug="ogrenci")
-    userGroup = current_user_group(request, request.user)
     context = {
         "admins": admins,
         "moderators": moderators,
@@ -149,17 +165,15 @@ def admin_blocked_users(request):
     :param request:
     :return:
     """
-    blockedUsers = Account.objects.filter(is_active=False)
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
+    blockedUsers = Account.objects.filter(is_active=False)
     context = {
         "users": blockedUsers,
         "userGroup": userGroup,
     }
-    if userGroup == 'admin':
-        return render(request, "adminpanel/account/blocked-user.html", context)
-    else:
-        messages.error(request, "Yetkiniz yok.")
-        return redirect("admin_dashboard")
+    return render(request, "adminpanel/account/blocked-user.html", context)
 
 
 @login_required(login_url="login_admin")
@@ -169,8 +183,10 @@ def admin_block_account(request, username):
     :param username:
     :return:
     """
-    user = get_object_or_404(Account, username=username)
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
+    user = get_object_or_404(Account, username=username)
     if userGroup == 'admin' or userGroup == 'moderator':
         if user.is_active is True:
             user.is_active = False
@@ -194,8 +210,10 @@ def admin_delete_account(request, username):
     :param username:
     :return:
     """
-    user = get_object_or_404(Account, username=username)
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
+    user = get_object_or_404(Account, username=username)
     if userGroup == 'admin':
         if user.is_active is True:
             messages.error(request, "Kullanıcıyı silmek için engellemeniz gereklidir.")
@@ -216,6 +234,8 @@ def admin_register_account(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     accountGroup = AccountGroup()
     groups = Group.objects.all()
     context = {
@@ -260,6 +280,8 @@ def admin_add_group_to_user(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     groups = Group.objects.all()
     users = Account.objects.all()
     context = {
@@ -298,6 +320,8 @@ def admin_add_permission_to_user(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
+    if userGroup != "admin" and userGroup != "moderator":
+        return redirect("404")
     permissions = Permission.objects.all()
     users = Account.objects.all()
     context = {

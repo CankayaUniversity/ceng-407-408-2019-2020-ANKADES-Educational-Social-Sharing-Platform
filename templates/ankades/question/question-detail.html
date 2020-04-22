@@ -7,23 +7,23 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <ol class="breadcrumb float-sm-left">
-                        <li class="breadcrumb-item"><a href="{% url 'all_articles' %}">Tüm Sorular</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'all_questions' %}">Tüm Sorular</a></li>
                         {% if instance.categoryId.parentId.parentId.slug != "home" %}
                             <li class="breadcrumb-item"><a
-                                    href="{% url 'article_category_page' instance.categoryId.parentId.parentId.slug %}">{{ instance.categoryId.parentId.parentId.title }}</a>
+                                    href="{% url 'question_category_page' instance.categoryId.parentId.parentId.slug %}">{{ instance.categoryId.parentId.parentId.title }}</a>
                             </li>
                         {% endif %}
                         {% if instance.parentId.slug != "home" %}
                             <li class="breadcrumb-item"><a
-                                    href="{% url 'article_category_page' instance.categoryId.parentId.slug %}">{{ instance.categoryId.parentId.title }}</a>
+                                    href="{% url 'question_category_page' instance.categoryId.parentId.slug %}">{{ instance.categoryId.parentId.title }}</a>
                             </li>
                         {% endif %}
                         {% if instance.parentId.slug != "home" %}
                             <li class="breadcrumb-item"><a
-                                    href="{% url 'article_category_page' instance.categoryId.slug %}">{{ instance.categoryId.title }}</a>
+                                    href="{% url 'question_category_page' instance.categoryId.slug %}">{{ instance.categoryId.title }}</a>
                             </li>
                         {% endif %}
-                        <li class="breadcrumb-item active">{{ instance.title }}</li>
+                        <li class="breadcrumb-item active">{{ instance.title|truncatewords:15 }}</li>
                     </ol>
                 </div>
             </div>

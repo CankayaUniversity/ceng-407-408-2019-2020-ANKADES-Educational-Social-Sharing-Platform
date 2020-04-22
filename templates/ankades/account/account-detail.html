@@ -8,8 +8,8 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="img-circle" style="max-height: 250px !important;"
-                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}">
+                                <img class="img-circle"
+                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}" style="max-height: 400px; width: 100%;">
                             </div>
                             <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
                             <p class="text-muted text-center">{{ userDetailGroup.title }}</p>
@@ -100,6 +100,8 @@
                                                         data-toggle="tab">Takipçiler</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#followings"
                                                         data-toggle="tab">Takip Edilen</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#cv"
+                                                        data-toggle="tab">CV</a></li>
                             </ul>
                         </div>
                         <div class="card-body">

@@ -2,6 +2,33 @@
 {% load static %}
 {% block title %}{{ instance.title }} | {{ instance.creator.get_full_name }}{% endblock %}
 {% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="{% url 'all_articles' %}">Tüm Makaleler</a></li>
+                        {% if instance.categoryId.parentId.parentId.slug != "home" %}
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'article_category_page' instance.categoryId.parentId.parentId.slug %}">{{ instance.categoryId.parentId.parentId.title }}</a>
+                            </li>
+                        {% endif %}
+                        {% if instance.parentId.slug != "home" %}
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'article_category_page' instance.categoryId.parentId.slug %}">{{ instance.categoryId.parentId.title }}</a>
+                            </li>
+                        {% endif %}
+                        {% if instance.parentId.slug != "home" %}
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'article_category_page' instance.categoryId.slug %}">{{ instance.categoryId.title }}</a>
+                            </li>
+                        {% endif %}
+                        <li class="breadcrumb-item active">{{ instance.title|truncatewords:15 }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content">
         <div class="container-fluid">
             <div class="row">

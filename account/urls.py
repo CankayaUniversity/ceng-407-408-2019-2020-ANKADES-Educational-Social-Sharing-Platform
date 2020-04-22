@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
+from django.contrib.auth import views as auth_views
 from account.views import views, edit, posts
 
 urlpatterns = [
@@ -29,6 +30,12 @@ urlpatterns = [
 
     # Requested User
     path('', views.index, name="index"),
+
+    #Password Reset
+    path('sifre-sifirla/', auth_views.PasswordResetView.as_view(), name="reset_password"),
+    path('sifre-sifirlama-gonderildi/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path('sifre-sifirla/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('sifre-sifirlama/', auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 
 ]
 

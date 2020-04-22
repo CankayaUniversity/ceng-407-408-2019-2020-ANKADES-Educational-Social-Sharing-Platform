@@ -4,6 +4,15 @@
 {% load crispy_forms_field %}
 {% load static %}
 {% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <h1 class="m-0 text-dark">Kurs Ekle</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
@@ -35,29 +44,30 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="title">Başlık*</label>
+                                    <label for="title">Kursunuzun Başlığı*</label>
                                     <input type="text" id="title" class="form-control" name="title"
                                            placeholder="Başlık">
                                 </div>
                                 <div class="form-group">
-                                    <label for="introduction">Kurs Hakkında Kısa Bilgi* </label>
+                                    <label for="introduction">Kursunuz Hakkında Kısa Bilgi* </label>
                                     <input type="text" id="introduction" class="form-control" required name="introduction"
-                                           placeholder="Öğrencilere kurs hakkında kısa bilgi (Hedef Kitle">
+                                           placeholder="Öğrencilere kurs hakkında kısa bilgi (Hedef Kitle)">
                                 </div>
+                                        <label>Kursunuz Hakkında Detaylı Açıklama* </label>
                                 <div class="form-group mb-0">
                                     <div class="custom-control">
                                         {{ form.description }}
                                     </div>
                                 </div>
-                                <div class="form-group mb-0">
+                                <div class="form-group mb-3 mt-3">
                                     <div class="custom-control custom-checkbox">
+                                        <label class="custom-control-label" for="isPrivate">Kursunuz herkese açık olacaksa bu özelliği aktifleştirin</label>
                                         <input type="checkbox" name="isPrivate" class="custom-control-input"
                                                id="isPrivate">
-                                        <label class="custom-control-label" for="isPrivate">Özellik</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Kurs İçin Bir Resim Seçin</label>
+                                    <label for="exampleInputFile">Kursunuz İçin Bir Resim Seçin</label>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" name="coursePicture"

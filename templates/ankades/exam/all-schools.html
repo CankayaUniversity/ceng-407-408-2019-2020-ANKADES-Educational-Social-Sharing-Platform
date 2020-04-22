@@ -3,31 +3,33 @@
 {% block title %}Ankacademy | Okullar{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <h1 class="m-0 text-dark">Tüm Okullar</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Okullar</h3>
-                        </div>
                         <div class="card-body">
                             <table id="account-logs" class="table">
                                 <thead>
                                 <tr>
                                     <th>Okul</th>
-                                    <th>Bölüm</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% if departments %}
-                                    {% for department in departments %}
+                                {% if schools %}
+                                    {% for school in schools %}
                                         <tr>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.parentId.title }}</a>
-                                            </td>
-                                            <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.title }}</a>
+                                                <a href="{% url 'all_departments' school.slug %}" style="font-size: 18px;">{{ school.title }}</a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -36,7 +38,6 @@
                                 <tfoot>
                                 <tr>
                                     <th>Okul</th>
-                                    <th>Bölüm</th>
                                 </tr>
                                 </tfoot>
                             </table>
