@@ -285,6 +285,7 @@ def delete_article(request, slug):
         if instance.creator == request.user:
             if instance.isActive:
                 instance.isActive = False
+                instance.save()
                 messages.success(request, "Makale başarıyla silindi.")
                 return redirect(reverse("account_detail", kwargs={"username": request.user}))
             else:
@@ -310,6 +311,7 @@ def add_article_comment(request, slug):
             new_comment = ArticleComment(content=content, creator=request.user)
             new_comment.articleId = instance
             new_comment.commentNumber = get_random_string(length=32)
+            new_comment.isRoot = True
             new_comment.save()
             messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
             return redirect(

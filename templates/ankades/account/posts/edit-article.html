@@ -3,13 +3,20 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2 mt-2">
+                <div class="col-sm-12">
+                    <h1 class="m-0 text-dark">Makale Düzenleme / {{ instance.title }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content mt-3">
         <div class="container-fluid mt-3">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary p-5">
-                        <div class="card-header">{{ instance.title }}
-                        </div>
                         <form role="form" method="post" action="{% url 'edit_article' instance.slug %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">

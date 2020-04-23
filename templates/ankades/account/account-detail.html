@@ -69,7 +69,7 @@
                                 Yaşadığın Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
                             <p class="text-muted">Malibu, California</p>
                             <hr>
-                            <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+                            <strong><i class="fas fa-pencil-alt mr-1"></i> Yetenekler</strong>
                             <p class="text-muted">
                                 <span class="tag tag-danger">UI Design</span>
                                 <span class="tag tag-success">Coding</span>
@@ -127,7 +127,45 @@
                                                             <a href="{% url 'article_detail' username=article.creator.username slug=article.slug %}"
                                                                class="btn btn-primary btn-sm">Devamı</a>
                                                             {% if article.creator == request.user %}
-                                                                <a href="#" class="btn btn-danger btn-sm">Sil</a>
+                                                                <a href="{% url 'edit_article' slug=article.slug %}"
+                                                               class="btn btn-success btn-sm">Düzenle</a>
+                                                                <a type="button" class="btn btn-sm btn-danger"
+                                                                   data-toggle="modal"
+                                                                   data-target="#article-{{ article.slug }}"><i
+                                                                        class="fas fa-trash"></i>Sil
+                                                                </a>
+                                                                {#delete modal#}
+                                                                <div class="modal fade" id="article-{{ article.slug }}">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">UYARI !</h4>
+                                                                                <button type="button" class="close"
+                                                                                        data-dismiss="modal"
+                                                                                        aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p class="text-left">Gerçekten "<span
+                                                                                        class="text-bold">{{ article.title }}</span>"
+                                                                                    adlı makalenizi silmek istediğinize
+                                                                                    emin misiniz?&hellip;
+                                                                                </p>
+                                                                                <br>
+                                                                                <button type="button"
+                                                                                        class="btn btn-success"
+                                                                                        data-dismiss="modal">İptal
+                                                                                </button>
+                                                                                <a type="button"
+                                                                                   href="{% url 'delete_article' article.slug %}"
+                                                                                   class="btn btn-danger">Sil
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                {#end of delete modal#}
                                                             {% endif %}
                                                         </div>
                                                     </div>
