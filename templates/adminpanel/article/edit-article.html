@@ -7,9 +7,9 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Çağrı</h3>
+                        <h3 class="card-title">{{ instance.title }}</h3>
                     </div>
-                    <form role="form" enctype="multipart/form-data" action="{% url 'edit_social_media' instance.slug %}" method="post">
+                    <form role="form" enctype="multipart/form-data" action="{% url 'admin_edit_social_media' instance.slug %}" method="post">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">
@@ -21,7 +21,7 @@
                                 <label for="exampleInputFile">Dosya Seçin</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="media" id="exampleInputFile" accept="{{ instance.media }}">
+                                        <input type="file" class="custom-file-input" name="media" id="exampleInputFile">
                                         <label class="custom-file-label" for="exampleInputFile">{% if instance.media %}{{ instance.media }}{% endif %}</label>
                                     </div>
                                     <div class="input-group-append">

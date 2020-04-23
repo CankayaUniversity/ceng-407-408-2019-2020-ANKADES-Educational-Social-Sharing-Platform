@@ -255,6 +255,22 @@
                 {% if userGroup == 'admin' %}
                     <li class="nav-header">Admin</li>
                     <li class="nav-item has-treeview">
+                        <a href="{% url 'admin_edit_privacy_policy' %}" class="nav-link">
+                            <i class="nav-icon fas fa-user-plus"></i>
+                            <p>
+                                Gizlilik Politikası
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="{% url 'admin_edit_terms_of_use' %}" class="nav-link">
+                            <i class="nav-icon fas fa-user-plus"></i>
+                            <p>
+                                Kullanım Koşulları
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item has-treeview">
                         <a href="{% url 'admin_register_account' %}" class="nav-link">
                             <i class="nav-icon fas fa-user-plus"></i>
                             <p>

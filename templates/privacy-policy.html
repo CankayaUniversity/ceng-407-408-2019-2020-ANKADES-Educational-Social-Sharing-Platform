@@ -1,0 +1,20 @@
+{% extends 'ankades/layout/layout.html' %}
+{% block title %}Ankacademy | Gizlilik Politikası{% endblock %}
+{% load static %}
+{% block content %}
+    <section class="content mt-3">
+        <div class="container-fluid mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12">
+                            <div class="container">
+                                    {{ instance.description|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

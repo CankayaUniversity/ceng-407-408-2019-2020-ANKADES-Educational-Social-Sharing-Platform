@@ -117,9 +117,13 @@ urlpatterns = [
     path('logs/accounts/', activity.admin_account_logs, name="admin_account_logs"),
 
     #Exam
-    path('okul-ekle/', exam.admin_add_school, name="admin_add_school"),
-    path('bolum-ekle/', exam.admin_add_department, name="admin_add_department"),
-    path('okullar/', exam.admin_all_schools, name="admin_all_schools"),
+    path('add-school/', exam.admin_add_school, name="admin_add_school"),
+    path('add-department/', exam.admin_add_department, name="admin_add_department"),
+    path('all-schools/', exam.admin_all_schools, name="admin_all_schools"),
+
+    #Site Settings
+    path('edit-privacy-policy/', views.admin_edit_privacy_policy, name="admin_edit_privacy_policy"),
+    path('edit-terms-of-use/', views.admin_edit_terms_of_use, name="admin_edit_terms_of_use"),
 ]
 
 if settings.DEBUG:

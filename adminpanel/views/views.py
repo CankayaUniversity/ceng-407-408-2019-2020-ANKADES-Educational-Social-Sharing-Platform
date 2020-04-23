@@ -3,12 +3,14 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from online_users.models import OnlineUserActivity
 
 from account.models import Account
+from adminpanel.forms import SiteSettingsForm
 from ankadescankaya.views import current_user_group
-from adminpanel.models import Tag
+from adminpanel.models import Tag, SiteSettings
 from article.models import Article
 from course.models import Course
 from question.models import Question
@@ -106,6 +108,62 @@ def admin_tags(request):
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/tags/all-tags.html", context)
+
+
+def admin_edit_privacy_policy(request):
+    """
+    :param request:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    instance = SiteSettings.objects.get(slug="privacy-policy")
+    form = SiteSettingsForm(request.POST or None)
+    context = {
+        "userGroup": userGroup,
+        "form": form,
+        "instance": instance,
+    }
+    if request.method == "POST":
+        title = request.POST.get("title")
+        slug = request.POST.get("slug")
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
+        instance.title = title
+        instance.slug = slug
+        instance.updatedDate = datetime.datetime.now()
+        instance.description = description
+        instance.save()
+        messages.success(request, "Gizlilik Politikası başarıyla düzenlendi !")
+        return render(request, "adminpanel/site-settings/edit-privacy-policy.html", context)
+    return render(request, "adminpanel/site-settings/edit-privacy-policy.html", context)
+
+
+def admin_edit_terms_of_use(request):
+    """
+    :param request:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    instance = SiteSettings.objects.get(slug="terms-of-use")
+    form = SiteSettingsForm(request.POST or None)
+    context = {
+        "userGroup": userGroup,
+        "form": form,
+        "instance": instance,
+    }
+    if request.method == "POST":
+        title = request.POST.get("title")
+        slug = request.POST.get("slug")
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
+        instance.title = title
+        instance.slug = slug
+        instance.updatedDate = datetime.datetime.now()
+        instance.description = description
+        instance.save()
+        messages.success(request, "Kullanım Koşulları başarıyla düzenlendi !")
+        return render(request, "adminpanel/site-settings/edit-terms-of-use.html", context)
+    return render(request, "adminpanel/site-settings/edit-terms-of-use.html", context)
 
 
 @login_required(login_url="login_admin")

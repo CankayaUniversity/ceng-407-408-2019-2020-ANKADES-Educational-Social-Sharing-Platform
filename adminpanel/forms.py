@@ -16,5 +16,9 @@ class ArticleForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget())
 
 
+class SiteSettingsForm(forms.Form):
+    description = forms.CharField(widget=CKEditorWidget())
+
+
 class QuestionForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget())

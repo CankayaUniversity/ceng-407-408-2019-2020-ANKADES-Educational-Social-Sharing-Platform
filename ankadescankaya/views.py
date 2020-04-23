@@ -1,8 +1,9 @@
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 
 from account.models import AccountGroup
+from adminpanel.models import SiteSettings
 from article.models import ArticleCategory
 from course.models import CourseCategory
 from exam.models import ExamCategory
@@ -62,3 +63,57 @@ def get_404(request):
         "courseLowerCategories": categories[8],
     }
     return render(request, "404.html", context)
+
+
+def terms_of_use(request):
+    """"
+    :param request:
+    :return:
+    """
+    categories = Categories.all_categories()
+    userGroup = current_user_group(request, request.user)
+    try:
+        instance = SiteSettings.objects.get(slug="terms-of-use")
+    except:
+        return redirect("404")
+    context = {
+        "userGroup": userGroup,
+        "instance": instance,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "terms-of-use.html", context)
+
+
+def privacy_policy(request):
+    """
+    :param request:
+    :return:
+    """
+    categories = Categories.all_categories()
+    userGroup = current_user_group(request, request.user)
+    try:
+        instance = SiteSettings.objects.get(slug="privacy-policy")
+    except:
+        return redirect("404")
+    context = {
+        "userGroup": userGroup,
+        "instance": instance,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "privacy-policy.html", context)
