@@ -16,6 +16,10 @@ from course.models import Course, CourseComment, CourseCategory
 
 
 def all_courses(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     courses_limit = Course.objects.filter(isActive=True).order_by('-createdDate')
     courseComment = CourseComment.objects.filter(isActive=True)
@@ -25,7 +29,7 @@ def all_courses(request):
     if keyword:
         courses = Course.objects.filter(
             Q(title__contains=keyword, isActive=True) | Q(creator=keyword, isActive=True) | Q(categoryId=keyword,
-                                                                                              isActive=Tru))
+                                                                                              isActive=True))
         context = {
             "courses": courses,
             "courseComment": courseComment,
@@ -52,6 +56,7 @@ def all_courses(request):
         except EmptyPage:
             course_pagination = paginator.page(paginator.num_pages)
         context = {
+            "userGroup": userGroup,
             "courses": courses,
             "courseComment": courseComment,
             "course_pagination": course_pagination,
