@@ -34,7 +34,6 @@ urlpatterns = [
     # Group
     path('groups/', group.admin_all_groups, name="admin_all_groups"),
     path('add-group/', group.admin_add_group, name="admin_add_group"),
-    url(r'^groups/(?P<slug>[\w-]+)/edit-group/$', group.admin_edit_group, name="admin_edit_group"),
     url(r'^groups/delete/(?P<slug>[\w-]+)/$', group.admin_delete_group,
         name="admin_delete_group"),
     path('isactive-group/<slug:slug>/', group.admin_isactive_group,

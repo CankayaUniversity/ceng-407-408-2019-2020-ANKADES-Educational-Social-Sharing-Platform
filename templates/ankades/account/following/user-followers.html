@@ -55,7 +55,7 @@
                                 {{ instance.graduate }}
                             </p>
                             <hr>
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> {% if request.user == instance %}Yaşadığınız Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
                             <p class="text-muted">Malibu, California</p>
                             <hr>
                             <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>

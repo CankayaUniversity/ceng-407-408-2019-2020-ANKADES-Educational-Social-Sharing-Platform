@@ -39,26 +39,28 @@ def admin_all_groups(request, slug=None):
         return redirect("admin_all_groups")
 
 
-@login_required(login_url="login_admin")
-def admin_edit_group(request, slug):
-    """
-    :param request:
-    :param slug:
-    :return:
-    """
-    instance = get_object_or_404(Group, slug=slug)
-    form = AdminEditGroupForm(request.POST or None, instance=instance)
-    context = {
-        "form": form,
-    }
-    if form.is_valid():
-        title = form.cleaned_data.get("title")
-    if request.method == "POST":
-        instance.updatedDate = datetime.datetime.now()
-        instance.save()
-        messages.success(request, "Grup başarıyla düzenlendi.")
-        return render(request, "adminpanel/group/edit-group.html", {'form': form})
-    return redirect("admin_edit_group")
+# TODO
+# @login_required(login_url="login_admin")
+# def admin_edit_group(request, slug):
+#     """
+#     :param request:
+#     :param slug:
+#     :return:
+#     """
+#     instance = get_object_or_404(Group, slug=slug)
+#     form = AdminEditGroupForm(request.POST or None, instance=instance)
+#     context = {
+#         "form": form,
+#         "instance": instance,
+#     }
+#     if form.is_valid():
+#         title = form.cleaned_data.get("title")
+#     if request.method == "POST":
+#         instance.updatedDate = datetime.datetime.now()
+#         instance.save()
+#         messages.success(request, "Grup başarıyla düzenlendi.")
+#         return render(request, "adminpanel/group/edit-group.html", {'form': form})
+#     return redirect("admin_edit_group")
 
 
 @login_required(login_url="login_admin")

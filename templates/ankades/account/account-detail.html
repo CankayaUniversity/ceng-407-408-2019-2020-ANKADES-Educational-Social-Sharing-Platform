@@ -57,11 +57,11 @@
                                 {% if instance.graduate %}
                                     {{ instance.graduate }}
                                 {% else %}
-                                    {{ instance.get_full_name }} eğitim bilgilerini henüz paylaşmamış
+                                    {% if instance == request.user %}{{ instance.get_full_name }} eğitim bilginiz bulunamadı{% else %}{{ instance.get_full_name }} eğitim bilgilerini henüz paylaşmamış
                                 {% endif %}
                             </p>
                             <hr>
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> {% if instance == request.user %}Yaşadığın Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
                             <p class="text-muted">Malibu, California</p>
                             <hr>
                             <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
