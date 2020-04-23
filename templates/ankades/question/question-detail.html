@@ -175,11 +175,13 @@
                                             <div class="timeline-footer">
                                                 {% if answer.creator != request.user %}
                                                     <a class="btn btn-primary btn-sm"
-                                                       href="{% url 'question_vote_comment' answer.answerNumber %}"><i class="fas fa-thumbs-up"></i> Oy
+                                                       href="{% url 'question_vote_comment' answer.answerNumber %}"><i
+                                                            class="fas fa-thumbs-up"></i> Oy
                                                         ver</a>
                                                 {% endif %}
                                                 <a class="btn btn-info btn-sm"
-                                                   onclick="reply{{ forloop.counter }}()"><i class="fas fa-reply"></i> Cevapla</a>
+                                                   onclick="reply{{ forloop.counter }}()"><i class="fas fa-reply"></i>
+                                                    Cevapla</a>
                                                 {% if instance.creator == request.user %}
                                                     {% if answer.questionId.isSolved == False and answer.isCertified == False %}
                                                         <a href="{% url 'confirm_answer' answer.answerNumber %}"
@@ -196,7 +198,8 @@
                                                 {% endif %}
                                                 {% if answer.creator == request.user or instance.creator == request.user %}
                                                     <a href="{% url 'delete_answer' answer.answerNumber %}"
-                                                       class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Sil</a>
+                                                       class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                                        Sil</a>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -218,37 +221,38 @@
                                                             {{ reply.content }}
                                                         </div>
                                                         <div class="timeline-footer">
-                                                        {% if reply.creator == request.user or instance.creator == request.user %}
-                                                            <a href="{% url 'delete_answer' reply.answerNumber %}"
-                                                               class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Sil</a>
-                                                        {% endif %}
+                                                            {% if reply.creator == request.user or instance.creator == request.user %}
+                                                                <a href="{% url 'delete_answer' reply.answerNumber %}"
+                                                                   class="btn btn-danger btn-sm"><i
+                                                                        class="fas fa-trash"></i> Sil</a>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
                                             {% endif %}
                                         {% endfor %}
-                                        <div class="timeline" id="{{ forloop.counter }}answer" style="display:none;">
-                                            <div class="timeline-item">
-                                                <form method="post" class="comment-form p-3"
-                                                      action="{% url 'add_question_answer_reply' answer.answerNumber %}">
-                                                    {% csrf_token %}
-                                                    <p class="comment-form-comment form-group has-placeholder">
-                                                        <label>Yanıt ver</label>
-                                                        <i class="fa fa-edit color-main"></i>
-                                                        <textarea class="form-control" name="reply"
-                                                                  cols="10"
-                                                                  rows="3" maxlength="65525" aria-required="true"
-                                                                  required="required" placeholder=""></textarea>
-                                                    </p>
-                                                    <p class="form-submit">
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <span>Gönder</span>
-                                                        </button>
-                                                    </p>
-                                                </form>
-                                            </div>
-                                        </div>
                                     {% endif %}
+                                    <div class="timeline" id="{{ forloop.counter }}answer" style="display:none;">
+                                        <div class="timeline-item">
+                                            <form method="post" class="comment-form p-3"
+                                                  action="{% url 'add_question_answer_reply' answer.answerNumber %}">
+                                                {% csrf_token %}
+                                                <p class="comment-form-comment form-group has-placeholder">
+                                                    <label>Yanıt ver</label>
+                                                    <i class="fa fa-edit color-main"></i>
+                                                    <textarea class="form-control" name="reply"
+                                                              cols="10"
+                                                              rows="3" maxlength="65525" aria-required="true"
+                                                              required="required" placeholder=""></textarea>
+                                                </p>
+                                                <p class="form-submit">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <span>Gönder</span>
+                                                    </button>
+                                                </p>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                                 <script>
                                     function reply{{ forloop.counter }}() {

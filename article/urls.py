@@ -14,6 +14,8 @@ urlpatterns = [
     path('makale/sil/<slug:slug>/', views.delete_article, name="delete_article"),
     url(r'^makale/(?P<slug>[\w-]+)/duzenle/$', views.edit_article, name="edit_article"),
     path('makale/yorum-ekle/<slug:slug>/', views.add_article_comment, name="add_article_comment"),
+    url(r'^makale/(?P<commentNumber>[\w-]+)/cevapla/$', views.add_article_comment_reply,
+        name="add_article_comment_reply"),
     url(r'^(?P<username>[\w-]+)/(?P<slug>[\w-]+)/like/$', ArticleLikeToggle.as_view(), name="article-like-toggle"),
 ]
 

@@ -8,13 +8,13 @@ from django.db.models import Q
 from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 from rest_framework import viewsets
-from rest_framework.generics import get_object_or_404
 
-from ankadescankaya.views import current_user_group
 from ankadescankaya.slug import slug_save
 from ankadescankaya.views import Categories
+from ankadescankaya.views import current_user_group
 from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
@@ -242,32 +242,34 @@ def article_detail(request, username, slug):
     categories = Categories.all_categories()
     try:
         instance = Article.objects.get(slug=slug)
-        if instance.creator.username != username:
-            return render(request, "404.html")
-        articles = Article.objects.filter(isActive=True)
-        relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
-        articleComments = ArticleComment.objects.filter(articleId__slug=slug)
-        instance.view += 1
-        instance.save()
-        context = {
-            "articles": articles,
-            "relatedPosts": relatedPosts,
-            "instance": instance,
-            "userGroup": userGroup,
-            "articleComments": articleComments,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
-        return render(request, "ankades/article/article-detail.html", context)
     except:
         return redirect("404")
+    if instance.creator.username != username:
+        return render(request, "404.html")
+    articles = Article.objects.filter(isActive=True)
+    relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
+    articleComments = ArticleComment.objects.filter(articleId__slug=slug)
+    replyComment = ArticleComment.objects.filter(isReply=True, isRoot=False)
+    instance.view += 1
+    instance.save()
+    context = {
+        "articles": articles,
+        "relatedPosts": relatedPosts,
+        "instance": instance,
+        "userGroup": userGroup,
+        "articleComments": articleComments,
+        "replyComment": replyComment,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "ankades/article/article-detail.html", context)
 
 
 @login_required(login_url="login_account")
@@ -307,10 +309,56 @@ def add_article_comment(request, slug):
             content = request.POST.get("content")
             new_comment = ArticleComment(content=content, creator=request.user)
             new_comment.articleId = instance
+            new_comment.commentNumber = get_random_string(length=32)
             new_comment.save()
             messages.success(request, "Makale yorumu başarıyla oluşturuldu.")
+            return redirect(
+                reverse("article_detail",
+                        kwargs={"username": new_comment.articleId.creator, "slug": new_comment.articleId.slug}))
     except:
         return redirect("404")
+
+
+@login_required(login_url="login_account")
+def add_article_comment_reply(request, commentNumber):
+    """
+    :param request:
+    :param commentNumber:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    context = {
+        "userGroup": userGroup,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    try:
+        instance = ArticleComment.objects.get(commentNumber=commentNumber)
+        if request.method == "POST":
+            reply = request.POST.get("reply")
+            new_answer = ArticleComment(content=reply, creator=request.user)
+            new_answer.articleId = instance.articleId
+            new_answer.commentNumber = get_random_string(length=32)
+            new_answer.parentId_id = instance.id
+            new_answer.isActive = True
+            new_answer.isRoot = False
+            new_answer.isReply = True
+            new_answer.save()
+            messages.success(request, "Yorumunuz başarıyla oluşturuldu.")
+        return redirect(
+            reverse("article_detail",
+                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}), context)
+    except:
+        messages.error(request, "Makale bulunamadı.")
+        return redirect("all_articles")
 
 
 class ArticleLikeToggle(RedirectView):

@@ -133,7 +133,7 @@ def follow_account(request, username):
             instance = AccountFollower.objects.get(followerId__username=request.user,
                                                    followingId__username=getFollowing.username)
             instance.delete()
-            messages.success(request, instance.followingId.get_full_name() + "kullanıcısını takipten çıktınız.")
+            messages.success(request, instance.followingId.get_full_name() + "  kullanıcısını takipten çıktınız.")
             return redirect(reverse("account_detail", kwargs={"username": getFollowing.username}))
         except:
             new_follower = AccountFollower()
