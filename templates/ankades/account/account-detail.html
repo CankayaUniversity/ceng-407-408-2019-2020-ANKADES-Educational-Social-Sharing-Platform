@@ -9,7 +9,8 @@
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="img-circle"
-                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}" style="max-height: 400px; width: 100%;">
+                                     src="{{ instance.image.url }}" alt="{{ instance.get_full_name }}"
+                                     style="max-height: 400px; width: 100%;">
                             </div>
                             <h3 class="profile-username text-center">{{ instance.get_full_name }}</h3>
                             <p class="text-muted text-center">{{ userDetailGroup.title }}</p>
@@ -57,11 +58,15 @@
                                 {% if instance.graduate %}
                                     {{ instance.graduate }}
                                 {% else %}
-                                    {% if instance == request.user %}{{ instance.get_full_name }} eğitim bilginiz bulunamadı{% else %}{{ instance.get_full_name }} eğitim bilgilerini henüz paylaşmamış
+                                    {% if instance == request.user %}{{ instance.get_full_name }} eğitim bilginiz
+                                        bulunamadı{% else %}{{ instance.get_full_name }} eğitim bilgilerini henüz
+                                        paylaşmamış
+                                    {% endif %}
                                 {% endif %}
                             </p>
                             <hr>
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> {% if instance == request.user %}Yaşadığın Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> {% if instance == request.user %}
+                                Yaşadığın Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
                             <p class="text-muted">Malibu, California</p>
                             <hr>
                             <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
@@ -119,9 +124,10 @@
                                                             {{ article.description|safe|truncatewords:250 }}
                                                         </div>
                                                         <div class="timeline-footer">
-                                                            <a href="{% url 'article_detail' username=article.creator.username slug=article.slug %}" class="btn btn-primary btn-sm">Devamı</a>
+                                                            <a href="{% url 'article_detail' username=article.creator.username slug=article.slug %}"
+                                                               class="btn btn-primary btn-sm">Devamı</a>
                                                             {% if article.creator == request.user %}
-                                                            <a href="#" class="btn btn-danger btn-sm">Sil</a>
+                                                                <a href="#" class="btn btn-danger btn-sm">Sil</a>
                                                             {% endif %}
                                                         </div>
                                                     </div>
