@@ -19,7 +19,7 @@
                        class="d-block" style="color: #fff;">
                         {% if request.user.first_name is not None %}{{ request.user.get_full_name }}{% else %}
                             {{ request.user.username }}{% endif %}</a>
-                        <span style="font-size: 14px; color: #C2C7D0;">{{ userGroup.title }}</span>
+                    <span style="font-size: 14px; color: #C2C7D0;">{{ userGroup.title }}</span>
                 </div>
             </div>
         {% endif %}
@@ -67,6 +67,11 @@
                     {% endif %}
                 {% endif %}
             </ul>
+            <div class="mt-5">
+                <a style="font-size: 12px;" href="{% url 'terms_of_use' %}">Kullanım Koşulları</a>
+                <br>
+                <a style="font-size: 12px;" href="{% url 'privacy_policy' %}">Gizlilik Politikası</a>
+            </div>
         </nav>
     </div>
 </aside>
