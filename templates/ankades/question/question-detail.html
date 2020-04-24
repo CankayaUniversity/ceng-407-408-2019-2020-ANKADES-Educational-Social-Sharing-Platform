@@ -148,29 +148,29 @@
                                 </div>
                             </div>
                         {% endif %}
-                             <div class="container">
-                        <form method="post" class="comment-form"
-                              action="{% url 'add_question_answer' slug=instance.slug questionNumber=instance.questionNumber %}">
-                            {% csrf_token %}
-                            <p class="comment-form-comment form-group has-placeholder">
-                                <label for="content">Bir Cevap Yaz</label>
-                                <i class="fa fa-edit color-main"></i>
-                                <textarea class="form-control" id="content" name="content"
-                                          cols="45"
-                                          rows="8" maxlength="65525" aria-required="true"
-                                          required="required" placeholder=""></textarea>
-                            </p>
-                            <p class="form-submit">
-                                <button type="submit" class="btn btn-primary">
-                                    <span>Gönder</span>
-                                </button>
-                            </p>
-                        </form>
-                    </div>
                         <h4 class="comments-title mb-3">
                             Cevaplar
                         </h4>
                         {% if questionAnswers %}
+                            <div class="container">
+                                <form method="post" class="comment-form"
+                                      action="{% url 'add_question_answer' slug=instance.slug questionNumber=instance.questionNumber %}">
+                                    {% csrf_token %}
+                                    <p class="comment-form-comment form-group has-placeholder">
+                                        <label for="content">Bir Cevap Yaz</label>
+                                        <i class="fa fa-edit color-main"></i>
+                                        <textarea class="form-control" id="content" name="content"
+                                                  cols="45"
+                                                  rows="8" maxlength="65525" aria-required="true"
+                                                  required="required" placeholder=""></textarea>
+                                    </p>
+                                    <p class="form-submit">
+                                        <button type="submit" class="btn btn-primary">
+                                            <span>Gönder</span>
+                                        </button>
+                                    </p>
+                                </form>
+                            </div>
                             {% for answer in questionAnswers %}
                                 <div class="timeline">
                                     <div>
@@ -288,6 +288,25 @@
                             <div class="callout callout-danger col-lg-12 col-sm-12 col-xs-12 col-md-12">
                                 <h5>Üzgünüz :(</h5>
                                 <p>Herhangi bir cevap bulunamadı. İlk cevabı sen vermek ister misin ?</p>
+                            </div>
+                            <div class="container">
+                                <form method="post" class="comment-form"
+                                      action="{% url 'add_question_answer' slug=instance.slug questionNumber=instance.questionNumber %}">
+                                    {% csrf_token %}
+                                    <p class="comment-form-comment form-group has-placeholder">
+                                        <label for="content">Bir Cevap Yaz</label>
+                                        <i class="fa fa-edit color-main"></i>
+                                        <textarea class="form-control" id="content" name="content"
+                                                  cols="45"
+                                                  rows="8" maxlength="65525" aria-required="true"
+                                                  required="required" placeholder=""></textarea>
+                                    </p>
+                                    <p class="form-submit">
+                                        <button type="submit" class="btn btn-primary">
+                                            <span>Gönder</span>
+                                        </button>
+                                    </p>
+                                </form>
                             </div>
                         {% endif %}
                     </div>
