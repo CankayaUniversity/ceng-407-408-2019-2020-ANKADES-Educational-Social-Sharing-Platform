@@ -16,6 +16,10 @@ from question.models import Question, QuestionComment, QuestionCategory
 
 
 def add_question(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     form = QuestionForm(request.POST or None)
@@ -57,6 +61,10 @@ def add_question(request):
 
 
 def all_questions(request):
+    """
+    :param request:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     questions_categories_lists = QuestionCategory.objects.filter(isActive=True)
     questions_limit = Question.objects.filter(isActive=True).order_by('-createdDate')
@@ -156,6 +164,11 @@ def question_detail(request, slug, questionNumber):
 
 @login_required(login_url="login_account")
 def confirm_answer(request, answerNumber):
+    """
+    :param request:
+    :param answerNumber:
+    :return:
+    """
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
         question = Question.objects.get(questionNumber=instance.questionId.questionNumber)
@@ -190,6 +203,11 @@ def confirm_answer(request, answerNumber):
 
 @login_required(login_url="login_account")
 def delete_answer(request, answerNumber):
+    """
+    :param request:
+    :param answerNumber:
+    :return:
+    """
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
         slug = instance.questionId.slug
@@ -206,6 +224,12 @@ def delete_answer(request, answerNumber):
 
 @login_required(login_url="login_account")
 def edit_question(request, slug, questionNumber):
+    """
+    :param request:
+    :param slug:
+    :param questionNumber:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     try:
@@ -250,6 +274,12 @@ def edit_question(request, slug, questionNumber):
 
 @login_required(login_url="login_account")
 def add_question_answer(request, slug, questionNumber):
+    """
+    :param request:
+    :param slug:
+    :param questionNumber:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     context = {
@@ -284,6 +314,11 @@ def add_question_answer(request, slug, questionNumber):
 
 @login_required(login_url="login_account")
 def add_question_answer_reply(request, answerNumber):
+    """
+    :param request:
+    :param answerNumber:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     context = {
@@ -338,6 +373,11 @@ def delete_question(request, slug):
 
 
 def question_category_page(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     try:
@@ -364,6 +404,11 @@ def question_category_page(request, slug):
 
 @login_required(login_url="login_account")
 def question_vote_comment(request, answerNumber):
+    """
+    :param request:
+    :param answerNumber:
+    :return:
+    """
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
         user = request.user
