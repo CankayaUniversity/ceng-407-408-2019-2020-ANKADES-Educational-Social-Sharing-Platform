@@ -321,10 +321,17 @@ def add_question_answer_reply(request, answerNumber):
 
 @login_required(login_url="login_account")
 def delete_question(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     try:
-        instance = get_object_or_404(Question, slug=slug)
-        instance.delete()
+        instance = Question.objects.get(slug=slug)
+        if instance.isActive:
+            instance.isActive = False
+            instance.save()
         return redirect("all_questions")
     except:
         return redirect("404")

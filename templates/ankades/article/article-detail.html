@@ -113,6 +113,25 @@
                             Cevaplar
                         </h4>
                         {% if articleComments %}
+                            <div class="container">
+                                <form method="post" class="comment-form"
+                                      action="{% url 'add_article_comment' slug=instance.slug %}">
+                                    {% csrf_token %}
+                                    <p class="comment-form-comment form-group has-placeholder">
+                                        <label for="content">Bir Cevap Yaz</label>
+                                        <i class="fa fa-edit color-main"></i>
+                                        <textarea class="form-control" id="content" name="content"
+                                                  cols="45"
+                                                  rows="8" maxlength="65525" aria-required="true"
+                                                  required="required" placeholder=""></textarea>
+                                    </p>
+                                    <p class="form-submit">
+                                        <button type="submit" class="btn btn-primary">
+                                            <span>Gönder</span>
+                                        </button>
+                                    </p>
+                                </form>
+                            </div>
                             {% for comment in articleComments %}
                                 <div class="timeline">
                                     <div>
@@ -207,26 +226,26 @@
                                 <h5>Üzgünüz :(</h5>
                                 <p>Herhangi bir cevap bulunamadı. İlk cevabı sen vermek ister misin ?</p>
                             </div>
+                            <div class="container">
+                                <form method="post" class="comment-form"
+                                      action="{% url 'add_article_comment' slug=instance.slug %}">
+                                    {% csrf_token %}
+                                    <p class="comment-form-comment form-group has-placeholder">
+                                        <label for="content">Bir Cevap Yaz</label>
+                                        <i class="fa fa-edit color-main"></i>
+                                        <textarea class="form-control" id="content" name="content"
+                                                  cols="45"
+                                                  rows="8" maxlength="65525" aria-required="true"
+                                                  required="required" placeholder=""></textarea>
+                                    </p>
+                                    <p class="form-submit">
+                                        <button type="submit" class="btn btn-primary">
+                                            <span>Gönder</span>
+                                        </button>
+                                    </p>
+                                </form>
+                            </div>
                         {% endif %}
-                    </div>
-                    <div class="container">
-                        <form method="post" class="comment-form"
-                              action="{% url 'add_article_comment' slug=instance.slug %}">
-                            {% csrf_token %}
-                            <p class="comment-form-comment form-group has-placeholder">
-                                <label for="content">Bir Cevap Yaz</label>
-                                <i class="fa fa-edit color-main"></i>
-                                <textarea class="form-control" id="content" name="content"
-                                          cols="45"
-                                          rows="8" maxlength="65525" aria-required="true"
-                                          required="required" placeholder=""></textarea>
-                            </p>
-                            <p class="form-submit">
-                                <button type="submit" class="btn btn-primary">
-                                    <span>Gönder</span>
-                                </button>
-                            </p>
-                        </form>
                     </div>
                     <div class="modal fade" id="modal-default">
                         <div class="modal-dialog">
