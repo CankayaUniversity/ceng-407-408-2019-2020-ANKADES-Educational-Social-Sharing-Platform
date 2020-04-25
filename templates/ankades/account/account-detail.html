@@ -221,10 +221,10 @@
                                                             {{ question.description|safe|truncatewords:250 }}
                                                         </div>
                                                     <div class="timeline-footer">
-                                                            <a href="{% url 'question_detail' slug=question.slug questionNumber=question.questionNumber %}"
+                                                            <a href="{% url 'question_detail' slug=question.slug postNumber=question.postNumber %}"
                                                                class="btn btn-primary btn-sm">Soruya Git</a>
                                                             {% if question.creator == request.user %}
-                                                                <a href="{% url 'edit_question' slug=question.slug questionNumber=question.questionNumber %}"
+                                                                <a href="{% url 'edit_question' slug=question.slug postNumber=question.postNumber %}"
                                                                class="btn btn-success btn-sm">Düzenle</a>
                                                                 <a type="button" class="btn btn-sm btn-danger"
                                                                    data-toggle="modal"

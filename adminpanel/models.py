@@ -59,24 +59,4 @@ class SiteSettings(models.Model):
         ordering = ['-createdDate']
 
 
-class Report(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=254, unique=True)
-    slug = models.SlugField(max_length=254, allow_unicode=True)
-    description = models.CharField(max_length=254)
-    isActive = models.BooleanField(default=True)
-    isRead = models.BooleanField(default=True)
-    isSolved = models.BooleanField(default=True)
-    owner = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
-    createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.slug
-
-    class Meta:
-        db_table = "Report"
-        ordering = ['-createdDate']
-
-
 pre_save.connect(slug_save, sender=Tag)

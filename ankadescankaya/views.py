@@ -35,6 +35,7 @@ class Categories(DetailView):
 
 def current_user_group(self, username):
     """
+    :rtype:
     :param self:
     :param username:
     :return:

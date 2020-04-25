@@ -30,7 +30,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title"><a
-                                            href="{% url 'question_detail' question.slug question.questionNumber %}">{{ question.title }}</a>
+                                            href="{% url 'question_detail' question.slug question.postNumber %}">{{ question.title }}</a>
                                     </h5>
                                     <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
                                     <small class="card-text">Kategori: {{ question.categoryId.title }}</small>

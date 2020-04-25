@@ -24,3 +24,8 @@ class CourseMediaStorage(S3Boto3Storage):
 class UserMediaStorage(S3Boto3Storage):
     location = settings.AWS_USER_MEDIA_LOCATION
     file_overwrite = False
+
+
+class SupportMediaStorage(S3Boto3Storage):
+    location = settings.AWS_SUPPORT_MEDIA_LOCATION
+    file_overwrite = False

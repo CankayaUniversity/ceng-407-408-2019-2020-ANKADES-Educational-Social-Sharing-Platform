@@ -36,7 +36,7 @@ class QuestionCategory(models.Model):
 
 class Question(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    questionNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
+    postNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
     introduction = models.CharField(null=True, blank=True, max_length=254)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     categoryId = models.ForeignKey(QuestionCategory, on_delete=models.CASCADE, null=False)
@@ -52,19 +52,19 @@ class Question(models.Model):
                                    db_table="AccountLikedQuestion")
 
     def __str__(self):
-        return self.questionNumber
+        return self.postNumber
 
     def __unicode__(self):
-        return self.questionNumber
+        return self.postNumber
 
     def get_absolute_url(self):
-        return reverse("question_detail", kwargs={"slug": self.slug, "questionNumber": self.questionNumber})
+        return reverse("question_detail", kwargs={"slug": self.slug, "postNumber": self.postNumber})
 
     def get_like_url(self):
-        return reverse("question-like-toggle", kwargs={"slug": self.slug, "questionNumber": self.questionNumber})
+        return reverse("question-like-toggle", kwargs={"slug": self.slug, "postNumber": self.postNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-api-toggle", kwargs={"slug": self.slug, "questionNumber": self.questionNumber})
+        return reverse("question-like-api-toggle", kwargs={"slug": self.slug, "postNumber": self.postNumber})
 
     class Meta:
         db_table = "Question"
@@ -94,16 +94,16 @@ class QuestionComment(models.Model):
 
     def get_absolute_url(self):
         return reverse("question_detail",
-                       kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
+                       kwargs={"slug": self.questionId.slug, "postNumber": self.questionId.postNumber})
 
     def get_like_url(self):
-        return reverse("question-like-comment-toggle", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
+        return reverse("question-like-comment-toggle", kwargs={"slug": self.questionId.slug, "postNumber": self.questionId.postNumber})
 
     def get_vote_url(self):
         return reverse("question-vote-answer-toggle", kwargs={"answerNumber": self.answerNumber})
 
     def get_api_like_url(self):
-        return reverse("question-like-comment-api-toggle", kwargs={"slug": self.questionId.slug, "questionNumber": self.questionId.questionNumber})
+        return reverse("question-like-comment-api-toggle", kwargs={"slug": self.questionId.slug, "postNumber": self.questionId.postNumber})
 
     class Meta:
         db_table = "QuestionComment"

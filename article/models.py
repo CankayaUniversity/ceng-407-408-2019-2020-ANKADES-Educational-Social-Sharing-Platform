@@ -39,6 +39,7 @@ class Article(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE)
     categoryId = models.ForeignKey(ArticleCategory, on_delete=models.CASCADE, null=False)
+    postNumber = models.CharField(unique=True, null=True, blank=True, max_length=32)
     title = models.CharField(max_length=254, null=False, blank=False)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = RichTextField(null=False, blank=False)

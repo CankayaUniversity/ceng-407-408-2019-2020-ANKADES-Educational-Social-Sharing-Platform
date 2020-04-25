@@ -12,7 +12,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Soru Sorma</h3>
                         </div>
-                        <form role="form" method="post" action="{% url 'edit_question' instance.slug instance.questionNumber %}">
+                        <form role="form" method="post" action="{% url 'edit_question' instance.slug instance.postNumber %}">
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group">

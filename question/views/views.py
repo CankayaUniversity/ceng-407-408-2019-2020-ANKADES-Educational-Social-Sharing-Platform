@@ -35,7 +35,7 @@ def add_question(request):
         instance.title = title
         instance.isActive = False
         instance.description = description
-        instance.questionNumber = get_random_string(length=32)
+        instance.postNumber = get_random_string(length=32)
         instance.creator = request.user
         instance.createdDate = datetime.datetime.now()
         instance.updatedDate = datetime.datetime.now()
@@ -119,26 +119,26 @@ def all_questions(request):
         return render(request, "ankades/question/all-questions.html", context)
 
 
-def question_detail(request, slug, questionNumber):
+def question_detail(request, slug, postNumber):
     """
     :param request:
     :param slug:
-    :param questionNumber:
+    :param postNumber:
     :return:
     """
     try:
-        instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        instance = Question.objects.get(postNumber=postNumber, slug=slug)
         userGroup = current_user_group(request, request.user)
         categories = Categories.all_categories()
         instance.view += 1
         instance.save()
         questionAnswers = QuestionComment.objects.filter(questionId__slug=slug,
-                                                         questionId__questionNumber=questionNumber, isRoot=True,
+                                                         questionId__postNumber=postNumber, isRoot=True,
                                                          isReply=False)
         answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False)
         try:
             certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug,
-                                                          questionId__questionNumber=questionNumber, isCertified=True)
+                                                          questionId__postNumber=postNumber, isCertified=True)
         except:
             certifiedAnswer = None
         context = {
@@ -171,7 +171,7 @@ def confirm_answer(request, answerNumber):
     """
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
-        question = Question.objects.get(questionNumber=instance.questionId.questionNumber)
+        question = Question.objects.get(postNumber=instance.questionId.postNumber)
         if instance.questionId.creator.username == request.user.username:
             if instance.isCertified:
                 instance.isCertified = False
@@ -180,23 +180,23 @@ def confirm_answer(request, answerNumber):
                 question.save()
                 messages.success(request, "Cevabın doğruluğunu iptal ettiniz.")
                 return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
-                                                                   "questionNumber": instance.questionId.questionNumber}))
+                                                                   "postNumber": instance.questionId.postNumber}))
             else:
                 if question.isSolved:
                     messages.error(request,
                                    "Sorunun, onaylanmış cevabı bulunduğu için, işlem gerçekleştirilemedi. Lütfen önce onayı kaldırın.")
                     return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
-                                                                       "questionNumber": instance.questionId.questionNumber}))
+                                                                       "postNumber": instance.questionId.postNumber}))
                 instance.isCertified = True
                 question.isSolved = True
                 instance.save()
                 question.save()
                 messages.success(request, "Cevabın doğruluğunu onayladınız.")
                 return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
-                                                                   "questionNumber": instance.questionId.questionNumber}))
+                                                                   "postNumber": instance.questionId.postNumber}))
         else:
             return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
-                                                               "questionNumber": instance.questionId.questionNumber}))
+                                                               "postNumber": instance.questionId.postNumber}))
     except:
         return redirect("404")
 
@@ -211,11 +211,11 @@ def delete_answer(request, answerNumber):
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
         slug = instance.questionId.slug
-        questionNumber = instance.questionId.questionNumber
+        postNumber = instance.questionId.postNumber
         if instance.questionId.creator == request.user or instance.creator == request.user:
             instance.delete()
             messages.success(request, "Cevap başarıyla silindi.")
-            return redirect(reverse("question_detail", kwargs={"slug": slug, "questionNumber": questionNumber}))
+            return redirect(reverse("question_detail", kwargs={"slug": slug, "postNumber": postNumber}))
         else:
             return redirect("all_questions")
     except:
@@ -223,17 +223,17 @@ def delete_answer(request, answerNumber):
 
 
 @login_required(login_url="login_account")
-def edit_question(request, slug, questionNumber):
+def edit_question(request, slug, postNumber):
     """
     :param request:
     :param slug:
-    :param questionNumber:
+    :param postNumber:
     :return:
     """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     try:
-        instance = Question.objects.get(questionNumber=questionNumber, slug=slug)
+        instance = Question.objects.get(postNumber=postNumber, slug=slug)
         form = EditQuestionForm(request.POST or None, instance=instance)
         if instance.creator == request.user:
             if request.method == "POST":
@@ -249,7 +249,7 @@ def edit_question(request, slug, questionNumber):
                 instance.save()
                 messages.success(request, "Sorunuz başarıyla güncellendi")
                 return redirect(reverse("question_detail",
-                                        kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}))
+                                        kwargs={"slug": instance.slug, "postNumber": instance.postNumber}))
         else:
             messages.error(request, "Bu soru size ait değil !")
             return redirect("index")
@@ -273,11 +273,11 @@ def edit_question(request, slug, questionNumber):
 
 
 @login_required(login_url="login_account")
-def add_question_answer(request, slug, questionNumber):
+def add_question_answer(request, slug, postNumber):
     """
     :param request:
     :param slug:
-    :param questionNumber:
+    :param postNumber:
     :return:
     """
     userGroup = current_user_group(request, request.user)
@@ -295,7 +295,7 @@ def add_question_answer(request, slug, questionNumber):
         "courseLowerCategories": categories[8],
     }
     try:
-        instance = Question.objects.get(slug=slug, questionNumber=questionNumber)
+        instance = Question.objects.get(slug=slug, postNumber=postNumber)
         if request.method == "POST":
             content = request.POST.get("content")
             new_answer = QuestionComment(content=content, creator=request.user)
@@ -306,7 +306,7 @@ def add_question_answer(request, slug, questionNumber):
             new_answer.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
         return redirect(
-            reverse("question_detail", kwargs={"slug": instance.slug, "questionNumber": instance.questionNumber}),
+            reverse("question_detail", kwargs={"slug": instance.slug, "postNumber": instance.postNumber}),
             context)
     except:
         return redirect("404")
@@ -347,7 +347,7 @@ def add_question_answer_reply(request, answerNumber):
             new_answer.save()
             messages.success(request, "Cevabınız başarıyla oluşturuldu.")
         return redirect(
-            reverse("question_detail", kwargs={"slug": instance.questionId.slug, "questionNumber": instance.questionId.questionNumber}),
+            reverse("question_detail", kwargs={"slug": instance.questionId.slug, "postNumber": instance.questionId.postNumber}),
             context)
     except:
         messages.error(request, "Cevap vermek istediğiniz soru bulunamadı.")
@@ -416,12 +416,12 @@ def question_vote_comment(request, answerNumber):
             instance.votes.remove(user)
             messages.success(request, "Verdiğiniz oy başarıyla silindi.")
             return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
-                                                               "questionNumber": instance.questionId.questionNumber}))
+                                                               "postNumber": instance.questionId.postNumber}))
         else:
             instance.votes.add(user)
             messages.success(request, "Cevap oylamanız başarıyla gerçekleştirildi")
             return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
-                                                               "questionNumber": instance.questionId.questionNumber}))
+                                                               "postNumber": instance.questionId.postNumber}))
     except:
         messages.error(request, "Cevap bulunamadı.")
         return redirect("all_questions")
@@ -448,8 +448,8 @@ class QuestionAnswerVoteToggle(RedirectView):
 class QuestionLikeToggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         slug = self.kwargs.get("slug")
-        questionNumber = self.kwargs.get("questionNumber")
-        obj = get_object_or_404(Question, slug=slug, questionNumber=questionNumber)
+        postNumber = self.kwargs.get("postNumber")
+        obj = get_object_or_404(Question, slug=slug, postNumber=postNumber)
         url_ = obj.get_absolute_url()
         user = self.request.user
         if user.is_authenticated:
@@ -463,8 +463,8 @@ class QuestionLikeToggle(RedirectView):
 
 class QuestionLikeCommentToggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        questionNumber = self.kwargs.get("questionNumber")
-        obj = get_object_or_404(QuestionComment, questionId=questionNumber)
+        postNumber = self.kwargs.get("postNumber")
+        obj = get_object_or_404(QuestionComment, questionId=postNumber)
         url_ = obj.get_absolute_url()
         user = self.request.user
         if user.is_authenticated:

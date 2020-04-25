@@ -22,10 +22,10 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="float-left card-title">
-                                        <a href="{% url 'question_detail' slug=question.slug questionNumber=question.questionNumber %}">{{ question.title|safe|truncatewords:20 }}</a>
+                                        <a href="{% url 'question_detail' slug=question.slug postNumber=question.postNumber %}">{{ question.title|safe|truncatewords:20 }}</a>
                                     </h5>
                                     <h5 class="float-right card-title"><a
-                                            href="{% url 'question_detail' question.slug question.questionNumber %}">
+                                            href="{% url 'question_detail' question.slug question.postNumber %}">
                                         {% if question.isSolved %}
                                             (ÇÖZÜLDÜ)
                                         {% elif question.questioncomment_set.count == 0 %}(Cevap Bekliyor)

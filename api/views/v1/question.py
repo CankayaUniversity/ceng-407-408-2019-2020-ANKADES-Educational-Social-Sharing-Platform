@@ -12,10 +12,10 @@ class QuestionLikeAPIToggle(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     @swagger_auto_schema(operation_summary="Like an article by given a slug")
-    def get(self, request, slug=None, questionNumber=None, format=None):
+    def get(self, request, slug=None, postNumber=None, format=None):
         slug = self.kwargs.get("slug")
-        questionNumber = self.kwargs.get("questionNumber")
-        obj = get_object_or_404(Question, slug=slug, questionNumber=questionNumber)
+        postNumber = self.kwargs.get("postNumber")
+        obj = get_object_or_404(Question, slug=slug, postNumber=postNumber)
         user = self.request.user
         updated = False
         liked = False

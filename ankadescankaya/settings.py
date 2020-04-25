@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'exam',
     'question',
     'directmessage',
+    'support',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,6 +127,7 @@ AWS_ARTICLE_MEDIA_LOCATION = 'media/article'
 AWS_EXAM_MEDIA_LOCATION = 'media/exam'
 AWS_COURSE_MEDIA_LOCATION = 'media/course'
 AWS_USER_MEDIA_LOCATION = 'media/user'
+AWS_SUPPORT_MEDIA_LOCATION = 'media/support'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
 # STATICFILES_DIRS = [

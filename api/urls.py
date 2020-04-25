@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^Account/Register/', AccountRegistrationView.as_view()),
 
     # Question
-    url(r'^Question/(?P<slug>[\w-]+)/(?P<questionNumber>[\w-]+)/Like/$', QuestionLikeAPIToggle.as_view(),
+    url(r'^Question/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/Like/$', QuestionLikeAPIToggle.as_view(),
         name="question-like-api-toggle"),
 ]
 urlpatterns += router.urls

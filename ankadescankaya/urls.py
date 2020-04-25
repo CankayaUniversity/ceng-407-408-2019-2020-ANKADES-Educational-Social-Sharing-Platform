@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include("question.urls")),
     path('', include("article.urls")),
     path('', include("exam.urls")),
+    path('', include("support.urls")),
     path('', include("directmessage.urls")),
     path('404', main_view.get_404, name="404"),
     path('terms-of-use/', main_view.terms_of_use, name="terms_of_use"),
