@@ -65,6 +65,9 @@ class Report(models.Model):
     slug = models.SlugField(max_length=254, allow_unicode=True)
     description = models.CharField(max_length=254)
     isActive = models.BooleanField(default=True)
+    isRead = models.BooleanField(default=True)
+    isSolved = models.BooleanField(default=True)
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(auto_now_add=True)
 
