@@ -1,8 +1,10 @@
 import uuid
 
 from django.db import models
+from django.db.models.signals import pre_save
 
 from account.models import Account
+from ankadescankaya.slug import slug_save
 from ankadescankaya.storage_backends import SupportMediaStorage
 
 
@@ -50,3 +52,6 @@ class Report(models.Model):
     class Meta:
         db_table = "Report"
         ordering = ['-createdDate']
+
+
+pre_save.connect(slug_save, sender=Support)

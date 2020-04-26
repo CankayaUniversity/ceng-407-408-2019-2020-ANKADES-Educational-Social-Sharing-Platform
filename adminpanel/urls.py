@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question, permission, course, exam
+from adminpanel.views import group, socialmedia, activity, question, permission, course, exam, support
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -124,6 +124,7 @@ urlpatterns = [
     #Site Settings
     path('edit-privacy-policy/', views.admin_edit_privacy_policy, name="admin_edit_privacy_policy"),
     path('edit-terms-of-use/', views.admin_edit_terms_of_use, name="admin_edit_terms_of_use"),
+    path('add-support-subject/', support.admin_add_support_subject, name="admin_add_support_subject"),
 ]
 
 if settings.DEBUG:

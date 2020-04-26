@@ -32,7 +32,6 @@
                         </p>
                     </a>
                 </li>
-
                 <li class="nav-header">Navigasyon</li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -218,45 +217,11 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="nav-header">Okullar</li>
-                <li class="nav-item has-treeview">
-                    <a href="{% url 'admin_all_schools' %}" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
-                        <p>
-                            Liste
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin_add_school' %}" class="nav-link">
-                        <i class="nav-icon fas fa-plus"></i>
-                        <p>
-                            Okul Ekle
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin_add_department' %}" class="nav-link">
-                        <i class="nav-icon fas fa-plus"></i>
-                        <p>
-                            Bölüm Ekle
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-plus"></i>
-                        <p>
-                            Sınav Ekle
-                        </p>
-                    </a>
-                </li>
                 {% if userGroup == 'admin' %}
                     <li class="nav-header">Admin</li>
                     <li class="nav-item has-treeview">
                         <a href="{% url 'admin_edit_privacy_policy' %}" class="nav-link">
-                            <i class="nav-icon fas fa-user-plus"></i>
+                            <i class="nav-icon fas fa-folder-plus"></i>
                             <p>
                                 Gizlilik Politikası
                             </p>
@@ -264,7 +229,7 @@
                     </li>
                     <li class="nav-item has-treeview">
                         <a href="{% url 'admin_edit_terms_of_use' %}" class="nav-link">
-                            <i class="nav-icon fas fa-user-plus"></i>
+                            <i class="nav-icon fas fa-folder-plus"></i>
                             <p>
                                 Kullanım Koşulları
                             </p>
@@ -376,7 +341,47 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a href="{% url 'admin_add_support_subject' %}" class="nav-link">
+                            <i class="fas fa-headset nav-icon"></i>
+                            <p>Destek Başlığı Ekle</p>
+                        </a>
+                    </li>
                 {% endif %}
+
+                <li class="nav-header">Okullar</li>
+                <li class="nav-item has-treeview">
+                    <a href="{% url 'admin_all_schools' %}" class="nav-link">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Liste
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_add_school' %}" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            Okul Ekle
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_add_department' %}" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            Bölüm Ekle
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            Sınav Ekle
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
