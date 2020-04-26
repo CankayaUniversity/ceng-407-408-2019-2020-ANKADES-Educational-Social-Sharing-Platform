@@ -65,6 +65,14 @@
                             </a>
                         </li>
                     {% endif %}
+                    {% if userGroup == 'admin' or userGroup == 'moderator' or userPermission == 'can_add_department' %}
+                        <li class="nav-item">
+                            <a href="{% url 'add_department' %}" class="nav-link">
+                                <i class="nav-icon far fa-circle text-primary"></i>
+                                <p>Bölüm Ekle</p>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
             <div class="mt-5">

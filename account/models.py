@@ -260,4 +260,3 @@ class AccountSkill(models.Model):
 
 pre_save.connect(slug_save, sender=SocialMedia)
 pre_save.connect(slug_save, sender=Group)
-pre_save.connect(slug_save, sender=Permission)

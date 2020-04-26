@@ -33,9 +33,10 @@ def admin_add_permission(request):
     if userGroup == 'admin':
         if request.method == "POST":
             title = request.POST.get("title")
+            slug = request.POST.get("slug")
             description = request.POST.get("description")
             isActive = request.POST.get("isActive") == 'on'
-            new_group = Permission(title=title, description=description, isActive=isActive)
+            new_group = Permission(title=title, description=description, isActive=isActive, slug=slug)
             new_group.save()
             messages.success(request, "İzin başarıyla oluşturuldu.")
             return redirect("admin_all_permissions")
