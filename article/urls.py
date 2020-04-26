@@ -13,6 +13,7 @@ urlpatterns = [
     path('makale-ekle/', views.add_article, name="add_article"),
     path('makale/sil/<slug:slug>/', views.delete_article, name="delete_article"),
     url(r'^makale/(?P<slug>[\w-]+)/duzenle/$', views.edit_article, name="edit_article"),
+    url(r'^makale/(?P<postNumber>[\w-]+)/sikayet-et/$', views.add_report_article, name="add_report_article"),
     path('makale/yorum-ekle/<slug:slug>/', views.add_article_comment, name="add_article_comment"),
     url(r'^makale/(?P<commentNumber>[\w-]+)/cevapla/$', views.add_article_comment_reply,
         name="add_article_comment_reply"),

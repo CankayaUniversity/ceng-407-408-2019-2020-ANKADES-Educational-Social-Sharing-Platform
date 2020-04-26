@@ -18,6 +18,7 @@ from ankadescankaya.views import current_user_group
 from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
+from support.models import Report
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -270,6 +271,32 @@ def article_detail(request, username, slug):
         "courseLowerCategories": categories[8],
     }
     return render(request, "ankades/article/article-detail.html", context)
+
+
+@login_required(login_url="login_admin")
+def add_report_article(request, postNumber):
+    """
+    :param postNumber:
+    :param request:
+    :return:
+    """
+    try:
+        instance = Article.objects.get(postNumber=postNumber)
+        if request.method == "POST":
+            description = request.POST.get("description")
+            new_report = Report(description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
+            new_report.creator = request.user
+            new_report.supportNumber = get_random_string(length=32)
+            new_report.title = "Kullanıcı Şikayeti"
+            new_report.post = postNumber
+            new_report.displayMessage = str(new_report.creator.get_full_name()) + " adlı kullanıcı makale için şikayette bulundu. Makale numarası: " + postNumber
+            new_report.save()
+            messages.success(request, "Şikayetiniz başarıyla gönderildi. En kısa sürede tarafınıza geri dönüş sağlanacaktır.")
+            return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
+        return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
+    except:
+        messages.error(request, "Makale bulunamadı.")
+        return redirect("404")
 
 
 @login_required(login_url="login_account")
