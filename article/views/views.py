@@ -249,7 +249,7 @@ def article_detail(request, username, slug):
         return render(request, "404.html")
     articles = Article.objects.filter(isActive=True)
     relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
-    articleComments = ArticleComment.objects.filter(articleId__slug=slug)
+    articleComments = ArticleComment.objects.filter(articleId__slug=slug, isRoot=True)
     replyComment = ArticleComment.objects.filter(isReply=True, isRoot=False)
     instance.view += 1
     instance.save()
@@ -273,7 +273,7 @@ def article_detail(request, username, slug):
     return render(request, "ankades/article/article-detail.html", context)
 
 
-@login_required(login_url="login_admin")
+@login_required(login_url="login_account")
 def add_report_article(request, postNumber):
     """
     :param postNumber:

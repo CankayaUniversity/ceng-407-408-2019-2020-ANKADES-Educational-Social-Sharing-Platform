@@ -13,6 +13,7 @@ from ankadescankaya.views import Categories
 from ankadescankaya.views import current_user_group
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
+from support.models import Report
 
 
 def add_question(request):
@@ -159,6 +160,34 @@ def question_detail(request, slug, postNumber):
         }
         return render(request, "ankades/question/question-detail.html", context)
     except:
+        return redirect("404")
+
+
+@login_required(login_url="login_account")
+def add_report_question(request, postNumber):
+    """
+    :param postNumber:
+    :param request:
+    :return:
+    """
+    try:
+        instance = Question.objects.get(postNumber=postNumber)
+        if request.method == "POST":
+            description = request.POST.get("questionReport")
+            new_report = Report(description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
+            new_report.creator = request.user
+            new_report.supportNumber = get_random_string(length=32)
+            new_report.title = "Kullanıcı Şikayeti"
+            new_report.post = postNumber
+            new_report.displayMessage = str(new_report.creator.get_full_name()) + " adlı kullanıcı soru için şikayette bulundu. Soru numarası: " + postNumber
+            new_report.save()
+            messages.success(request, "Şikayetiniz başarıyla gönderildi. En kısa sürede tarafınıza geri dönüş sağlanacaktır.")
+            return redirect(reverse("question_detail", kwargs={"slug": instance.slug,
+                                                               "postNumber": instance.postNumber}))
+        return redirect(reverse("question_detail", kwargs={"slug": instance.slug,
+                                                           "postNumber": instance.postNumber}))
+    except:
+        messages.error(request, "Soru bulunamadı.")
         return redirect("404")
 
 

@@ -8,7 +8,7 @@ from ankadescankaya.storage_backends import SupportMediaStorage
 
 class Report(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=254, unique=True)
+    title = models.CharField(max_length=254)
     displayMessage = models.CharField(max_length=255, blank=True, null=True)
     supportNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
     post = models.CharField(null=False, blank=False, max_length=32, verbose_name="Application Post Number")

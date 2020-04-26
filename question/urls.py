@@ -11,6 +11,7 @@ urlpatterns = [
     path('soru-sor/', views.add_question, name="add_question"),
     path('sorular/kategoriler/<slug:slug>', views.question_category_page, name="question_category_page"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/$', views.question_detail, name="question_detail"),
+    url(r'^(?P<postNumber>[\w-]+)/sikayet-et/$', views.add_report_question, name="add_report_question"),
     url(r'^cevap/(?P<answerNumber>[\w-]+)/onayla/$', views.confirm_answer, name="confirm_answer"),
     url(r'^cevap/(?P<answerNumber>[\w-]+)/sil$', views.delete_answer, name="delete_answer"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/duzenle/$', views.edit_question, name="edit_question"),
