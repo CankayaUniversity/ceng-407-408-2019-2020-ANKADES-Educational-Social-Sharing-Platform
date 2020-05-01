@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <section class="content-header">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -16,7 +16,9 @@
                                 <thead>
                                 <tr>
                                     <th>Bölüm</th>
-                                    <th>Okul</th>
+                                    <th>Slug</th>
+                                    <th>Bölüm Kodu</th>
+                                    <th>Bölümün Okulu</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -27,7 +29,13 @@
                                                 <a href="#" style="font-size: 18px;">{{ department.title }}</a>
                                             </td>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.parentId.title }}</a>
+                                                <a href="#" style="font-size: 18px;">{{ department.slug }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="#" style="font-size: 18px;">{{ department.departmentCode }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="#" style="font-size: 18px;">{{ department.schoolId.title }}</a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -36,7 +44,9 @@
                                 <tfoot>
                                 <tr>
                                     <th>Bölüm</th>
-                                    <th>Okul</th>
+                                    <th>Slug</th>
+                                    <th>Bölüm Kodu</th>
+                                    <th>Bölümün Okulu</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -55,6 +65,7 @@
                                 <thead>
                                 <tr>
                                     <th>Okullar</th>
+                                    <th>Slug</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -64,13 +75,17 @@
                                             <td>
                                                 <a href="#" style="font-size: 18px;">{{ school.title }}</a>
                                             </td>
+                                            <td>
+                                                <a href="#" style="font-size: 18px;">{{ school.slug }}</a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Okul</th>
+                                    <th>Okullar</th>
+                                    <th>Slug</th>
                                 </tr>
                                 </tfoot>
                             </table>

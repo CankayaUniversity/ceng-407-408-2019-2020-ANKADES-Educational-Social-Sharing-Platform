@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from ankadescankaya.views import current_user_group, Categories
-from exam.models import ExamCategory
+from exam.models import School
 
 
 def all_schools(request):
@@ -11,7 +11,7 @@ def all_schools(request):
     """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
-    schools = ExamCategory.objects.filter(isActive=True, isSchool=True).order_by('title')
+    schools = School.objects.filter(isActive=True).order_by('title')
     context = {
         "userGroup": userGroup,
         "articleCategories": categories[0],

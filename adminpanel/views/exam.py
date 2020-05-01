@@ -2,9 +2,22 @@ import datetime
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.utils.crypto import get_random_string
 
 from ankadescankaya.views import current_user_group, Categories
-from exam.models import ExamCategory
+from exam.models import School, Department
+
+
+def admin_all_schools(request):
+    userGroup = current_user_group(request, request.user)
+    schools = School.objects.all()
+    departments = Department.objects.all()
+    context = {
+        "userGroup": userGroup,
+        "schools": schools,
+        "departments": departments,
+    }
+    return render(request, "adminpanel/exam/all-schools.html", context)
 
 
 def admin_add_school(request):
@@ -13,32 +26,17 @@ def admin_add_school(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
     context = {
         "userGroup": userGroup,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     if request.method == "POST":
-        instance = ExamCategory()
+        instance = School()
         title = request.POST.get("title")
-        slug = request.POST.get("slug")
         instance.title = title
-        instance.slug = slug
         instance.isActive = True
         instance.creator = request.user
         instance.createdDate = datetime.datetime.now()
         instance.updatedDate = datetime.datetime.now()
-        instance.isRoot = True
-        instance.parentId_id = instance.id
-        instance.isSchool = True
         instance.save()
         messages.success(request, "Okul başarıyla eklendi.")
         return redirect("admin_add_school")
@@ -51,36 +49,56 @@ def admin_add_department(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
-    schools = ExamCategory.objects.filter(isSchool=True).order_by('title')
+    schools = School.objects.filter(isActive=True).order_by('slug')
     context = {
         "userGroup": userGroup,
         "schools": schools,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     if request.method == "POST":
-        instance = ExamCategory()
-        categoryId = request.POST["categoryId"]
+        instance = Department()
+        schoolId = request.POST["schoolId"]
         title = request.POST.get("title")
-        slug = request.POST.get("slug")
         instance.title = title
-        instance.slug = slug
         instance.isActive = True
         instance.creator = request.user
         instance.createdDate = datetime.datetime.now()
         instance.updatedDate = datetime.datetime.now()
-        instance.isRoot = False
-        instance.parentId_id = categoryId
-        instance.isSchool = False
-        instance.isDepartment = True
+        instance.schoolId_id = schoolId
+        instance.departmentCode = get_random_string(length=32)
+        instance.save()
+        messages.success(request, "Bölüm başarıyla eklendi.")
+        return redirect("admin_add_department")
+    return render(request, "adminpanel/exam/add-department.html", context)
+
+
+def admin_add_lecture(request, departmentCode):
+    """
+    :param request:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    departmentCode = departmentCode
+    try:
+        department = Department.objects.get(departmentCode=departmentCode)
+    except:
+        messages.error(request, "Bölüm Bulanamadı.")
+        # TODO should change index to all departments
+        return redirect("index")
+    context = {
+        "userGroup": userGroup,
+        "department": department,
+    }
+    if request.method == "POST":
+        instance = Department()
+        schoolId = request.POST["schoolId"]
+        title = request.POST.get("title")
+        instance.title = title
+        instance.isActive = True
+        instance.creator = request.user
+        instance.createdDate = datetime.datetime.now()
+        instance.updatedDate = datetime.datetime.now()
+        instance.schoolId_id = schoolId
+        instance.departmentCode = get_random_string(length=32)
         instance.save()
         messages.success(request, "Bölüm başarıyla eklendi.")
         return redirect("admin_add_department")
@@ -93,20 +111,10 @@ def admin_all_schools(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
-    schools = ExamCategory.objects.filter(isSchool=True).order_by('title')
-    departments = ExamCategory.objects.filter(isDepartment=True).order_by('title')
+    schools = School.objects.filter().order_by('slug')
+    departments = Department.objects.filter().order_by('slug')
     context = {
         "userGroup": userGroup,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
         "schools": schools,
         "departments": departments,
     }

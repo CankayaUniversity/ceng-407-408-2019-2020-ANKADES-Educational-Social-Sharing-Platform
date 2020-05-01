@@ -1,47 +1,62 @@
 import uuid
-from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.db.models.signals import pre_save
-from django.urls import reverse
 
 from account.models import Account
 from adminpanel.models import Tag
 from ankadescankaya.slug import slug_save
-from ankadescankaya.storage_backends import ExamMediaStorage
+from ankadescankaya.storage_backends import ExamMediaStorage, SchoolMediaStorage
 
 
-class ExamCategory(models.Model):
+class School(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    title = models.CharField(max_length=254)
-    slug = models.SlugField(max_length=254, allow_unicode=True)
+    title = models.CharField(max_length=254, unique=True)
+    slug = models.SlugField(max_length=254, allow_unicode=True, unique=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
-    parentId = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-    isRoot = models.BooleanField(default=False)
-    isSchool = models.BooleanField(default=False)
-    isDepartment = models.BooleanField(default=False)
-    tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)
     isActive = models.BooleanField(default=True)
+    media = models.FileField(null=True, blank=True, storage=SchoolMediaStorage())
 
     def __str__(self):
         return self.slug
 
     class Meta:
-        db_table = "ExamCategory"
+        db_table = "School"
 
 
-class Exam(models.Model):
+class Department(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    term = models.PositiveIntegerField(default=1)
-    lectureCode = models.CharField(null=False, blank=False, max_length=50)
+    departmentCode = models.CharField(null=False, blank=False, max_length=50)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    categoryId = models.ForeignKey(ExamCategory, on_delete=models.CASCADE, null=False)
+    schoolId = models.ForeignKey(School, on_delete=models.CASCADE, null=False)
     title = models.CharField(max_length=254, null=False, blank=False)
+    slug = models.SlugField(max_length=254, allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     isActive = models.BooleanField(default=True)
-    media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
+
+    def __str__(self):
+        return self.departmentCode
+
+    def __unicode__(self):
+        return self.departmentCode
+
+    class Meta:
+        db_table = "Department"
+
+
+class Lecture(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    lectureCode = models.CharField(null=False, blank=False, max_length=10)
+    slug = models.SlugField(max_length=254, allow_unicode=True)
+    term = models.CharField(null=True, blank=True, max_length=32, verbose_name="Lecture Term")
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    departmentId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
+    title = models.CharField(max_length=254, null=False, blank=False, verbose_name="Post Title")
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.lectureCode
@@ -50,7 +65,40 @@ class Exam(models.Model):
         return self.lectureCode
 
     class Meta:
+        db_table = "Lecture"
+
+
+class Exam(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    lectureId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    examCode = models.CharField(max_length=32)
+    owner = models.CharField(null=True, blank=True, max_length=100, verbose_name="Exam Owner Name")
+    examDate = models.DateField()
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
+    media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
+
+    def __str__(self):
+        return self.examCode
+
+    def __unicode__(self):
+        return self.examCode
+
+    class Meta:
         db_table = "Exam"
 
 
-pre_save.connect(slug_save, sender=Exam)
+class LectureExam(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    examId = models.ForeignKey(Exam, on_delete=models.CASCADE, null=True)
+    lectureId = models.ForeignKey(Lecture, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        db_table = "LectureExam"
+
+
+pre_save.connect(slug_save, sender=School)
+pre_save.connect(slug_save, sender=Department)
+pre_save.connect(slug_save, sender=Lecture)

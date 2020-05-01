@@ -6,7 +6,6 @@ from account.models import AccountGroup
 from adminpanel.models import SiteSettings
 from article.models import ArticleCategory
 from course.models import CourseCategory
-from exam.models import ExamCategory
 from question.models import QuestionCategory
 
 
