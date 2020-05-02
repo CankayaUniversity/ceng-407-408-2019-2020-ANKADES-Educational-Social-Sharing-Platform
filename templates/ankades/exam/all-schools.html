@@ -24,11 +24,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% if schools %}
-                                    {% for school in schools %}
+                                {% if departments %}
+                                    {% for department in departments %}
                                         <tr>
                                             <td>
-                                                <a href="{% url 'all_departments' school.slug %}" style="font-size: 18px;">{{ school.schoolId.title }}</a>
+                                                <a href="{% url 'all_departments' department.schoolId.slug %}" style="font-size: 18px;">{{ department.schoolId.title }}</a>
                                             </td>
                                         </tr>
                                     {% endfor %}

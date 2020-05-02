@@ -3,14 +3,14 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from exam.views import schools, views
+from exam.views import school, lecture, department
 
 urlpatterns = [
-    # url(r'^(?P<slug>[\w-]+)/bolumler/$', views.all_departments, name="all_departments"),
-    path('okullar/', schools.all_schools, name="all_schools"),
-
-    path('<slug:slug>/bolumler', schools.all_departments, name="all_departments"),
-    path('bolum-ekle/', schools.add_department, name="add_department"),
+    path('okullar/', school.all_schools, name="all_schools"),
+    url(r'^okullar/(?P<slug>[\w-]+)/bolumler', department.all_departments, name="all_departments"),
+    url(r'^bolum/(?P<departmentCode>[\w-]+)/dersler/$', lecture.lectures, name="lectures"),
+    path('bolum-ekle/', department.add_department, name="add_department"),
+    path('ders-ekle/', lecture.add_lecture, name="add_lecture"),
     # url(r'^bolum-ekle/(?P<slug>[\w-]+)/$', views.add_department, name="add_department"),
 ]
 

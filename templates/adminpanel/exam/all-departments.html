@@ -1,10 +1,10 @@
-{% extends 'ankades/layout/layout.html' %}
-{% block title %}Ankacademy | Bölümler{% endblock %}
+{% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | All Departments{% endblock %}
 {% load static %}
 {% block content %}
     <div class="content-header">
         <div class="container">
-            <div class="row mt-3">
+            <div class="row">
                 <div class="col-sm-12">
                     <h1 class="m-0 text-dark">Bölümler</h1>
                 </div>
@@ -17,13 +17,10 @@
                 {% if departments %}
                     {% for department in departments %}
                         <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
-                            <div class="card">
+                            <div class="card mt-5">
                                 <div class="card-body">
                                     <h5 class="float-left card-title">
-                                        <a href="{% url 'lectures' department.departmentCode %}">{{ department.title|safe|truncatewords:20 }}</a>
-                                    </h5>
-                                    <h5 class="float-right card-title">
-                                        <a href="{% url 'lectures' department.departmentCode %}">Derslere Git</a>
+                                        <a href="{% url 'admin_all_lectures' department.departmentCode %}">{{ department.title|safe|truncatewords:20 }} - Derslere Git</a>
                                     </h5>
                                     </br>
                                     <hr>

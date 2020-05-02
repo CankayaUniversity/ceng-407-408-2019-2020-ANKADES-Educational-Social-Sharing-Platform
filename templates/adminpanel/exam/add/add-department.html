@@ -24,6 +24,19 @@
                                     {% endif %}
                                 </select>
                             </div>
+                            {% if departments %}
+                                <div class="form-group">
+                                    <label for="school">Okul*</label>
+                                    <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                            value="Seçiniz"
+                                            name="schoolId" required>
+                                        <option disabled>Lütfen bir okul seçiniz</option>
+                                        {% for department in departments %}
+                                            <option value="{{ school.id }}">{{ school.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
                             <div class="form-group">
                                 <label for="title">Bölüm Adı</label>
                                 <input type="text" name="title" class="form-control" id="title" required

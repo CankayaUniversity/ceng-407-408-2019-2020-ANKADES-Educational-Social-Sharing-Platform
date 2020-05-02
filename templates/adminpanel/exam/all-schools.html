@@ -26,16 +26,16 @@
                                     {% for department in departments %}
                                         <tr>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.title }}</a>
+                                                <a href="{% url 'admin_all_departments' department.schoolId.slug %}" style="font-size: 18px;">{{ department.title }}</a>
                                             </td>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.slug }}</a>
+                                                <a href="{% url 'admin_all_departments' department.schoolId.slug %}" style="font-size: 18px;">{{ department.slug }}</a>
                                             </td>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.departmentCode }}</a>
+                                                <a href="{% url 'admin_all_departments' department.schoolId.slug %}" style="font-size: 18px;">{{ department.departmentCode }}</a>
                                             </td>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ department.schoolId.title }}</a>
+                                                <a href="{% url 'admin_all_departments' department.schoolId.slug %}" style="font-size: 18px;">{{ department.schoolId.title }}</a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -73,7 +73,7 @@
                                     {% for school in schools %}
                                         <tr>
                                             <td>
-                                                <a href="#" style="font-size: 18px;">{{ school.title }}</a>
+                                                <a href="{% url 'admin_all_departments' school.slug %}" style="font-size: 18px;">{{ school.title }}</a>
                                             </td>
                                             <td>
                                                 <a href="#" style="font-size: 18px;">{{ school.slug }}</a>

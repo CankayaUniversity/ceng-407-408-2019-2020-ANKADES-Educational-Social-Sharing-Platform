@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question, permission, course, exam, support
+from adminpanel.views import group, socialmedia, activity, question, permission, course, school, support, lecture, department
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -116,12 +116,17 @@ urlpatterns = [
     path('logs/admins/', activity.admin_admin_logs, name="admin_admin_logs"),
     path('logs/accounts/', activity.admin_account_logs, name="admin_account_logs"),
 
-    #Exam
-    path('add-school/', exam.admin_add_school, name="admin_add_school"),
-    path('add-department/', exam.admin_add_department, name="admin_add_department"),
-    path('all-schools/', exam.admin_all_schools, name="admin_all_schools"),
+    # School
+    path('add-school/', school.admin_add_school, name="admin_add_school"),
+    path('all-schools/', school.admin_all_schools, name="admin_all_schools"),
+    # Department
+    path('<slug:slug>/departments', department.admin_all_departments, name="admin_all_departments"),
+    path('add-department/', department.admin_add_department, name="admin_add_department"),
+    # Lecture
+    path('add-lecture/', lecture.admin_add_lecture, name="admin_add_lecture"),
+    url(r'^department/(?P<departmentCode>[\w-]+)/lectures/$', lecture.admin_all_lectures, name="admin_all_lectures"),
 
-    #Site Settings
+    # Site Settings
     path('edit-privacy-policy/', views.admin_edit_privacy_policy, name="admin_edit_privacy_policy"),
     path('edit-terms-of-use/', views.admin_edit_terms_of_use, name="admin_edit_terms_of_use"),
     path('add-support-subject/', support.admin_add_support_subject, name="admin_add_support_subject"),
