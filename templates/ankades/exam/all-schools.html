@@ -28,7 +28,7 @@
                                     {% for school in schools %}
                                         <tr>
                                             <td>
-                                                <a href="{% url 'all_departments' school.slug %}" style="font-size: 18px;">{{ school.title }}</a>
+                                                <a href="{% url 'all_departments' school.slug %}" style="font-size: 18px;">{{ school.schoolId.title }}</a>
                                             </td>
                                         </tr>
                                     {% endfor %}

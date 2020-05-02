@@ -34,7 +34,7 @@
                 {#course categories#}
                 <li class="nav-header">SINAV ARŞİVİ</li>
                 <li class="nav-item has-treeview">
-{#                    <a href="{% url 'all_schools' %}" class="nav-link">#}
+                    <a href="{% url 'all_schools' %}" class="nav-link">
                         <i class="nav-icon fas fa-list"></i>
                         <p>
                             Tüm Okullar
@@ -67,7 +67,7 @@
                     {% endif %}
                     {% if userGroup == 'admin' or userGroup == 'moderator' or userPermission == 'can_add_department' %}
                         <li class="nav-item">
-{#                            <a href="{% url 'add_department' %}" class="nav-link">#}
+                            <a href="{% url 'add_department' %}" class="nav-link">
                                 <i class="nav-icon far fa-circle text-primary"></i>
                                 <p>Bölüm Ekle</p>
                             </a>
