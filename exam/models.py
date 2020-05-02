@@ -50,7 +50,6 @@ class Lecture(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     lectureCode = models.CharField(null=False, blank=False, max_length=10)
     slug = models.SlugField(max_length=254, allow_unicode=True)
-    term = models.CharField(null=True, blank=True, max_length=32, verbose_name="Lecture Term")
     creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     departmentId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
     title = models.CharField(max_length=254, null=False, blank=False, verbose_name="Post Title")
@@ -90,10 +89,29 @@ class Exam(models.Model):
         db_table = "Exam"
 
 
+class Term(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=254, allow_unicode=True)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.slug
+
+    def __unicode__(self):
+        return self.slug
+
+    class Meta:
+        db_table = "Term"
+
+
 class LectureExam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     examId = models.ForeignKey(Exam, on_delete=models.CASCADE, null=True)
     lectureId = models.ForeignKey(Lecture, on_delete=models.CASCADE, null=True)
+    termId = models.ForeignKey(Term, on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = "LectureExam"
@@ -102,3 +120,4 @@ class LectureExam(models.Model):
 pre_save.connect(slug_save, sender=School)
 pre_save.connect(slug_save, sender=Department)
 pre_save.connect(slug_save, sender=Lecture)
+pre_save.connect(slug_save, sender=Term)
