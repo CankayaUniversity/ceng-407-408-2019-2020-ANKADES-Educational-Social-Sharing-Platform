@@ -50,7 +50,7 @@ def admin_add_lecture(request):
                 "instance": instance,
                 "departments": departments,
             }
-            return render(request, "ankades/exam/add/add-lecture.html", addContext)
+            return render(request, "adminpanel/exam/add/add-lecture.html", addContext)
         if request.method == "POST":
             instance = Lecture()
             departmentId = request.POST["department"]
@@ -71,7 +71,7 @@ def admin_add_lecture(request):
                 instance.save()
                 messages.success(request, "Ders başarıyla eklendi.")
                 # TODO should return
-                return redirect("add_lecture")
+                return redirect("admin_add_lecture")
         return render(request, "adminpanel/exam/add/add-lecture.html", context)
     else:
         return redirect("index")
