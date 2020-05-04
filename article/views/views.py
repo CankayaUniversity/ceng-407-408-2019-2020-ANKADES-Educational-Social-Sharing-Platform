@@ -248,9 +248,9 @@ def article_detail(request, username, slug):
     if instance.creator.username != username:
         return render(request, "404.html")
     articles = Article.objects.filter(isActive=True)
-    relatedPosts = Article.objects.all().order_by('-createdDate')[:5]
-    articleComments = ArticleComment.objects.filter(articleId__slug=slug, isRoot=True)
-    replyComment = ArticleComment.objects.filter(isReply=True, isRoot=False)
+    relatedPosts = Article.objects.filter(isActive=True).order_by('-createdDate')[:5]
+    articleComments = ArticleComment.objects.filter(articleId__slug=slug, isRoot=True, isActive=True)
+    replyComment = ArticleComment.objects.filter(isReply=True, isRoot=False, isActive=True)
     instance.view += 1
     instance.save()
     context = {
@@ -382,6 +382,84 @@ def add_article_comment_reply(request, commentNumber):
             new_answer.isReply = True
             new_answer.save()
             messages.success(request, "Yorumunuz başarıyla oluşturuldu.")
+        return redirect(
+            reverse("article_detail",
+                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}), context)
+    except:
+        messages.error(request, "Makale bulunamadı.")
+        return redirect("all_articles")
+
+
+@login_required(login_url="login_account")
+def edit_article_comment(request, commentNumber):
+    """
+    :param request:
+    :param commentNumber:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    context = {
+        "userGroup": userGroup,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    try:
+        instance = ArticleComment.objects.get(commentNumber=commentNumber)
+        article = Article.objects.get(slug=instance.articleId.slug)
+        if request.method == "POST":
+            edit = request.POST.get("edit")
+            instance.content = edit
+            instance.updatedDate = datetime.datetime.now()
+            article.view -= 1
+            article.save()
+            instance.save()
+            messages.success(request, "Yorumunuz başarıyla güncellendi.")
+        return redirect(
+            reverse("article_detail",
+                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}), context)
+    except:
+        messages.error(request, "Makale bulunamadı.")
+        return redirect("all_articles")
+
+
+@login_required(login_url="login_account")
+def delete_article_comment(request, commentNumber):
+    """
+    :param request:
+    :param commentNumber:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    context = {
+        "userGroup": userGroup,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    try:
+        instance = ArticleComment.objects.get(commentNumber=commentNumber)
+        article = Article.objects.get(slug=instance.articleId.slug)
+        instance.isActive = False
+        instance.updatedDate = datetime.datetime.now()
+        article.view -= 1
+        article.save()
+        instance.save()
+        messages.success(request, "Yorum başarıyla silindi.")
         return redirect(
             reverse("article_detail",
                     kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}), context)
