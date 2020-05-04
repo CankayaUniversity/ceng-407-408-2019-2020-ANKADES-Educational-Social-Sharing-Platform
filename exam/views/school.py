@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from ankadescankaya.views import current_user_group, Categories
-from exam.models import Department
+from exam.models import Department, School
 
 
 def all_schools(request):
@@ -14,7 +14,7 @@ def all_schools(request):
     """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
-    departments = Department.objects.filter(isActive=True, schoolId_id__isnull=False).order_by('title')
+    schools = School.objects.filter(isActive=True).order_by('title')
     context = {
         "userGroup": userGroup,
         "articleCategories": categories[0],
@@ -26,6 +26,6 @@ def all_schools(request):
         "courseCategories": categories[6],
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
-        "departments": departments,
+        "schools": schools,
     }
     return render(request, "ankades/exam/all-schools.html", context)

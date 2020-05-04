@@ -121,7 +121,7 @@
                                                         <span class="time"><i
                                                                 class="far fa-clock"></i> {{ article.createdDate }}</span>
                                                         <div class="timeline-body">
-                                                            {{ article.description|safe|truncatewords:250 }}
+                                                            {{ article.title|safe|truncatewords:250 }}
                                                         </div>
                                                         <div class="timeline-footer">
                                                             <a href="{% url 'article_detail' username=article.creator.username slug=article.slug %}"
