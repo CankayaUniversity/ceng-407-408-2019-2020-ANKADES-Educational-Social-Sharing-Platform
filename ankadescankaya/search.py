@@ -60,18 +60,6 @@ class SearchKeyword(DetailView):
         return school
 
     @staticmethod
-    def search_department(request):
-        """
-        :param request:
-        :return:
-        """
-        department = None
-        keyword = request.GET.get("keyword")
-        if keyword:
-            department = Department.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(departmentCode__icontains=keyword, isActive=True))
-        return department
-
-    @staticmethod
     def search_lecture(request):
         """
         :param request:

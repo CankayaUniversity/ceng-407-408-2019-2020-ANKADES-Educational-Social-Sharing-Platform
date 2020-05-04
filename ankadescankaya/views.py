@@ -131,7 +131,6 @@ def search_keyword(request):
     questions = SearchKeyword.search_question(request)
     courses = SearchKeyword.search_course(request)
     schools = SearchKeyword.search_school(request)
-    departments = SearchKeyword.search_department(request)
     lectures = SearchKeyword.search_lecture(request)
     exams = SearchKeyword.search_exam(request)
     accounts = SearchKeyword.search_account(request)
@@ -142,7 +141,6 @@ def search_keyword(request):
         "questions": questions,
         "courses": courses,
         "schools": schools,
-        "departments": departments,
         "lectures": lectures,
         "exams": exams,
         "accounts": accounts,

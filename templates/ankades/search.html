@@ -11,44 +11,44 @@
                             <div class="card-header p-0 border-bottom-0">
                                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="articles-tab" data-toggle="pill"
-                                           href="#articles" role="tab"
-                                           aria-controls="articles" aria-selected="true">Makaleler</a>
+                                        <a class="nav-link active" id="search-articles-tab" data-toggle="pill"
+                                           href="#search-articles" role="tab"
+                                           aria-controls="search-articles" aria-selected="true">Makaleler</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="questions-tab" data-toggle="pill"
-                                           href="#questions" role="tab"
-                                           aria-controls="questions" aria-selected="false">Sorular</a>
+                                        <a class="nav-link" id="search-questions-tab" data-toggle="pill"
+                                           href="#search-questions" role="tab"
+                                           aria-controls="search-questions" aria-selected="false">Sorular</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="courses-tab" data-toggle="pill"
-                                           href="#courses" role="tab"
-                                           aria-controls="courses" aria-selected="false">Kurslar</a>
+                                        <a class="nav-link" id="search-courses-tab" data-toggle="pill"
+                                           href="#search-courses" role="tab"
+                                           aria-controls="search-courses" aria-selected="false">Kurslar</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="exams-tab" data-toggle="pill"
-                                           href="#exams" role="tab"
-                                           aria-controls="exams" aria-selected="false">Okullar</a>
+                                        <a class="nav-link" id="search-schools-tab" data-toggle="pill"
+                                           href="#search-schools" role="tab"
+                                           aria-controls="search-schools" aria-selected="false">Okullar</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="categories-tab" data-toggle="pill"
-                                           href="#categories" role="tab"
-                                           aria-controls="categories" aria-selected="false">Kategoriler</a>
+                                        <a class="nav-link" id="search-lectures-tab" data-toggle="pill"
+                                           href="#search-lectures" role="tab"
+                                           aria-controls="search-lectures" aria-selected="false">Dersler</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="users-tab" data-toggle="pill"
-                                           href="#users" role="tab"
-                                           aria-controls="users" aria-selected="false">Kullanıcılar</a>
+                                        <a class="nav-link" id="search-accounts-tab" data-toggle="pill"
+                                           href="#search-accounts" role="tab"
+                                           aria-controls="search-accounts" aria-selected="false">Kullanıcılar</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-four-tabContent">
-                                    <div class="tab-pane fade show active" id="articles" role="tabpanel"
-                                         aria-labelledby="articles-tab">
+                                    <div class="tab-pane fade show active" id="search-articles" role="tabpanel"
+                                         aria-labelledby="search-articles-tab">
                                         {% if articles %}
                                             {% for article in articles %}
-                                                <div class="container">
+                                                <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
                                                     <div class="card">
                                                         <img class="card-img-top" src="{{ article.media.url }}"
                                                              alt="Card image cap"
@@ -82,61 +82,246 @@
                                             </div>
                                         {% endif %}
                                     </div>
-                                    <div class="tab-pane fade" id="questions" role="tabpanel"
-                                         aria-labelledby="questions-tab">
-                                        Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris
-                                        pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor
-                                        sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus
-                                        orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a
-                                        luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus.
-                                        Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc
-                                        euismod pellentesque diam.
+                                    <div class="tab-pane fade" id="search-questions" role="tabpanel"
+                                         aria-labelledby="search-questions-tab">
+                                        {% if questions %}
+                                            {% for question in questions %}
+                                                <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="float-left card-title">
+                                                                <a href="{% url 'question_detail' slug=question.slug postNumber=question.postNumber %}">{{ question.title|safe|truncatewords:20 }}</a>
+                                                            </h5>
+                                                            <h5 class="float-right card-title"><a
+                                                                    href="{% url 'question_detail' question.slug question.postNumber %}">
+                                                                {% if question.isSolved %}
+                                                                    (ÇÖZÜLDÜ)
+                                                                {% elif question.questioncomment_set.count == 0 %}(Cevap
+                                                                    Bekliyor)
+                                                                {% endif %}
+                                                            </a>
+                                                            </h5>
+                                                            <p class="card-text">{{ question.description|safe|truncatechars:500 }}</p>
+                                                            <small class="card-text">Kategori: <a
+                                                                    href="{% url 'question_category_page' question.categoryId.slug %}">{{ question.categoryId.title }}
+                                                            </small>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <small class="text-muted float-left"><a
+                                                                    href="{% url 'account_detail' question.creator %}">{{ question.creator.get_full_name }}</a></small>
+                                                            <small class="text-muted float-right ml-2">{{ question.questioncomment_set.count }}
+                                                                Yorum</small>
+                                                            <small class="text-muted ml-2 float-right">{{ question.likes.count }}
+                                                                Beğeni</small>
+                                                            <small class="text-muted float-right">{{ question.view }}
+                                                                Görüntülenme</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <p>Aradığınız kelimeyle eşleşen soru bulunamadı.</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                    <div class="tab-pane fade" id="courses" role="tabpanel"
-                                         aria-labelledby="courses-tab">
-                                        Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris.
-                                        Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget
-                                        condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum
-                                        orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna
-                                        a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam
-                                        vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet
-                                        sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum,
-                                        lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem
-                                        eu risus tincidunt eleifend ac ornare magna.
+                                    <div class="tab-pane fade" id="search-courses" role="tabpanel"
+                                         aria-labelledby="search-courses-tab">
+                                        {% if courses %}
+                                            {% for course in courses %}
+                                                <div class="card-deck col-lg-3 col-md-3 col-xs-12 col-sm-12 mb-5">
+                                                    <div class="card">
+                                                        {% if course.coursePicture %}
+                                                            <img class="card-img-top"
+                                                                 src="{{ course.coursePicture.url }}"
+                                                                 alt="Card image cap"
+                                                                 width="504" height="250">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title"><a
+                                                                        href="{% url 'course_detail' course.slug %}">{{ course.title }}</a>
+                                                                </h5>
+                                                                <p class="card-text">{{ course.description|safe|truncatechars:255 }}</p>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <small class="text-muted float-left">{{ course.creator.get_full_name }}</small>
+                                                                <small class="text-muted float-left ml-2">{{ course.coursecomment_set.count }}
+                                                                    Yorum</small>
+                                                                <small class="text-muted ml-2 float-right">{{ course.likes.count }}
+                                                                    Beğeni</small>
+                                                                <small class="text-muted float-right">{{ course.view }}
+                                                                    Görüntülenme</small>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="card-body">
+                                                                <h5 class="card-title" style="margin-top: 177px"><a
+                                                                        href="{% url 'course_detail' course.slug %}">{{ course.title }}</a>
+                                                                </h5>
+                                                                <p class="card-text">{{ course.description|safe|truncatechars:255 }}</p>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <small class="text-muted float-left">{{ course.creator.get_full_name }}</small>
+                                                                <small class="text-muted float-left ml-2">{{ course.coursecomment_set.count }}
+                                                                    Yorum</small>
+                                                                <small class="text-muted ml-2 float-right">{{ course.likes.count }}
+                                                                    Beğeni</small>
+                                                                <small class="text-muted float-right">{{ course.view }}
+                                                                    Görüntülenme</small>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <p>Aradığınız kelimeyle eşleşen makale bulunamadı.</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                    <div class="tab-pane fade" id="exams" role="tabpanel"
-                                         aria-labelledby="exams-tab">
-                                        Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris.
-                                        Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget
-                                        condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum
-                                        orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna
-                                        a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam
-                                        vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet
-                                        sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum,
-                                        lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem
-                                        eu risus tincidunt eleifend ac ornare magna.
+                                    <div class="tab-pane fade" id="search-schools" role="tabpanel"
+                                         aria-labelledby="search-schools-tab">
+                                        {% if schools %}
+                                            <div class="card-body p-0">
+                                                <table class="table table-striped projects" id="search-schools-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Okul Adı
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for school in schools %}
+                                                        <tr>
+                                                            <td>
+                                                                <a href="{% url 'all_departments' school.slug %}">
+                                                                    {{ school.title }}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% else %}
+                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <p>Aradığınız kelimeyle eşleşen okul bulunamadı.</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                    <div class="tab-pane fade" id="categories" role="tabpanel"
-                                         aria-labelledby="categories-tab">
-                                        Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis
-                                        tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque
-                                        tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum
-                                        consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec
-                                        pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam.
-                                        Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst.
-                                        Praesent imperdiet accumsan ex sit amet facilisis.
+                                    <div class="tab-pane fade" id="search-lectures" role="tabpanel"
+                                         aria-labelledby="search-lectures-tab">
+                                        {% if lectures %}
+                                            <div class="card-body p-0">
+                                                <table class="table table-striped projects" id="search-schools-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Ders Kodu
+                                                        </th>
+                                                        <th>
+                                                            Ders Adı
+                                                        </th>
+                                                        <th>
+                                                            Bölüm Adı
+                                                        </th>
+                                                        <th>
+                                                            Okul Adı
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for lecture in lectures %}
+                                                        <tr>
+                                                            <td>
+                                                                <a href="">
+                                                                    {{ lecture.lectureCode }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="">
+                                                                    {{ lecture.title }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="">
+                                                                    {{ lecture.departmentId.title }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="">
+                                                                    {{ lecture.departmentId.schoolId.title }}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% else %}
+                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <p>Aradığınız kelimeyle eşleşen ders bulunamadı.</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                    <div class="tab-pane fade" id="users" role="tabpanel"
-                                         aria-labelledby="users-tab">
-                                        Pelledsafadsgdsagdsafdntsag esque vestibulum commodo nibh nec blandit. Maecenas
-                                        neque magna, iaculis
-                                        tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque
-                                        tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum
-                                        consecteturdsafdas dolor a vestib dsafdsafulum pharetra. Donec interdum placerat
-                                        urna nec
-                                        pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam.
-                                        Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst.
-                                        Praesent imperdiet accumsan ex sit amet facilisis.dsafdasfdasf dsafdasfdsa
+                                    <div class="tab-pane fade" id="search-accounts" role="tabpanel"
+                                         aria-labelledby="search-accounts-tab">
+                                        {% if accounts %}
+                                            <div class="card-body p-0">
+                                                <table class="table table-striped projects" id="search-accounts-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Resim
+                                                        </th>
+                                                        <th>
+                                                            İsim
+                                                        </th>
+                                                        <th>
+                                                            Kullanıcı Adı
+                                                        </th>
+                                                        <th>
+                                                            Email Adresi
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for account in accounts %}
+                                                        <tr>
+                                                            <td>
+                                                                <ul class="list-inline">
+                                                                    <li class="list-inline-item">
+                                                                        <img alt="{{ account.get_full_name }}"
+                                                                             class="table-avatar" width="40"
+                                                                             height="40"
+                                                                             src="{{ account.image.url }}">
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{% url 'account_detail' account.username %}">
+                                                                    {{ account.get_full_name }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{% url 'account_detail' account.username %}">
+                                                                    {{ account.username }}
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{% url 'account_detail' account.username %}">
+                                                                    {{ account.email }}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% else %}
+                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <p>Aradığınız kelimeyle eşleşen kullanıcı bulunamadı.</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +332,3 @@
         </div>
     </section>
 {% endblock %}
-{#<div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">#}
-{#    <h5>Üzgünüz :(</h5>#}
-{#    <p>Henüz bir makale paylaşılmamış.</p>#}
-{#</div>#}
