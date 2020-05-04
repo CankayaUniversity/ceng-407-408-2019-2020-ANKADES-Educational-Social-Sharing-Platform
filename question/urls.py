@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/$', views.question_detail, name="question_detail"),
     url(r'^(?P<postNumber>[\w-]+)/sikayet-et/$', views.add_report_question, name="add_report_question"),
     url(r'^cevap/(?P<answerNumber>[\w-]+)/onayla/$', views.confirm_answer, name="confirm_answer"),
-    url(r'^cevap/(?P<answerNumber>[\w-]+)/sil$', views.delete_answer, name="delete_answer"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/duzenle/$', views.edit_question, name="edit_question"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/yorum-yap/$', views.add_question_answer,
         name="add_question_answer"),
@@ -26,6 +25,8 @@ urlpatterns = [
         name="question-like-comment-toggle"),
     url(r'^cevap/(?P<answerNumber>[\w-]+)/oyla/$', views.question_vote_comment,
         name="question_vote_comment"),
+    url(r'^delete-answer/(?P<answerNumber>[\w-]+)/$', views.delete_question_answer, name="delete_question_answer"),
+    url(r'^edit-answer/(?P<answerNumber>[\w-]+)/$', views.edit_question_answer, name="edit_question_answer"),
 ]
 
 if settings.DEBUG:

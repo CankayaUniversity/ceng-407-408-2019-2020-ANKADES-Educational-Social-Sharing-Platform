@@ -143,6 +143,9 @@
                         <h4 class="comments-title mt-5">
                             Cevaplar
                         </h4>
+
+                        {#                    CERTIFIED ANSWER#}
+
                         {% if certifiedAnswer %}
                             <div class="timeline mt-3">
                                 <div class="time-label">
@@ -170,6 +173,9 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        {#                    END OF CERTIFIED ANSWER#}
+
                         {% if questionAnswers %}
                             {% for answer in questionAnswers %}
                                 <div class="timeline">
@@ -179,7 +185,11 @@
                                         {% else %}
                                             <i class="fas fa-comment bg-blue"></i>
                                         {% endif %}
+
+                                        {#                                    ANSWER DIV#}
+
                                         <div class="timeline-item p-2">
+
                                             <img class="img-circle img-sm" src="{{ answer.creator.image.url }}"
                                                  alt="{{ answer.creator.get_full_name }}">
                                             <span class="time"><i
@@ -191,17 +201,25 @@
                                             <div class="timeline-body">
                                                 {{ answer.content }}
                                             </div>
+
+                                            {#                                        ANSWER OPERATIONS#}
+
                                             <div class="timeline-footer">
+                                                {#                                            VOTE ANSWER#}
                                                 {% if answer.creator != request.user %}
                                                     <a class="btn btn-primary btn-sm"
                                                        href="{% url 'question_vote_comment' answer.answerNumber %}"><i
-                                                            class="fas fa-thumbs-up"></i> Oy
-                                                        ver</a>
+                                                            class="fas fa-thumbs-up"></i> Oy Ver</a>
                                                 {% endif %}
+                                                {#                                            END OF VOTE ANSWER#}
+
+                                                {#                                                REPLY ANSWER#}
                                                 <a class="btn btn-info btn-sm"
-                                                   onclick="reply{{ forloop.counter }}()"><i class="fas fa-reply"></i>
+                                                   onclick="reply_question{{ answer.answerNumber }}()"><i class="fas fa-reply"></i>
                                                     Cevapla</a>
-                                                {% if instance.creator == request.user %}
+                                                {#                                            END OF REPLY ANSWER#}
+
+                                                {% if instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                     {% if answer.questionId.isSolved == False and answer.isCertified == False %}
                                                         <a href="{% url 'confirm_answer' answer.answerNumber %}"
                                                            class="btn btn-success btn-sm">
@@ -215,43 +233,33 @@
                                                         </a>
                                                     {% endif %}
                                                 {% endif %}
-                                                {% if answer.creator == request.user or instance.creator == request.user %}
-                                                    <a href="{% url 'delete_answer' answer.answerNumber %}"
-                                                       class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
-                                                        Sil</a>
+
+                                                {#                                            EDIT AND DELETE ANSWER#}
+                                                {% if answer.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                    <a onclick="edit_{{ answer.answerNumber }}()"
+                                                       class="btn btn-success btn-sm">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                        Düzenle
+                                                    </a>
+                                                    <a href="{% url 'delete_question_answer' answer.answerNumber %}"
+                                                       class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                        Sil
+                                                    </a>
                                                 {% endif %}
+                                                {#                                            END OF EDIT AND DELETE ANSWER#}
+
                                             </div>
+
+                                            {#                                        END OF ANSWER OPERATIONS#}
+
                                         </div>
+
+                                        {#                                    END OF ANSWER DIV#}
+
                                     </div>
-                                    {% if answerReply %}
-                                        {% for reply in answerReply %}
-                                            {% if reply.parentId_id == answer.id %}
-                                                <div>
-                                                    <div class="timeline-item p-2"
-                                                         style="background-color: #f8f9fa !important; border:none; box-shadow: none;">
-                                                        <img class="img-circle img-sm"
-                                                             src="{{ reply.creator.image.url }}"
-                                                             alt="{{ reply.creator.get_full_name }}">
-                                                        <span class="time"><i
-                                                                class="fas fa-clock"></i> {{ reply.createdDate }}</span>
-                                                        <h3 class="timeline-header"><a
-                                                                href="#">{{ reply.creator.get_full_name }}</a></h3>
-                                                        <div class="timeline-body">
-                                                            {{ reply.content }}
-                                                        </div>
-                                                        <div class="timeline-footer">
-                                                            {% if reply.creator == request.user or instance.creator == request.user %}
-                                                                <a href="{% url 'delete_answer' reply.answerNumber %}"
-                                                                   class="btn btn-danger btn-sm"><i
-                                                                        class="fas fa-trash"></i> Sil</a>
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                    <div class="timeline" id="{{ forloop.counter }}answer" style="display:none;">
+
+                                    <div class="timeline" id="add_{{ forloop.counter }}reply" style="display:none;">
                                         <div class="timeline-item">
                                             <form method="post" class="comment-form p-3"
                                                   action="{% url 'add_question_answer_reply' answer.answerNumber %}">
@@ -272,10 +280,114 @@
                                             </form>
                                         </div>
                                     </div>
+
+                                    <div class="timeline" id="edit_{{ forloop.counter }}answer" style="display:none;">
+                                        <div class="timeline-item">
+                                            <form method="post" class="comment-form p-3"
+                                                  action="{% url 'edit_question_answer' answer.answerNumber %}">
+                                                {% csrf_token %}
+                                                <p class="comment-form-comment form-group has-placeholder">
+                                                    <label>Yorum Düzenle</label>
+                                                    <i class="fa fa-edit color-main"></i>
+                                                    <textarea class="form-control" name="edit"
+                                                              cols="10"
+                                                              rows="3" maxlength="65525" aria-required="true"
+                                                              required="required"
+                                                              placeholder="">{{ answer.content }}</textarea>
+                                                </p>
+                                                <p class="form-submit">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <span>Düzenle</span>
+                                                    </button>
+                                                </p>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    {#                                ANSWER REPLY#}
+
+                                    {% if answerReply %}
+                                        {% for reply in answerReply %}
+                                            {% if reply.parentId_id == answer.id %}
+                                                <div>
+                                                    <div class="timeline-item p-2"
+                                                         style="background-color: #f8f9fa !important; border:none; box-shadow: none;">
+                                                        <img class="img-circle img-sm"
+                                                             src="{{ reply.creator.image.url }}"
+                                                             alt="{{ reply.creator.get_full_name }}">
+                                                        <span class="time"><i
+                                                                class="fas fa-clock"></i> {{ reply.createdDate }}</span>
+                                                        <h3 class="timeline-header"><a
+                                                                href="#">{{ reply.creator.get_full_name }}</a></h3>
+                                                        <div class="timeline-body">
+                                                            {{ reply.content }}
+                                                        </div>
+                                                        <div class="timeline-footer">
+                                                            {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                                <a onclick="edit_reply_{{ reply.answerNumber }}()"
+                                                                   class="btn btn-success btn-sm">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                    Düzenle
+                                                                </a>
+                                                                <a href="{% url 'delete_question_answer' reply.answerNumber %}"
+                                                                   class="btn btn-danger btn-sm"><i
+                                                                        class="fas fa-trash"></i> Sil</a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {#                                            edit reply#}
+                                            <div class="timeline" id="edit_{{ forloop.counter }}reply"
+                                                 style="display:none;">
+                                                <div class="timeline-item">
+                                                    <form method="post" class="comment-form p-3"
+                                                          action="{% url 'edit_question_answer' reply.answerNumber %}">
+                                                        {% csrf_token %}
+                                                        <p class="comment-form-comment form-group has-placeholder">
+                                                            <label>Yorum Düzenle</label>
+                                                            <i class="fa fa-edit color-main"></i>
+                                                            <textarea class="form-control" name="edit"
+                                                                      cols="10"
+                                                                      rows="3" maxlength="65525" aria-required="true"
+                                                                      required="required"
+                                                                      placeholder="">{{ reply.content }}</textarea>
+                                                        </p>
+                                                        <p class="form-submit">
+                                                            <button type="submit" class="btn btn-primary">
+                                                                <span>Düzenle</span>
+                                                            </button>
+                                                        </p>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                function edit_reply_{{ reply.answerNumber }}() {
+                                                    let open = document.getElementById("edit_{{ forloop.counter }}reply");
+                                                    if (open.style.display === "none") {
+                                                        open.style.display = "block";
+                                                    } else {
+                                                        open.style.display = "none";
+                                                    }
+                                                }
+                                            </script>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {#                                END OF ANSWER REPLY#}
                                 </div>
                                 <script>
-                                    function reply{{ forloop.counter }}() {
-                                        let open = document.getElementById("{{ forloop.counter }}answer");
+                                    function reply_question{{ answer.answerNumber }}() {
+                                        let open = document.getElementById("add_{{ forloop.counter }}reply");
+                                        if (open.style.display === "none") {
+                                            open.style.display = "block";
+                                        } else {
+                                            open.style.display = "none";
+                                        }
+                                    }
+
+                                    function edit_{{ answer.answerNumber }}() {
+                                        let open = document.getElementById("edit_{{ forloop.counter }}answer");
                                         if (open.style.display === "none") {
                                             open.style.display = "block";
                                         } else {
@@ -289,7 +401,6 @@
                                 Cevaplar
                             </h4>
                             <div class="callout callout-danger col-lg-12 col-sm-12 col-xs-12 col-md-12">
-                                <h5>Üzgünüz :(</h5>
                                 <p>Herhangi bir cevap bulunamadı. İlk cevabı sen vermek ister misin ?</p>
                             </div>
                         {% endif %}
@@ -304,12 +415,15 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form role="form" method="post" action="{% url 'add_report_question' instance.postNumber %}">
+                                    <form role="form" method="post"
+                                          action="{% url 'add_report_question' instance.postNumber %}">
                                         {% csrf_token %}
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="message">Mesajınız*</label>
-                                                <textarea class="form-control" name="questionReport" id="message" rows="3" maxlength="65525" aria-required="true" required placeholder="Mesajınız"></textarea>
+                                                <textarea class="form-control" name="questionReport" id="message"
+                                                          rows="3" maxlength="65525" aria-required="true" required
+                                                          placeholder="Mesajınız"></textarea>
                                             </div>
                                         </div>
                                         <div class="card-footer">

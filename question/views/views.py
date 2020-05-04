@@ -128,17 +128,17 @@ def question_detail(request, slug, postNumber):
     :return:
     """
     try:
-        instance = Question.objects.get(postNumber=postNumber, slug=slug)
+        instance = Question.objects.get(postNumber=postNumber, slug=slug, isActive=True)
         userGroup = current_user_group(request, request.user)
         categories = Categories.all_categories()
         instance.view += 1
         instance.save()
-        questionAnswers = QuestionComment.objects.filter(questionId__slug=slug,
+        questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, isActive=True,
                                                          questionId__postNumber=postNumber, isRoot=True,
                                                          isReply=False)
-        answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False)
+        answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False, isActive=True)
         try:
-            certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug,
+            certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug, isActive=True,
                                                           questionId__postNumber=postNumber, isCertified=True)
         except:
             certifiedAnswer = None
@@ -226,27 +226,6 @@ def confirm_answer(request, answerNumber):
         else:
             return redirect(reverse("question_detail", kwargs={"slug": instance.questionId.slug,
                                                                "postNumber": instance.questionId.postNumber}))
-    except:
-        return redirect("404")
-
-
-@login_required(login_url="login_account")
-def delete_answer(request, answerNumber):
-    """
-    :param request:
-    :param answerNumber:
-    :return:
-    """
-    try:
-        instance = QuestionComment.objects.get(answerNumber=answerNumber)
-        slug = instance.questionId.slug
-        postNumber = instance.questionId.postNumber
-        if instance.questionId.creator == request.user or instance.creator == request.user:
-            instance.delete()
-            messages.success(request, "Cevap başarıyla silindi.")
-            return redirect(reverse("question_detail", kwargs={"slug": slug, "postNumber": postNumber}))
-        else:
-            return redirect("all_questions")
     except:
         return redirect("404")
 
@@ -393,12 +372,64 @@ def delete_question(request, slug):
     userGroup = current_user_group(request, request.user)
     try:
         instance = Question.objects.get(slug=slug)
-        if instance.isActive:
+        if instance.isActive and instance.creator is request.user:
             instance.isActive = False
             instance.save()
         return redirect("all_questions")
     except:
         return redirect("404")
+
+
+@login_required(login_url="login_account")
+def delete_question_answer(request, answerNumber):
+    """
+    :param request:
+    :param answerNumber:
+    :return:
+    """
+    try:
+        instance = QuestionComment.objects.get(answerNumber=answerNumber)
+        question = Question.objects.get(slug=instance.questionId.slug)
+        instance.isActive = False
+        instance.updatedDate = datetime.datetime.now()
+        if instance.isCertified:
+            instance.isCertified = False
+        question.view -= 1
+        question.save()
+        instance.save()
+        messages.success(request, "Cevap başarıyla silindi.")
+        return redirect(
+            reverse("question_detail",
+                    kwargs={"slug": instance.questionId.slug, "postNumber": instance.questionId.postNumber}))
+    except:
+        messages.error(request, "Soru bulunamadı.")
+        return redirect("all_questions")
+
+
+@login_required(login_url="login_account")
+def edit_question_answer(request, answerNumber):
+    """
+    :param request:
+    :param answerNumber:
+    :return:
+    """
+    try:
+        instance = QuestionComment.objects.get(answerNumber=answerNumber)
+        question = Question.objects.get(slug=instance.questionId.slug)
+        if request.method == "POST":
+            edit = request.POST.get("edit")
+            instance.content = edit
+            instance.updatedDate = datetime.datetime.now()
+            question.view -= 1
+            question.save()
+            instance.save()
+            messages.success(request, "Cevap başarıyla güncellendi.")
+        return redirect(
+            reverse("question_detail",
+                    kwargs={"slug": instance.questionId.slug, "postNumber": instance.questionId.postNumber}))
+    except:
+        messages.error(request, "Soru bulunamadı.")
+        return redirect("all_questions")
 
 
 def question_category_page(request, slug):

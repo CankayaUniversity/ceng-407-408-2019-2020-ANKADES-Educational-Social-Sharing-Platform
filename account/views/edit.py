@@ -210,15 +210,19 @@ def edit_zone(request):
     :param request:
     :return:
     """
-    instance = get_object_or_404(Account, username=request.user)
-    zone = AccountZone.objects.filter(userId__username=instance.username)
-    if request.method == "POST":
-        zone = request.POST.get("zone")
-        instance.zone = zone
-        instance.save()
-        messages.success(request, "Konumunuz başarıyla güncellendi.")
+    try:
+        instance = Account.objects.get(username=request.user)
+        zone = AccountZone.objects.filter(userId__username=instance.username)
+        if request.method == "POST":
+            zone = request.POST.get("zone")
+            instance.zone = zone
+            instance.save()
+            messages.success(request, "Yaşadığınız şehir başarıyla güncellendi.")
+            return redirect('/ayarlar/')
         return redirect('/ayarlar/')
-    return redirect('/ayarlar/')
+    except:
+        messages.error(request, "Bir sorun oluştu. Lütfen daha sonra tekrar deneyin.")
+        return redirect('/ayarlar/')
 
 
 @login_required(login_url="login_account")
