@@ -24,8 +24,8 @@ def all_courses(request):
     courses_limit = Course.objects.filter(isActive=True).order_by('-createdDate')
     courseComment = CourseComment.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
-    keyword = request.GET.get("keyword")
     categories = Categories.all_categories()
+    keyword = request.GET.get("keyword")
     if keyword:
         courses = Course.objects.filter(
             Q(title__contains=keyword, isActive=True) | Q(creator=keyword, isActive=True) | Q(categoryId=keyword,

@@ -4,15 +4,18 @@ from django.views.generic import DetailView
 
 from account.models import AccountGroup
 from adminpanel.models import SiteSettings
+from ankadescankaya.search import SearchKeyword
 from article.models import ArticleCategory
 from course.models import CourseCategory
 from question.models import QuestionCategory
 
 
 class Categories(DetailView):
-
     @staticmethod
     def all_categories():
+        """
+        :return:
+        """
         articleCategories = ArticleCategory.objects.filter(
             Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True))
         articleSubCategories = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, isCategory=True))
@@ -117,3 +120,41 @@ def privacy_policy(request):
         "courseLowerCategories": categories[8],
     }
     return render(request, "privacy-policy.html", context)
+
+
+def search_keyword(request):
+    """
+    :param request:
+    :return:
+    """
+    articles = SearchKeyword.search_article(request)
+    questions = SearchKeyword.search_question(request)
+    courses = SearchKeyword.search_course(request)
+    schools = SearchKeyword.search_school(request)
+    departments = SearchKeyword.search_department(request)
+    lectures = SearchKeyword.search_lecture(request)
+    exams = SearchKeyword.search_exam(request)
+    accounts = SearchKeyword.search_account(request)
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    context = {
+        "articles": articles,
+        "questions": questions,
+        "courses": courses,
+        "schools": schools,
+        "departments": departments,
+        "lectures": lectures,
+        "exams": exams,
+        "accounts": accounts,
+        "userGroup": userGroup,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "ankades/search.html", context)

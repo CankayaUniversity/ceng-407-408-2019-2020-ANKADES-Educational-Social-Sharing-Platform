@@ -36,7 +36,7 @@ class CourseCategory(models.Model):
 
 class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    courseNumber = models.CharField(unique=True, null=True, blank=True, max_length=32)
+    courseNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
     categoryId = models.ForeignKey(CourseCategory, on_delete=models.CASCADE)
     creator = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=254)

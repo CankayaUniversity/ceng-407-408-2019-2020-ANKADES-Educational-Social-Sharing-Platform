@@ -3,7 +3,7 @@
 {% load static %}
 {% block content %}
     <section class="content">
-        <div class="container-fluid mt-5">
+        <div class="container mt-5">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-sm-12">
@@ -46,17 +46,41 @@
                                 <div class="tab-content" id="custom-tabs-four-tabContent">
                                     <div class="tab-pane fade show active" id="articles" role="tabpanel"
                                          aria-labelledby="articles-tab">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus
-                                        ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non
-                                        magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper
-                                        ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis
-                                        aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                        fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus
-                                        porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est
-                                        vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus
-                                        rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris
-                                        lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia
-                                        erat eget sapien porta consectetur.
+                                        {% if articles %}
+                                            {% for article in articles %}
+                                                <div class="container">
+                                                    <div class="card">
+                                                        <img class="card-img-top" src="{{ article.media.url }}"
+                                                             alt="Card image cap"
+                                                             width="504" height="250">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><a
+                                                                    href="{% url 'article_detail' article.creator article.slug %}">{{ article.title|truncatechars:40 }}</a>
+                                                            </h5>
+                                                            <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <small class="text-muted float-left"><a
+                                                                    href="{% url 'account_detail' article.creator %}">{{ article.creator.get_full_name }}</a></small>
+                                                            <small class="text-muted float-left ml-2">{{ article.createdDate|date:"d.m.Y" }}</small>
+                                                            <small class="text-muted float-right ml-2"><i
+                                                                    class="far fa-comments"></i> {{ article.articlecomment_set.count }}
+                                                            </small>
+                                                            <small class="text-muted ml-2 float-right"><i
+                                                                    class="far fa-thumbs-up"></i> {{ article.likes.count }}
+                                                            </small>
+                                                            <small class="text-muted float-right"><i
+                                                                    class="far fa-eye"></i> {{ article.view }}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <p>Aradığınız kelimeyle eşleşen makale bulunamadı.</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="tab-pane fade" id="questions" role="tabpanel"
                                          aria-labelledby="questions-tab">
@@ -104,10 +128,12 @@
                                     </div>
                                     <div class="tab-pane fade" id="users" role="tabpanel"
                                          aria-labelledby="users-tab">
-                                        Pelledsafadsgdsagdsafdntsag esque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis
+                                        Pelledsafadsgdsagdsafdntsag esque vestibulum commodo nibh nec blandit. Maecenas
+                                        neque magna, iaculis
                                         tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque
                                         tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum
-                                        consecteturdsafdas dolor a vestib dsafdsafulum pharetra. Donec interdum placerat urna nec
+                                        consecteturdsafdas dolor a vestib dsafdsafulum pharetra. Donec interdum placerat
+                                        urna nec
                                         pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam.
                                         Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst.
                                         Praesent imperdiet accumsan ex sit amet facilisis.dsafdasfdasf dsafdasfdsa
@@ -121,3 +147,7 @@
         </div>
     </section>
 {% endblock %}
+{#<div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">#}
+{#    <h5>Üzgünüz :(</h5>#}
+{#    <p>Henüz bir makale paylaşılmamış.</p>#}
+{#</div>#}

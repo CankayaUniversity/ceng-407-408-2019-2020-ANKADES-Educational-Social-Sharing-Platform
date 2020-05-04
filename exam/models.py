@@ -77,6 +77,7 @@ class Exam(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     isActive = models.BooleanField(default=True)
+    title = models.CharField(max_length=254)
     media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
 
     def __str__(self):
