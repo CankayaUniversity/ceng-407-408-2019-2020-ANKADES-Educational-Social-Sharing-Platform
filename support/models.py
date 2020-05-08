@@ -100,4 +100,5 @@ class Report(models.Model):
         ordering = ['-createdDate']
 
 
-pre_save.connect(slug_save, sender=Support)
+pre_save.connect(slug_save, sender=SupportSubject)
+pre_save.connect(slug_save, sender=ReportSubject)
