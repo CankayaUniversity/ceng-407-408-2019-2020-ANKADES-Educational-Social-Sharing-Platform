@@ -16,6 +16,18 @@
                             <form method="post" class="form-control-user" action="{% url 'admin_add_report_subject' %}">
                                 {% csrf_token %}
                                 <div class="form-group">
+                                    <label for="select">Üst Kategorisi*</label>
+                                    <select id="select" class="form-control select2bs4" style="width: 100%;" value="Seçiniz" name="categoryId"
+                                            required>
+                                        <option disabled>Lütfen üst kategori seçiniz</option>
+                                        {% if reportSubjects %}
+                                            {% for category in reportSubjects %}
+                                                <option value="{{ category.id }}">{{ category.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="title">Şikayet Başlığı</label>
                                     <input type="text" id="title" class="form-control" name="title" placeholder="Şikayet Başlığı">
                                 </div>
@@ -32,16 +44,9 @@
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="isRoot" class="custom-control-input"
-                                               id="isRoot">
-                                        <label class="custom-control-label" for="isRoot">Ana Başlık</label>
-                                    </div>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="isCategory" class="custom-control-input"
                                                id="isCategory">
-                                        <label class="custom-control-label" for="isCategory">Alt Başlık</label>
+                                        <label class="custom-control-label" for="isCategory">Üst Başlık</label>
                                     </div>
                                 </div>
                                 <br>

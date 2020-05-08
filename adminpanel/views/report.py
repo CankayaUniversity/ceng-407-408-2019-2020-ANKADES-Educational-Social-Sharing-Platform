@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
 
 from ankadescankaya.views import current_user_group
@@ -30,23 +31,23 @@ def admin_add_report_subject(request):
     :param request:
     :return:
     """
+    reportSubjects = ReportSubject.objects.filter(Q(isCategory=True)).order_by('title')
     userGroup = current_user_group(request, request.user)
     if userGroup == "admin" or userGroup == "moderator":
         if request.method == "POST":
+            value = request.POST['categoryId']
             title = request.POST.get("title")
             description = request.POST.get("description")
             isActive = request.POST.get("isActive") == "on"
-            isRoot = request.POST.get("isRoot") == "on"
             isCategory = request.POST.get("isCategory") == "on"
-            new_report_subject = ReportSubject(title=title, description=description, isActive=isActive, isRoot=isRoot,
+            new_report_subject = ReportSubject(title=title, description=description, isActive=isActive,
                                                isCategory=isCategory)
             new_report_subject.createdDate = datetime.datetime.now()
             new_report_subject.creator = request.user
-            new_report_subject.save()
-            new_report_subject.parentId = new_report_subject
+            new_report_subject.parentId_id = value
             new_report_subject.save()
             messages.success(request, "Şikayet başlığı başarıyla oluşturuldu.")
-        return render(request, "adminpanel/support/add-report-subject.html", {"userGroup": userGroup})
+        return render(request, "adminpanel/support/add-report-subject.html", {"userGroup": userGroup, "reportSubjects": reportSubjects})
     else:
         messages.error(request, "Yetkiniz yok.")
         return redirect("admin_dashboard")
@@ -59,10 +60,10 @@ def admin_all_report_subjects(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    reports = ReportSubject.objects.all()
+    reportSubjects = ReportSubject.objects.all()
     context = {
         "userGroup": userGroup,
-        "reports": reports,
+        "reportSubjects": reportSubjects,
     }
     return render(request, "adminpanel/support/all-report-subjects.html", context)
 
