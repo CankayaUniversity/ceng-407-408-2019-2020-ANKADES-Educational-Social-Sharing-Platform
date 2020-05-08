@@ -1,0 +1,137 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% block title %}Ankacademy | Admin Panel | Course Categories{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kurs Kategorileri</h3>
+                        </div>
+                        <button type="button" class="btn btn-success m-3" data-toggle="modal"
+                                data-target="#modal-default">
+                            Yeni Kategori Ekle
+                        </button>
+                        <div class="card-body">
+                            <table id="article-category" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oluşturan</th>
+                                    <th>Ad</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>Üst Kategori</th>
+                                    <th>İşlemler</th>
+                                    <th>Sil</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if categories %}
+                                    {% for category in categories %}
+                                        <tr>
+                                            <td>{{ category.id }}</td>
+                                            <td>{{ category.creator }}</td>
+                                            <td>{{ category.title }}</td>
+                                            <td>{{ category.createdDate }}</td>
+                                            <td>{% if category.updatedDate == None %}Güncelleme Yapılmamış{% else %}
+                                                {{ category.updatedDate }}{% endif %}</td>
+                                            <td>{{ category.isActive }}</td>
+                                            <td>{{ category.isCategory }}</td>
+                                            <td>
+                                                <a type="button"
+                                                   href="{% url 'admin_isactive_article_category' category.slug %}"
+                                                   class="btn btn-warning">
+                                                    {% if category.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a type="button"
+                                                   href="{% url 'admin_delete_article_category' category.slug %}"
+                                                   class="btn btn-danger">Sil
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oluşturan</th>
+                                    <th>Ad</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>Üst Kategori</th>
+                                    <th>İşlemler</th>
+                                    <th>Sil</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modal-default">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Yeni Kategori Ekle</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form" action="{% url 'admin_add_course_category' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="select">Üst Kategorisi*</label>
+                                                <select id="select" class="form-control select2bs4" style="width: 100%;"
+                                                        value="Seçiniz"
+                                                        required>
+                                                    <option disabled>Lütfen üst kategori seçiniz</option>
+                                                    {% if courseCategory %}
+                                                        {% for category in courseCategory %}
+                                                            <option value="{{ category.title }}">{{ category.title }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Kategori Adı*</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                       placeholder="Kategori Adı">
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="isActive" class="custom-control-input"
+                                                           id="isActive">
+                                                    <label class="custom-control-label"
+                                                           for="isActive">Aktiflik</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="isCategory"
+                                                           class="custom-control-input"
+                                                           id="isCategory">
+                                                    <label class="custom-control-label"
+                                                           for="isCategory">Üst Kategori mi?</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="submit" name="submit" class="btn btn-primary">Kaydet</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

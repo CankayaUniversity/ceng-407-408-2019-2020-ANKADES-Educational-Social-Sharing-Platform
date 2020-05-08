@@ -1,0 +1,84 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | All Courses{% endblock %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kurslar</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="all-courses" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oluşturan</th>
+                                    <th>Kategori</th>
+                                    <th>Ad</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>İşlemler</th>
+                                    {% if userGroup == 'admin' %}
+                                        <th>Sil</th>
+                                    {% endif %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if courses %}
+                                    {% for course in courses %}
+                                        <tr>
+                                            <td>{{ course.id }}</td>
+                                            <td>{{ course.creator }}</td>
+                                            <td>{{ course.categoryId }}</td>
+                                            <td>{{ course.title }}</td>
+                                            <td>{{ course.slug }}</td>
+                                            <td>{{ course.createdDate }}</td>
+                                            <td>{% if course.updatedDate == None %}Güncelleme Yapılmamış{% else %}
+                                                {{ course.updatedDate }}{% endif %}</td>
+                                            <td>{{ course.isActive }}</td>
+                                            <td>
+                                                <a type="button" href="{% url 'admin_isactive_course' course.slug %}"
+                                                   class="btn btn-warning">
+                                                    {% if course.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                </a>
+                                            </td>
+                                            {% if userGroup == 'admin' %}
+                                                <td>
+                                                    <a type="button"
+                                                       href="{% url 'admin_delete_course' course.slug %}"
+                                                       class="btn btn-danger">Sil
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oluşturan</th>
+                                    <th>Kategori</th>
+                                    <th>Ad</th>
+                                    <th>Slug</th>
+                                    <th>Oluşturulduğu Tarihi</th>
+                                    <th>Son Güncelleme</th>
+                                    <th>Aktiflik</th>
+                                    <th>İşlemler</th>
+                                    {% if userGroup == 'admin' %}
+                                        <th>Sil</th>
+                                    {% endif %}
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
