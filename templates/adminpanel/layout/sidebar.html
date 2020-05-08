@@ -33,23 +33,31 @@
                     </a>
                 </li>
                 <li class="nav-header">Navigasyon</li>
-                <li class="nav-item">
-                    <a href="{% url 'admin_add_report_subject' %}" class="nav-link">
-                        <i class="fas fa-headset nav-icon"></i>
-                        <p>Şikayet Başlığı Ekle</p>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-headset"></i>
+                        <p>
+                            Destek
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin_all_report_subjects' %}" class="nav-link">
-                        <i class="fas fa-headset nav-icon"></i>
-                        <p>Şikayet Başlıkları</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin_all_reports' %}" class="nav-link">
-                        <i class="fas fa-headset nav-icon"></i>
-                        <p>Şikayetler</p>
-                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'admin_add_report_subject' %}" class="nav-link">
+                                <p>Şikayet Başlığı Ekle</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'admin_all_report_subjects' %}" class="nav-link">
+                                <p>Şikayet Başlıkları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'admin_all_reports' %}" class="nav-link">
+                                <p>Şikayetler</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
