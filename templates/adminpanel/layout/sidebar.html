@@ -33,6 +33,24 @@
                     </a>
                 </li>
                 <li class="nav-header">Navigasyon</li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_add_report_subject' %}" class="nav-link">
+                        <i class="fas fa-headset nav-icon"></i>
+                        <p>Şikayet Başlığı Ekle</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_all_report_subjects' %}" class="nav-link">
+                        <i class="fas fa-headset nav-icon"></i>
+                        <p>Şikayet Başlıkları</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'admin_all_reports' %}" class="nav-link">
+                        <i class="fas fa-headset nav-icon"></i>
+                        <p>Şikayetler</p>
+                    </a>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-mobile-alt"></i>
@@ -340,12 +358,6 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'admin_add_support_subject' %}" class="nav-link">
-                            <i class="fas fa-headset nav-icon"></i>
-                            <p>Destek Başlığı Ekle</p>
-                        </a>
                     </li>
                 {% endif %}
 

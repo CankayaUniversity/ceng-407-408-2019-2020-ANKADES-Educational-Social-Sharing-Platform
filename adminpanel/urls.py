@@ -3,7 +3,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question, permission, course, school, support, lecture, department
+from adminpanel.views import group, socialmedia, activity, question, permission, course, school, support, lecture, \
+    department, report
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -129,7 +130,9 @@ urlpatterns = [
     # Site Settings
     path('edit-privacy-policy/', views.admin_edit_privacy_policy, name="admin_edit_privacy_policy"),
     path('edit-terms-of-use/', views.admin_edit_terms_of_use, name="admin_edit_terms_of_use"),
-    path('add-support-subject/', support.admin_add_support_subject, name="admin_add_support_subject"),
+    path('all-reports/', report.admin_all_reports, name="admin_all_reports"),
+    path('add-report-subject/', report.admin_add_report_subject, name="admin_add_report_subject"),
+    path('all-report-subjects/', report.admin_all_report_subjects, name="admin_all_report_subjects"),
 ]
 
 if settings.DEBUG:

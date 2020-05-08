@@ -1,5 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Admin Panel | Add Support Subject{% endblock %}
+{% block title %}Ankacademy | Admin Panel | Add Report Subject{% endblock %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 {% load static %}
@@ -10,14 +10,14 @@
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Destek Başlığı Ekle</h3>
+                            <h3 class="card-title">Şikayet Başlığı Ekle</h3>
                         </div>
                         <div class="card-body">
-                            <form method="post" class="form-control-user" action="{% url 'admin_add_support_subject' %}">
+                            <form method="post" class="form-control-user" action="{% url 'admin_add_report_subject' %}">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <label for="title">Konu Başlığı</label>
-                                    <input type="text" id="title" class="form-control" name="title" placeholder="Konu Başlığı">
+                                    <label for="title">Şikayet Başlığı</label>
+                                    <input type="text" id="title" class="form-control" name="title" placeholder="Şikayet Başlığı">
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Açıklama</label>

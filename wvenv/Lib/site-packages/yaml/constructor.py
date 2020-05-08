@@ -72,7 +72,7 @@ class BaseConstructor:
             constructor = self.yaml_constructors[node.tag]
         else:
             for tag_prefix in self.yaml_multi_constructors:
-                if node.tag.startswith(tag_prefix):
+                if tag_prefix is not None and node.tag.startswith(tag_prefix):
                     tag_suffix = node.tag[len(tag_prefix):]
                     constructor = self.yaml_multi_constructors[tag_prefix]
                     break
@@ -324,22 +324,23 @@ class SafeConstructor(BaseConstructor):
         minute = int(values['minute'])
         second = int(values['second'])
         fraction = 0
+        tzinfo = None
         if values['fraction']:
             fraction = values['fraction'][:6]
             while len(fraction) < 6:
                 fraction += '0'
             fraction = int(fraction)
-        delta = None
         if values['tz_sign']:
             tz_hour = int(values['tz_hour'])
             tz_minute = int(values['tz_minute'] or 0)
             delta = datetime.timedelta(hours=tz_hour, minutes=tz_minute)
             if values['tz_sign'] == '-':
                 delta = -delta
-        data = datetime.datetime(year, month, day, hour, minute, second, fraction)
-        if delta:
-            data -= delta
-        return data
+            tzinfo = datetime.timezone(delta)
+        elif values['tz']:
+            tzinfo = datetime.timezone.utc
+        return datetime.datetime(year, month, day, hour, minute, second, fraction,
+                                 tzinfo=tzinfo)
 
     def construct_yaml_omap(self, node):
         # Note: we do not check for duplicate keys, because it's too
@@ -513,7 +514,7 @@ class FullConstructor(SafeConstructor):
             except ImportError as exc:
                 raise ConstructorError("while constructing a Python module", mark,
                         "cannot find module %r (%s)" % (name, exc), mark)
-        if not name in sys.modules:
+        if name not in sys.modules:
             raise ConstructorError("while constructing a Python module", mark,
                     "module %r is not imported" % name, mark)
         return sys.modules[name]
@@ -533,7 +534,7 @@ class FullConstructor(SafeConstructor):
             except ImportError as exc:
                 raise ConstructorError("while constructing a Python object", mark,
                         "cannot find module %r (%s)" % (module_name, exc), mark)
-        if not module_name in sys.modules:
+        if module_name not in sys.modules:
             raise ConstructorError("while constructing a Python object", mark,
                     "module %r is not imported" % module_name, mark)
         module = sys.modules[module_name]
@@ -585,7 +586,7 @@ class FullConstructor(SafeConstructor):
             elif state:
                 slotstate.update(state)
             for key, value in slotstate.items():
-                setattr(object, key, value)
+                setattr(instance, key, value)
 
     def construct_python_object(self, suffix, node):
         # Format:

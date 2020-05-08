@@ -1,0 +1,114 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Ankacademy | Reports{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tüm Kullanıcı Şikayetleri</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="account-logs" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Konu</th>
+                                    <th>Paylaşım Numarası</th>
+                                    <th>Şikayet Numarası</th>
+                                    <th>Şikayet Mesaj</th>
+                                    <th>Şikayet Oluşturan</th>
+                                    <th>Çözülme</th>
+                                    <th>Okunma</th>
+                                    <th>Aktiflik</th>
+                                    <th>Oluşturulma</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if reports %}
+                                    {% for report in reports %}
+                                        <tr>
+                                            <td>{{ report.subjectId.title }}</td>
+                                            <td>{{ report.postNumber }}</td>
+                                            <td>{{ report.reportNumber }}</td>
+                                            <td>{{ report.displayMessage }}</td>
+                                            <td>{{ report.creator }}</td>
+                                            <td>{{ report.isSolved }}</td>
+                                            <td>{{ report.isRead }}</td>
+                                            <td>{{ report.isActive }}</td>
+                                            <td>{{ report.createdDate }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tfoot>
+                                <tr>
+                                    <th>Konu</th>
+                                    <th>Paylaşım Numarası</th>
+                                    <th>Şikayet Numarası</th>
+                                    <th>Şikayet Mesaj</th>
+                                    <th>Şikayet Oluşturan</th>
+                                    <th>Çözülme</th>
+                                    <th>Okunma</th>
+                                    <th>Aktiflik</th>
+                                    <th>Oluşturulma</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{#            <div class="row">#}
+{#                <div class="col-12">#}
+{#                    <div class="card">#}
+{#                        <div class="card-header">#}
+{#                            <h3 class="card-title">Aktif Kullanıcı Şikayetleri</h3>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <table id="account-logs" class="table table-bordered table-striped">#}
+{#                                <thead>#}
+{#                                <tr>#}
+{#                                    <th>ID</th>#}
+{#                                    <th>Kişi</th>#}
+{#                                    <th>Başlık</th>#}
+{#                                    <th>Uygulama</th>#}
+{#                                    <th>Metod</th>#}
+{#                                    <th>Description</th>#}
+{#                                    <th>Oluşturulduğu Tarih</th>#}
+{#                                </tr>#}
+{#                                </thead>#}
+{#                                <tbody>#}
+{#                                {% if accountLogs %}#}
+{#                                    {% for accLog in accountLogs %}#}
+{#                                        <tr>#}
+{#                                            <td>{{ accLog.id }}</td>#}
+{#                                            <td>{{ accLog.creator }}</td>#}
+{#                                            <td>{{ accLog.title }}</td>#}
+{#                                            <td>{{ accLog.application }}</td>#}
+{#                                            <td>{{ accLog.method }}</td>#}
+{#                                            <td>{{ accLog.description }}</td>#}
+{#                                            <td>{{ accLog.createdDate }}</td>#}
+{#                                        </tr>#}
+{#                                    {% endfor %}#}
+{#                                {% endif %}#}
+{#                                <tfoot>#}
+{#                                <tr>#}
+{#                                    <th>ID</th>#}
+{#                                    <th>Kişi</th>#}
+{#                                    <th>Başlık</th>#}
+{#                                    <th>Uygulama</th>#}
+{#                                    <th>Metod</th>#}
+{#                                    <th>Description</th>#}
+{#                                    <th>Oluşturulduğu Tarih</th>#}
+{#                                </tr>#}
+{#                                </tfoot>#}
+{#                            </table>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+        </div>
+    </section>
+{% endblock %}

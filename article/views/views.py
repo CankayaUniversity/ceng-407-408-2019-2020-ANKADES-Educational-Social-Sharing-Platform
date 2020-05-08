@@ -286,9 +286,9 @@ def add_report_article(request, postNumber):
             description = request.POST.get("description")
             new_report = Report(description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
             new_report.creator = request.user
-            new_report.supportNumber = get_random_string(length=32)
+            new_report.reportNumber = get_random_string(length=32)
             new_report.title = "Kullanıcı Şikayeti"
-            new_report.post = postNumber
+            new_report.postNumber = postNumber
             new_report.displayMessage = str(new_report.creator.get_full_name()) + " adlı kullanıcı makale için şikayette bulundu. Makale numarası: " + postNumber
             new_report.save()
             messages.success(request, "Şikayetiniz başarıyla gönderildi. En kısa sürede tarafınıza geri dönüş sağlanacaktır.")
