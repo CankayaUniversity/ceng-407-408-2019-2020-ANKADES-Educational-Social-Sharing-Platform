@@ -53,6 +53,7 @@ urlpatterns = [
          name="admin_delete_question_category"),
     path('add-question-category/', question.admin_add_question_category,
          name="admin_add_question_category"),
+    path('edit-question/<slug:slug>/', question.admin_edit_question, name="admin_edit_question"),
 
 
     # Course

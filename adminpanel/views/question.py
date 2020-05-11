@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
 from ankadescankaya.views.views import current_user_group
+from question.forms import EditQuestionForm
 from question.models import QuestionCategory, Question
 
 
@@ -178,3 +179,36 @@ def admin_all_questions(request):
     }
     return render(request, "adminpanel/question/all-questions.html", context)
 
+
+@login_required(login_url="login_admin")
+def admin_edit_question(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=False))
+    instance = Question.objects.get(slug=slug)
+    form = EditQuestionForm(request.POST or None, instance=instance)
+    context = {
+        "questionCategory": questionCategory,
+        "userGroup": userGroup,
+        "form": form,
+        "instance": instance,
+    }
+    if request.method == "POST":
+        value = request.POST['categoryId']
+        title = request.POST.get("title")
+        isActive = request.POST.get("isActive") == "on"
+        if form.is_valid():
+            description = form.cleaned_data.get("description")
+        instance.isActive = isActive
+        instance.title = title
+        instance.categoryId_id = value
+        instance.isActive = isActive
+        instance.updatedDate = datetime.datetime.now()
+        instance.save()
+        messages.success(request, "Makale başarıyla düzenlendi !")
+        return redirect("admin_all_articles")
+    return render(request, "adminpanel/question/edit-question.html", context)
