@@ -5,6 +5,8 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
+from django.utils import timezone
+
 from ankadescankaya.slug import slug_save
 from ankadescankaya.storage_backends import UserMediaStorage
 
@@ -215,22 +217,23 @@ class AccountLogs(models.Model):
         ordering = ['-createdDate']
 
 
-class Notification(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE)
-    title = models.CharField(max_length=254)
-    application = models.CharField(max_length=254)
-    description = models.CharField(max_length=254)
-    createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(null=True, blank=True)
-    isActive = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.id
-
-    class Meta:
-        db_table = "Notification"
-        ordering = ['-createdDate']
+# class Notification(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     creator = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="creator")
+#     target = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="subject")
+#     title = models.CharField(max_length=254)
+#     application = models.CharField(max_length=254)
+#     description = models.CharField(max_length=254)
+#     created = models.DateTimeField(auto_now_add=True)
+#     isRead = models.BooleanField(default=True)
+#     notifyLink = models.CharField(max_length=254)
+#
+#     def __str__(self):
+#         return self.notifyLink
+#
+#     class Meta:
+#         db_table = "Notification"
+#         ordering = ['-created']
 
 
 class Skill(models.Model):

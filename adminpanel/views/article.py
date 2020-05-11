@@ -89,14 +89,14 @@ def admin_add_article_category(request):
                 instance.creator = request.user
                 instance.parentId_id = value
                 instance.save()
-                messages.success(request, "Makale kategorisi başarıyla eklendi !")
+                messages.success(request, "Makale kategorisi başarıyla eklendi.")
                 return redirect("admin_add_article_category")
             except:
                 instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
                 instance.parentId_id = value
                 instance.save()
-                messages.success(request, "Makale kategorisi başarıyla eklendi !")
+                messages.success(request, "Makale kategorisi başarıyla eklendi.")
                 return redirect("admin_add_article_category")
         return render(request, "adminpanel/article/add-category.html", context)
     else:

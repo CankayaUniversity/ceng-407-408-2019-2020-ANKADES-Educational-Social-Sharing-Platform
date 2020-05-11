@@ -4,6 +4,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.db.models.signals import pre_save
+from django.utils import timezone
 from rest_framework.reverse import reverse
 
 from account.models import Account
@@ -15,11 +16,11 @@ from ankadescankaya.storage_backends import ArticleMediaStorage
 class ArticleCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=254, unique=True)
+    title = models.CharField(max_length=254)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = models.TextField(null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(null=True, blank=True)
+    updatedDate = models.DateTimeField(null=True, blank=True, default=timezone.now)
     parentId = models.ForeignKey('self', on_delete=models.SET_NULL, null=True)
     isRoot = models.BooleanField(default=False)
     tree = ArrayField(JSONField(default=dict), max_length=200, blank=True, default=list)

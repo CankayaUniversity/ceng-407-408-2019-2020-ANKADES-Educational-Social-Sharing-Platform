@@ -22,30 +22,33 @@ def admin_add_question_category(request):
         "userGroup": userGroup,
         "questionCategory": questionCategory,
     }
-    if userGroup == 'admin':
+    if userGroup == 'admin' or userGroup == "moderator":
         if request.method == "POST":
-            categoryId = request.POST["categoryId"]
+            value = request.POST['categoryId']
             title = request.POST.get("title")
             isActive = request.POST.get("isActive") == "on"
             isCategory = request.POST.get("isCategory") == "on"
             try:
                 getTitle = QuestionCategory.objects.get(title=title)
-                if title:
-                    error = title + " isimli kategori " + getTitle.parentId.title + " kategorisinde zaten mevcut."
-                    messages.error(request, error)
+                if getTitle.parentId_id == value:
+                    messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
                     return redirect("admin_add_question_category")
-            except:
-                instance = QuestionCategory(title=title, isActive=isActive,
-                                            isCategory=isCategory)
+                instance = QuestionCategory(title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
-                instance.parentId_id = categoryId
+                instance.parentId_id = value
                 instance.save()
-                messages.success(request, "Soru kategorisi başarıyla eklendi !")
-                return redirect("admin_question_categories")
+                messages.success(request, "Makale kategorisi başarıyla eklendi.")
+                return redirect("admin_add_question_category")
+            except:
+                instance = QuestionCategory(title=title, isActive=isActive, isCategory=isCategory)
+                instance.creator = request.user
+                instance.parentId_id = value
+                instance.save()
+                messages.success(request, "Makale kategorisi başarıyla eklendi.")
+                return redirect("admin_add_question_category")
         return render(request, "adminpanel/question/add-category.html", context)
     else:
-        messages.error(request, "Yetkiniz yok!")
-        return redirect("admin_dashboard")
+        return redirect("index")
 
 
 @login_required(login_url="login_admin")
