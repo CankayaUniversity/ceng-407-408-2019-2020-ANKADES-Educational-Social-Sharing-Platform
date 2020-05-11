@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from account.models import AccountLogs
-from ankadescankaya.views import current_user_group
 from adminpanel.models import AdminLogs
+from ankadescankaya.views.views import current_user_group
 
 
 @login_required(login_url="login_admin")

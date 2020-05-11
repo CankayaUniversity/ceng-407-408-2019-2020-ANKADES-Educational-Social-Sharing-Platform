@@ -3,7 +3,7 @@ import datetime
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group
 from exam.models import School, Department
 
 

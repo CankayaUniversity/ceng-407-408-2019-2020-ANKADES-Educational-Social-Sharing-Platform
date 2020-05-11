@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.crypto import get_random_string
 
-from ankadescankaya.views import current_user_group, Categories
+from ankadescankaya.views.views import current_user_group, Categories
 from exam.models import Department, School
 
 

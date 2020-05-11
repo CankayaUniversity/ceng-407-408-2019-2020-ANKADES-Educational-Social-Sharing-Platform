@@ -3,8 +3,7 @@ from django.shortcuts import render, redirect
 
 from account.models import Account, AccountFollower
 from account.views.views import get_user_follower
-from ankadescankaya.views import current_user_group
-from ankadescankaya.views import Categories
+from ankadescankaya.views.views import current_user_group, Categories
 from article.models import Article
 from course.models import Course
 from question.models import Question

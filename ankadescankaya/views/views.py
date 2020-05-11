@@ -4,7 +4,7 @@ from django.views.generic import DetailView
 
 from account.models import AccountGroup
 from adminpanel.models import SiteSettings
-from ankadescankaya.search import SearchKeyword
+from ankadescankaya.views.search import SearchKeyword
 from article.models import ArticleCategory
 from course.models import CourseCategory
 from question.models import QuestionCategory

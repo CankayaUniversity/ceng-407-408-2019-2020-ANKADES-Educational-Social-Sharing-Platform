@@ -8,8 +8,7 @@ from rest_framework.generics import get_object_or_404
 
 from account.models import Account, AccountSocialMedia, SocialMedia, AccountFollower, AccountZone
 from account.views.views import get_social_media, get_user_follower
-from ankadescankaya.views import Categories
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group, Categories
 
 
 @login_required(login_url="login_account")

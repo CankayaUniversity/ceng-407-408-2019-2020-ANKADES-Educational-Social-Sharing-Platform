@@ -13,8 +13,7 @@ from django.views.generic import RedirectView
 from rest_framework import viewsets
 
 from ankadescankaya.slug import slug_save
-from ankadescankaya.views import Categories
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group, Categories
 from article.forms import EditArticleForm, ArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer

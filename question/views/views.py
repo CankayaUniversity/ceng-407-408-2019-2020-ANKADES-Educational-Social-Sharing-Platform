@@ -9,8 +9,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 
-from ankadescankaya.views import Categories
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group, Categories
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
 from support.models import Report

@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from rest_framework.generics import get_object_or_404
 
 from account.models import SocialMedia
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group
 
 
 @login_required(login_url="login_admin")

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from adminpanel.views import group, socialmedia, activity, question, permission, course, school, support, lecture, \
+from adminpanel.views import group, socialmedia, activity, question, permission, course, school, lecture, \
     department, report
 from adminpanel.views import views, account, article
 
@@ -83,6 +83,8 @@ urlpatterns = [
     path('add-permission/', permission.admin_add_permission, name="admin_add_permission"),
     path('delete-permission/<slug:slug>/', permission.admin_delete_permission, name="admin_delete_permission"),
     path('isactive-permission/<slug:slug>/', permission.admin_isactive_permission, name="admin_isactive_permission"),
+
+    path('add-user-permission/', permission.admin_add_account_permission, name="admin_add_account_permission"),
 
     # Article
     path('articles/', article.admin_all_articles, name="admin_all_articles"),

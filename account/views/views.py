@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, SocialMedia, AccountFollower
-from ankadescankaya.views import Categories, current_user_group
+from ankadescankaya.views.views import Categories, current_user_group
 from article.models import Article
 from course.models import Course
 from question.models import Question
@@ -25,8 +25,10 @@ def index(request):
         followers = AccountFollower.objects.filter(followingId__username=instance.username) # takipçiler
         followings = AccountFollower.objects.filter(followerId__username=request.user.username) # takip edilen
         articles = Article.objects.filter(isActive=True)
+        questions = Question.objects.filter(isActive=True)
         context = {
             "articles": articles,
+            "questions": questions,
             "userGroup": userGroup,
             "existFollower": existFollower,
             "followers": followers,

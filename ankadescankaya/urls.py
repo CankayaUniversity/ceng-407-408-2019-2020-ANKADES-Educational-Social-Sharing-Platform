@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 from account.views import views as account_view
-from ankadescankaya import views as main_view
+from ankadescankaya.views import views as main_view
 
 urlpatterns = [
     path('api/', include("api.urls")),

@@ -9,7 +9,7 @@ from online_users.models import OnlineUserActivity
 
 from account.models import Account
 from adminpanel.forms import SiteSettingsForm
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group
 from adminpanel.models import Tag, SiteSettings
 from article.models import Article
 from course.models import Course

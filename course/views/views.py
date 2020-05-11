@@ -9,8 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 
-from ankadescankaya.views import Categories
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group, Categories
 from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm
 from course.models import Course, CourseComment, CourseCategory
 

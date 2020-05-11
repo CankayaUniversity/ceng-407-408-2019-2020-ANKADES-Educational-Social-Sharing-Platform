@@ -6,7 +6,7 @@ from online_users.models import OnlineUserActivity
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, Permission, AccountPermission
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group
 
 
 @login_required(login_url="login_admin")

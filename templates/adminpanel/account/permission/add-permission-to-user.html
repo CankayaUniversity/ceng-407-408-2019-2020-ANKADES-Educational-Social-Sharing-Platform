@@ -9,7 +9,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Grup Ekle</h3>
                     </div>
-                    <form role="form" action="{% url 'admin_add_group_to_user' %}" method="post">
+                    <form role="form" action="{% url 'admin_add_permission_to_user' %}" method="post">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">

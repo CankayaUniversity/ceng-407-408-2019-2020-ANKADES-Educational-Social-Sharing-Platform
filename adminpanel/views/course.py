@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group
 from course.models import CourseCategory, Course
 
 

@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from rest_framework.generics import get_object_or_404
 
-from ankadescankaya.views import current_user_group
+from ankadescankaya.views.views import current_user_group
 from article.forms import ArticleForm
 from article.models import Article, ArticleCategory
 
