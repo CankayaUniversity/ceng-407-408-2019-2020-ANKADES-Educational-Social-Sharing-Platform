@@ -1,5 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Edit Social Media{% endblock %}
+{% block title %}Ankacademy | Edit Article{% endblock %}
 {% load static %}
 {% block content %}
     <div class="container">
@@ -9,36 +9,64 @@
                     <div class="card-header">
                         <h3 class="card-title">{{ instance.title }}</h3>
                     </div>
-                    <form role="form" enctype="multipart/form-data" action="{% url 'admin_edit_social_media' instance.slug %}" method="post">
+                    <form role="form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="title">Sosyal Medya Adı</label>
-                                <input type="text" name="title" class="form-control" id="title"
-                                       placeholder="Sosyal Medya Adı" required value="{{ instance.title }}">
+                                <label for="categoryId">Kategori*</label>
+                                <select class="form-control select2bs4" style="width: 100%;" name="categoryId"
+                                        id="categoryId"
+                                        required>
+                                    <option disabled>Lütfen bir kategori seçiniz</option>
+                                    <option selected value="{{ instance.categoryId_id }}">{{ instance.categoryId.title }}</option>
+                                    {% if articleCategory %}
+                                        {% for category in articleCategory %}
+                                            <option value="{{ category.id }}">{{ category.title }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Başlık*</label>
+                                <input type="text" id="title" class="form-control" name="title"
+                                       value="{{ instance.title }}">
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control">
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="isPrivate" value="{{ instance.isPrivate }}"
+                                           class="custom-control-input" id="isPrivate">
+                                    <label class="custom-control-label" for="isPrivate">Özellik</label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="isActive" value="{{ instance.isActive }}"
+                                           class="custom-control-input" id="isActive">
+                                    <label class="custom-control-label" for="isActive">Aktiflik</label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputFile">Dosya Seçin</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="media" id="exampleInputFile">
-                                        <label class="custom-file-label" for="exampleInputFile">{% if instance.media %}{{ instance.media }}{% endif %}</label>
+                                        <input type="file" class="custom-file-input" name="media"
+                                               value="{{ instance.media.url }}"
+                                               id="media">
+                                        <label class="custom-file-label" for="media">{{ instance.media }}</label>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="">Yükle</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group mb-0">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox"  name="isActive" class="custom-control-input"
-                                           id="exampleCheck1" {% if instance.isActive is True %}checked{% endif %}>
-                                    <label class="custom-control-label" for="exampleCheck1">Aktiflik</label>
-                                </div>
-                            </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
                         </div>
                     </form>
                 </div>

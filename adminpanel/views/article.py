@@ -4,11 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
+from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
+from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group
-from article.forms import ArticleForm
+from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory
 
 
@@ -60,6 +63,57 @@ def admin_delete_article(request, slug):
 
 
 @login_required(login_url="login_admin")
+def admin_edit_article(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
+    try:
+        instance = Article.objects.get(slug=slug)
+        if userGroup == "admin" or userGroup == "moderator":
+            form = EditArticleForm(request.POST or None, instance=instance)
+            description = instance.description
+            if instance.creator == request.user:
+                if request.method == "POST":
+                    value = request.POST['id']
+                    title = request.POST.get("title")
+                    isPrivate = request.POST.get("isPrivate") == "on"
+                    if form.is_valid():
+                        description = form.cleaned_data.get("description")
+                    if request.FILES:
+                        if instance.media:
+                            instance.media = None
+                        media = request.FILES.get('media')
+                        fs = FileSystemStorage()
+                        fs.save(media.name, media)
+                        instance.media = media
+                    instance.title = title
+                    instance.isPrivate = isPrivate
+                    instance.description = description
+                    instance.creator = request.user
+                    instance.categoryId_id = value
+                    instance.updatedDate = datetime.datetime.now()
+                    instance.isActive = False
+                    instance.save()
+                    pre_save.connect(slug_save, sender=admin_edit_article)
+                    messages.success(request, "Makale başarıyla güncellendi.")
+                    return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
+                context = {
+                    "instance": instance,
+                    "articleCategory": articleCategory,
+                    "userGroup": userGroup,
+                    "form": form,
+                }
+                return render(request, "adminpanel/article/edit-article.html", context)
+            return redirect("admin_all_articles")
+    except:
+        return redirect("404")
+
+
+@login_required(login_url="login_admin")
 def admin_add_article_category(request):
     """
     :param request:
@@ -108,11 +162,12 @@ def admin_edit_article(request, slug):
     userGroup = current_user_group(request, request.user)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     instance = Article.objects.get(slug=slug)
-    form = ArticleForm(request.POST or None)
+    form = EditArticleForm(request.POST or None, instance=instance)
     context = {
         "articleCategory": articleCategory,
         "userGroup": userGroup,
         "form": form,
+        "instance": instance,
     }
     if request.method == "POST":
         value = request.POST['categoryId']
@@ -124,6 +179,7 @@ def admin_edit_article(request, slug):
         instance.isActive = isActive
         instance.title = title
         instance.categoryId_id = value
+        instance.isPrivate = isPrivate
         instance.updatedDate = datetime.datetime.now()
         if request.FILES:
             media = request.FILES.get('media')

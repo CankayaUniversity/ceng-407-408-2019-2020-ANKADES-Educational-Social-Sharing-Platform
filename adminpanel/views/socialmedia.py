@@ -60,12 +60,8 @@ def admin_edit_social_media(request, slug):
     if request.method == "POST" and request.FILES['media']:
         title = request.POST.get('title')
         isActive = request.POST.get("isActive") == 'on'
-        media = request.FILES['media']
         instance.title = title
         instance.isActive = isActive
-        instance.media = media
-        fs = FileSystemStorage()
-        fs.save(media.name, media)
         instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Sosyal Medya başarıyla güncellendi.")

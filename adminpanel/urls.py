@@ -90,6 +90,7 @@ urlpatterns = [
     path('articles/', article.admin_all_articles, name="admin_all_articles"),
     path('isactive-article/<slug:slug>/', article.admin_isactive_article, name="admin_isactive_article"),
     path('delete-article/<slug:slug>/', article.admin_delete_article, name="admin_delete_article"),
+    path('edit-article/<slug:slug>/', article.admin_edit_article, name="admin_edit_article"),
 
     # Tag
     path('tags/', views.admin_tags, name="admin_tags"),

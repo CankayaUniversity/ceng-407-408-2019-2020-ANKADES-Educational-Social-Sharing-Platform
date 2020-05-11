@@ -14,7 +14,7 @@ from rest_framework import viewsets
 
 from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group, Categories
-from article.forms import EditArticleForm, ArticleForm
+from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
 from support.models import Report
@@ -172,7 +172,7 @@ def add_article(request):
     return render(request, "ankades/article/add-article.html", context)
 
 
-@login_required(login_url="login_admin")
+@login_required(login_url="login_account")
 def edit_article(request, slug):
     """
     :param request:
