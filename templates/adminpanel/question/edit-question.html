@@ -1,0 +1,55 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | Edit Article{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ instance.title }}</h3>
+                    </div>
+                    <form role="form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="categoryId">Kategori*</label>
+                                <select class="form-control select2bs4" style="width: 100%;" name="categoryId"
+                                        id="categoryId"
+                                        required>
+                                    <option disabled>Lütfen bir kategori seçiniz</option>
+                                    <option selected value="{{ instance.categoryId_id }}">{{ instance.categoryId.title }}</option>
+                                    {% if articleCategory %}
+                                        {% for category in articleCategory %}
+                                            <option value="{{ category.id }}">{{ category.title }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Başlık*</label>
+                                <input type="text" id="title" class="form-control" name="title"
+                                       value="{{ instance.title }}">
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control">
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="isActive" value="{{ instance.isActive }}"
+                                           class="custom-control-input" id="isActive">
+                                    <label class="custom-control-label" for="isActive">Aktiflik</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,6 +3,7 @@ from django import forms
 from django.db.models import Q
 
 from article.models import Article, ArticleCategory
+from question.models import Question
 
 
 class ArticleForm(forms.Form):

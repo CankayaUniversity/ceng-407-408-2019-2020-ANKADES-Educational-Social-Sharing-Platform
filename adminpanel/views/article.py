@@ -59,7 +59,7 @@ def admin_delete_article(request, slug):
             return redirect("admin_all_articles")
     else:
         messages.error(request, "Yetkiniz Yok.")
-        return redirect("all_articles")
+        return redirect("admin_all_articles")
 
 
 @login_required(login_url="login_admin")
@@ -74,7 +74,7 @@ def admin_add_article_category(request):
         "userGroup": userGroup,
         "articleCategory": articleCategory
     }
-    if userGroup == 'admin':
+    if userGroup == 'admin' or userGroup == "moderator":
         if request.method == "POST":
             value = request.POST['categoryId']
             title = request.POST.get("title")
@@ -85,19 +85,59 @@ def admin_add_article_category(request):
                 if getTitle.parentId_id == value:
                     messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
                     return redirect("admin_add_article_category")
-                return render(request, "adminpanel/article/add-category.html", context)
+                instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
+                instance.creator = request.user
+                instance.parentId_id = value
+                instance.save()
+                messages.success(request, "Makale kategorisi başarıyla eklendi !")
+                return redirect("admin_add_article_category")
             except:
                 instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
                 instance.creator = request.user
-                # jsonField = {"childId": instance.id}
-                # instance.parentId.tree = json.dumps(jsonField)ç
                 instance.parentId_id = value
                 instance.save()
                 messages.success(request, "Makale kategorisi başarıyla eklendi !")
                 return redirect("admin_add_article_category")
         return render(request, "adminpanel/article/add-category.html", context)
     else:
-        messages.error(request, "Yetkiniz yok!")
+        return redirect("index")
+
+
+@login_required(login_url="login_admin")
+def admin_edit_article_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True)).order_by('title')
+    userGroup = current_user_group(request, request.user)
+    try:
+        instance = ArticleCategory.objects.get(slug=slug)
+        if userGroup == 'admin' or userGroup == "moderator":
+            if request.method == "POST":
+                value = request.POST['categoryId']
+                title = request.POST.get("title")
+                isActive = request.POST.get("isActive") == "on"
+                isCategory = request.POST.get("isCategory") == "on"
+                if instance.parentId_id != value:
+                    instance.parentId_id = value
+                    instance.title = title
+                    instance.isActive = isActive
+                    instance.isCategory = isCategory
+                    pre_save.connect(slug_save, sender=ArticleCategory)
+                    instance.save()
+                    messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
+                    return redirect("admin_article_categories")
+                return redirect("admin_article_categories")
+            context = {
+                "userGroup": userGroup,
+                "articleCategory": articleCategory,
+                "instance": instance,
+            }
+            return render(request, "adminpanel/article/edit-category.html", context)
+    except:
+        messages.error(request, "Makale kategorisi bulunamadı.")
         return redirect("admin_article_categories")
 
 

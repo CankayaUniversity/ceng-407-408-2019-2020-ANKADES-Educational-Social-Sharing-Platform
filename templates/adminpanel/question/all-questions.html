@@ -45,6 +45,10 @@
                                                    class="btn btn-warning">
                                                     {% if question.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
+                                                <a type="button" href="{% url 'admin_edit_question' question.slug %}"
+                                                   class="btn btn-success">
+                                                    Düzenle
+                                                </a>
                                             </td>
                                             <td>
                                                 <a type="button" href="{% url 'admin_delete_question' question.slug %}"

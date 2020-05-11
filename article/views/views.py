@@ -166,6 +166,7 @@ def add_article(request):
         instance.creator = request.user
         instance.categoryId_id = value
         instance.isActive = True
+        instance.postNumber = get_random_string(length=32)
         instance.save()
         messages.success(request, "Makale başarıyla eklendi !")
         return redirect("index")

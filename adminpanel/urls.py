@@ -103,6 +103,8 @@ urlpatterns = [
         name="admin_isactive_article_category"),
     path('delete-article-category/<slug:slug>/', article.admin_delete_article_category,
          name="admin_delete_article_category"),
+    path('edit-article-category/<slug:slug>/', article.admin_edit_article_category,
+         name="admin_edit_article_category"),
     path('add-article-category/', article.admin_add_article_category,
          name="admin_add_article_category"),
 

@@ -14,7 +14,7 @@
                             <table id="all-articles" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Paylaşım No</th>
                                     <th>Oluşturan</th>
                                     <th>Kategori</th>
                                     <th>Ad</th>
@@ -32,7 +32,7 @@
                                 {% if articles %}
                                     {% for article in articles %}
                                         <tr>
-                                            <td>{{ article.id }}</td>
+                                            <td>{{ article.postNumber }}</td>
                                             <td>{{ article.creator }}</td>
                                             <td>{{ article.categoryId }}</td>
                                             <td>{{ article.title }}</td>
@@ -64,7 +64,7 @@
                                 {% endif %}
                                 <tfoot>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Paylaşım No</th>
                                     <th>Oluşturan</th>
                                     <th>Kategori</th>
                                     <th>Ad</th>

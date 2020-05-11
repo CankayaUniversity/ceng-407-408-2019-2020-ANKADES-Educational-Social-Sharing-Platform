@@ -47,6 +47,11 @@
                                                    class="btn btn-warning">
                                                     {% if category.isActive %}Kapat{% else %}Aktifleştir{% endif %}
                                                 </a>
+                                                <a type="button"
+                                                   href="{% url 'admin_edit_article_category' category.slug %}"
+                                                   class="btn btn-success">
+                                                    Güncelle
+                                                </a>
                                             </td>
                                             <td>
                                                 <a type="button"
