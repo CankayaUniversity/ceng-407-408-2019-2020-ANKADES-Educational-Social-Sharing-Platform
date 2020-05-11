@@ -4,6 +4,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ankadescankaya.views.views import current_user_group
 from question.models import Question
 
 
@@ -30,5 +31,20 @@ class QuestionLikeAPIToggle(APIView):
         data = {
             "updated": updated,
             "liked": liked
+        }
+        return Response(data)
+
+
+class QuestionDetailAPIToggle(APIView):
+
+    @swagger_auto_schema(operation_summary="Get question by given slug and postNumber")
+    def get(self, request, slug=None, postNumber=None, format=None):
+        slug = self.kwargs.get("slug")
+        postNumber = self.kwargs.get("postNumber")
+        obj = get_object_or_404(Question, slug=slug, postNumber=postNumber)
+        userGroup = current_user_group(request, request.user)
+        data = {
+            "obj": obj,
+            "userGroup": userGroup,
         }
         return Response(data)

@@ -7,9 +7,9 @@ from rest_framework import permissions, routers
 
 from ankadescankaya import settings
 from api.views.v1.account import AccountRegistrationView, AccountLoginAPIView
-from api.views.v1.article import ArticleLikeAPIToggle
+from api.views.v1.article import ArticleLikeAPIToggle, ArticleDetailAPIToggle, ArticleListAPIView
 from api.views.v1.group import IsActiveGroupAPIToggle
-from api.views.v1.question import QuestionLikeAPIToggle
+from api.views.v1.question import QuestionLikeAPIToggle, QuestionDetailAPIToggle
 
 router = routers.SimpleRouter()
 
@@ -25,13 +25,13 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
-
-
+app_name = "api"
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='ankades')),
     url(r'^', include(router.urls)),
-    url(r'^Article/(?P<username>[\w-]+)/(?P<slug>[\w-]+)/Like/$', ArticleLikeAPIToggle.as_view(), name="article-like-api-toggle"),
+
+    # Account
     url(r'^Account/Group/(?P<slug>[\w-]+)/IsActive/$', IsActiveGroupAPIToggle.as_view(), name="group-active-api-toggle"),
     url(r'^Account/Login/$', AccountLoginAPIView.as_view(), name="login-api"),
     url(r'^Account/Register/', AccountRegistrationView.as_view()),
@@ -39,5 +39,14 @@ urlpatterns = [
     # Question
     url(r'^Question/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/Like/$', QuestionLikeAPIToggle.as_view(),
         name="question-like-api-toggle"),
+    url(r'^Question/Detail/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/$', QuestionDetailAPIToggle.as_view(),
+        name="question-detail"),
+
+    # Article
+    url(r'^Article/List/$', ArticleListAPIView.as_view(), name="article-list"),
+    url(r'^Article/(?P<username>[\w-]+)/(?P<slug>[\w-]+)/Like/$', ArticleLikeAPIToggle.as_view(), name="article-like-api-toggle"),
+    url(r'^Article/(?P<postNumber>[\w-]+)/(?P<slug>[\w-]+)$', ArticleDetailAPIToggle.as_view(),
+        name="article-detail-api"),
+
 ]
 urlpatterns += router.urls
