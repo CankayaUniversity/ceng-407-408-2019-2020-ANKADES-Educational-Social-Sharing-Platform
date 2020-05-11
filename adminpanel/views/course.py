@@ -99,11 +99,13 @@ def admin_isactive_course(request, slug):
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Kurs kategorisi artık aktif değil.")
                 return redirect("admin_all_courses")
             else:
                 instance.isActive = True
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Kurs başarıyla aktifleştirildi.")
                 return redirect("admin_all_courses")
@@ -127,11 +129,13 @@ def admin_isactive_course_category(request, slug):
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Kurs kategorisi artık aktif değil.")
                 return redirect("admin_course_categories")
             else:
                 instance.isActive = True
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Kurs kategorisi başarıyla aktifleştirildi.")
                 return redirect("admin_course_categories")

@@ -18,9 +18,8 @@
                             <table id="article-category" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Oluşturan</th>
                                     <th>Ad</th>
+                                    <th>Oluşturan</th>
                                     <th>Oluşturulduğu Tarihi</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>
@@ -33,9 +32,8 @@
                                 {% if categories %}
                                     {% for category in categories %}
                                         <tr>
-                                            <td>{{ category.id }}</td>
-                                            <td>{{ category.creator }}</td>
                                             <td>{{ category.title }}</td>
+                                            <td>{{ category.creator }}</td>
                                             <td>{{ category.createdDate }}</td>
                                             <td>{% if category.updatedDate == None %}Güncelleme Yapılmamış{% else %}{{ category.updatedDate }}{% endif %}</td>
                                             <td>{{ category.isActive }}</td>
@@ -45,6 +43,11 @@
                                                    href="{% url 'admin_isactive_question_category' category.slug %}"
                                                    class="btn btn-warning">
                                                     {% if category.isActive %}Kapat{% else %}Aktifleştir{% endif %}
+                                                </a>
+                                                <a type="button"
+                                                   href="{% url 'admin_edit_question_category' category.slug %}"
+                                                   class="btn btn-success">
+                                                    Güncelle
                                                 </a>
                                             </td>
                                             <td>
@@ -58,9 +61,8 @@
                                 {% endif %}
                                 <tfoot>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Oluşturan</th>
                                     <th>Ad</th>
+                                    <th>Oluşturan</th>
                                     <th>Oluşturulduğu Tarihi</th>
                                     <th>Son Güncelleme</th>
                                     <th>Aktiflik</th>

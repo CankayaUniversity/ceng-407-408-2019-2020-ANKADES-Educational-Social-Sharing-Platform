@@ -3,8 +3,10 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.db.models.signals import pre_save
 from django.shortcuts import redirect, render, get_object_or_404
 
+from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group
 from question.forms import EditQuestionForm
 from question.models import QuestionCategory, Question
@@ -30,7 +32,7 @@ def admin_add_question_category(request):
             isCategory = request.POST.get("isCategory") == "on"
             try:
                 getTitle = QuestionCategory.objects.get(title=title)
-                if getTitle.parentId_id == value:
+                if getTitle.parentId.id == value:
                     messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
                     return redirect("admin_add_question_category")
                 instance = QuestionCategory(title=title, isActive=isActive, isCategory=isCategory)
@@ -49,6 +51,45 @@ def admin_add_question_category(request):
         return render(request, "adminpanel/question/add-category.html", context)
     else:
         return redirect("index")
+
+
+@login_required(login_url="login_admin")
+def admin_edit_question_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=True)).order_by('title')
+    userGroup = current_user_group(request, request.user)
+    try:
+        instance = QuestionCategory.objects.get(slug=slug)
+        if userGroup == 'admin' or userGroup == "moderator":
+            if request.method == "POST":
+                value = request.POST['categoryId']
+                title = request.POST.get("title")
+                isActive = request.POST.get("isActive") == "on"
+                isCategory = request.POST.get("isCategory") == "on"
+                if instance.parentId_id != value:
+                    instance.parentId_id = value
+                    instance.title = title
+                    instance.isActive = isActive
+                    instance.isCategory = isCategory
+                    pre_save.connect(slug_save, sender=QuestionCategory)
+                    instance.save()
+                    messages.success(request, "Soru kategorisi başarıyla güncellendi.")
+                    return redirect("admin_question_categories")
+                messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
+                return redirect("admin_question_categories")
+            context = {
+                "userGroup": userGroup,
+                "questionCategory": questionCategory,
+                "instance": instance,
+            }
+            return render(request, "adminpanel/question/edit-category.html", context)
+    except:
+        messages.error(request, "Soru kategorisi bulunamadı.")
+        return redirect("admin_question_categories")
 
 
 @login_required(login_url="login_admin")
@@ -103,11 +144,13 @@ def admin_isactive_question(request, slug):
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Soru kategorisi artık aktif değil.")
                 return redirect("admin_all_questions")
             else:
                 instance.isActive = True
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Soru başarıyla aktifleştirildi.")
                 return redirect("admin_all_questions")
@@ -125,17 +168,19 @@ def admin_isactive_question_category(request, slug):
     :param slug:
     :return:
     """
+    userGroup = current_user_group(request, request.user)
     try:
         instance = QuestionCategory.objects.get(slug=slug)
-        userGroup = current_user_group(request, request.user)
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Soru kategorisi artık aktif değil.")
                 return redirect("admin_question_categories")
             else:
                 instance.isActive = True
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Soru kategorisi başarıyla aktifleştirildi.")
                 return redirect("admin_question_categories")

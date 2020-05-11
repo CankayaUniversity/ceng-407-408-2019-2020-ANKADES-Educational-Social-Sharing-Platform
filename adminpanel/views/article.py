@@ -35,11 +35,13 @@ def admin_isactive_article(request, slug):
     instance = get_object_or_404(Article, slug=slug)
     if instance.isActive is True:
         instance.isActive = False
+        instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Makale artık aktif değil.")
         return redirect("admin_all_articles")
     else:
         instance.isActive = True
+        instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Makale başarıyla aktifleştirildi.")
         return redirect("admin_all_articles")
@@ -127,8 +129,9 @@ def admin_edit_article_category(request, slug):
                     instance.isCategory = isCategory
                     pre_save.connect(slug_save, sender=ArticleCategory)
                     instance.save()
-                    messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
+                    messages.success(request, "Makale kategorisi başarıyla güncellendi.")
                     return redirect("admin_article_categories")
+                messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
                 return redirect("admin_article_categories")
             context = {
                 "userGroup": userGroup,
@@ -208,11 +211,13 @@ def admin_isactive_article_category(request, slug):
         if userGroup == 'admin':
             if instance.isActive is True:
                 instance.isActive = False
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Makale kategorisi artık aktif değil.")
                 return redirect("admin_article_categories")
             else:
                 instance.isActive = True
+                instance.updatedDate = datetime.datetime.now()
                 instance.save()
                 messages.success(request, "Makale kategorisi başarıyla aktifleştirildi.")
                 return redirect("admin_article_categories")
