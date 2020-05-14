@@ -144,40 +144,39 @@
                         {#                    CERTIFIED ANSWER#}
 
 
-
                         {#                    END OF CERTIFIED ANSWER#}
 
                         {% if questionAnswers %}
-                        <h4 class="comments-title mt-5">
-                            Cevaplar
-                        </h4>
+                            <h4 class="comments-title mt-5">
+                                Cevaplar
+                            </h4>
                             {% if certifiedAnswer %}
-                            <div class="timeline mt-3">
-                                <div class="time-label">
-                                    <span class="bg-success"><i class="fas fa-check"></i>  Doğru Cevap</span>
-                                </div>
-                                <div class="timeline-item card-footer card-comments">
-                                    <div class="card-comment">
-                                        <img class="img-circle img-sm" src="{{ certifiedAnswer.creator.image.url }}"
-                                             alt="User Image">
-                                        <div class="comment-text">
+                                <div class="timeline mt-3">
+                                    <div class="time-label">
+                                        <span class="bg-success"><i class="fas fa-check"></i>  Doğru Cevap</span>
+                                    </div>
+                                    <div class="timeline-item card-footer card-comments">
+                                        <div class="card-comment">
+                                            <img class="img-circle img-sm" src="{{ certifiedAnswer.creator.image.url }}"
+                                                 alt="User Image">
+                                            <div class="comment-text">
                                         <span class="username">
                                             <a href="{% url 'account_detail' certifiedAnswer.creator %}">{{ certifiedAnswer.creator.get_full_name }}</a>
                                             <span class="text-muted float-right ml-2">{{ certifiedAnswer.createdDate }}</span>
                                             <span class="text-muted float-right">Toplam Onaylanma: {{ certifiedAnswer.votes.count }}</span>
                                         </span>
-                                            {{ certifiedAnswer.content }}
+                                                {{ certifiedAnswer.content }}
+                                            </div>
                                         </div>
+                                        {% if certifiedAnswer.questionId.creator == request.user or userGroup == "moderator" or userGroup == "admin" %}
+                                            <a href="{% url 'confirm_answer' certifiedAnswer.answerNumber %}"
+                                               class="btn btn-danger float-right btn-sm">
+                                                Onayı Kaldır
+                                            </a>
+                                        {% endif %}
                                     </div>
-                                    {% if certifiedAnswer.questionId.creator == request.user or userGroup == "moderator" or userGroup == "admin" %}
-                                        <a href="{% url 'confirm_answer' certifiedAnswer.answerNumber %}"
-                                           class="btn btn-danger float-right btn-sm">
-                                            Onayı Kaldır
-                                        </a>
-                                    {% endif %}
                                 </div>
-                            </div>
-                        {% endif %}
+                            {% endif %}
                             {% for answer in questionAnswers %}
                                 <div class="timeline">
                                     <div>
@@ -216,7 +215,8 @@
 
                                                 {#                                                REPLY ANSWER#}
                                                 <a class="btn btn-info btn-sm"
-                                                   onclick="reply_question{{ answer.answerNumber }}()"><i class="fas fa-reply"></i>
+                                                   onclick="reply_question{{ answer.answerNumber }}()"><i
+                                                        class="fas fa-reply"></i>
                                                     Cevapla</a>
                                                 {#                                            END OF REPLY ANSWER#}
 
@@ -421,9 +421,23 @@
                                         {% csrf_token %}
                                         <div class="card-body">
                                             <div class="form-group">
+                                                <select id="select" class="form-control select2bs4" style="width: 100%;"
+                                                        value="Seçiniz" name="subjectId"
+                                                        required>
+                                                    <option disabled>Lütfen birini seçiniz</option>
+                                                    {% if reportSubjects %}
+                                                        {% for report in reportSubjects %}
+                                                            {% if report.title != 'Home' %}
+                                                                <option value="{{ report.id }}">{{ report.title }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="message">Mesajınız*</label>
-                                                <textarea class="form-control" name="questionReport" id="message"
-                                                          rows="3" maxlength="65525" aria-required="true" required
+                                                <textarea class="form-control" name="description" id="message" rows="3"
+                                                          maxlength="65525" aria-required="true" required
                                                           placeholder="Mesajınız"></textarea>
                                             </div>
                                         </div>

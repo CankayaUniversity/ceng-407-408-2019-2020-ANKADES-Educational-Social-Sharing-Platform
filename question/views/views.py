@@ -12,7 +12,7 @@ from django.views.generic import RedirectView
 from ankadescankaya.views.views import current_user_group, Categories
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
-from support.models import Report
+from support.models import Report, ReportSubject
 
 
 def add_question(request):
@@ -134,6 +134,7 @@ def question_detail(request, slug, postNumber):
     categories = Categories.all_categories()
     instance.view += 1
     instance.save()
+    reportSubjects = ReportSubject.objects.filter(isActive=True)
     questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, isActive=True,
                                                      questionId__postNumber=postNumber, isRoot=True,
                                                      isReply=False)
@@ -146,6 +147,7 @@ def question_detail(request, slug, postNumber):
     context = {
         "userGroup": userGroup,
         "instance": instance,
+        "reportSubjects": reportSubjects,
         "questionAnswers": questionAnswers,
         "certifiedAnswer": certifiedAnswer,
         "answerReply": answerReply,
@@ -172,19 +174,18 @@ def add_report_question(request, postNumber):
     try:
         instance = Question.objects.get(postNumber=postNumber)
         if request.method == "POST":
-            description = request.POST.get("questionReport")
-            new_report = Report(description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
-            new_report.creator = request.user
-            new_report.supportNumber = get_random_string(length=32)
+            subjectId = request.POST['subjectId']
+            description = request.POST.get("description")
+            new_report = Report(subjectId_id=subjectId, description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
+            new_report.creatorId = request.user
+            new_report.reportNumber = get_random_string(length=32)
             new_report.title = "Kullanıcı Şikayeti"
             new_report.postNumber = postNumber
-            new_report.displayMessage = str(new_report.creator.get_full_name()) + " adlı kullanıcı soru için şikayette bulundu. Soru numarası: " + postNumber
+            new_report.displayMessage = str(new_report.creatorId.get_full_name()) + " adlı kullanıcı soru için şikayette bulundu. Soru numarası: " + postNumber
             new_report.save()
             messages.success(request, "Şikayetiniz başarıyla gönderildi. En kısa sürede tarafınıza geri dönüş sağlanacaktır.")
-            return redirect(reverse("question_detail", kwargs={"slug": instance.slug,
-                                                               "postNumber": instance.postNumber}))
-        return redirect(reverse("question_detail", kwargs={"slug": instance.slug,
-                                                           "postNumber": instance.postNumber}))
+            return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "postNumber": instance.postNumber}))
+        return redirect(reverse("question_detail", kwargs={"slug": instance.slug, "postNumber": instance.postNumber}))
     except:
         messages.error(request, "Soru bulunamadı.")
         return redirect("404")

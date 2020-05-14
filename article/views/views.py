@@ -17,7 +17,7 @@ from ankadescankaya.views.views import current_user_group, Categories
 from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
-from support.models import Report
+from support.models import Report, ReportSubject
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -251,10 +251,12 @@ def article_detail(request, username, slug):
     relatedPosts = Article.objects.filter(isActive=True).order_by('-createdDate')[:5]
     articleComments = ArticleComment.objects.filter(articleId__slug=slug, isRoot=True, isActive=True)
     replyComment = ArticleComment.objects.filter(isReply=True, isRoot=False, isActive=True)
+    reportSubjects = ReportSubject.objects.filter(isActive=True)
     instance.view += 1
     instance.save()
     context = {
         "articles": articles,
+        "reportSubjects": reportSubjects,
         "relatedPosts": relatedPosts,
         "instance": instance,
         "userGroup": userGroup,
@@ -283,13 +285,14 @@ def add_report_article(request, postNumber):
     try:
         instance = Article.objects.get(postNumber=postNumber)
         if request.method == "POST":
+            subjectId = request.POST['subjectId']
             description = request.POST.get("description")
-            new_report = Report(description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
-            new_report.creator = request.user
+            new_report = Report(subjectId_id=subjectId, description=description, isActive=True, isSolved=False, isRead=False, createdDate=datetime.datetime.now())
+            new_report.creatorId = request.user
             new_report.reportNumber = get_random_string(length=32)
             new_report.title = "Kullanıcı Şikayeti"
             new_report.postNumber = postNumber
-            new_report.displayMessage = str(new_report.creator.get_full_name()) + " adlı kullanıcı makale için şikayette bulundu. Makale numarası: " + postNumber
+            new_report.displayMessage = str(new_report.creatorId.get_full_name()) + " adlı kullanıcı makale için şikayette bulundu. Makale numarası: " + postNumber
             new_report.save()
             messages.success(request, "Şikayetiniz başarıyla gönderildi. En kısa sürede tarafınıza geri dönüş sağlanacaktır.")
             return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
@@ -434,7 +437,7 @@ def delete_article_comment(request, commentNumber):
         messages.success(request, "Yorum başarıyla silindi.")
         return redirect(
             reverse("article_detail",
-                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}), context)
+                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}))
     except:
         messages.error(request, "Makale bulunamadı.")
         return redirect("all_articles")
