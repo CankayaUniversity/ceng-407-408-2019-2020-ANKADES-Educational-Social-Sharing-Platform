@@ -30,6 +30,13 @@
                                     <small class="card-text">
                                         <a href="{% url 'all_departments' lecture.departmentId.schoolId.slug %}">
                                             Okul: {{ lecture.departmentId.schoolId.title }}
+                                            {% if schools %}
+                                                {% for school in schools %}
+                                                    {% if school.departmentId.schoolId.title != lecture.departmentId.schoolId.title %}
+                                                        Diğer Okullar: {{ school.departmentId.schoolId.title }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
                                         </a>
                                     </small>
                                     </br>

@@ -13,14 +13,18 @@ def lectures(request, departmentCode):
     :param departmentCode:
     :return:
     """
+    count = 0
+    res = []
     try:
         lectures = Lecture.objects.filter(departmentId__departmentCode=departmentCode, isActive=True)
+        allLectures = Lecture.objects.filter(isActive=True)
     except:
         messages.error(request, "Ders bulunamadı.")
         return redirect("all_schools")
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     context = {
+        "schools": allLectures,
         "userGroup": userGroup,
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
