@@ -46,44 +46,51 @@
                                 <div class="tab-content" id="custom-tabs-four-tabContent">
                                     <div class="tab-pane fade show active" id="articles" role="tabpanel"
                                          aria-labelledby="articles-tab">
-                                        {% if articles %}
-                                            {% if article_pagination %}
-                                                {% for article in article_pagination %}
-                                                    <div class="card-deck col-lg-3 col-md-3 col-xs-12 col-sm-12 mb-5">
-                                                        <div class="card">
-                                                            <img class="card-img-top" src="{{ article.media.url }}"
-                                                                 alt="Card image cap"
-                                                                 width="504" height="250">
-                                                            <div class="card-body">
-                                                                <h5 class="card-title"><a
-                                                                        href="{% url 'article_detail' article.creator article.slug %}">{{ article.title|truncatechars:40 }}</a>
-                                                                </h5>
-                                                                <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                {% if articles %}
+                                                    {% if article_pagination %}
+                                                        {% for article in article_pagination %}
+                                                            <div class="card-deck col-3 mb-5">
+                                                                <div class="card">
+                                                                    <img class="card-img-top"
+                                                                         src="{{ article.media.url }}"
+                                                                         alt="Card image cap"
+                                                                         width="504" height="250">
+                                                                    <div class="card-header"><b>
+                                                                        <p style="font-size: 20px" class="card-title"><a style="text-decoration: none !important;" href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a>
+                                                                        </p></b>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <small class="text-muted float-left ml-2"><a
+                                                                                href="{% url 'account_detail' article.creator %}">Kategori: {{ article.categoryId.title }}</a></small>
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <small class="text-muted float-left"><a
+                                                                                href="{% url 'account_detail' article.creator %}">{{ article.creator.get_full_name }}</a></small>
+                                                                        <small class="text-muted float-left ml-2">{{ article.createdDate|date:"d.m.Y" }}</small>
+                                                                        <small class="text-muted float-right ml-2"><i
+                                                                                class="far fa-comments"></i> {{ article.articlecomment_set.count }}
+                                                                        </small>
+                                                                        <small class="text-muted ml-2 float-right"><i
+                                                                                class="far fa-thumbs-up"></i> {{ article.likes.count }}
+                                                                        </small>
+                                                                        <small class="text-muted float-right"><i
+                                                                                class="far fa-eye"></i> {{ article.view }}
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="card-footer">
-                                                                <small class="text-muted float-left"><a
-                                                                        href="{% url 'account_detail' article.creator %}">{{ article.creator.get_full_name }}</a></small>
-                                                                <small class="text-muted float-left ml-2">{{ article.createdDate|date:"d.m.Y" }}</small>
-                                                                <small class="text-muted float-right ml-2"><i
-                                                                        class="far fa-comments"></i> {{ article.articlecomment_set.count }}
-                                                                </small>
-                                                                <small class="text-muted ml-2 float-right"><i
-                                                                        class="far fa-thumbs-up"></i> {{ article.likes.count }}
-                                                                </small>
-                                                                <small class="text-muted float-right"><i
-                                                                        class="far fa-eye"></i> {{ article.view }}
-                                                                </small>
-                                                            </div>
-                                                        </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                        <h5>Üzgünüz :(</h5>
+                                                        <p>Henüz bir makale paylaşılmamış.</p>
                                                     </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% else %}
-                                            <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
-                                                <h5>Üzgünüz :(</h5>
-                                                <p>Henüz bir makale paylaşılmamış.</p>
+                                                {% endif %}
                                             </div>
-                                        {% endif %}
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="questions" role="tabpanel"
                                          aria-labelledby="questions-tab">

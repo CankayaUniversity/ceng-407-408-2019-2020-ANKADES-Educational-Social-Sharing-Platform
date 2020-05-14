@@ -13,21 +13,20 @@
             </div>
         </div>
     </div>
-    <section class="content-header">
+    <section class="content">
         <div class="container">
             <div class="row">
                 {% if articles %}
                     {% if article_pagination %}
                         {% for article in article_pagination %}
-                            <div class="card-deck col-lg-3 col-md-3 col-xs-12 col-sm-12 mb-5">
+                            <div class="card-deck col-4 mb-5">
                                 <div class="card">
                                     <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
                                          width="504" height="250">
                                     <div class="card-body">
-                                        <h5 class="card-title"><a
-                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title|truncatechars:40 }}</a>
-                                        </h5>
-                                        <p class="card-text">{{ article.description|safe|truncatechars:255 }}</p>
+                                        <h4 class="card-title"><b><a style="color: #0b0b0b !important;"
+                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a></b>
+                                        </h4>
                                     </div>
                                     <div class="card-footer">
                                         <small class="text-muted float-left"><a

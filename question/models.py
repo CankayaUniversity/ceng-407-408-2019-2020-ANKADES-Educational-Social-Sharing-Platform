@@ -64,8 +64,8 @@ class Question(models.Model):
     def get_like_url(self):
         return reverse("question-like-toggle", kwargs={"slug": self.slug, "postNumber": self.postNumber})
 
-    def get_api_like_url(self):
-        return reverse("question-like-api-toggle", kwargs={"slug": self.slug, "postNumber": self.postNumber})
+    def get_api_like_url(self, request):
+        return reverse("question-like-api-toggle", kwargs={"slug": request.slug, "postNumber": request.postNumber})
 
     class Meta:
         db_table = "Question"

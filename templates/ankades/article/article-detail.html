@@ -128,10 +128,10 @@
                                 </p>
                             </form>
                         </div>
+                        {% if articleComments %}
                         <h4 class="comments-title mb-3">
                             Cevaplar
                         </h4>
-                        {% if articleComments %}
                             {% for comment in articleComments %}
                                 <div class="timeline">
                                     <div>

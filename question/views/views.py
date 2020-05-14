@@ -128,38 +128,38 @@ def question_detail(request, slug, postNumber):
     """
     try:
         instance = Question.objects.get(postNumber=postNumber, slug=slug, isActive=True)
-        userGroup = current_user_group(request, request.user)
-        categories = Categories.all_categories()
-        instance.view += 1
-        instance.save()
-        questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, isActive=True,
-                                                         questionId__postNumber=postNumber, isRoot=True,
-                                                         isReply=False)
-        answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False, isActive=True)
-        try:
-            certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug, isActive=True,
-                                                          questionId__postNumber=postNumber, isCertified=True)
-        except:
-            certifiedAnswer = None
-        context = {
-            "userGroup": userGroup,
-            "instance": instance,
-            "questionAnswers": questionAnswers,
-            "certifiedAnswer": certifiedAnswer,
-            "answerReply": answerReply,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
-        return render(request, "ankades/question/question-detail.html", context)
     except:
         return redirect("404")
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    instance.view += 1
+    instance.save()
+    questionAnswers = QuestionComment.objects.filter(questionId__slug=slug, isActive=True,
+                                                     questionId__postNumber=postNumber, isRoot=True,
+                                                     isReply=False)
+    answerReply = QuestionComment.objects.filter(isReply=True, isRoot=False, isActive=True)
+    try:
+        certifiedAnswer = QuestionComment.objects.get(questionId__slug=slug, isActive=True,
+                                                      questionId__postNumber=postNumber, isCertified=True)
+    except:
+        certifiedAnswer = None
+    context = {
+        "userGroup": userGroup,
+        "instance": instance,
+        "questionAnswers": questionAnswers,
+        "certifiedAnswer": certifiedAnswer,
+        "answerReply": answerReply,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "ankades/question/question-detail.html", context)
 
 
 @login_required(login_url="login_account")

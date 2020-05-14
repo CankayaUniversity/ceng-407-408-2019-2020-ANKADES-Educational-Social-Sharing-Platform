@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
@@ -21,13 +22,22 @@ def index(request):
     categories = Categories.all_categories()
     try:
         instance = Account.objects.get(username=request.user.username)
+        page = request.GET.get('page', 1)
         existFollower = get_user_follower(request, request.user, instance)
         followers = AccountFollower.objects.filter(followingId__username=instance.username) # takipçiler
         followings = AccountFollower.objects.filter(followerId__username=request.user.username) # takip edilen
         articles = Article.objects.filter(isActive=True)
         questions = Question.objects.filter(isActive=True)
+        paginator = Paginator(articles, 12)
+        try:
+            article_pagination = paginator.page(page)
+        except PageNotAnInteger:
+            article_pagination = paginator.page(1)
+        except EmptyPage:
+            article_pagination = paginator.page(paginator.num_pages)
         context = {
             "articles": articles,
+            "article_pagination": article_pagination,
             "questions": questions,
             "userGroup": userGroup,
             "existFollower": existFollower,

@@ -67,8 +67,8 @@ class Article(models.Model):
     def get_like_url(self):
         return reverse("article-like-toggle", kwargs={"username": self.creator, "slug": self.slug})
 
-    def get_api_like_url(self):
-        return reverse("article-like-api-toggle", kwargs={"username": self.creator, "slug": self.slug})
+    def get_api_like_url(self, request):
+        return reverse("article-like-api-toggle", kwargs={"username": request.creator, "slug": request.slug})
 
     class Meta:
         db_table = "Article"
