@@ -1,0 +1,111 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | Sınav Ekle{% endblock %}
+{% load static %}
+{% block content %}
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary mt-5">
+                        <div class="card-header">
+                            <h3 class="card-title">Ders Ekle</h3>
+                        </div>
+                        {% if getSchool %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="school">Okul*</label>
+                                    <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                            value="Seçiniz" name="school"
+                                            required>
+                                        <option selected value="{{ instance }}">{{ instance.title }}</option>
+                                    </select>
+                                </div>
+                                {% if getDepartment %}
+                                    <div class="form-group">
+                                        <label for="school">Bölüm*</label>
+                                        <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                                value="Seçiniz" name="department"
+                                                required>
+                                            <option selected value="{{ selectedDepartment }}">{{ selectedDepartment.title }}</option>
+                                        </select>
+                                    </div>
+                                    <form role="form" method="post" action="{% url 'add_exam' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="department">Bölüm*</label>
+                                            <select id="department" class="form-control select2bs4" style="width: 100%;"
+                                                    value="Seçiniz" name="department" required>
+                                                <option disabled>Lütfen bir bölüm seçiniz</option>
+                                                {% if departments %}
+                                                    {% for department in departments %}
+                                                        <option value="{{ department.id }}">{{ department.title }}</option>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <option selected>{{ instance.title }} adlı okulda herhangi bir bölüm
+                                                        bulunamadı.
+                                                    </option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a type="button" href="{% url 'add_exam' %}"
+                                               class="btn btn-danger float-right">Geri</a>
+                                            <button type="submit" name="submit" class="btn btn-success">Ekle</button>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    {#Post Department Form#}
+                                    <form role="form" method="post" action="{% url 'add_exam' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="department">Bölüm*</label>
+                                            <select id="department" class="form-control select2bs4" style="width: 100%;"
+                                                    value="Seçiniz" name="department" required>
+                                                <option disabled>Lütfen bir bölüm seçiniz</option>
+                                                {% if departments %}
+                                                    {% for department in departments %}
+                                                        <option value="{{ department.id }}">{{ department.title }}</option>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <option selected>{{ instance.title }} adlı okulda herhangi bir bölüm
+                                                        bulunamadı.
+                                                    </option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a type="button" href="{% url 'add_exam' %}"
+                                               class="btn btn-danger float-right">Geri</a>
+                                            <button type="submit" name="submit" class="btn btn-primary">İleri</button>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            {#Get Form#}
+                            <form role="form" method="get">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
+                                        <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                                value="Seçiniz" name="school" required>
+                                            <option disabled>Lütfen bir okul seçiniz</option>
+                                            {% if schools %}
+                                                {% for school in schools %}
+                                                    <option value="{{ school.slug }}">{{ school.title }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="submit" class="btn btn-primary">İleri</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

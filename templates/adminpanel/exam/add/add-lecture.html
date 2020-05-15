@@ -12,57 +12,56 @@
                         </div>
                         {% if getSchool %}
                             <div class="card-body">
+                            <div class="form-group">
+                                <label for="school">Okul*</label>
+                                <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                        value="Seçiniz" name="school"
+                                        required>
+                                    <option selected value="{{ instance }}">{{ instance.title }}</option>
+                                </select>
+                            </div>
+                            {#Post Form#}
+                            <form role="form" method="post" action="{% url 'add_lecture' %}">
+                                {% csrf_token %}
                                 <div class="form-group">
-                                    <label for="school">Okul*</label>
-                                    <select id="school" class="form-control select2bs4" style="width: 100%;"
-                                            value="Seçiniz" name="school"
-                                            required>
-                                        <option selected value="{{ instance }}">{{ instance.title }}</option>
+                                    <label for="school">Bölüm*</label>
+                                    <select id="department" class="form-control select2bs4" style="width: 100%;"
+                                            value="Seçiniz" name="department" required>
+                                        <option disabled>Lütfen bir bölüm seçiniz</option>
+                                        {% if departments %}
+                                            {% for department in departments %}
+                                                <option value="{{ department.id }}">{{ department.title }}</option>
+                                            {% endfor %}
+                                        {% else %}
+                                            <option selected>{{ instance.title }} adlı okulda herhangi bir bölüm
+                                                bulunamadı.
+                                            </option>
+                                        {% endif %}
                                     </select>
                                 </div>
-                                {#Post Form#}
-                                <form role="form" method="post" action="{% url 'add_lecture' %}">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="school">Bölüm*</label>
-                                        <select id="department" class="form-control select2bs4" style="width: 100%;"
-                                                value="Seçiniz" name="department" required>
-                                            <option disabled>Lütfen bir bölüm seçiniz</option>
-                                            {% if departments %}
-                                                {% for department in departments %}
-                                                    <option value="{{ department.id }}">{{ department.title }}</option>
-                                                {% endfor %}
-                                            {% else %}
-                                                <option selected>{{ instance.title }} adlı okulda herhangi bir bölüm
-                                                    bulunamadı.
-                                                </option>
-                                            {% endif %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="title">Ders Adı*</label>
-                                        <input type="text" id="title" class="form-control" name="title" required
-                                               placeholder="Ders Adı (Veri Yapıları)">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lectureCode">Ders Kodu*</label>
-                                        <input type="text" id="lectureCode" class="form-control" name="lectureCode"
-                                               required
-                                               placeholder="Ders Kodu (CENG281)">
-                                    </div>
-                            </div>
-                            <div class="card-footer">
-                                <a type="button" href="{% url 'add_lecture' %}"
-                                   class="btn btn-danger float-right">Geri</a>
-                                <button type="submit" name="submit" class="btn btn-success">Ekle</button>
-                            </div>
+                                <div class="form-group">
+                                    <label for="title">Ders Adı*</label>
+                                    <input type="text" id="title" class="form-control" name="title" required
+                                           placeholder="Ders Adı (Veri Yapıları)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lectureCode">Ders Kodu*</label>
+                                    <input type="text" id="lectureCode" class="form-control" name="lectureCode"
+                                           required
+                                           placeholder="Ders Kodu (CENG281)">
+                                </div>
+                                <div class="card-footer">
+                                    <a type="button" href="{% url 'add_lecture' %}"
+                                       class="btn btn-danger float-right">Geri</a>
+                                    <button type="submit" name="submit" class="btn btn-success">Ekle</button>
+                                </div>
                             </form>
                         {% else %}
                             {#Get Form#}
                             <form role="form" method="get">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="school">Okul*</label>
+                                        <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
                                         <select id="school" class="form-control select2bs4" style="width: 100%;"
                                                 value="Seçiniz" name="school" required>
                                             <option disabled>Lütfen bir okul seçiniz</option>
@@ -75,13 +74,13 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button type="submit" name="submit" class="btn btn-primary">Seç</button>
+                                    <button type="submit" name="submit" class="btn btn-primary">İleri</button>
                                 </div>
                             </form>
                         {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 {% endblock %}

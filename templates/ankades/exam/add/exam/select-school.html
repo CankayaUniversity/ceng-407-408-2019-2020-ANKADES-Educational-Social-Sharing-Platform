@@ -1,0 +1,51 @@
+{% extends 'adminpanel/layout/layout.html' %}
+{% block title %}Ankacademy | Sınav Ekle{% endblock %}
+{% load static %}
+{% block content %}
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary mt-5">
+                        <div class="card-header">
+                            <h3 class="card-title">Ders Ekle</h3>
+                        </div>
+                        {% if getSchool %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="school">Okul*</label>
+                                    <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                            value="Seçiniz" name="school"
+                                            required>
+                                        <option selected value="{{ instance }}">{{ instance.title }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        {% else %}
+                            {#Get Form#}
+                            <form role="form" method="get">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
+                                        <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                                value="Seçiniz" name="school" required>
+                                            <option disabled>Lütfen bir okul seçiniz</option>
+                                            {% if schools %}
+                                                {% for school in schools %}
+                                                    <option value="{{ school.slug }}">{{ school.title }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="submit" class="btn btn-primary">İleri</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

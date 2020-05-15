@@ -67,29 +67,6 @@ class Lecture(models.Model):
         db_table = "Lecture"
 
 
-class Exam(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lectureId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    examCode = models.CharField(max_length=32)
-    owner = models.CharField(null=True, blank=True, max_length=100, verbose_name="Exam Owner Name")
-    examDate = models.DateField()
-    createdDate = models.DateTimeField(auto_now_add=True)
-    updatedDate = models.DateTimeField(null=True, blank=True)
-    isActive = models.BooleanField(default=True)
-    title = models.CharField(max_length=254)
-    media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
-
-    def __str__(self):
-        return self.examCode
-
-    def __unicode__(self):
-        return self.examCode
-
-    class Meta:
-        db_table = "Exam"
-
-
 class Term(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100)
@@ -106,6 +83,31 @@ class Term(models.Model):
 
     class Meta:
         db_table = "Term"
+
+
+class Exam(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    examNumber = models.CharField(max_length=32, unique=True)
+    lectureId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
+    termId = models.ForeignKey(Term, on_delete=models.SET_NULL, null=True)
+    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    examCode = models.CharField(max_length=32)
+    owner = models.CharField(null=True, blank=True, max_length=100, verbose_name="Exam Owner Name")
+    examDate = models.DateField()
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
+    title = models.CharField(max_length=254)
+    media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
+
+    def __str__(self):
+        return self.examNumber
+
+    def __unicode__(self):
+        return self.examNumber
+
+    class Meta:
+        db_table = "Exam"
 
 
 class LectureExam(models.Model):
