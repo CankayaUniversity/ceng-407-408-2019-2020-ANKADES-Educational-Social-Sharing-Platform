@@ -9,6 +9,7 @@ urlpatterns = [
     path('okullar/', school.all_schools, name="all_schools"),
     url(r'^okullar/(?P<slug>[\w-]+)/bolumler', department.all_departments, name="all_departments"),
     url(r'^bolum/(?P<departmentCode>[\w-]+)/dersler/$', lecture.lectures, name="lectures"),
+    url(r'^ders/(?P<slug>[\w-]+)/sinavlar/$', exam.lecture_exam, name="lecture_exam"),
     path('bolum-ekle/', department.add_department, name="add_department"),
     path('ders-ekle/', lecture.add_lecture, name="add_lecture"),
     path('sinav-ekle/', exam.add_exam, name="add_exam"),

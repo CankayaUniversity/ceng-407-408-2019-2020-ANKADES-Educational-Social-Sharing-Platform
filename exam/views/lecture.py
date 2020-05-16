@@ -13,8 +13,6 @@ def lectures(request, departmentCode):
     :param departmentCode:
     :return:
     """
-    count = 0
-    res = []
     try:
         lectures = Lecture.objects.filter(departmentId__departmentCode=departmentCode, isActive=True)
         allLectures = Lecture.objects.filter(isActive=True)

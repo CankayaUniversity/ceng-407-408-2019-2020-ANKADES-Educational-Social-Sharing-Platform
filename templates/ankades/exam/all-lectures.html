@@ -20,10 +20,10 @@
                             <div class="card mt-5">
                                 <div class="card-body">
                                     <h5 class="float-left card-title">
-                                        <a href="">{{ lecture.title|safe|truncatewords:20 }}</a>
+                                        <a href="{% url 'lecture_exam' lecture.slug %}">{{ lecture.title|safe|truncatewords:20 }}</a>
                                     </h5>
                                     <h5 class="float-right card-title">
-                                        <a href="">Sınavlara Git</a>
+                                        <a href="{% url 'lecture_exam' lecture.slug %}">Sınavlara Git</a>
                                     </h5>
                                     </br>
                                     <hr>
