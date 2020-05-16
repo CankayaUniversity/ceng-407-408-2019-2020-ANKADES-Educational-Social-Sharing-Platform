@@ -11,16 +11,33 @@
                             <h3 class="card-title">Ders Ekle</h3>
                         </div>
                         {% if getSchool %}
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="school">Okul*</label>
-                                    <select id="school" class="form-control select2bs4" style="width: 100%;"
-                                            value="Seçiniz" name="school"
-                                            required>
-                                        <option selected value="{{ instance }}">{{ instance.title }}</option>
-                                    </select>
+                            <form role="form" method="get">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
+                                        <select id="school" class="form-control select2bs4" style="width: 100%;"
+                                                value="Seçiniz" name="school" required>
+                                            <option disabled>Lütfen bir okul seçiniz</option>
+                                            <option selected value="{{ getSchool.slug }}">{{ getSchool.title }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="department">Bölüm* (Devam etmek için bölüm seçiniz.)</label>
+                                        <select id="department" class="form-control select2bs4" style="width: 100%;"
+                                                value="Seçiniz" name="department" required>
+                                            <option disabled>Lütfen bir bölüm seçiniz</option>
+                                            {% if departments %}
+                                                {% for department in departments %}
+                                                    <option value="{{ department.slug }}">{{ department.title }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="submit" class="btn btn-primary">İleri</button>
+                                </div>
+                            </form>
                         {% else %}
                             {#Get Form#}
                             <form role="form" method="get">

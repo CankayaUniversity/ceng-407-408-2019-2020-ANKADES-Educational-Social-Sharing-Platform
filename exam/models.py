@@ -10,7 +10,7 @@ from ankadescankaya.storage_backends import ExamMediaStorage, SchoolMediaStorage
 
 class School(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, unique=True)
     slug = models.SlugField(max_length=254, allow_unicode=True, unique=True)
     createdDate = models.DateTimeField(auto_now_add=True)
@@ -28,8 +28,8 @@ class School(models.Model):
 class Department(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     departmentCode = models.CharField(null=False, blank=False, max_length=50)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    schoolId = models.ForeignKey(School, on_delete=models.CASCADE, null=False)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
+    schoolId = models.ForeignKey(School, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, null=False, blank=False)
     slug = models.SlugField(max_length=254, allow_unicode=True)
     createdDate = models.DateTimeField(auto_now_add=True)
@@ -50,8 +50,8 @@ class Lecture(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     lectureCode = models.CharField(null=False, blank=False, max_length=10)
     slug = models.SlugField(max_length=254, allow_unicode=True)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    departmentId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
+    departmentId = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, null=False, blank=False, verbose_name="Post Title")
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
@@ -71,7 +71,7 @@ class Term(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=254, allow_unicode=True)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
 
@@ -88,10 +88,9 @@ class Term(models.Model):
 class Exam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     examNumber = models.CharField(max_length=32, unique=True)
-    lectureId = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
+    lectureId = models.ForeignKey(Lecture, on_delete=models.SET_NULL, null=True)
     termId = models.ForeignKey(Term, on_delete=models.SET_NULL, null=True)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    examCode = models.CharField(max_length=32)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     owner = models.CharField(null=True, blank=True, max_length=100, verbose_name="Exam Owner Name")
     examDate = models.DateField()
     createdDate = models.DateTimeField(auto_now_add=True)
