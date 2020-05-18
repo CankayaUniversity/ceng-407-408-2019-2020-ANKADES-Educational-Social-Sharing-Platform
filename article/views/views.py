@@ -311,7 +311,6 @@ def delete_article(request, slug):
     """
     try:
         instance = Article.objects.get(slug=slug)
-        request.user = request.user
         if instance.creator == request.user:
             if instance.isActive:
                 instance.isActive = False
@@ -333,7 +332,6 @@ def add_article_comment(request, slug):
     :param slug:
     :return:
     """
-    request.user = request.user
     try:
         instance = Article.objects.get(slug=slug)
         if request.method == "POST":

@@ -80,7 +80,7 @@ class SearchKeyword(DetailView):
         exam = None
         keyword = request.GET.get("keyword")
         if keyword:
-            exam = Exam.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(examCode__icontains=keyword, isActive=True))
+            exam = Exam.objects.filter(Q(title__icontains=keyword, isActive=True))
         return exam
 
     @staticmethod

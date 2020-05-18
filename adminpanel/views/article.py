@@ -6,7 +6,6 @@ from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from ankadescankaya.slug import slug_save
@@ -32,6 +31,11 @@ def admin_all_articles(request):
 
 @login_required(login_url="login_admin")
 def admin_isactive_article(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Article, slug=slug)
     if instance.isActive is True:
         instance.isActive = False
@@ -49,6 +53,11 @@ def admin_isactive_article(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_article(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(Article, slug=slug)
     userGroup = current_user_group(request, request.user)
     if userGroup == 'admin':
@@ -192,9 +201,8 @@ def admin_article_categories(request):
     :param request:
     :return:
     """
-    request.user = request.user
     userGroup = current_user_group(request, request.user)
-    categories = ArticleCategory.objects.all()
+    categories = ArticleCategory.objects.filter(isActive=True)
     context = {
         "categories": categories,
         "userGroup": userGroup,
@@ -204,7 +212,11 @@ def admin_article_categories(request):
 
 @login_required(login_url="login_admin")
 def admin_isactive_article_category(request, slug):
-    request.user = request.user
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     userGroup = current_user_group(request, request.user)
     try:
         instance = ArticleCategory.objects.get(slug=slug)
@@ -230,6 +242,11 @@ def admin_isactive_article_category(request, slug):
 
 @login_required(login_url="login_admin")
 def admin_delete_article_category(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     instance = get_object_or_404(ArticleCategory, slug=slug)
     if instance.isActive is True:
         messages.error(request, "Makale kategorisi aktif olduğu için silme işlemi gerçekleştirilemedi.")

@@ -97,8 +97,8 @@
                                                         value="Seçiniz"
                                                         required>
                                                     <option disabled>Lütfen üst kategori seçiniz</option>
-                                                    {% if articleCategory %}
-                                                        {% for category in articleCategory %}
+                                                    {% if categories %}
+                                                        {% for category in categories %}
                                                             <option value="{{ category.title }}">{{ category.title }}</option>
                                                         {% endfor %}
                                                     {% endif %}
