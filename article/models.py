@@ -54,6 +54,7 @@ class Article(models.Model):
                                    db_table="AccountLikedArticle")
     readTime = models.IntegerField(default=0)
     introduction = models.CharField(max_length=254, null=True, blank=True)
+    owner = models.CharField(max_length=254, null=True, blank=True)
 
     def __str__(self):
         return self.title

@@ -151,13 +151,14 @@ def add_article(request):
     if request.method == "POST":
         value = request.POST['categoryId']
         title = request.POST.get("title")
+        owner = request.POST.get("owner")
         isPrivate = request.POST.get("isPrivate") == "on"
         if form.is_valid():
             description = form.cleaned_data.get("description")
         if not title and description:
             messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
             return render(request, "ankades/article/add-article.html", context)
-        instance = Article(title=title, description=description, isPrivate=isPrivate)
+        instance = Article(title=title, description=description, isPrivate=isPrivate, owner=owner)
         if request.FILES:
             media = request.FILES.get('media')
             fs = FileSystemStorage()
