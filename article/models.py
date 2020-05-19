@@ -53,8 +53,9 @@ class Article(models.Model):
     likes = models.ManyToManyField(Account, related_name="articleLikes", default=0, blank=True,
                                    db_table="AccountLikedArticle")
     readTime = models.IntegerField(default=0)
-    introduction = models.CharField(max_length=254, null=True, blank=True)
+    introduction = models.CharField(max_lengtha=254, null=True, blank=True)
     owner = models.CharField(max_length=254, null=True, blank=True)
+    resource = models.URLField()
 
     def __str__(self):
         return self.title

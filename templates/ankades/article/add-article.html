@@ -40,12 +40,16 @@
                                         {{ form.description }}
                                     </div>
                                 </div>
-                                <div class="form-group mb-0">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="isPrivate" class="custom-control-input" id="isPrivate">
-                                        <label class="custom-control-label" for="isPrivate">Özellik</label>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="resource">Makale Sahibinin Tam Adı*</label>
+                                    <input type="text" id="resource" class="form-control" name="resource" placeholder="Kaynak Tam Urlsi (https://example.com/ornek-makale-adi)" required>
                                 </div>
+{#                                <div class="form-group mb-0">#}
+{#                                    <div class="custom-control custom-checkbox">#}
+{#                                        <input type="checkbox" name="isPrivate" class="custom-control-input" id="isPrivate">#}
+{#                                        <label class="custom-control-label" for="isPrivate">Özellik</label>#}
+{#                                    </div>#}
+{#                                </div>#}
                                 <div class="form-group">
                                     <label for="exampleInputFile">Dosya Seçin</label>
                                     <div class="input-group">
