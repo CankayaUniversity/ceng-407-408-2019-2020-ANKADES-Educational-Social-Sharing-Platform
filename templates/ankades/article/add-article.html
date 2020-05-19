@@ -35,18 +35,20 @@
                                     <label for="title">Başlık*</label>
                                     <input type="text" id="title" class="form-control" name="title" placeholder="Başlık">
                                 </div>
+                                <label>Makale Özeti (Abstract)*</label>
                                 <div class="form-group mb-0">
                                     <div class="custom-control">
                                         {{ form.abstract }}
                                     </div>
                                 </div>
+                                <label>Tüm Makale (İsteğe Bağlı)</label>
                                 <div class="form-group mb-0">
                                     <div class="custom-control">
                                         {{ form.description }}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="resource">Makale Sahibinin Tam Adı*</label>
+                                    <label for="resource">Varsa Kaynak URL'si</label>
                                     <input type="text" id="resource" class="form-control" name="resource" placeholder="Kaynak Tam Urlsi (https://example.com/ornek-makale-adi)" required>
                                 </div>
 {#                                <div class="form-group mb-0">#}
@@ -56,7 +58,7 @@
 {#                                    </div>#}
 {#                                </div>#}
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Dosya Seçin</label>
+                                    <label for="exampleInputFile">Makale İçin Bir Resim Seçin</label>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" name="media"
