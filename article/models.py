@@ -46,6 +46,7 @@ class Article(models.Model):
     description = RichTextField(null=False, blank=False)
     media = models.FileField(null=True, blank=True, storage=ArticleMediaStorage(), default="no-image-available.png")
     createdDate = models.DateTimeField(auto_now_add=True)
+    abstract = RichTextField(null=True, blank=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
@@ -53,7 +54,7 @@ class Article(models.Model):
     likes = models.ManyToManyField(Account, related_name="articleLikes", default=0, blank=True,
                                    db_table="AccountLikedArticle")
     readTime = models.IntegerField(default=0)
-    introduction = models.CharField(max_lengtha=254, null=True, blank=True)
+    introduction = models.CharField(max_length=254, null=True, blank=True)
     owner = models.CharField(max_length=254, null=True, blank=True)
     resource = models.URLField()
 

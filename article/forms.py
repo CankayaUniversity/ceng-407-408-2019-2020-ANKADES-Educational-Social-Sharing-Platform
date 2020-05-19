@@ -1,16 +1,15 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from django.db.models import Q
 
-from article.models import Article, ArticleCategory
-from question.models import Question
+from article.models import Article
 
 
 class ArticleForm(forms.Form):
     description = forms.CharField(widget=CKEditorWidget(), label="Yazı")
+    abstract = forms.CharField(widget=CKEditorWidget(), label="Abstract")
 
 
 class EditArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['description', 'media']
+        fields = ['abstract', 'description', 'media']

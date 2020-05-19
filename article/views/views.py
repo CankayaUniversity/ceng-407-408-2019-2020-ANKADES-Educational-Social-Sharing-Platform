@@ -156,6 +156,7 @@ def add_article(request):
         isPrivate = request.POST.get("isPrivate") == "on"
         if form.is_valid():
             description = form.cleaned_data.get("description")
+            abstract = form.cleaned_data.get("abstract")
         if not title and description:
             messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
             return render(request, "ankades/article/add-article.html", context)
