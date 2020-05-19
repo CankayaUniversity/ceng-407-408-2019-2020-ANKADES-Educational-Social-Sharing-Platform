@@ -22,50 +22,42 @@ def index(request):
     categories = Categories.all_categories()
     try:
         instance = Account.objects.get(username=request.user.username)
-        page = request.GET.get('page', 1)
         existFollower = get_user_follower(request, request.user, instance)
-        followers = AccountFollower.objects.filter(followingId__username=instance.username) # takipçiler
-        followings = AccountFollower.objects.filter(followerId__username=request.user.username) # takip edilen
-        articles = Article.objects.filter(isActive=True)
-        questions = Question.objects.filter(isActive=True)
-        paginator = Paginator(articles, 12)
-        try:
-            article_pagination = paginator.page(page)
-        except PageNotAnInteger:
-            article_pagination = paginator.page(1)
-        except EmptyPage:
-            article_pagination = paginator.page(paginator.num_pages)
-        context = {
-            "articles": articles,
-            "article_pagination": article_pagination,
-            "questions": questions,
-            "userGroup": userGroup,
-            "existFollower": existFollower,
-            "followers": followers,
-            "followings": followings,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
+        followers = AccountFollower.objects.filter(followingId__username=instance.username)  # takipçiler
+        followings = AccountFollower.objects.filter(followerId__username=request.user.username)  # takip edilen
     except:
-        context = {
-            "userGroup": userGroup,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
+        instance = None
+        existFollower = None
+        followers = None
+        followings = None
+    page = request.GET.get('page', 1)
+    articles = Article.objects.filter(isActive=True)
+    questions = Question.objects.filter(isActive=True)
+    paginator = Paginator(articles, 12)
+    try:
+        article_pagination = paginator.page(page)
+    except PageNotAnInteger:
+        article_pagination = paginator.page(1)
+    except EmptyPage:
+        article_pagination = paginator.page(paginator.num_pages)
+    context = {
+        "articles": articles,
+        "article_pagination": article_pagination,
+        "questions": questions,
+        "userGroup": userGroup,
+        "existFollower": existFollower,
+        "followers": followers,
+        "followings": followings,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
     return render(request, "ankades/index.html", context)
 
 

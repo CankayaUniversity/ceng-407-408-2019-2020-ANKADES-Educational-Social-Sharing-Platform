@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from adminpanel.views import group, socialmedia, activity, question, permission, course, school, lecture, \
-    department, report
+    department, report, exam
 from adminpanel.views import views, account, article
 
 urlpatterns = [
@@ -134,6 +134,9 @@ urlpatterns = [
     # Lecture
     path('add-lecture/', lecture.admin_add_lecture, name="admin_add_lecture"),
     url(r'^department/(?P<departmentCode>[\w-]+)/lectures/$', lecture.admin_all_lectures, name="admin_all_lectures"),
+
+    # Exam
+    path('sinav-ekle/', exam.admin_add_exam, name="admin_add_exam"),
 
     # Site Settings
     path('edit-privacy-policy/', views.admin_edit_privacy_policy, name="admin_edit_privacy_policy"),

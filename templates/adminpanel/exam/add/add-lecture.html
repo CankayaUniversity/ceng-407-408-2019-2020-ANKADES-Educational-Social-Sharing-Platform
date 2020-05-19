@@ -1,5 +1,5 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Admin Panel | Add Lecture{% endblock %}
+{% block title %}Ankacademy | Add Lecture{% endblock %}
 {% load static %}
 {% block content %}
     <section class="">
@@ -51,7 +51,7 @@
                                            placeholder="Ders Kodu (CENG281)">
                                 </div>
                                 <div class="card-footer">
-                                    <a type="button" href="{% url 'add_lecture' %}"
+                                    <a type="button" href="{% url 'admin_add_lecture' %}"
                                        class="btn btn-danger float-right">Geri</a>
                                     <button type="submit" name="submit" class="btn btn-success">Ekle</button>
                                 </div>
@@ -61,7 +61,7 @@
                             <form role="form" method="get">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
+                                        <label for="school">Okul*</label>
                                         <select id="school" class="form-control select2bs4" style="width: 100%;"
                                                 value="Seçiniz" name="school" required>
                                             <option disabled>Lütfen bir okul seçiniz</option>
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button type="submit" name="submit" class="btn btn-primary">İleri</button>
+                                    <button type="submit" name="submit" class="btn btn-primary">Seç</button>
                                 </div>
                             </form>
                         {% endif %}
@@ -82,5 +82,6 @@
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 {% endblock %}
