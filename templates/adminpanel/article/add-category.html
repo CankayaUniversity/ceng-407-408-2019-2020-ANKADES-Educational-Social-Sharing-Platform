@@ -22,7 +22,7 @@
                                         <option disabled>Lütfen üst kategori seçiniz</option>
                                         {% if articleCategory %}
                                             {% for category in articleCategory %}
-                                                <option value="{{ category.id }}">{{ category.title }}</option>
+                                                <option value="{{ category.id }}">{% if category.parentId.slug != "home" %}{{ category.parentId.title }} -> {% endif %}Kategori: {{ category.title }}</option>
                                             {% endfor %}
                                         {% endif %}
                                     </select>
