@@ -26,6 +26,7 @@
                                             id="categoryId"
                                             required>
                                         <option disabled>Lütfen bir kategori seçiniz</option>
+                                        <option selected value="{{ instance.categoryId.id }}">{{ instance.categoryId.title }}</option>
                                         {% if articleCategory %}
                                             {% for category in articleCategory %}
                                                 <option value="{{ category.id }}">{{ category.title }}</option>
