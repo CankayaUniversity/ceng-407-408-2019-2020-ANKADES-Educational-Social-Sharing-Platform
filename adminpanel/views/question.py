@@ -43,7 +43,7 @@ def admin_add_question_category(request):
                     new_cat.creator = request.user
                     new_cat.save()
                     messages.success(request, "Soru için üst kategori başarıyla eklendi.")
-                    return redirect("admin_add_course_category")
+                    return redirect("admin_add_question_category")
             if getTop == 'q-jOuLKTg':
                 home = QuestionCategory.objects.get(catNumber=getTop)
                 context = {
@@ -73,7 +73,7 @@ def admin_add_question_category(request):
                         new_top.creator = request.user
                         new_top.save()
                         messages.success(request, "Alt kategori başarıyla eklendi.")
-                        return redirect("admin_add_course_category")
+                        return redirect("admin_add_question_category")
                     else:
                         title = request.POST.get('title')
                         isActive = request.POST.get("isActive") == 'on'
@@ -306,8 +306,8 @@ def admin_edit_question(request, slug):
         instance.isActive = isActive
         instance.updatedDate = datetime.datetime.now()
         instance.save()
-        messages.success(request, "Makale başarıyla düzenlendi !")
-        return redirect("admin_all_articles")
+        messages.success(request, "Soru başarıyla düzenlendi !")
+        return redirect("admin_all_questions")
     return render(request, "adminpanel/question/edit-question.html", context)
 
 
