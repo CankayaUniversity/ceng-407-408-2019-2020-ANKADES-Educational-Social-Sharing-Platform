@@ -6,6 +6,8 @@ from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.db.models.signals import pre_save
 from django.shortcuts import render, redirect
+from django.utils.crypto import get_random_string
+from django.views.generic import DetailView
 from rest_framework.generics import get_object_or_404
 
 from ankadescankaya.slug import slug_save
@@ -79,40 +81,87 @@ def admin_add_article_category(request):
     :param request:
     :return:
     """
-    articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=True)).order_by('title')
+    topCategory = ArticleCategoryView.getTopCategory(request)
     userGroup = current_user_group(request, request.user)
     context = {
         "userGroup": userGroup,
-        "articleCategory": articleCategory
+        "topCategory": topCategory
     }
-    if userGroup == 'admin' or userGroup == "moderator":
-        if request.method == "POST":
-            value = request.POST['categoryId']
-            title = request.POST.get("title")
-            isActive = request.POST.get("isActive") == "on"
-            isCategory = request.POST.get("isCategory") == "on"
-            try:
-                getTitle = ArticleCategory.objects.get(title=title)
-                if getTitle.parentId_id == value:
-                    messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
+    if userGroup == 'admin' or userGroup == 'moderator':
+        getTop = request.GET.get('getTop')
+        postTop = request.POST.get('postTop')
+        home = request.POST.get('home')
+        if getTop or home or postTop:
+            if home:  # If request category slug is equal to home
+                parent = ArticleCategory.objects.get(catNumber=home)
+                if request.method == 'POST':
+                    title = request.POST.get('title')
+                    isActive = request.POST.get("isActive") == 'on'
+                    new_cat = ArticleCategory(creator=request.user, isCategory=True, isActive=isActive, isRoot=False, parentId=parent, title=title)
+                    new_cat.catNumber = "c-" + get_random_string(length=7)
+                    new_cat.createdDate = datetime.datetime.now()
+                    new_cat.creator = request.user
+                    new_cat.save()
+                    messages.success(request, "Makale için üst kategori başarıyla eklendi.")
                     return redirect("admin_add_article_category")
-                instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
-                instance.creator = request.user
-                instance.parentId_id = value
-                instance.save()
-                messages.success(request, "Makale kategorisi başarıyla eklendi.")
-                return redirect("admin_add_article_category")
-            except:
-                instance = ArticleCategory(title=title, isActive=isActive, isCategory=isCategory)
-                instance.creator = request.user
-                instance.parentId_id = value
-                instance.save()
-                messages.success(request, "Makale kategorisi başarıyla eklendi.")
-                return redirect("admin_add_article_category")
-        return render(request, "adminpanel/article/add-category.html", context)
+            if getTop == 'c-IGfbPX':
+                home = ArticleCategory.objects.get(catNumber=getTop)
+                context = {
+                    "getTop": getTop,
+                    "userGroup": userGroup,
+                    "home": home
+                }
+                return render(request, "adminpanel/article/add-category.html", context)
+            if postTop:
+                inputTop = ArticleCategory.objects.get(catNumber=postTop)
+                selectSub = ArticleCategory.objects.filter(parentId=inputTop)
+                context = {
+                    "getTop": getTop,
+                    "inputTop": inputTop,
+                    "selectSub": selectSub,
+                    "userGroup": userGroup,
+                }
+                if request.method == 'POST':
+                    selection = request.POST.get('selection')
+                    if selection == 'none':
+                        title = request.POST.get('title')
+                        isActive = request.POST.get("isActive") == 'on'
+                        new_top = ArticleCategory(title=title, isCategory=True, isActive=isActive, isRoot=False, parentId=inputTop)
+                        new_top.catNumber = "c-" + get_random_string(length=7)
+                        new_top.createdDate = datetime.datetime.now()
+                        new_top.creator = request.user
+                        new_top.save()
+                        messages.success(request, "Alt kategori başarıyla eklendi.")
+                        return redirect("admin_add_article_category")
+                    else:
+                        title = request.POST.get('title')
+                        isActive = request.POST.get("isActive") == 'on'
+                        new_lower = ArticleCategory(title=title, isCategory=True, isActive=isActive, isRoot=False, parentId=inputTop)
+                        new_lower.catNumber = "c-" + get_random_string(length=7)
+                        new_lower.createdDate = datetime.datetime.now()
+                        new_lower.creator = request.user
+                        new_lower.save()
+                        messages.success(request, "En alt kategori başarıyla eklendi.")
+                        return redirect("admin_add_article_category")
+                return render(request, "adminpanel/article/add-category.html", context)
+            else:
+                inputTop = ArticleCategory.objects.get(catNumber=getTop)
+                selectSub = ArticleCategory.objects.filter(parentId=inputTop)
+                context = {
+                    "getTop": getTop,
+                    "inputTop": inputTop,
+                    "selectSub": selectSub,
+                    "userGroup": userGroup,
+                }
+                return render(request, "adminpanel/article/add-category.html", context)
+        else:
+            return render(request, "adminpanel/article/add-category.html", context)
     else:
         return redirect("index")
 
+
+
+# instance.catNumber = "c-" + get_random_string(length=6)
 
 @login_required(login_url="login_admin")
 def admin_edit_article_category(request, slug):
@@ -255,3 +304,39 @@ def admin_delete_article_category(request, slug):
         instance.delete()
         messages.success(request, "Makale kategorisi başarıyla silindi.")
         return redirect("admin_article_categories")
+
+
+class ArticleCategoryView(DetailView):
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getTopCategory(request):
+        """
+        :param request:
+        :return topCategory:
+        """
+        topCategory = ArticleCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True)|Q(isRoot=True))
+        return topCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getSubCategory(request, catNumber):
+        """
+        :param request:
+        :param catNumber:
+        :return subCategory:
+        """
+        instance = get_object_or_404(ArticleCategory, catNumber=catNumber)
+        subCategory = ArticleCategory.objects.filter(parentId__catNumber=instance)
+        return subCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getLowCategory(request, catNumber):
+        """
+        :param request:
+        :return catNumber:
+        """
+        instance = get_object_or_404(ArticleCategory, catNumber=catNumber)
+        lowCategory = ArticleCategory.objects.filter(parentId__catNumber=instance)
+        return lowCategory

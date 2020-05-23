@@ -51,6 +51,10 @@ def current_user_group(self, username):
 
 
 def get_404(request):
+    """
+    :param request:
+    :return:
+    """
     categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     context = {

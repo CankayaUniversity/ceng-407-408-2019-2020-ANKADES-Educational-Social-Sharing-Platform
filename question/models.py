@@ -26,9 +26,10 @@ class QuestionCategory(models.Model):
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
     isCategory = models.BooleanField(default=False)
+    catNumber = models.CharField(unique=True, blank=True, null=True, max_length=9)
 
     def __str__(self):
-        return self.title
+        return self.catNumber
 
     class Meta:
         db_table = "QuestionCategory"

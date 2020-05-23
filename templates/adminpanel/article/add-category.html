@@ -1,55 +1,114 @@
 {% extends 'adminpanel/layout/layout.html' %}
-{% block title %}Ankacademy | Admin Panel | Add Category{% endblock %}
-{% load crispy_forms_tags %}
-{% load crispy_forms_field %}
+{% block title %}Ankacademy | Add Lower Category{% endblock %}
 {% load static %}
 {% block content %}
-    <section class="content-header">
+    <section class="">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-primary">
+                    <div class="card card-primary mt-5">
                         <div class="card-header">
-                            <h3 class="card-title">Makale Kategori Ekleme</h3>
+                            <h3 class="card-title">En Alt Kategori Ekle</h3>
                         </div>
-                        <div class="card-body">
-                            <form method="post" enctype="multipart/form-data" class="form-control-user" action="{% url 'admin_add_article_category' %}">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="select">Üst Kategorisi*</label>
-                                    <select id="select" class="form-control select2bs4" style="width: 100%;" value="Seçiniz" name="categoryId"
-                                            required>
-                                        <option disabled>Lütfen üst kategori seçiniz</option>
-                                        {% if articleCategory %}
-                                            {% for category in articleCategory %}
-                                                <option value="{{ category.id }}">{% if category.parentId.slug != "home" %}{{ category.parentId.title }} -> {% endif %}Kategori: {{ category.title }}</option>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="title">Başlık</label>
-                                    <input type="text" id="title" class="form-control" name="title" placeholder="Kategori Adı">
-                                </div>
-                                <div class="form-group mb-0">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="isActive" class="custom-control-input"
-                                               id="isActive">
-                                        <label class="custom-control-label" for="isActive">Aktiflik</label>
+                        {% if getTop == 'c-IGfbPX' %}
+                            <div class="card-body">
+                                {#Post Form#}
+                                <form role="form" method="post" action="{% url 'admin_add_article_category' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group" style="">
+                                        <label for="home">Üst Kategori : {{ home.title }}*</label>
+                                        <input type="hidden" id="home" class="form-control" name="home" readonly
+                                               value="{{ home.catNumber }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Kategori Adı*</label>
+                                        <input type="text" id="title" class="form-control" name="title" required
+                                               placeholder="Başlık">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="isActive" class="custom-control-input"
+                                                   id="isActive">
+                                            <label class="custom-control-label"
+                                                   for="isActive">Aktiflik</label>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" name="submit" style="width: 100% !important;"
+                                                class="float-right btn btn-success">Kaydet
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        {% elif getTop and getTop != 'c-IGfbPX' %}
+                            <div class="card-body">
+                                {#Post Form#}
+                                <form role="form" method="post" action="{% url 'admin_add_article_category' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="postTop">Üst Kategori : {{ inputTop.title }}*</label>
+                                        <input type="hidden" id="postTop" class="form-control" name="postTop" readonly
+                                               value="{{ inputTop.catNumber }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="selection">Alt Kategori*</label>
+                                        <select id="selection" class="form-control select2bs4" style="width: 100%;"
+                                                name="selection" required>
+                                            <option disabled>Lütfen bir bölüm seçiniz</option>
+                                            <option selected value="none">Üst Kategori (2. Kırılım) Olacaksa Değiştirmeyin !!!</option>
+                                            {% if selectSub %}
+                                                {% for sub in selectSub %}
+                                                    <option value="{{ sub.catNumber }}">{{ sub.title }}</option>
+                                                {% endfor %}
+                                            {% else %}
+                                                <option disabled>{{ top.title }} bulunamadı.</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Kategori Adı*</label>
+                                        <input type="text" id="title" class="form-control" name="title" required
+                                               placeholder="Kategori Adı">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="isActive" class="custom-control-input"
+                                                   id="isActive">
+                                            <label class="custom-control-label"
+                                                   for="isActive">Aktiflik</label>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a type="button" href="{% url 'admin_add_article_category' %}"
+                                           class="btn btn-danger float-left" style="width: 30% !important;">Geri</a>
+                                        <button type="submit" name="submit" class="btn btn-success float-right" style="width: 30% !important;">Ekle</button>
+                                    </div>
+                                </form>
+                            </div>
+                        {% else %}
+                            {#Get Form#}
+                            <form role="form" method="get">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="getTop">Üst Kategori*</label>
+                                        <select id="getTop" class="form-control select2bs4" style="width: 100%;"
+                                                value="Seçiniz" name="getTop" required>
+                                            <option disabled>Lütfen bir kategori seçiniz</option>
+                                            {% if topCategory %}
+                                                {% for top in topCategory %}
+                                                    <option value="{{ top.catNumber }}">{{ top.title }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group mb-0">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="isCategory" class="custom-control-input"
-                                               id="isCategory">
-                                        <label class="custom-control-label" for="isCategory">Üst Kategori mi ?</label>
-                                    </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="submit" style="width: 100% !important;"
+                                            class="float-right btn btn-success">İleri
+                                    </button>
                                 </div>
-                                <br>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">Ekle
-                                </button>
                             </form>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

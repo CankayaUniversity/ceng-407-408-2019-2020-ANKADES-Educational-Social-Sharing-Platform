@@ -5,7 +5,7 @@
 {% load static %}
 {% block content %}
     <div class="content-header">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row mb-2 mt-2">
                 <div class="col-sm-12">
                     <h1 class="m-0 text-dark">Tüm Makaleler</h1>
@@ -14,12 +14,13 @@
         </div>
     </div>
     <section class="content">
-        <div class="container">
+        <div class="card">
+        <div class="container-fluid">
             <div class="row">
                 {% if articles %}
                     {% if article_pagination %}
                         {% for article in article_pagination %}
-                            <div class="card-deck col-4 mb-5">
+                            <div class="card-deck col-3 p-3">
                                 <div class="card">
                                     <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
                                          width="504" height="250">
@@ -53,6 +54,7 @@
                     </div>
                 {% endif %}
             </div>
+        </div>
         </div>
     </section>
 {% endblock %}

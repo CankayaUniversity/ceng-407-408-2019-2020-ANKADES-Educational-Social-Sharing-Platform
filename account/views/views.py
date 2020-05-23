@@ -7,6 +7,7 @@ from django.urls import reverse
 from rest_framework.generics import get_object_or_404
 
 from account.models import Account, Group, AccountGroup, AccountSocialMedia, AccountPermission, SocialMedia, AccountFollower
+from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.views.views import Categories, current_user_group
 from article.models import Article
 from course.models import Course

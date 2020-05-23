@@ -27,9 +27,10 @@ class ArticleCategory(models.Model):
     view = models.PositiveIntegerField(default=0)
     isActive = models.BooleanField(default=True)
     isCategory = models.BooleanField(default=False)
+    catNumber = models.CharField(unique=True, max_length=9, null=True, blank=True)
 
     def __str__(self):
-        return self.slug
+        return self.catNumber
 
     class Meta:
         db_table = "ArticleCategory"

@@ -21,7 +21,7 @@ urlpatterns = [
     path('privacy-policy/', main_view.privacy_policy, name="privacy_policy"),
     path('search', main_view.search_keyword, name="search_keyword"),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^(?P<username>[\w-]+)/$', account_view.account_detail, name="account_detail"),
+    url(r'^@(?P<username>[\w-]+)/$', account_view.account_detail, name="account_detail"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

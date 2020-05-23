@@ -65,11 +65,11 @@
                             </a>
                         </li>
                     {% endif %}
-                    {% if userGroup == 'admin' or userGroup == 'moderator' or userPermission == 'can_add_department' %}
+                    {% if userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'ogretmen' %}
                         <li class="nav-item">
-                            <a href="{% url 'add_department' %}" class="nav-link">
+                            <a href="{% url 'add_exam' %}" class="nav-link">
                                 <i class="nav-icon far fa-circle text-primary"></i>
-                                <p>Bölüm Ekle</p>
+                                <p>Sınav Ekle</p>
                             </a>
                         </li>
                     {% endif %}
