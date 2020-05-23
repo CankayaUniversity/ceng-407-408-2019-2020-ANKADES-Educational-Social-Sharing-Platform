@@ -2,37 +2,38 @@
 {% load static %}
 {% block title %}{{ instance.title }}{% endblock %}
 {% block content %}
-    <div class="content-header">
+    <div class="content-header mb-0">
         <div class="container">
-            <div class="row mb-2">
+            <div class="row">
                 <div class="col-sm-12">
-                    <ol class="breadcrumb float-sm-left">
-                        <li class="breadcrumb-item"><a href="{% url 'all_articles' %}">Tüm Makaleler</a></li>
-                        {% if instance.categoryId.parentId.parentId.slug != "home" %}
-                            <li class="breadcrumb-item"><a
-                                    href="{% url 'article_category_page' instance.categoryId.parentId.parentId.slug %}">{{ instance.categoryId.parentId.parentId.title }}</a>
-                            </li>
-                        {% endif %}
-                        {% if instance.parentId.slug != "home" %}
-                            <li class="breadcrumb-item"><a
-                                    href="{% url 'article_category_page' instance.categoryId.parentId.slug %}">{{ instance.categoryId.parentId.title }}</a>
-                            </li>
-                        {% endif %}
-                        {% if instance.parentId.slug != "home" %}
-                            <li class="breadcrumb-item"><a
-                                    href="{% url 'article_category_page' instance.categoryId.slug %}">{{ instance.categoryId.title }}</a>
-                            </li>
-                        {% endif %}
-                        <li class="breadcrumb-item active">{{ instance.title|truncatewords:15 }}</li>
-                    </ol>
+{#                    <ol class="breadcrumb float-sm-left">#}
+{#                        <li class="breadcrumb-item"><a href="{% url 'all_articles' %}">Tüm Makaleler</a></li>#}
+                        <p style="font-size: 2em !important;" class="text-center">{{ instance.title }}</p>
+{#                        {% if instance.categoryId.parentId.parentId.slug != "home" %}#}
+{#                            <li class="breadcrumb-item"><a#}
+{#                                    href="{% url 'article_category_page' instance.categoryId.parentId.parentId.slug %}">{{ instance.categoryId.parentId.parentId.title }}</a>#}
+{#                            </li>#}
+{#                        {% endif %}#}
+{#                        {% if instance.parentId.slug != "home" %}#}
+{#                            <li class="breadcrumb-item"><a#}
+{#                                    href="{% url 'article_category_page' instance.categoryId.parentId.slug %}">{{ instance.categoryId.parentId.title }}</a>#}
+{#                            </li>#}
+{#                        {% endif %}#}
+{#                        {% if instance.parentId.slug != "home" %}#}
+{#                            <li class="breadcrumb-item"><a#}
+{#                                    href="{% url 'article_category_page' instance.categoryId.slug %}">{{ instance.categoryId.title }}</a>#}
+{#                            </li>#}
+{#                        {% endif %}#}
+{#                        <li class="breadcrumb-item active">{{ instance.title|truncatewords:15 }}</li>#}
+{#                    </ol>#}
                 </div>
             </div>
         </div>
     </div>
-    <section class="content">
+    <section class="content mt-0">
         <div class="container">
             <div class="row">
-                <div class="card card-widget mt-3 p-3 col-lg-12">
+                <div class=" card-widget mt-3 p-3 col-lg-12">
                     <div class="card-header">
                         <div class="user-block">
                             <img class="img-circle" src="{{ instance.creator.image.url }}"
@@ -42,26 +43,26 @@
                             <span class="description">Paylaşım tarihi - {{ instance.createdDate }}
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="container-fluid" style="width: 100% !important;">
                         {% if instance.media != "no-image-available.png" %}
                             <img class="img-fluid pad" src="{{ instance.media.url }}" alt="{{ instance.title }}"
-                                 width="100%" style="height: 800px !important;">
+                                 width="100%" style="max-height: 800px !important;">
                         {% endif %}
-                        <div class="container-fluid container p-5" style="background: #f8f9fa">
-                            <p style="font-size: 3em">{{ instance.title }}</p>
+                        <div class="container-fluid">
+                            {{ instance.description|safe }}
                             <p>
-                                <i style="color: #57a4ff" class="fa fa-ticket-alt"> {{ instance.categoryId }}</i>
+                                <i style="color: #57a4ff" class="fa fa-ticket-alt"> {{ instance.categoryId.title }}</i>
                             </p>
-                            {{ instance.description|safe }}</div>
-                        <div class="container mt-3">
-                            <button type="button" class="btn btn-danger btn-md"><i class="fas fa-share"></i> Paylaş
+                        </div>
+                        <div class="container-fluid mt-3">
+                            <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-share"></i> Paylaş
                             </button>
                             <a type="button" data-href='{{ instance.get_api_like_url }}'
                                data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
-                               class="btn btn-primary btn-md"><i class="far fa-thumbs-up"></i> Beğen
+                               class="btn btn-primary btn-sm"><i class="far fa-thumbs-up"></i> Beğen
                             </a>
                             {% if instance.creator == request.user %}
-                                <a class="btn btn-info btn-md"
+                                <a class="btn btn-info btn-sm"
                                    href="{% url 'edit_article' instance.slug %}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
@@ -69,7 +70,7 @@
                                 </a>
                             {% endif %}
                             {% if instance.creator != request.user %}
-                                <a type="button" class="btn btn-warning btn-md" data-toggle="modal"
+                                <a type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                    data-target="#modal-default" style="color: white;">
                                     Şikayet Et
                                 </a>
