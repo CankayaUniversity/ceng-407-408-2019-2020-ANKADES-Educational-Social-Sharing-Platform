@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.crypto import get_random_string
+from django.views.generic import DetailView
 
 from ankadescankaya.views.views import current_user_group
 from course.models import CourseCategory, Course
@@ -15,36 +17,86 @@ def admin_add_course_category(request):
     :param request:
     :return:
     """
-    courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=True))
+    topCategory = CourseCategoryView.getTopCategory(request)
     userGroup = current_user_group(request, request.user)
     context = {
         "userGroup": userGroup,
-        "courseCategory": courseCategory,
+        "topCategory": topCategory
     }
-    if userGroup == 'admin':
-        if request.method == "POST":
-            categoryId = request.POST["categoryId"]
-            title = request.POST.get("title")
-            isActive = request.POST.get("isActive") == "on"
-            isCategory = request.POST.get("isCategory") == "on"
-            try:
-                getTitle = CourseCategory.objects.get(title=title)
-                if title:
-                    error = title + " isimli kategori " + getTitle.parentId.title + " kategorisinde zaten mevcut."
-                    messages.error(request, error)
+    if userGroup == 'admin' or userGroup == 'moderator':
+        getTop = request.GET.get('getTop')
+        postTop = request.POST.get('postTop')
+        home = request.POST.get('home')
+        if getTop or home or postTop:
+            if home:  # If request category slug is equal to home
+                parent = CourseCategory.objects.get(catNumber=home)
+                if request.method == 'POST':
+                    title = request.POST.get('title')
+                    isActive = request.POST.get("isActive") == 'on'
+                    new_cat = CourseCategory(creator=request.user, isCategory=True, isActive=isActive, isRoot=False,
+                                              parentId=parent, title=title)
+                    new_cat.catNumber = "cc-" + get_random_string(length=6)
+                    new_cat.createdDate = datetime.datetime.now()
+                    new_cat.creator = request.user
+                    new_cat.save()
+                    messages.success(request, "Kurs için üst kategori başarıyla eklendi.")
                     return redirect("admin_add_course_category")
-            except:
-                instance = CourseCategory(title=title, isActive=isActive,
-                                          isCategory=isCategory)
-                instance.creator = request.user
-                instance.parentId_id = categoryId
-                instance.save()
-                messages.success(request, "Kurs kategorisi başarıyla eklendi !")
-                return redirect("admin_course_categories")
-        return render(request, "adminpanel/course/add-course-category.html", context)
+            if getTop == 'cc-rochVWt':
+                home = CourseCategory.objects.get(catNumber=getTop)
+                context = {
+                    "getTop": getTop,
+                    "userGroup": userGroup,
+                    "home": home
+                }
+                return render(request, "adminpanel/course/add-course-category.html", context)
+            if postTop:
+                inputTop = CourseCategory.objects.get(catNumber=postTop)
+                selectSub = CourseCategory.objects.filter(parentId=inputTop)
+                context = {
+                    "getTop": getTop,
+                    "inputTop": inputTop,
+                    "selectSub": selectSub,
+                    "userGroup": userGroup,
+                }
+                if request.method == 'POST':
+                    selection = request.POST.get('selection')
+                    if selection == 'none':
+                        title = request.POST.get('title')
+                        isActive = request.POST.get("isActive") == 'on'
+                        new_top = CourseCategory(title=title, isCategory=True, isActive=isActive, isRoot=False,
+                                                  parentId=inputTop)
+                        new_top.catNumber = "cc-" + get_random_string(length=6)
+                        new_top.createdDate = datetime.datetime.now()
+                        new_top.creator = request.user
+                        new_top.save()
+                        messages.success(request, "Alt kategori başarıyla eklendi.")
+                        return redirect("admin_add_course_category")
+                    else:
+                        title = request.POST.get('title')
+                        isActive = request.POST.get("isActive") == 'on'
+                        new_lower = CourseCategory(title=title, isCategory=True, isActive=isActive, isRoot=False,
+                                                    parentId=inputTop)
+                        new_lower.catNumber = "cc-" + get_random_string(length=6)
+                        new_lower.createdDate = datetime.datetime.now()
+                        new_lower.creator = request.user
+                        new_lower.save()
+                        messages.success(request, "En alt kategori başarıyla eklendi.")
+                        return redirect("admin_add_course_category")
+                return render(request, "adminpanel/course/add-course-category.html", context)
+            else:
+                inputTop = CourseCategory.objects.get(catNumber=getTop)
+                selectSub = CourseCategory.objects.filter(parentId=inputTop)
+                context = {
+                    "getTop": getTop,
+                    "inputTop": inputTop,
+                    "selectSub": selectSub,
+                    "userGroup": userGroup,
+                }
+                return render(request, "adminpanel/course/add-course-category.html", context)
+        else:
+            return render(request, "adminpanel/course/add-course-category.html", context)
     else:
-        messages.error(request, "Yetkiniz yok!")
-        return redirect("admin_dashboard")
+        return redirect("index")
 
 
 @login_required(login_url="login_admin")
@@ -203,3 +255,39 @@ def admin_all_courses(request):
         "userGroup": userGroup,
     }
     return render(request, "adminpanel/course/all-courses.html", context)
+
+
+class CourseCategoryView(DetailView):
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getTopCategory(request):
+        """
+        :param request:
+        :return topCategory:
+        """
+        topCategory = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True)|Q(isRoot=True))
+        return topCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getSubCategory(request, catNumber):
+        """
+        :param request:
+        :param catNumber:
+        :return subCategory:
+        """
+        instance = get_object_or_404(CourseCategory, catNumber=catNumber)
+        subCategory = CourseCategory.objects.filter(parentId__catNumber=instance)
+        return subCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getLowCategory(request, catNumber):
+        """
+        :param request:
+        :return catNumber:
+        """
+        instance = get_object_or_404(CourseCategory, catNumber=catNumber)
+        lowCategory = CourseCategory.objects.filter(parentId__catNumber=instance)
+        return lowCategory

@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.signals import pre_save
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.crypto import get_random_string
+from django.views.generic import DetailView
 
 from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group
@@ -18,37 +20,84 @@ def admin_add_question_category(request):
     :param request:
     :return:
     """
-    questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=True))
+    topCategory = QuestionCategoryView.getTopCategory(request)
     userGroup = current_user_group(request, request.user)
     context = {
         "userGroup": userGroup,
-        "questionCategory": questionCategory,
+        "topCategory": topCategory
     }
-    if userGroup == 'admin' or userGroup == "moderator":
-        if request.method == "POST":
-            value = request.POST['categoryId']
-            title = request.POST.get("title")
-            isActive = request.POST.get("isActive") == "on"
-            isCategory = request.POST.get("isCategory") == "on"
-            try:
-                getTitle = QuestionCategory.objects.get(title=title)
-                if getTitle.parentId.id == value:
-                    messages.error(request, "Eklemek istediğiniz kategori zaten mevcut.")
-                    return redirect("admin_add_question_category")
-                instance = QuestionCategory(title=title, isActive=isActive, isCategory=isCategory)
-                instance.creator = request.user
-                instance.parentId_id = value
-                instance.save()
-                messages.success(request, "Makale kategorisi başarıyla eklendi.")
-                return redirect("admin_add_question_category")
-            except:
-                instance = QuestionCategory(title=title, isActive=isActive, isCategory=isCategory)
-                instance.creator = request.user
-                instance.parentId_id = value
-                instance.save()
-                messages.success(request, "Makale kategorisi başarıyla eklendi.")
-                return redirect("admin_add_question_category")
-        return render(request, "adminpanel/question/add-category.html", context)
+    if userGroup == 'admin' or userGroup == 'moderator':
+        getTop = request.GET.get('getTop')
+        postTop = request.POST.get('postTop')
+        home = request.POST.get('home')
+        if getTop or home or postTop:
+            if home:  # If request category slug is equal to home
+                parent = QuestionCategory.objects.get(catNumber=home)
+                if request.method == 'POST':
+                    title = request.POST.get('title')
+                    isActive = request.POST.get("isActive") == 'on'
+                    new_cat = QuestionCategory(creator=request.user, isCategory=True, isActive=isActive, isRoot=False,
+                                             parentId=parent, title=title)
+                    new_cat.catNumber = "q-" + get_random_string(length=7)
+                    new_cat.createdDate = datetime.datetime.now()
+                    new_cat.creator = request.user
+                    new_cat.save()
+                    messages.success(request, "Soru için üst kategori başarıyla eklendi.")
+                    return redirect("admin_add_course_category")
+            if getTop == 'q-jOuLKTg':
+                home = QuestionCategory.objects.get(catNumber=getTop)
+                context = {
+                    "getTop": getTop,
+                    "userGroup": userGroup,
+                    "home": home
+                }
+                return render(request, "adminpanel/question/add-category.html", context)
+            if postTop:
+                inputTop = QuestionCategory.objects.get(catNumber=postTop)
+                selectSub = QuestionCategory.objects.filter(parentId=inputTop)
+                context = {
+                    "getTop": getTop,
+                    "inputTop": inputTop,
+                    "selectSub": selectSub,
+                    "userGroup": userGroup,
+                }
+                if request.method == 'POST':
+                    selection = request.POST.get('selection')
+                    if selection == 'none':
+                        title = request.POST.get('title')
+                        isActive = request.POST.get("isActive") == 'on'
+                        new_top = QuestionCategory(title=title, isCategory=True, isActive=isActive, isRoot=False,
+                                                 parentId=inputTop)
+                        new_top.catNumber = "q-" + get_random_string(length=7)
+                        new_top.createdDate = datetime.datetime.now()
+                        new_top.creator = request.user
+                        new_top.save()
+                        messages.success(request, "Alt kategori başarıyla eklendi.")
+                        return redirect("admin_add_course_category")
+                    else:
+                        title = request.POST.get('title')
+                        isActive = request.POST.get("isActive") == 'on'
+                        new_lower = QuestionCategory(title=title, isCategory=True, isActive=isActive, isRoot=False,
+                                                   parentId=inputTop)
+                        new_lower.catNumber = "q-" + get_random_string(length=7)
+                        new_lower.createdDate = datetime.datetime.now()
+                        new_lower.creator = request.user
+                        new_lower.save()
+                        messages.success(request, "En alt kategori başarıyla eklendi.")
+                        return redirect("admin_add_question_category")
+                return render(request, "adminpanel/question/add-category.html", context)
+            else:
+                inputTop = QuestionCategory.objects.get(catNumber=getTop)
+                selectSub = QuestionCategory.objects.filter(parentId=inputTop)
+                context = {
+                    "getTop": getTop,
+                    "inputTop": inputTop,
+                    "selectSub": selectSub,
+                    "userGroup": userGroup,
+                }
+                return render(request, "adminpanel/question/add-category.html", context)
+        else:
+            return render(request, "adminpanel/question/add-category.html", context)
     else:
         return redirect("index")
 
@@ -260,3 +309,39 @@ def admin_edit_question(request, slug):
         messages.success(request, "Makale başarıyla düzenlendi !")
         return redirect("admin_all_articles")
     return render(request, "adminpanel/question/edit-question.html", context)
+
+
+class QuestionCategoryView(DetailView):
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getTopCategory(request):
+        """
+        :param request:
+        :return topCategory:
+        """
+        topCategory = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True)|Q(isRoot=True))
+        return topCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getSubCategory(request, catNumber):
+        """
+        :param request:
+        :param catNumber:
+        :return subCategory:
+        """
+        instance = get_object_or_404(QuestionCategory, catNumber=catNumber)
+        subCategory = QuestionCategory.objects.filter(parentId__catNumber=instance)
+        return subCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getLowCategory(request, catNumber):
+        """
+        :param request:
+        :return catNumber:
+        """
+        instance = get_object_or_404(QuestionCategory, catNumber=catNumber)
+        lowCategory = QuestionCategory.objects.filter(parentId__catNumber=instance)
+        return lowCategory

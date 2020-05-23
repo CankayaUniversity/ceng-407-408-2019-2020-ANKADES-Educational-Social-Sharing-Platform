@@ -340,3 +340,4 @@ class ArticleCategoryView(DetailView):
         instance = get_object_or_404(ArticleCategory, catNumber=catNumber)
         lowCategory = ArticleCategory.objects.filter(parentId__catNumber=instance)
         return lowCategory
+
