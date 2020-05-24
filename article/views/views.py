@@ -12,6 +12,7 @@ from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 
+from account.views.views import get_user_follower
 from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group, Categories
@@ -258,6 +259,8 @@ def article_detail(request, username, slug):
     categories = Categories.all_categories()
     try:
         instance = Article.objects.get(slug=slug)
+        creatorGroup = current_user_group(request, instance.creator.username)
+        existFollower = get_user_follower(request, request.user, instance)
     except:
         return redirect("404")
     if instance.creator.username != username:
@@ -271,6 +274,8 @@ def article_detail(request, username, slug):
     instance.save()
     context = {
         "articles": articles,
+        "creatorGroup": creatorGroup,
+        "existFollower": existFollower,
         "reportSubjects": reportSubjects,
         "relatedPosts": relatedPosts,
         "instance": instance,
@@ -287,7 +292,7 @@ def article_detail(request, username, slug):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "ankades/article/article-detail.html", context)
+    return render(request, "ankacademy/article/article-detail.html", context)
 
 
 @login_required(login_url="login_account")
