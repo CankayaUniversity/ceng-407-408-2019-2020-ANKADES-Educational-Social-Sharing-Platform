@@ -1,0 +1,51 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}Okullar | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'all_schools' %}">Okullar</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Okullar</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box table-responsive">
+                    <table id="search-schools-table" class="table table-striped table-bordered dt-responsive nowrap"
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Okul Adı</th>
+                            <th>Bölümlere Git</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for school in schools %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'all_departments' school.slug %}"
+                                       style="font-size: 18px; color: #2a2a2a;">{{ school.title }}</a>
+                                </td>
+                                <td>
+                                    <a type="button" class="btn btn-primary btn-sm"
+                                       href="{% url 'all_departments' school.slug %}">Bölümlere
+                                        Git</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

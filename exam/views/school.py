@@ -28,4 +28,4 @@ def all_schools(request):
         "courseLowerCategories": categories[8],
         "schools": schools,
     }
-    return render(request, "ankades/exam/all-schools.html", context)
+    return render(request, "ankacademy/exam/all-schools.html", context)
