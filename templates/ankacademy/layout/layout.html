@@ -5,22 +5,18 @@
     <meta charset="utf-8"/>
     <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Responsive bootstrap 4 admin template" name="description"/>
+    <meta content="{% block meta %}{% endblock %}" name="description"/>
     <meta content="Ankacademy" name="Ankacademy"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
+    {% block statics %}{% endblock %}
     <link href="{% static 'ankacademy/libs/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet"/>
     <link href="{% static 'ankacademy/libs/switchery/switchery.min.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'ankacademy/libs/multiselect/multi-select.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'ankacademy/libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'ankacademy/libs/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{% static 'ankacademy/libs/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{% static 'ankacademy/libs/datatables/responsive.bootstrap4.min.css' %}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{% static 'ankacademy/libs/datatables/fixedColumns.bootstrap4.min.css' %}" rel="stylesheet"
+    <link href="{% static 'ankacademy/libs/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'ankacademy/libs/tooltipster/tooltipster.bundle.min.css' %}" rel="stylesheet"
           type="text/css"/>
 
     <link href="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"
@@ -122,18 +118,17 @@
 <script src="{% static 'ankacademy/libs/bootstrap-select/bootstrap-select.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/bootstrap-maxlength/bootstrap-maxlength.min.js' %}"></script>
-<script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
-<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
-<script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
-<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+{% block scripts %}{% endblock %}
+
 <!--Form Wizard-->
-<script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
-<script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
-<script src="{% static 'ankacademy/js/pages/form-wizard.init.js' %}"></script>
+
+
 <!--Toastr-->
 <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/tables.js' %}"></script>
+<!--ToolTip-->
+<script src="{% static 'ankacademy/libs/tooltipster/tooltipster.bundle.min.js' %}"></script>
+<script src="{% static 'ankacademy/js/pages/tooltipster.init.js' %}"></script>
 
 
 <!-- Init js-->
@@ -141,11 +136,6 @@
 
 <!-- App js -->
 <script src="{% static 'ankacademy/js/app.min.js' %}"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        bsCustomFileInput.init();
-    });
-</script>
 <script>
     $(function () {
         {#//Initialize Select2 Elements#}

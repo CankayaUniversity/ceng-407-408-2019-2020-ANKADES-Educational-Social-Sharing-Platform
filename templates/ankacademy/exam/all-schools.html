@@ -1,6 +1,14 @@
 {% extends 'ankacademy/layout/layout.html' %}
 {% load static %}
 {% block title %}Okullar | Ankacademy{% endblock %}
+{% block statics %}
+    <link href="{% static 'ankacademy/libs/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'ankacademy/libs/datatables/responsive.bootstrap4.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'ankacademy/libs/datatables/fixedcolumns.bootstrap4.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -48,4 +56,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
 {% endblock %}

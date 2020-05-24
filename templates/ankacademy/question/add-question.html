@@ -62,7 +62,9 @@
                                 <div class="col-lg-12">
                                     <div class="checkbox checkbox-primary">
                                         <input id="checkbox-v" type="checkbox" checked required disabled>
-                                        <label for="checkbox-v"> <a href="{% url 'terms_of_use' %}">Kullanım Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik Politikası</a>nı okudum ve kabul ediyorum. </label>
+                                        <label for="checkbox-v"> <a href="{% url 'terms_of_use' %}">Kullanım
+                                            Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik
+                                            Politikası</a>nı okudum ve kabul ediyorum. </label>
                                     </div>
                                 </div>
                             </div>
@@ -73,4 +75,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/form-wizard.init.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
 {% endblock %}

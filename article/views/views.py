@@ -187,12 +187,13 @@ def add_article(request):
         title = request.POST.get("title")
         owner = request.POST.get("owner")
         resource = request.POST.get("resource")
+        introduction = request.POST.get("introduction")
         isPrivate = request.POST.get("isPrivate") == "on"
         if form.is_valid():
             description = form.cleaned_data.get("description")
             abstract = form.cleaned_data.get("abstract")
-        if not title and description:
-            messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
+        if not introduction or description:
+            messages.error(request, "Makalenin hepsi veya ön yazısı yayınlanmadan devam edemezsiniz.")
             return render(request, "ankades/article/add-article.html", context)
         instance = Article(title=title, description=description, isPrivate=isPrivate, owner=owner, resource=resource)
         if request.FILES:
@@ -203,11 +204,12 @@ def add_article(request):
         instance.creator = request.user
         instance.categoryId_id = value
         instance.isActive = True
+        instance.introduction = introduction
         instance.postNumber = get_random_string(length=32)
         instance.save()
         messages.success(request, "Makale başarıyla eklendi !")
         return redirect("index")
-    return render(request, "ankades/article/add-article.html", context)
+    return render(request, "ankacademy/article/add-article.html", context)
 
 
 @login_required(login_url="login_account")
