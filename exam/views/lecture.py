@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.utils.crypto import get_random_string
 
 from ankadescankaya.views.views import current_user_group, Categories
 from exam.models import Department, School, Lecture
@@ -14,6 +15,7 @@ def lectures(request, departmentCode):
     :return:
     """
     try:
+        instance = Department.objects.get(departmentCode=departmentCode)
         lectures = Lecture.objects.filter(departmentId__departmentCode=departmentCode, isActive=True)
         allLectures = Lecture.objects.filter(isActive=True)
     except:
@@ -23,6 +25,7 @@ def lectures(request, departmentCode):
     categories = Categories.all_categories()
     context = {
         "schools": allLectures,
+        "instance": instance,
         "userGroup": userGroup,
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
@@ -35,7 +38,7 @@ def lectures(request, departmentCode):
         "courseLowerCategories": categories[8],
         "lectures": lectures,
     }
-    return render(request, "ankades/exam/all-lectures.html", context)
+    return render(request, "ankacademy/exam/all-lectures.html", context)
 
 
 def add_lecture(request):
@@ -93,6 +96,7 @@ def add_lecture(request):
                 return redirect("add_lecture")
             else:
                 instance.title = title
+                instance.postNumber = get_random_string(length=32)
                 instance.isActive = True
                 instance.creator = request.user
                 instance.createdDate = datetime.datetime.now()

@@ -102,17 +102,23 @@ def add_exam(request):
         return redirect("index")
 
 
-def lecture_exam(request, slug):
+def lecture_exam(request, postNumber):
     """
     :param request:
-    :param slug:
+    :param postNumber:
     :return:
     """
-    exams = Exam.objects.filter(lectureId__slug=slug, isActive=True)
+    try:
+        instance = Lecture.objects.get(postNumber=postNumber)
+    except:
+        messages.error(request, "Ders bulunamadı.")
+        return redirect("all_schools")
+    exams = Exam.objects.filter(lectureId__postNumber=postNumber, isActive=True)
     categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     context = {
         "userGroup": userGroup,
+        "instance": instance,
         "exams": exams,
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
@@ -124,4 +130,4 @@ def lecture_exam(request, slug):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "ankades/exam/lecture-exam.html", context)
+    return render(request, "ankacademy/exam/lecture-exam.html", context)

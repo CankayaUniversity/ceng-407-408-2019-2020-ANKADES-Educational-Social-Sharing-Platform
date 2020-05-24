@@ -48,8 +48,8 @@ class Department(models.Model):
 
 class Lecture(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lectureCode = models.CharField(null=False, blank=False, max_length=10)
-    slug = models.SlugField(max_length=254, allow_unicode=True)
+    lectureCode = models.CharField(null=True, blank=True, max_length=10)
+    postNumber = models.CharField(null=True, blank=True, max_length=32, unique=True)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     departmentId = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=254, null=False, blank=False, verbose_name="Post Title")
@@ -58,10 +58,10 @@ class Lecture(models.Model):
     isActive = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.lectureCode
+        return self.postNumber
 
     def __unicode__(self):
-        return self.lectureCode
+        return self.postNumber
 
     class Meta:
         db_table = "Lecture"
@@ -121,5 +121,4 @@ class LectureExam(models.Model):
 
 pre_save.connect(slug_save, sender=School)
 pre_save.connect(slug_save, sender=Department)
-pre_save.connect(slug_save, sender=Lecture)
 pre_save.connect(slug_save, sender=Term)

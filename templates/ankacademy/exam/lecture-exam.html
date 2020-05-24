@@ -1,0 +1,69 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% block title %}Ankacademy | Sınavlar{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="">Okullar</a></li>
+                            <li class="breadcrumb-item"><a href="">{{ instance.departmentId.schoolId.title }}</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="">{{ instance.departmentId.title }}</a></li>
+                            <li class="breadcrumb-item"><a href="">{{ instance.title }}</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sınavlar</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Dersler</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% if exams %}
+                {% for exam in exams %}
+                    <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="float-left card-title">
+                                    <a href="{{ exam.media.url }}"
+                                       download="{{ exam.title }}">{{ exam.title|safe|truncatewords:20 }}</a>
+                                </h5>
+                                <h5 class="float-right card-title">
+                                    <a href="{{ exam.media.url }}" download="{{ exam.title }}">İndir</a>
+                                </h5>
+                                <br>
+                                <hr>
+                                <small class="float-right card-text">
+                                    Sınavı Hazırlayan: {{ exam.owner }}
+                                </small>
+                                <small class="card-text">
+                                    Ders: {{ exam.lectureId.title }}
+                                </small>
+                                <br>
+                                <small class="card-text">
+                                    Bölüm: {{ exam.lectureId.departmentId.title }}
+                                </small>
+                                <br>
+                                <small class="card-text">
+                                    Okul: {{ exam.lectureId.departmentId.schoolId.title }}
+                                </small>
+                                <br>
+                                <small class="card-text">
+                                    Dönem: {{ exam.termId.title }}
+                                </small>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                    <h5>Üzgünüz :(</h5>
+                    <p>Henüz okula ait bölümler sisteme kayıt edilmemiş.</p>
+                </div>
+            {% endif %}
+        </div>
+{% endblock %}
