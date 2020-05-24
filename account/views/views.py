@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from rest_framework.generics import get_object_or_404
@@ -11,7 +12,8 @@ from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.views.views import Categories, current_user_group
 from article.models import Article
 from course.models import Course
-from question.models import Question
+from exam.models import Exam
+from question.models import Question, QuestionComment
 
 
 def index(request):
@@ -70,43 +72,47 @@ def account_detail(request, username):
     """
     try:
         instance = Account.objects.get(username=username)
-        userGroup = current_user_group(request, request.user)
-        categories = Categories.all_categories()
-        userDetailGroup = user_group(request, username)
-        existFollower = get_user_follower(request, request.user, instance)
-        followers = AccountFollower.objects.filter(followingId__username=instance.username)
-        followings = AccountFollower.objects.filter(followerId__username=instance.username)
-        getFollowerForFollow = get_user_follower(request, request.user, followers)
-        getFollowingForFollow = get_user_follower(request, request.user, followings)
-        articles = user_articles(request, username).order_by('-createdDate__day')
-        questions = user_questions(request, username).order_by('-createdDate__day')
-        courses = user_courses(request, username).order_by('-createdDate__day')
-        context = {
-            "instance": instance,
-            "userDetailGroup": userDetailGroup,
-            "userGroup": userGroup,
-            "existFollower": existFollower,
-            "getFollowerForFollow": getFollowerForFollow,
-            "getFollowingForFollow": getFollowingForFollow,
-            "articles": articles,
-            "questions": questions,
-            "courses": courses,
-            "followers": followers,
-            "followings": followings,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
-        return render(request, "ankades/account/account-detail.html", context)
     except:
         messages.error(request, "Böyle bir kullanıcı bulunamadı.")
         return redirect("404")
+    userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
+    userDetailGroup = user_group(request, username)
+    existFollower = get_user_follower(request, request.user, instance)
+    followers = AccountFollower.objects.filter(followingId__username=instance.username)
+    followings = AccountFollower.objects.filter(followerId__username=instance.username)
+    getFollowerForFollow = get_user_follower(request, request.user, followers)
+    getFollowingForFollow = get_user_follower(request, request.user, followings)
+    articles = user_articles(request, username).order_by('-createdDate__day')
+    questions = user_questions(request, username).order_by('-createdDate__day')
+    courses = user_courses(request, username).order_by('-createdDate__day')
+    exams = user_exams(request, username)
+    certifiedAnswer = QuestionComment.objects.filter(creator=instance, isCertified=True, isActive=True)
+    context = {
+        "instance": instance,
+        "userDetailGroup": userDetailGroup,
+        "userGroup": userGroup,
+        "existFollower": existFollower,
+        "getFollowerForFollow": getFollowerForFollow,
+        "getFollowingForFollow": getFollowingForFollow,
+        "articles": articles,
+        "questions": questions,
+        "courses": courses,
+        "exams": exams,
+        "certifiedAnswer": certifiedAnswer,
+        "followers": followers,
+        "followings": followings,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "ankacademy/account/account-detail.html", context)
 
 
 def get_user_follower(request, username, userDetail):
@@ -364,6 +370,21 @@ def user_courses(self, username):
     except:
         courses = None
         return courses
+
+
+def user_exams(self, username):
+    """
+    :param self:
+    :param username:
+    :return:
+    """
+    try:
+        account = Account.objects.get(username=username)
+        exams = Exam.objects.filter(Q(creator__username=account, isActive=True) | Q(owner=account.get_full_name())).order_by('-createdDate__day')
+        return exams
+    except:
+        exams = None
+        return exams
 
 
 def get_social_media(self, slug):
