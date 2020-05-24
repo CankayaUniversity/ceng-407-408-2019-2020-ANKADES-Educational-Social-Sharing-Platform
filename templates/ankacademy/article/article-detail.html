@@ -114,7 +114,7 @@
                                             {{ instance.abstract|safe }}
                                         {% endif %}
                                     </div>
-                                <hr />
+                                    <hr/>
                                     <div class="text-muted"><span>Makale Sahibi:
                                         {% if instance.owner %}{{ instance.owner }}{% else %}
                                             <a href="{% url 'account_detail' instance.creator %}"
@@ -330,9 +330,11 @@
                                     </ul>
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
 
-                                    <form>
+                                    <form method="post" class="comment-form"
+                                          action="{% url 'add_article_comment' slug=instance.slug %}">
+                                    {% csrf_token %}
                                         <div class="form-group">
-                                        <textarea class="form-control" id="message2" name="message" rows="5"
+                                        <textarea class="form-control" id="content" name="content" rows="5"
                                                   placeholder="Mesajınız" required=""></textarea>
                                         </div>
                                         <!-- /Form Msg -->
@@ -355,9 +357,11 @@
                                         <p>Makalenin henüz yorumu bulunmuyor.</p>
                                     </div>
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
-                                    <form>
+                                    <form method="post" class="comment-form"
+                                          action="{% url 'add_article_comment' slug=instance.slug %}">
+                                    {% csrf_token %}
                                         <div class="form-group">
-                                        <textarea class="form-control" id="message2" name="message" rows="5"
+                                        <textarea class="form-control" id="content" name="content" rows="5"
                                                   placeholder="Mesajınız" required=""></textarea>
                                         </div>
                                         <div class="row">
@@ -370,6 +374,7 @@
                                         </div>
                                     </form>
                                 {% endif %}
+                            {# Report Modal #}
                                 <div class="modal fade" id="modal-default">
                                     <div class="modal-dialog">
                                         <div class="modal-content">

@@ -20,6 +20,7 @@
           type="text/css"/>
 
     <!-- App css -->
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <link href="{% static 'ankacademy/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"
           id="bootstrap-stylesheet"/>
     <link href="{% static 'ankacademy/css/icons.min.css' %}" rel="stylesheet" type="text/css"/>
@@ -105,12 +106,40 @@
 <script src="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/bootstrap-maxlength/bootstrap-maxlength.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
+<script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
 
 <!-- Init js-->
 <script src="{% static 'ankacademy/js/pages/form-advanced.init.js' %}"></script>
 
 <!-- App js -->
 <script src="{% static 'ankacademy/js/app.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+</script>
+<script>
+    $(function () {
+        {#//Initialize Select2 Elements#}
+        $('.select2').select2();
+
+        {#//Initialize Select2 Elements#}
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+    });
+</script>
+{% if messages %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            {% if message.tags == "success" %}
+                toastr.success("{{ message }}");
+            {% elif message.tags == 'error' %}
+                toastr.error('{{ message }}');
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
 
 </body>
 
