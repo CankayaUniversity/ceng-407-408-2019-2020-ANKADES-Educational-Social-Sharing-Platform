@@ -28,7 +28,7 @@
                                     <div class="avatar-xl member-thumb mb-3 mx-auto d-block">
                                         <img src="{{ instance.creator.image.url }}" class="rounded-circle img-thumbnail"
                                              alt="profile-image">
-                                        {% if creatorGroup.title == 'admin' or creatorGroup.title == 'moderator' or creatorGroup.title == 'ogretmen' %}
+                                        {% if creatorGroup == 'admin' or creatorGroup == 'moderator' or creatorGroup == 'ogretmen' %}
                                             <i class="mdi mdi-star-circle member-star text-success"
                                                title="verified user"></i>{% endif %}
                                     </div>

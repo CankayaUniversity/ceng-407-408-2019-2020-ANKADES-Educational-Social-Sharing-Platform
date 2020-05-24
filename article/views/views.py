@@ -259,8 +259,8 @@ def article_detail(request, username, slug):
     categories = Categories.all_categories()
     try:
         instance = Article.objects.get(slug=slug)
-        creatorGroup = current_user_group(request, instance.creator.username)
-        existFollower = get_user_follower(request, request.user, instance)
+        creatorGroup = current_user_group(request, instance.creator)
+        existFollower = get_user_follower(request, request.user, instance.creator)
     except:
         return redirect("404")
     if instance.creator.username != username:
