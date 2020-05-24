@@ -309,7 +309,6 @@ def admin_delete_article_category(request, slug):
 class ArticleCategoryView(DetailView):
 
     @staticmethod
-    @login_required(login_url="login_admin")
     def getTopCategory(request):
         """
         :param request:
@@ -319,7 +318,6 @@ class ArticleCategoryView(DetailView):
         return topCategory
 
     @staticmethod
-    @login_required(login_url="login_admin")
     def getSubCategory(request, catNumber):
         """
         :param request:
@@ -331,7 +329,6 @@ class ArticleCategoryView(DetailView):
         return subCategory
 
     @staticmethod
-    @login_required(login_url="login_admin")
     def getLowCategory(request, catNumber):
         """
         :param request:

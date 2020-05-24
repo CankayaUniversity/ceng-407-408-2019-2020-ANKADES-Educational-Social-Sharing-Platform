@@ -9,6 +9,7 @@ from ankadescankaya.views import views as main_view
 urlpatterns = [
     path('api/', include("api.urls")),
     path('anka-admin/', include("adminpanel.urls")),
+    path('test/', main_view.test, name="test"),
     path('', include("account.urls")),
     path('', include("course.urls")),
     path('', include("question.urls")),

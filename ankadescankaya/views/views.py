@@ -160,3 +160,7 @@ def search_keyword(request):
         "courseLowerCategories": categories[8],
     }
     return render(request, "ankades/search.html", context)
+
+
+def test(request):
+    return render(request, "ankacademy/article/all-articles.html")

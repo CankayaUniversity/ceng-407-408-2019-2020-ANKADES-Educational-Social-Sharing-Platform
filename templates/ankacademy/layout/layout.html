@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="tr">
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description"/>
+    <meta content="Ankacademy" name="Ankacademy"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link href="{% static 'ankacademy/libs/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet"/>
+    <link href="{% static 'ankacademy/libs/switchery/switchery.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'ankacademy/libs/multiselect/multi-select.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'ankacademy/libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'ankacademy/libs/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"
+          type="text/css"/>
+
+    <!-- App css -->
+    <link href="{% static 'ankacademy/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"
+          id="bootstrap-stylesheet"/>
+    <link href="{% static 'ankacademy/css/icons.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'ankacademy/css/app.min.css' %}" rel="stylesheet" type="text/css" id="app-stylesheet"/>
+</head>
+
+<body class="center-menu" data-layout="horizontal">
+
+<!-- Begin page -->
+<div id="wrapper">
+
+    <!-- Navigation Bar-->
+    <header id="topnav">
+        <!-- Topbar Start -->
+        {% include 'ankacademy/layout/topnavbar.html' %}
+        <!-- end Topbar -->
+        {% include 'ankacademy/layout/navbar.html' %}
+
+        <!-- end navbar-custom -->
+    </header>
+    <!-- End Navigation Bar-->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+
+    <div class="content-page">
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+            {% include 'ankacademy/layout/footer.html' %}
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+
+</div>
+<!-- END wrapper -->
+
+<!-- Right Sidebar -->
+<div class="right-bar">
+    <div class="rightbar-title">
+        <a href="javascript:void(0);" class="right-bar-toggle float-right">
+            <i class="mdi mdi-close"></i>
+        </a>
+        <h4 class="font-16 m-0 text-white">Tema Değiştir</h4>
+    </div>
+    <div class="slimscroll-menu">
+
+        <div class="p-4">
+            <div class="custom-control custom-switch mb-3">
+                <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked/>
+                <label class="custom-control-label" for="light-mode-switch">Açık Tema</label>
+            </div>
+
+            <div class="custom-control custom-switch mb-3">
+                <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch"
+                       data-bsStyle="{% static 'ankacademy/css/bootstrap-dark.min.css' %}"
+                       data-appStyle="{% static 'ankacademy/css/app-dark.min.css' %}"/>
+                <label class="custom-control-label" for="dark-mode-switch">Koyu Tema</label>
+            </div>
+        </div>
+    </div> <!-- end slimscroll-menu-->
+</div>
+<!-- /Right-bar -->
+
+<!-- Right bar overlay-->
+<div class="rightbar-overlay"></div>
+
+<!-- Vendor js -->
+<script src="{% static 'ankacademy/js/vendor.min.js' %}"></script>
+
+<script src="{% static 'ankacademy/libs/switchery/switchery.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/multiselect/jquery.multi-select.js' %}"></script>
+<script src="{% static 'ankacademy/libs/select2/select2.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/jquery-quicksearch/jquery.quicksearch.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/jquery-mockjax/jquery.mockjax.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/autocomplete/jquery.autocomplete.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/bootstrap-maxlength/bootstrap-maxlength.min.js' %}"></script>
+<script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
+
+<!-- Init js-->
+<script src="{% static 'ankacademy/js/pages/form-advanced.init.js' %}"></script>
+
+<!-- App js -->
+<script src="{% static 'ankacademy/js/app.min.js' %}"></script>
+
+</body>
+
+</html>

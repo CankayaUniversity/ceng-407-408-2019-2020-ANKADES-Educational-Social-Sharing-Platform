@@ -68,7 +68,7 @@ def all_articles(request):
             "top": top,
             "articles": articles,
         }
-        return render(request, "ankades/article/all-articles.html", context)
+        return render(request, "ankacademy/article/all-articles.html", context)
     if sub:
         subCat = ArticleCategory.objects.filter(catNumber__in=sub)
         low = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
@@ -84,7 +84,7 @@ def all_articles(request):
             "sub": sub,
             "articles": articles,
         }
-        return render(request, "ankades/article/all-articles.html", context)
+        return render(request, "ankacademy/article/all-articles.html", context)
     if lower:
         lowCat = ArticleCategory.objects.filter(catNumber__in=lower)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=lower)
@@ -95,7 +95,7 @@ def all_articles(request):
             "lower": lower,
             "articles": articles,
         }
-        return render(request, "ankades/article/all-articles.html", context)
+        return render(request, "ankacademy/article/all-articles.html", context)
     context = {
         "userGroup": userGroup,
         "topCategories": topCategories,
@@ -103,7 +103,7 @@ def all_articles(request):
         "articles": articles,
         "articleComment": articleComment,
     }
-    return render(request, "ankades/article/all-articles.html", context)
+    return render(request, "ankacademy/article/all-articles.html", context)
 
 
 def article_category_page(request, slug):
