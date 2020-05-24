@@ -338,6 +338,6 @@ class ArticleCategoryView(DetailView):
         :return catNumber:
         """
         instance = get_object_or_404(ArticleCategory, catNumber=catNumber)
-        lowCategory = ArticleCategory.objects.filter(parentId__catNumber=instance)
+        lowCategory = ArticleCategory.objects.filter(parentId__catNumber=instance.catNumber)
         return lowCategory
 

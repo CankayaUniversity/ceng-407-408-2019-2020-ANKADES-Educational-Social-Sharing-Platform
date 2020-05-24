@@ -25,10 +25,25 @@
         {% endif %}
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                {#article categories#}
-                {% include 'ankades/layout/article-categories.html' %}
+                <li class="nav-header">MAKALELER</li>
+                <li class="nav-item has-treeview">
+                    <a href="{% url 'all_articles' %}" class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            Makaleler
+                        </p>
+                    </a>
+                </li>
                 {#question categories#}
-                {% include 'ankades/layout/question-categories.html' %}
+                <li class="nav-header">SORULAR</li>
+<li class="nav-item has-treeview">
+    <a href="{% url 'all_questions' %}" class="nav-link">
+        <i class="nav-icon fas fa-question"></i>
+        <p>
+            Tüm Sorular
+        </p>
+    </a>
+</li>
                 {#course categories#}
                 {% include 'ankades/layout/course-categories.html' %}
                 {#course categories#}

@@ -1,60 +1,170 @@
 {% extends 'ankades/layout/layout.html' %}
-{% block title %}Ankacademy | Makaleler{% endblock %}
-{% load crispy_forms_tags %}
-{% load crispy_forms_field %}
 {% load static %}
+{% block title %}Ankacademy | Makaleler{% endblock %}
 {% block content %}
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2 mt-2">
-                <div class="col-sm-12">
-                    <h1 class="m-0 text-dark">Tüm Makaleler</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section class="content">
-        <div class="card">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                {% if articles %}
-                    {% if article_pagination %}
-                        {% for article in article_pagination %}
-                            <div class="card-deck col-3 p-3">
-                                <div class="card">
-                                    <img class="card-img-top" src="{{ article.media.url }}" alt="Card image cap"
-                                         width="504" height="250">
-                                    <div class="card-body">
-                                        <h4 class="card-title"><b><a style="color: #0b0b0b !important;"
-                                                href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a></b>
-                                        </h4>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted float-left"><a
-                                                href="{% url 'account_detail' article.creator %}">{{ article.creator.get_full_name }}</a></small>
-                                        <small class="text-muted float-left ml-2">{{ article.createdDate|date:"d.m.Y" }}</small>
-                                        <small class="text-muted float-right ml-2"><i
-                                                class="far fa-comments"></i> {{ article.articlecomment_set.count }}
-                                        </small>
-                                        <small class="text-muted ml-2 float-right"><i
-                                                class="far fa-thumbs-up"></i> {{ article.likes.count }}
-                                        </small>
-                                        <small class="text-muted float-right"><i
-                                                class="far fa-eye"></i> {{ article.view }}
-                                        </small>
-                                    </div>
+                <div class="float-center col-md-2 p-3">
+                    {% if category %}
+                        <form method="get">
+                            <div class="form-group">
+                                <div class="select2-purple">
+                                    <select type="search" class="select2" multiple="multiple" disabled
+                                            data-placeholder="Kategorilerde Arayın"
+                                            data-dropdown-css-class="select2-purple" style="width: 100%;">
+                                        {% for cat in top %}
+                                            <option selected value="{{ cat.catNumber }}">{{ cat.title }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
-                        {% endfor %}
+                            <div class="form-group">
+                                <label>Kategori</label>
+                                <div class="select2-purple">
+                                    <select type="search" class="select2" multiple="multiple"
+                                            data-placeholder="Kategorilerde Arayın"
+                                            data-dropdown-css-class="select2-purple" style="width: 100%;"
+                                            name="s">
+                                        {% for optgroup in top %}
+                                            <optgroup label="{{ optgroup.title }}">
+                                                {% for subCat in sub %}
+                                                    {% if subCat.parentId.catNumber == optgroup.catNumber %}
+                                                        <option value="{{ subCat.catNumber }}">{{ subCat.title }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block mb-3">Ara</button>
+                            <a href="{% url 'all_articles' %}" class="btn btn-danger btn-block mb-3">Sıfırla</a>
+                        </form>
+                    {% elif sub %}
+                        <form method="get">
+                            <div class="form-group">
+                                <div class="select2-purple">
+                                    <select type="search" class="select2" multiple="multiple" disabled
+                                            data-placeholder="Kategorilerde Arayın"
+                                            data-dropdown-css-class="select2-purple" style="width: 100%;">
+                                        {% for cat in subCat %}
+                                            <option selected value="{{ cat.catNumber }}">{{ cat.title }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Kategori</label>
+                                <div class="select2-purple">
+                                    <select type="search" class="select2" multiple="multiple"
+                                            data-placeholder="Kategorilerde Arayın"
+                                            data-dropdown-css-class="select2-purple" style="width: 100%;" name="l">
+                                        {% for optgroup in subCat %}
+                                            <optgroup label="{{ optgroup.title }}">
+                                                {% for lower in low %}
+                                                    {% if lower.parentId.catNumber == optgroup.catNumber %}
+                                                        <option value="{{ lower.catNumber }}">{{ lower.title }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block mb-3">Ara</button>
+                            <a href="{% url 'all_articles' %}" class="btn btn-danger btn-block mb-3">Sıfırla</a>
+                        </form>
+                    {% elif lower %}
+                        <div class="form-group">
+                            <div class="select2-purple">
+                                <select type="search" class="select2" multiple="multiple" disabled
+                                        data-placeholder="Kategorilerde Arayın"
+                                        data-dropdown-css-class="select2-purple" style="width: 100%;">
+                                    {% for cat in lowCat %}
+                                        <option selected value="{{ cat.catNumber }}">{{ cat.title }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <a href="{% url 'all_articles' %}" class="btn btn-danger btn-block mb-3">Sıfırla</a>
+                    {% else %}
+                        <form method="get">
+                            <div class="form-group">
+                                <label>Kategori</label>
+                                <div class="select2-purple">
+                                    <select type="search" class="select2" multiple="multiple"
+                                            data-placeholder="Kategorilerde Arayın"
+                                            data-dropdown-css-class="select2-purple" style="width: 100%;"
+                                            name="c">
+                                        {% for topCat in topCategories %}
+                                            {% if topCat.slug != 'home' %}
+                                                <option value="{{ topCat.catNumber }}">
+                                                    {{ topCat.title }}
+                                                </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block mb-3">Ara</button>
+                            <a href="{% url 'all_articles' %}" class="btn btn-danger btn-block mb-3">Sıfırla</a>
+                        </form>
                     {% endif %}
-                {% else %}
-                    <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
-                        <h5>Üzgünüz :(</h5>
-                        <p>Henüz bir makale paylaşılmamış.</p>
+                </div>
+                <!-- /.col -->
+                <div class="col-md-10">
+                    <div class="container">
+                        <div class="row">
+                            {% if articles %}
+                                {% for article in articles %}
+                                    <div class="card-deck col-4 p-3">
+                                        <div class="card">
+                                            <img class="card-img-top" src="{{ article.media.url }}"
+                                                 alt="Card image cap"
+                                                 width="504" height="250">
+                                            <div class="card-body">
+                                                <h4 class="card-title"><b><a style="color: #0b0b0b !important;"
+                                                                             href="{% url 'article_detail' article.creator article.slug %}">{{ article.title }}</a></b>
+                                                </h4>
+                                            </div>
+                                            <div class="card-footer">
+                                                <small class="text-muted float-left"><a
+                                                        href="{% url 'account_detail' article.creator %}">{{ article.creator.get_full_name }}</a></small>
+                                                <small class="text-muted float-left ml-2">{{ article.createdDate|date:"d.m.Y" }}</small>
+                                                <small class="text-muted float-right ml-2"><i
+                                                        class="far fa-comments"></i> {{ article.articlecomment_set.count }}
+                                                </small>
+                                                <small class="text-muted ml-2 float-right"><i
+                                                        class="far fa-thumbs-up"></i> {{ article.likes.count }}
+                                                </small>
+                                                <small class="text-muted float-right"><i
+                                                        class="far fa-eye"></i> {{ article.view }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="callout callout-warning col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                    <h5>Üzgünüz :(</h5>
+                                    <p>Henüz bir makale paylaşılmamış.</p>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
-                {% endif %}
+                </div>
+                <!-- /.col -->
             </div>
-        </div>
-        </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
     </section>
+
+    <!-- Main content -->
+    <!-- /.content -->
 {% endblock %}

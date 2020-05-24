@@ -12,6 +12,7 @@ from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 
+from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group, Categories
 from article.forms import ArticleForm, EditArticleForm
@@ -38,60 +39,69 @@ class ArticleCategoryViewSet(viewsets.ModelViewSet):
 def all_articles(request):
     """
     :param request:
-    :return:
     """
     userGroup = current_user_group(request, request.user)
-    articles_categories_lists = ArticleCategory.objects.filter(isActive=True)
-    articles_limit = Article.objects.filter(isActive=True).order_by('-createdDate')
+    category = request.GET.getlist('c')
+    sub = request.GET.getlist('s')
+    lower = request.GET.getlist('l')
+    getLowCategory = []
+    articleCat = []
+    topCategories = ArticleCategoryView.getTopCategory(request)
     articleComment = ArticleComment.objects.filter(isActive=True)
-    page = request.GET.get('page', 1)
-    keyword = request.GET.get("keyword")
-    categories = Categories.all_categories()
-    if keyword:
-        articles = Article.objects.filter(Q(title__contains=keyword, isActive=True)).order_by('-createdDate')
+    articles = Article.objects.filter(isActive=True)
+    # TODO Paginator
+    if category:
+        top = ArticleCategory.objects.filter(catNumber__in=category)
+        sub = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=category)
+        for getLower in sub:
+            getLowCategory.append(getLower.catNumber)
+        lower = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=getLowCategory)
+        for cat in lower:
+            articleCat.append(cat.catNumber)
+        articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=articleCat)
+        print(articles)
+        # TODO Paginator
         context = {
-            "articles": articles,
-            "articles_categories_lists": articles_categories_lists,
-            "articles_limit": articles_limit,
             "userGroup": userGroup,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
+            "category": category,
+            "sub": sub,
+            "top": top,
+            "articles": articles,
         }
         return render(request, "ankades/article/all-articles.html", context)
-    else:
-        articles = Article.objects.filter(isActive=True).order_by('-createdDate')
-        paginator = Paginator(articles, 12)
-        try:
-            article_pagination = paginator.page(page)
-        except PageNotAnInteger:
-            article_pagination = paginator.page(1)
-        except EmptyPage:
-            article_pagination = paginator.page(paginator.num_pages)
+    if sub:
+        subCat = ArticleCategory.objects.filter(catNumber__in=sub)
+        low = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
+        for getLower in low:
+            getLowCategory.append(getLower.catNumber)
+        articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
         context = {
-            "articles": articles,
-            "articleComment": articleComment,
-            "article_pagination": article_pagination,
-            "articles_categories_lists": articles_categories_lists,
-            "articles_limit": articles_limit,
             "userGroup": userGroup,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
+            "category": category,
+            "low": low,
+            "subCat": subCat,
+            "sub": sub,
+            "articles": articles,
         }
         return render(request, "ankades/article/all-articles.html", context)
+    if lower:
+        lowCat = ArticleCategory.objects.filter(catNumber__in=lower)
+        articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=lower)
+        context = {
+            "userGroup": userGroup,
+            "lowCat": lowCat,
+            "lower": lower,
+            "articles": articles,
+        }
+        return render(request, "ankades/article/all-articles.html", context)
+    context = {
+        "userGroup": userGroup,
+        "topCategories": topCategories,
+        "category": category,
+        "articles": articles,
+        "articleComment": articleComment,
+    }
+    return render(request, "ankades/article/all-articles.html", context)
 
 
 def article_category_page(request, slug):
