@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path
 
-from article.views import views, category
+from article.views import views
 from article.views.views import ArticleLikeToggle
 
 urlpatterns = [

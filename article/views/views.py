@@ -59,10 +59,10 @@ def all_articles(request):
         for cat in lower:
             articleCat.append(cat.catNumber)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=articleCat)
-        print(articles)
         # TODO Paginator
         context = {
             "userGroup": userGroup,
+            "articleComment": articleComment,
             "category": category,
             "sub": sub,
             "top": top,
@@ -77,6 +77,7 @@ def all_articles(request):
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
         context = {
             "userGroup": userGroup,
+            "articleComment": articleComment,
             "category": category,
             "low": low,
             "subCat": subCat,
@@ -89,6 +90,7 @@ def all_articles(request):
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=lower)
         context = {
             "userGroup": userGroup,
+            "articleComment": articleComment,
             "lowCat": lowCat,
             "lower": lower,
             "articles": articles,

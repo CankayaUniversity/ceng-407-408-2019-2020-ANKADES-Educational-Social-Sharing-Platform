@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, DetailView
 
 from ankadescankaya.views.views import current_user_group, Categories
 from question.forms import QuestionForm, EditQuestionForm
@@ -66,57 +66,68 @@ def all_questions(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    questions_categories_lists = QuestionCategory.objects.filter(isActive=True)
-    questions_limit = Question.objects.filter(isActive=True).order_by('-createdDate')
     questionComment = QuestionComment.objects.filter(isActive=True)
-    categories = Categories.all_categories()
-    page = request.GET.get('page', 1)
-    keyword = request.GET.get("keyword")
-    if keyword:
-        questions = Question.objects.filter(title__contains=keyword)
+    questions = Question.objects.filter(isActive=True)
+    category = request.GET.getlist('c')
+    sub = request.GET.getlist('s')
+    lower = request.GET.getlist('l')
+    getLowCategory = []
+    questionCat = []
+    topCategories = QuestionCategoryView.getTopCategory(request)
+    if category:
+        top = QuestionCategory.objects.filter(catNumber__in=category)
+        sub = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=category)
+        for getLower in sub:
+            getLowCategory.append(getLower.catNumber)
+        lower = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=getLowCategory)
+        for cat in lower:
+            questionCat.append(cat.catNumber)
+        questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=questionCat)
+        # TODO Paginator
         context = {
-            "questions": questions,
-            "questions_categories_lists": questions_categories_lists,
-            "questions_limit": questions_limit,
             "userGroup": userGroup,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
-        return render(request, "ankades/question/all-questions.html", context)
-    else:
-        questions = Question.objects.filter(isActive=True)
-        paginator = Paginator(questions, 12)
-        try:
-            question_pagination = paginator.page(page)
-        except PageNotAnInteger:
-            question_pagination = paginator.page(1)
-        except EmptyPage:
-            question_pagination = paginator.page(paginator.num_pages)
-        context = {
-            "questions": questions,
             "questionComment": questionComment,
-            "question_pagination": question_pagination,
-            "questions_categories_lists": questions_categories_lists,
-            "questions_limit": questions_limit,
-            "userGroup": userGroup,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
+            "category": category,
+            "sub": sub,
+            "top": top,
+            "questions": questions,
         }
         return render(request, "ankades/question/all-questions.html", context)
+    if sub:
+        subCat = QuestionCategory.objects.filter(catNumber__in=sub)
+        low = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
+        for getLower in low:
+            getLowCategory.append(getLower.catNumber)
+        questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
+        context = {
+            "userGroup": userGroup,
+            "questionComment": questionComment,
+            "category": category,
+            "low": low,
+            "subCat": subCat,
+            "sub": sub,
+            "questions": questions,
+        }
+        return render(request, "ankades/question/all-questions.html", context)
+    if lower:
+        lowCat = QuestionCategory.objects.filter(catNumber__in=lower)
+        questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=lower)
+        context = {
+            "userGroup": userGroup,
+            "questionComment": questionComment,
+            "lowCat": lowCat,
+            "lower": lower,
+            "questions": questions,
+        }
+        return render(request, "ankades/question/all-questions.html", context)
+    context = {
+        "userGroup": userGroup,
+        "topCategories": topCategories,
+        "category": category,
+        "questions": questions,
+        "questionComment": questionComment,
+    }
+    return render(request, "ankades/question/all-questions.html", context)
 
 
 def question_detail(request, slug, postNumber):
@@ -533,3 +544,39 @@ class QuestionLikeCommentToggle(RedirectView):
             else:
                 obj.likes.add(user)
         return url_
+
+
+class QuestionCategoryView(DetailView):
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getTopCategory(request):
+        """
+        :param request:
+        :return topCategory:
+        """
+        topCategory = QuestionCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True)|Q(isRoot=True))
+        return topCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getSubCategory(request, catNumber):
+        """
+        :param request:
+        :param catNumber:
+        :return subCategory:
+        """
+        instance = get_object_or_404(QuestionCategory, catNumber=catNumber)
+        subCategory = QuestionCategory.objects.filter(parentId__catNumber=instance)
+        return subCategory
+
+    @staticmethod
+    @login_required(login_url="login_admin")
+    def getLowCategory(request, catNumber):
+        """
+        :param request:
+        :return catNumber:
+        """
+        instance = get_object_or_404(QuestionCategory, catNumber=catNumber)
+        lowCategory = QuestionCategory.objects.filter(parentId__catNumber=instance.catNumber)
+        return lowCategory
