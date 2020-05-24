@@ -1,10 +1,8 @@
 {% extends 'ankacademy/layout/layout.html' %}
 {% load static %}
-{% block title %}Ankacademy | {{ instance.title }}{% endblock %}
+{% block title %}{{ instance.title }} | Ankacademy{% endblock %}
 {% block content %}
-    <!-- Content Header (Page header) -->
     <div class="container-fluid">
-        <!-- start page title -->
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
@@ -19,109 +17,96 @@
                 </div>
             </div>
         </div>
-        <!-- end page title -->
 
         <div class="row justify-content-center">
             <div class="col-lg-9">
                 <div class="row">
                     <div class="col-xl-3 col-md-4">
-                        <div class="text-center card-box shadow-none border border-secoundary">
-                            <div class="member-card">
-                                <div class="avatar-xl member-thumb mb-3 mx-auto d-block">
-                                    <img src="{{ instance.creator.image.url }}" class="rounded-circle img-thumbnail"
-                                         alt="profile-image">
-                                    {% if creatorGroup.title == 'admin' or creatorGroup.title == 'moderator' or creatorGroup.title == 'ogretmen' %}
-                                        <i class="mdi mdi-star-circle member-star text-success"
-                                           title="verified user"></i>{% endif %}
-                                </div>
+                        <div class="mt-4">
+                            <div class="text-center card-box shadow-none border border-secoundary">
+                                <div class="member-card">
+                                    <div class="avatar-xl member-thumb mb-3 mx-auto d-block">
+                                        <img src="{{ instance.creator.image.url }}" class="rounded-circle img-thumbnail"
+                                             alt="profile-image">
+                                        {% if creatorGroup.title == 'admin' or creatorGroup.title == 'moderator' or creatorGroup.title == 'ogretmen' %}
+                                            <i class="mdi mdi-star-circle member-star text-success"
+                                               title="verified user"></i>{% endif %}
+                                    </div>
 
-                                <div class="">
-                                    <h5 class="font-18 mb-1">{{ instance.creator.get_full_name }}</h5>
-                                    <p class="text-muted mb-2">{{ creatorGroup.title }}</p>
-                                </div>
+                                    <div class="">
+                                        <h5 class="font-18 mb-1">{{ instance.creator.get_full_name }}</h5>
+                                        <p class="text-muted mb-2">{{ creatorGroup.title }}</p>
+                                    </div>
 
-                                {% if instance.creator.username != request.user.username %}
-                                    <a type="button" href="{% url 'follow_account' instance.creator.username %}"
-                                       class="btn btn-success btn-sm width-sm waves-effect mt-2 waves-light"><i
-                                            class="far fa-thumbs-up"></i>
-                                        {% if existFollower %}
-                                            Takibi Bırak
-                                        {% else %}
-                                            Takip Et
-                                        {% endif %}
-                                    </a>
-                                {% endif %}
-                                <button type="button"
-                                        class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Message
-                                </button>
+                                    {% if instance.creator.username != request.user.username %}
+                                        <a type="button" href="{% url 'follow_account' instance.creator.username %}"
+                                           class="btn btn-success btn-sm width-sm waves-effect mt-2 waves-light"><i
+                                                class="far fa-thumbs-up"></i>
+                                            {% if existFollower %}
+                                                Takibi Bırak
+                                            {% else %}
+                                                Takip Et
+                                            {% endif %}
+                                        </a>
+                                    {% endif %}
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Message
+                                    </button>
 
-                                <p class="sub-header mt-3">
-                                    Hi I'm Ankacademy Dev,has been the industry's standard dummy text ever since the
-                                    1500s, when an unknown printer took a galley of type.
-                                </p>
-
-                                <hr/>
-
-                                <div class="text-left">
-                                    <p class="text-muted font-13"><strong>Ad :</strong> <span
-                                            class="ml-4">{{ instance.creator.get_full_name }}</span>
+                                    <p class="sub-header mt-3">
+                                        {% if instance.creator.bio %}{{ instance.creator.bio }}{% else %}
+                                            {{ instance.creator.get_full_name }} kullanıcıs biyografisini
+                                            paylaşmamış{% endif %}
                                     </p>
 
-                                    <p class="text-muted font-13"><strong>Mobile :</strong><span
-                                            class="ml-4">(123) 123 1234</span>
-                                    </p>
+                                    <hr/>
 
-                                    <p class="text-muted font-13"><strong>Email :</strong> <span
-                                            class="ml-4">{{ instance.creator.email }}</span>
-                                    </p>
+                                    <div class="text-left">
+                                        <p class="text-muted font-13"><strong>Ad :</strong> <span
+                                                class="ml-4">{{ instance.creator.get_full_name }}</span>
+                                        </p>
 
-                                    <p class="text-muted font-13"><strong>Üyelik :</strong> <span
-                                            class="ml-4">{{ creatorGroup.title }}</span></p>
+                                        <p class="text-muted font-13"><strong>Email :</strong> <span
+                                                class="ml-4">{{ instance.creator.email }}</span>
+                                        </p>
+
+                                        <p class="text-muted font-13"><strong>Üyelik :</strong> <span
+                                                class="ml-4">{{ creatorGroup.title }}</span></p>
+                                    </div>
+                                    <ul class="social-links list-inline mt-4">
+                                        <li class="list-inline-item">
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                               href=""
+                                               data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                               href=""
+                                               data-original-title="Twitter"><i class="fab fa-twitter"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                               href=""
+                                               data-original-title="Skype"><i class="fab fa-skype"></i></a>
+                                        </li>
+                                    </ul>
                                 </div>
-
-                                <ul class="social-links list-inline mt-4">
-                                    <li class="list-inline-item">
-                                        <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href=""
-                                           data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href=""
-                                           data-original-title="Twitter"><i class="fab fa-twitter"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href=""
-                                           data-original-title="Skype"><i class="fab fa-skype"></i></a>
-                                    </li>
-                                </ul>
-
                             </div>
-
                         </div>
-                        <!-- end card-box -->
-
                     </div>
                     <div class="col-lg-9">
-                        <div class="p-4">
-
-                            <!-- Image Post -->
+                        <div class="mt-4">
                             <div class="card blog-post bg-transparent">
                                 <div class="post-image">
-                                    <img src="{{ instance.media.url }}" alt=""
+                                    <img src="{{ instance.media.url }}" alt="{{ instance.title }}"
+                                         style="width: 100% !important;"
                                          class="img-fluid mx-auto d-block rounded-top">
                                 </div>
-
                                 <div class="card-body">
-                                    <div class="text-muted"><span>Makale Sahibi:
-                                        {% if instance.owner %}{{ instance.owner }}{% else %}
-                                            <a href="{% url 'account_detail' instance.creator %}"
-                                               class="text-dark">{{ instance.creator.get_full_name }}</a>{% endif %}</span>
-                                    </div>
-                                    <div class="text-muted"><span
-                                            class="text-dark">Paylaşım Tarihi: {{ instance.createdDate|date:"d.M.Y" }}</span>
-                                    </div>
                                     <div class="text-center pt-2 pb-2">
                                         <h3>{{ instance.title }}</h3>
                                     </div>
+                                    <hr/>
                                     <div class="post-data pt-2">
                                         {% if instance.description %}
                                             {{ instance.description|safe }}
@@ -129,12 +114,19 @@
                                             {{ instance.abstract|safe }}
                                         {% endif %}
                                     </div>
+                                <hr />
+                                    <div class="text-muted"><span>Makale Sahibi:
+                                        {% if instance.owner %}{{ instance.owner }}{% else %}
+                                            <a href="{% url 'account_detail' instance.creator %}"
+                                               class="text-dark">{{ instance.creator.get_full_name }}</a>{% endif %}</span>
+                                    </div>
+                                    <div class="text-muted"><span
+                                            class="text-dark">Paylaşım Tarihi: {{ instance.createdDate|date:"d M Y" }}</span>
+                                    </div>
                                 </div>
                             </div>
-
                             <div class="mt-5">
                                 <h5 class="text-uppercase mb-4">Yazar Hakkında</h5>
-
                                 <div class="media">
                                     <div class="media-left mr-2">
                                         <a href="#"> <img class="rounded mr-2 avatar-xl" alt="64x64"
@@ -150,17 +142,13 @@
                                                 Yazar, biyografini henüz paylaşmamış.
                                             {% endif %}
                                         </p>
-
                                         <a href="{% url 'account_detail' instance.creator.username %}"
                                            class="btn btn-xs btn-success waves-light waves-effect">View Profile</a>
                                     </div>
                                 </div>
                             </div>
-
                             <hr/>
-
                             <div class="mt-5 blog-post-comment">
-
                                 {% if articleComments %}
                                     <h5 class="text-uppercase mt-5 mb-4">Yorumlar</h5>
                                     <ul class="media-list pl-0">
