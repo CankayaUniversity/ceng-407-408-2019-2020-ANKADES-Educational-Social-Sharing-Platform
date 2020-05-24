@@ -32,17 +32,21 @@
                     </a>
                 </li>
 
-                <li class="has-submenu">
-                    <a href="#"> <i class="mdi mdi-diamond-stone"></i>Paylaşım
-                    </a>
-                    <ul class="submenu">
-                        {% if userGroup == 'admin' or userGrouop == 'moderator' or userGroup == 'ogretmen' %}
+                {% if userGroup == 'admin' or userGrouop == 'moderator' or userGroup == 'ogretmen' %}
+                    <li class="has-submenu">
+                        <a href="#"> <i class="mdi mdi-diamond-stone"></i>Paylaşım
+                        </a>
+                        <ul class="submenu">
                             <li><a href="{% url 'add_article' %}">Makale</a></li>
                             <li><a href="{% url 'add_course' %}">Kurs</a></li>
                             <li><a href="{% url 'add_exam' %}">Sınav</a></li>
-                        {% endif %}
-                        <li><a href="{% url 'add_question' %}">Soru</a></li>
-                    </ul>
+                        </ul>
+                    </li>
+                {% endif %}
+
+                <li class="has-submenu">
+                    <a href="#"> <i class="mdi mdi-comment-question"></i>Soru Sor
+                    </a>
                 </li>
 
             </ul>
