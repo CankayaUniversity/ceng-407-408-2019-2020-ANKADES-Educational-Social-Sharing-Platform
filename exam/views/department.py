@@ -24,6 +24,7 @@ def all_departments(request, slug):
     departments = Department.objects.filter(schoolId=instance, isActive=True)
     context = {
         "userGroup": userGroup,
+        "instance": instance,
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
         "articleLowerCategories": categories[2],
@@ -35,7 +36,7 @@ def all_departments(request, slug):
         "courseLowerCategories": categories[8],
         "departments": departments,
     }
-    return render(request, "ankades/exam/all-departments.html", context)
+    return render(request, "ankacademy/exam/all-departments.html", context)
 
 
 def add_department(request):

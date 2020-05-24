@@ -1,4 +1,4 @@
-{% extends 'ankades/layout/layout.html' %}
+{% extends 'ankacademy/layout/layout.html' %}
 {% block title %}Ankacademy | Bölümler{% endblock %}
 {% load static %}
 {% block content %}
@@ -9,10 +9,11 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
-                            <li class="breadcrumb-item"><a href="{% url 'all_schools' %}">Bölümler</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'all_schools' %}">{{ instance.title }}</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Bölümler</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Bölümler</h4>
+                    <h4 class="page-title">{{ instance.title }} / Bölümler</h4>
                 </div>
             </div>
         </div>
