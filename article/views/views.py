@@ -42,6 +42,7 @@ def all_articles(request):
     :param request:
     """
     userGroup = current_user_group(request, request.user)
+    categories = Categories.all_categories()
     category = request.GET.getlist('c')
     sub = request.GET.getlist('s')
     lower = request.GET.getlist('l')
@@ -68,6 +69,15 @@ def all_articles(request):
             "sub": sub,
             "top": top,
             "articles": articles,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     if sub:
@@ -84,6 +94,15 @@ def all_articles(request):
             "subCat": subCat,
             "sub": sub,
             "articles": articles,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     if lower:
@@ -95,33 +114,6 @@ def all_articles(request):
             "lowCat": lowCat,
             "lower": lower,
             "articles": articles,
-        }
-        return render(request, "ankacademy/article/all-articles.html", context)
-    context = {
-        "userGroup": userGroup,
-        "topCategories": topCategories,
-        "category": category,
-        "articles": articles,
-        "articleComment": articleComment,
-    }
-    return render(request, "ankacademy/article/all-articles.html", context)
-
-
-def article_category_page(request, slug):
-    """
-    :param request:
-    :param slug:
-    :return:
-    """
-    userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
-    try:
-        articleCategory = ArticleCategory.objects.get(slug=slug)
-        articles = Article.objects.filter(categoryId=articleCategory)
-        context = {
-            "articleCategory": articleCategory,
-            "articles": articles,
-            "userGroup": userGroup,
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
@@ -132,7 +124,36 @@ def article_category_page(request, slug):
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
         }
-        return render(request, "ankades/article/get-article-category.html", context)
+        return render(request, "ankacademy/article/all-articles.html", context)
+    context = {
+        "userGroup": userGroup,
+        "topCategories": topCategories,
+        "category": category,
+        "articles": articles,
+        "articleComment": articleComment,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "ankacademy/article/all-articles.html", context)
+
+
+def article_category_page(request, catNumber):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
+    try:
+        articleCategory = ArticleCategory.objects.get(catNumber=catNumber)
+        articles = Article.objects.filter(categoryId=articleCategory)
+        return articles
     except:
         return redirect("404")
 
