@@ -96,7 +96,7 @@ def terms_of_use(request):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "terms-of-use.html", context)
+    return render(request, "ankacademy/terms-of-use.html", context)
 
 
 def privacy_policy(request):
@@ -123,7 +123,7 @@ def privacy_policy(request):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "privacy-policy.html", context)
+    return render(request, "ankacademy/privacy-policy.html", context)
 
 
 def search_keyword(request):

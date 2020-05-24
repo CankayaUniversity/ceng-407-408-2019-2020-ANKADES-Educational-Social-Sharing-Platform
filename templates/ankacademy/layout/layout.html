@@ -77,7 +77,7 @@
         </a>
         <h4 class="font-16 m-0 text-white">Tema Değiştir</h4>
     </div>
-    <div class="slimscroll-menu">
+    <div class="slimscroll-menu card">
 
         <div class="p-4">
             <div class="custom-control custom-switch mb-3">
@@ -91,6 +91,16 @@
                        data-appStyle="{% static 'ankacademy/css/app-dark.min.css' %}"/>
                 <label class="custom-control-label" for="dark-mode-switch">Koyu Tema</label>
             </div>
+
+            <div class="custom-control custom-switch page_footer">
+                <a href="{% url 'terms_of_use' %}">Kullanım Koşulları</a>
+            </div>
+
+
+            <div class="custom-control custom-switch page_footer">
+                <a href="{% url 'terms_of_use' %}">Gizlilik Politikası</a>
+            </div>
+
         </div>
     </div> <!-- end slimscroll-menu-->
 </div>
