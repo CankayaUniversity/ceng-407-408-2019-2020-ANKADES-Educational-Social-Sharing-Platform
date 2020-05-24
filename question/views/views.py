@@ -57,7 +57,7 @@ def add_question(request):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "ankades/question/add-question.html", context)
+    return render(request, "ankacademy/question/add-question.html", context)
 
 
 def all_questions(request):

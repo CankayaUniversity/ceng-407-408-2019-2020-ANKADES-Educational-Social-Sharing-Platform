@@ -1,0 +1,76 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}Sor Sor | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">Soru Sor</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Soru Sor</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <h4 class="header-title">Soru Sor</h4>
+                    <p class="sub-header">
+                        Soru sormak için, lütfen aşağıdaki alanları doldurunuz.
+                    </p>
+                    <form id="wizard-vertical" role="form" method="post" action="{% url 'add_question' %}">
+                        <h3>1. Adım</h3>
+                        <section>
+                            <div class="form-group row">
+                                <label class="col-lg-2 control-label " for="category">Kategori *</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control select2" required id="category">
+                                        <option disabled>Lütfen bir kategori seçiniz</option>
+                                        {% for sub in questionSubCategories %}
+                                            <optgroup label="{{ sub.title }}">
+                                                {% for lower in questionLowerCategories %}
+                                                    {% if lower.parentId.catNumber == sub.catNumber %}
+                                                        <option value="{{ lower.id }}">{{ lower.title }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 control-label " for="title"> Başlık *</label>
+                                <div class="col-lg-10">
+                                    <input id="title" name="title" type="text" class="required form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 control-label">Sorunuz*</label>
+                                <div class="col-lg-10">
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                        </section>
+                        <h3>Son</h3>
+                        <section>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox-v" type="checkbox" checked required disabled>
+                                        <label for="checkbox-v"> <a href="{% url 'terms_of_use' %}">Kullanım Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik Politikası</a>nı okudum ve kabul ediyorum. </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </form>
+                    <!-- End #wizard-vertical -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
