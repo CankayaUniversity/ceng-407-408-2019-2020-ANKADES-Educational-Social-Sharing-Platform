@@ -1,10 +1,161 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <title>Ankacademy | Kayıt Ol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description"/>
+    <meta content="Coderthemes" name="author"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="shortcut icon" href="assets/images/favicon.ico"/>
+
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+    <link href="{% static 'ankacademy/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"
+          id="bootstrap-stylesheet"/>
+    <link href="{% static 'ankacademy/css/icons.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'ankacademy/css/app.min.css' %}" rel="stylesheet" type="text/css" id="app-stylesheet"/>
 </head>
 <body>
+<div class="account-pages mt-5 mb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card">
+                    <div class="text-center account-logo-box">
+                        <div class="mt-2 mb-2">
+                            <a href="index.html" class="text-success">
+                                <h3 style="color: #fff !important;">ANKACADEMY KAYIT OL</h3>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'register_account' %}" method="post">
+                            <div class="row">
+                                <div class="input-group mb-3 col-6">
+                                    <input type="text" class="form-control" name="first_name" placeholder="Ad"
+                                           value="{% if first_name %}{{ first_name }}{% endif %}">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-6">
+                                    <input type="text" class="form-control" name="last_name" placeholder="Soyad"
+                                           value="{% if last_name %}{{ last_name }}{% endif %}">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-12">
+                                    <input type="text" class="form-control" name="username" placeholder="Kullanıcı Adı"
+                                           value="{% if username %}{{ username }}{% endif %}">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-12">
+                                    <input type="email" class="form-control" name="email" placeholder="Email"
+                                           value="{% if email %}{{ email }}{% endif %}">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-12">
+                                    <input type="password" class="form-control" name="password" placeholder="Şifre">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-12">
+                                    <input type="password" class="form-control" name="confirm_password"
+                                           placeholder="Şifre Tekrar">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="form-group">
+                                <div class="checkbox checkbox-success pt-1 pl-1">
+                                    <input id="checkbox-signup" name="terms" type="checkbox" checked="checked">
+                                    <label for="checkbox-signup" class="mb-0"><a href="{% url 'terms_of_use' %}">Kullanım
+                                        Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik Politikası</a>nı
+                                        okudum, kabul ediyorum.</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group account-btn text-center mt-2">
+                                <div class="col-12">
+                                    <button class="btn width-md btn-bordered btn-primary waves-effect waves-light"
+                                            type="submit">Kayıt Ol
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-sm-12 text-center">
+                        <p class="text-muted">Mevcut bir hesap ile<a href="{% url 'login_account' %}">
+                            <i class="mr-2"></i>Giriş Yap
+                        </a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="{% static 'ankacademy/js/vendor.min.js' %}"></script>
+<script src="{% static 'ankacademy/js/app.min.js' %}"></script>
+<script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+</script>
+<script>
+    $(function () {
+        {#//Initialize Select2 Elements#}
+        $('.select2').select2();
+
+        {#//Initialize Select2 Elements#}
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+    });
+</script>
+{% if messages %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            {% if message.tags == "success" %}
+                toastr.success("{{ message }}");
+            {% elif message.tags == 'error' %}
+                toastr.error('{{ message }}');
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
 </body>
 </html>
