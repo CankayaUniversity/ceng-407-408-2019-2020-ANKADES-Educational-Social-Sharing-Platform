@@ -183,7 +183,7 @@ def add_article(request):
         "courseLowerCategories": categories[8],
     }
     if request.method == "POST":
-        value = request.POST['categoryId']
+        value = request.POST['category']
         title = request.POST.get("title")
         owner = request.POST.get("owner")
         resource = request.POST.get("resource")

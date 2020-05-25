@@ -37,7 +37,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-2 control-label " for="category">Kategori *</label>
                                     <div class="col-lg-10">
-                                        <select class="form-control select2" required id="category">
+                                        <select class="form-control select2" name="category" required id="category">
                                             <option disabled>Lütfen bir kategori seçiniz</option>
                                             {% for sub in articleSubCategories %}
                                                 <optgroup label="{{ sub.title }}">
