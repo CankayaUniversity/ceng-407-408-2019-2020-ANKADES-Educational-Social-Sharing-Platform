@@ -177,12 +177,6 @@ def add_article(request):
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
         "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     if request.method == "POST":
         value = request.POST['category']

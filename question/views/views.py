@@ -26,9 +26,8 @@ def add_question(request):
     categories = Categories.all_categories()
     form = QuestionForm(request.POST or None)
     questionCategory = QuestionCategory.objects.filter(Q(isActive=True, isCategory=False))
-    description = None
     if request.method == "POST":
-        value = request.POST['value']
+        value = request.POST.get('value')
         title = request.POST.get('title')
         if form.is_valid():
             description = form.cleaned_data.get("description")
@@ -49,15 +48,9 @@ def add_question(request):
         "userGroup": userGroup,
         "questionCategory": questionCategory,
         "form": form,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
         "questionCategories": categories[3],
         "questionSubCategories": categories[4],
         "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     return render(request, "ankacademy/question/add-question.html", context)
 
