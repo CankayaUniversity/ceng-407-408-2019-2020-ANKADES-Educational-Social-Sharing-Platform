@@ -130,8 +130,8 @@
                                         <h5 class="float-right card-title">
                                             <a href="">{% if question.isSolved %}
                                                 <i>(Çözüldü)</i>
-                                            {% elif question.questioncomment_set.count == 0 %}(Cevap Bekliyor){% else %}
-                                                (Onay Bekliyor)
+                                            {% elif question.questioncomment_set.count == 0 %}<i>(Cevap Bekliyor)</i>{% else %}
+                                                <i>(Onay Bekliyor)</i>
                                             {% endif %}</a>
                                         </h5>
                                         <br/>
