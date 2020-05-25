@@ -12,13 +12,15 @@ from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView
 from rest_framework import viewsets
 
-from account.views.views import get_user_follower
+from account.models import AccountFollower
+from account.views.views import get_user_follower, user_questions, user_articles, user_courses, user_exams
 from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.slug import slug_save
 from ankadescankaya.views.views import current_user_group, Categories
 from article.forms import ArticleForm, EditArticleForm
 from article.models import Article, ArticleCategory, ArticleComment
 from article.serializers import ArticleCategorySerializer, ArticleCommentSerializer, ArticleSerializer
+from question.models import QuestionComment
 from support.models import Report, ReportSubject
 
 
@@ -279,15 +281,23 @@ def article_detail(request, username, slug):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
     try:
         instance = Article.objects.get(slug=slug)
-        creatorGroup = current_user_group(request, instance.creator)
-        existFollower = get_user_follower(request, request.user, instance.creator)
     except:
         return redirect("404")
     if instance.creator.username != username:
         return render(request, "404.html")
+    existFollower = get_user_follower(request, request.user, instance.creator)
+    articlesCount = user_articles(request, instance.creator).order_by('-createdDate__day')
+    questionsCount = user_questions(request, instance.creator).order_by('-createdDate__day')
+    coursesCount = user_courses(request, instance.creator).order_by('-createdDate__day')
+    examsCount = user_exams(request, instance.creator)
+    certifiedAnswersCount = QuestionComment.objects.filter(isCertified=True, isActive=True, creator=instance.creator)
+    followers = AccountFollower.objects.filter(followingId__username=instance.creator)
+    followings = AccountFollower.objects.filter(followerId__username=instance.creator)
+    getFollowerForFollow = get_user_follower(request, request.user, followers)
+    getFollowingForFollow = get_user_follower(request, request.user, followings)
+    creatorGroup = current_user_group(request, instance.creator)
     articles = Article.objects.filter(isActive=True)
     relatedPosts = Article.objects.filter(isActive=True).order_by('-createdDate')[:5]
     articleComments = ArticleComment.objects.filter(articleId__slug=slug, isRoot=True, isActive=True)
@@ -298,22 +308,22 @@ def article_detail(request, username, slug):
     context = {
         "articles": articles,
         "creatorGroup": creatorGroup,
-        "existFollower": existFollower,
         "reportSubjects": reportSubjects,
         "relatedPosts": relatedPosts,
         "instance": instance,
         "userGroup": userGroup,
         "articleComments": articleComments,
         "replyComment": replyComment,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
+        "certifiedAnswersCount": certifiedAnswersCount,
+        "articlesCount": articlesCount,
+        "questionsCount": questionsCount,
+        "coursesCount": coursesCount,
+        "examsCount": examsCount,
+        "existFollower": existFollower,
+        "followers": followers,
+        "followings": followings,
+        "getFollowerForFollow": getFollowerForFollow,
+        "getFollowingForFollow": getFollowingForFollow,
     }
     return render(request, "ankacademy/article/article-detail.html", context)
 

@@ -9,7 +9,8 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView, DetailView
 
-from account.views.views import get_user_follower
+from account.models import AccountFollower
+from account.views.views import get_user_follower, user_articles, user_questions, user_courses, user_exams
 from ankadescankaya.views.views import current_user_group, Categories
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
@@ -140,12 +141,20 @@ def question_detail(request, slug, postNumber):
     """
     try:
         instance = Question.objects.get(postNumber=postNumber, slug=slug, isActive=True)
-        creatorGroup = current_user_group(request, instance.creator)
-        existFollower = get_user_follower(request, request.user, instance.creator)
     except:
         return redirect("404")
+    creatorGroup = current_user_group(request, instance.creator)
+    existFollower = get_user_follower(request, request.user, instance.creator)
+    articlesCount = user_articles(request, instance.creator).order_by('-createdDate__day')
+    questionsCount = user_questions(request, instance.creator).order_by('-createdDate__day')
+    coursesCount = user_courses(request, instance.creator).order_by('-createdDate__day')
+    examsCount = user_exams(request, instance.creator)
+    certifiedAnswersCount = QuestionComment.objects.filter(isCertified=True, isActive=True, creator=instance.creator)
+    followers = AccountFollower.objects.filter(followingId__username=instance.creator)
+    followings = AccountFollower.objects.filter(followerId__username=instance.creator)
+    getFollowerForFollow = get_user_follower(request, request.user, followers)
+    getFollowingForFollow = get_user_follower(request, request.user, followings)
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
     instance.view += 1
     instance.save()
     reportSubjects = ReportSubject.objects.filter(isActive=True)
@@ -161,21 +170,21 @@ def question_detail(request, slug, postNumber):
     context = {
         "userGroup": userGroup,
         "creatorGroup": creatorGroup,
-        "existFollower": existFollower,
         "instance": instance,
         "reportSubjects": reportSubjects,
         "questionAnswers": questionAnswers,
         "certifiedAnswer": certifiedAnswer,
         "answerReply": answerReply,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
+        "articlesCount": articlesCount,
+        "questionsCount": questionsCount,
+        "coursesCount": coursesCount,
+        "examsCount": examsCount,
+        "existFollower": existFollower,
+        "getFollowerForFollow": getFollowerForFollow,
+        "getFollowingForFollow": getFollowingForFollow,
+        "followers": followers,
+        "followings": followings,
+        "certifiedAnswersCount": certifiedAnswersCount,
     }
     return render(request, "ankacademy/question/question-detail.html", context)
 

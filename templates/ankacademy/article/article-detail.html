@@ -94,6 +94,44 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="card-box shadow-none border border-secoundary">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">Takipçi:</th>
+                                            <td>{{ followers.count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Takip:</th>
+                                            <td><span class="label label-danger">{{ followings.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Makale:</th>
+                                            <td><span class="label label-danger">{{ articlesCount.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Soru:</th>
+                                            <td><span class="label label-danger">{{ questionsCount.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Kurs:</th>
+                                            <td><span class="label label-danger">{{ coursesCount.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Sınav:</th>
+                                            <td><span class="label label-danger">{{ examsCount.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Onaylanmış Cevap:</th>
+                                            <td><span
+                                                    class="label label-danger">{{ certifiedAnswersCount.count }}</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -156,7 +194,8 @@
                                     <ul class="media-list pl-0">
                                         {% for comment in articleComments %}
                                             <li class="media">
-                                                <a class="mr-2" href="{% url 'account_detail' comment.creator.username %}">
+                                                <a class="mr-2"
+                                                   href="{% url 'account_detail' comment.creator.username %}">
                                                     <img class="media-object rounded-circle"
                                                          src="{{ comment.creator.image.url }}"
                                                          style="max-width: 64px !important; max-height: 64px !important;"
