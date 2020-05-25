@@ -198,8 +198,6 @@ def add_article(request):
         instance = Article(title=title, description=description, isPrivate=isPrivate, owner=owner, resource=resource)
         if request.FILES:
             media = request.FILES.get('media')
-            fs = FileSystemStorage()
-            fs.save(media.name, media)
             instance.media = media
         instance.creator = request.user
         instance.categoryId_id = value
