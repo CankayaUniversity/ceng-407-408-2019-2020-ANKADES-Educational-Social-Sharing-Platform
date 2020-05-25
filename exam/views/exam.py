@@ -89,7 +89,7 @@ def lecture_exam(request, postNumber):
     except:
         messages.error(request, "Ders bulunamadı.")
         return redirect("all_schools")
-    exams = Exam.objects.filter(lectureId__postNumber=postNumber, isActive=True)
+    exams = Exam.objects.filter(lectureId__postNumber=instance, isActive=True)
     categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     context = {

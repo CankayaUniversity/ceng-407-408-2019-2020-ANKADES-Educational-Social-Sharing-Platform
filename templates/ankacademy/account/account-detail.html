@@ -371,13 +371,19 @@
                                                                     <span class="timeline-icon bg-primary"><i
                                                                             class="mdi mdi-checkbox-blank-circle-outline"></i></span>
                                                                     <h4 class="text-primary"><a
-                                                                            href="{% url 'lecture_exam' exam.lectureId.slug %}"></a>{{ exam.title }}
+                                                                            href="{% url 'lecture_exam' exam.lectureId.postNumber %}"></a>{{ exam.lectureId.lectureCode }} - {{ exam.lectureId.title }} - {{ exam.title }}
                                                                     </h4></h4>
                                                                     <p class="timeline-date text-muted">
                                                                         <small>{{ exam.createdDate|date:"d M Y" }}</small>
                                                                     </p>
+                                                                    <p class="timeline-date text-muted">
+                                                                        Sınav Tarihi<small>{{ exam.examDate|date:"d M Y" }}</small>
+                                                                    </p>
+                                                                    <p class="timeline-date text-muted">
+                                                                        Dönem<small>{{ exam.termId.title|date:"d M Y" }}</small>
+                                                                    </p>
                                                                     <div class="album">
-                                                                        <a href="{% url 'lecture_exam' exam.lectureId.slug %}"
+                                                                        <a href="{% url 'lecture_exam' exam.lectureId.postNumber %}"
                                                                            class="btn btn-primary btn-sm">Soruya Git</a>
                                                                         {% if exam.creator == request.user %}
                                                                             <a href=""
