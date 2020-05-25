@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.views.generic import DetailView
 
 from ankadescankaya.views.views import current_user_group, Categories
 from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm
@@ -20,20 +21,33 @@ def all_courses(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    courses_limit = Course.objects.filter(isActive=True).order_by('-createdDate')
-    courseComment = CourseComment.objects.filter(isActive=True)
-    page = request.GET.get('page', 1)
     categories = Categories.all_categories()
-    keyword = request.GET.get("keyword")
-    if keyword:
-        courses = Course.objects.filter(
-            Q(title__contains=keyword, isActive=True) | Q(creator=keyword, isActive=True) | Q(categoryId=keyword,
-                                                                                              isActive=True))
+    category = request.GET.getlist('c')
+    sub = request.GET.getlist('s')
+    lower = request.GET.getlist('l')
+    getLowCategory = []
+    articleCat = []
+    topCategories = ArticleCategoryView.getTopCategory(request)
+    articleComment = CourseComment.objects.filter(isActive=True)
+    courses = Course.objects.filter(isActive=True)
+    # TODO Paginator
+    if category:
+        top = CourseCategory.objects.filter(catNumber__in=category)
+        sub = CourseCategory.objects.filter(isActive=True, parentId__catNumber__in=category)
+        for getLower in sub:
+            getLowCategory.append(getLower.catNumber)
+        lower = CourseCategory.objects.filter(isActive=True, parentId__catNumber__in=getLowCategory)
+        for cat in lower:
+            articleCat.append(cat.catNumber)
+        courses = Course.objects.filter(isActive=True, categoryId__catNumber__in=articleCat)
+        # TODO Paginator
         context = {
-            "courses": courses,
-            "courseComment": courseComment,
-            "courses_limit": courses_limit,
             "userGroup": userGroup,
+            "articleComment": articleComment,
+            "category": category,
+            "sub": sub,
+            "top": top,
+            "courses": courses,
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
@@ -44,22 +58,21 @@ def all_courses(request):
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
         }
-        return render(request, "ankades/course/all-courses.html", context)
-    else:
-        courses = Course.objects.filter(isActive=True)
-        paginator = Paginator(courses, 12)
-        try:
-            course_pagination = paginator.page(page)
-        except PageNotAnInteger:
-            course_pagination = paginator.page(1)
-        except EmptyPage:
-            course_pagination = paginator.page(paginator.num_pages)
+        return render(request, "ankacademy/course/all-courses.html", context)
+    if sub:
+        subCat = CourseCategory.objects.filter(catNumber__in=sub)
+        low = CourseCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
+        for getLower in low:
+            getLowCategory.append(getLower.catNumber)
+        courses = Course.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
         context = {
             "userGroup": userGroup,
+            "articleComment": articleComment,
+            "category": category,
+            "low": low,
+            "subCat": subCat,
+            "sub": sub,
             "courses": courses,
-            "courseComment": courseComment,
-            "course_pagination": course_pagination,
-            "courses_limit": courses_limit,
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
@@ -70,7 +83,44 @@ def all_courses(request):
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
         }
-    return render(request, "ankades/course/all-courses.html", context)
+        return render(request, "ankacademy/course/all-courses.html", context)
+    if lower:
+        lowCat = CourseCategory.objects.filter(catNumber__in=lower)
+        courses = Course.objects.filter(isActive=True, categoryId__catNumber__in=lower)
+        context = {
+            "userGroup": userGroup,
+            "articleComment": articleComment,
+            "lowCat": lowCat,
+            "lower": lower,
+            "courses": courses,
+            "articleCategories": categories[0],
+            "articleSubCategories": categories[1],
+            "articleLowerCategories": categories[2],
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
+            "courseCategories": categories[6],
+            "courseSubCategories": categories[7],
+            "courseLowerCategories": categories[8],
+        }
+        return render(request, "ankacademy/course/all-courses.html", context)
+    context = {
+        "userGroup": userGroup,
+        "topCategories": topCategories,
+        "category": category,
+        "courses": courses,
+        "articleComment": articleComment,
+        "articleCategories": categories[0],
+        "articleSubCategories": categories[1],
+        "articleLowerCategories": categories[2],
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+        "courseCategories": categories[6],
+        "courseSubCategories": categories[7],
+        "courseLowerCategories": categories[8],
+    }
+    return render(request, "ankacademy/course/all-courses.html", context)
 
 
 def course_category_page(request, slug):
@@ -208,3 +258,36 @@ def add_lecture(request, courseNumber):
 # TODO
 def course_detail(request, slug):
     return None
+
+
+class ArticleCategoryView(DetailView):
+
+    @staticmethod
+    def getTopCategory(request):
+        """
+        :param request:
+        :return topCategory:
+        """
+        topCategory = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True)|Q(isRoot=True))
+        return topCategory
+
+    @staticmethod
+    def getSubCategory(request, catNumber):
+        """
+        :param request:
+        :param catNumber:
+        :return subCategory:
+        """
+        instance = get_object_or_404(CourseCategory, catNumber=catNumber)
+        subCategory = CourseCategory.objects.filter(parentId__catNumber=instance)
+        return subCategory
+
+    @staticmethod
+    def getLowCategory(request, catNumber):
+        """
+        :param request:
+        :return catNumber:
+        """
+        instance = get_object_or_404(CourseCategory, catNumber=catNumber)
+        lowCategory = CourseCategory.objects.filter(parentId__catNumber=instance.catNumber)
+        return lowCategory
