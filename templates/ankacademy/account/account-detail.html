@@ -36,19 +36,23 @@
                                 <p class="text-muted mb-2">{{ creatorGroup.title }}</p>
                             </div>
                             {% if instance.username != request.user.username %}
-                                <a type="button" href="{% url 'follow_account' instance.username %}"
-                                   class="btn btn-success btn-sm width-sm waves-effect mt-2 waves-light"><i
-                                        class="far fa-thumbs-up"></i>
-                                    {% if existFollower %}
+                                {% if existFollower %}
+                                    <a type="button" href="{% url 'follow_account' instance.username %}"
+                                       class="btn btn-primary btn-sm mt-2 "><i
+                                            class="mdi mdi-thumb-down"></i>
                                         Takibi Bırak
-                                    {% else %}
+                                    </a>
+                                {% else %}
+                                    <a type="button" href="{% url 'follow_account' instance.username %}"
+                                       class="btn btn-primary btn-sm mt-2 "><i
+                                            class="mdi mdi-thumb-up"></i>
                                         Takip Et
-                                    {% endif %}
-                                </a>
+                                    </a>
+                                {% endif %}
                             {% endif %}
                             {% if instance.username != request.user.username %}
                                 <button type="button"
-                                        class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Message
+                                        class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Mesaj
                                 </button>
                             {% endif %}
                             <p class="sub-header mt-3">
@@ -371,13 +375,15 @@
                                                                     <span class="timeline-icon bg-primary"><i
                                                                             class="mdi mdi-checkbox-blank-circle-outline"></i></span>
                                                                     <h4 class="text-primary"><a
-                                                                            href="{% url 'lecture_exam' exam.lectureId.postNumber %}"></a>{{ exam.lectureId.lectureCode }} - {{ exam.lectureId.title }} - {{ exam.title }}
+                                                                            href="{% url 'lecture_exam' exam.lectureId.postNumber %}"></a>{{ exam.lectureId.lectureCode }}
+                                                                        - {{ exam.lectureId.title }} - {{ exam.title }}
                                                                     </h4></h4>
                                                                     <p class="timeline-date text-muted">
                                                                         <small>{{ exam.createdDate|date:"d M Y" }}</small>
                                                                     </p>
                                                                     <p class="timeline-date text-muted">
-                                                                        Sınav Tarihi<small>{{ exam.examDate|date:"d M Y" }}</small>
+                                                                        Sınav
+                                                                        Tarihi<small>{{ exam.examDate|date:"d M Y" }}</small>
                                                                     </p>
                                                                     <p class="timeline-date text-muted">
                                                                         Dönem<small>{{ exam.termId.title|date:"d M Y" }}</small>
