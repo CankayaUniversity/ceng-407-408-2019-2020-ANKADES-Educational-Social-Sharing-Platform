@@ -92,7 +92,7 @@ def all_questions(request):
             "top": top,
             "questions": questions,
         }
-        return render(request, "ankades/question/all-questions.html", context)
+        return render(request, "ankacademy/question/all-questions.html", context)
     if sub:
         subCat = QuestionCategory.objects.filter(catNumber__in=sub)
         low = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
@@ -108,7 +108,7 @@ def all_questions(request):
             "sub": sub,
             "questions": questions,
         }
-        return render(request, "ankades/question/all-questions.html", context)
+        return render(request, "ankacademy/question/all-questions.html", context)
     if lower:
         lowCat = QuestionCategory.objects.filter(catNumber__in=lower)
         questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=lower)
@@ -119,7 +119,7 @@ def all_questions(request):
             "lower": lower,
             "questions": questions,
         }
-        return render(request, "ankades/question/all-questions.html", context)
+        return render(request, "ankacademy/question/all-questions.html", context)
     context = {
         "userGroup": userGroup,
         "topCategories": topCategories,
@@ -127,7 +127,7 @@ def all_questions(request):
         "questions": questions,
         "questionComment": questionComment,
     }
-    return render(request, "ankades/question/all-questions.html", context)
+    return render(request, "ankacademy/question/all-questions.html", context)
 
 
 def question_detail(request, slug, postNumber):

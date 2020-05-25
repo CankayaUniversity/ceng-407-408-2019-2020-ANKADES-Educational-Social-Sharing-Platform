@@ -1,0 +1,186 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}Ankacademy | Sorular{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sorular</a></li>
+                            {% if category %}
+                                {% for cat in top %}
+                                    <li class="breadcrumb-item">{{ cat.title }}</li>
+                                {% endfor %}
+                            {% elif sub %}
+                                {% for cat in subCat %}
+                                    <li class="breadcrumb-item">{{ cat.parentId.title }}</li>
+                                    <li class="breadcrumb-item">{{ cat.title }}</li>
+                                {% endfor %}
+                            {% elif lower %}
+                                {% for cat in lowCat %}
+                                    <li class="breadcrumb-item">{{ cat.parentId.parentId.title }}</li>
+                                    <li class="breadcrumb-item">{{ cat.parentId.title }}</li>
+                                    <li class="breadcrumb-item">{{ cat.title }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Sorular</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="">
+                    <h5 class="text-uppercase mb-4 mt-0">Kategoriler</h5>
+                    {% if category %}
+                        <form method="get">
+                            <div class="form-group">
+                                <select class="form-control select2" name="s">
+                                    {% for optgroup in top %}
+                                        <optgroup label="{{ optgroup.title }}">
+                                            <option disabled selected>{{ optgroup.title }} / Hepsi</option>
+                                            {% for subCat in sub %}
+                                                {% if subCat.parentId.catNumber == optgroup.catNumber %}
+                                                    <option value="{{ subCat.catNumber }}">{{ optgroup.title }}
+                                                        / {{ subCat.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </optgroup>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-purple waves-effect waves-light"><i
+                                    class="mdi mdi-magnify mr-1"></i>Ara
+                            </button>
+                            <a href="{% url 'all_questions' %}" class="btn btn-danger">Sıfırla</a>
+                        </form>
+                    {% elif sub %}
+                        <form method="get">
+                            <div class="form-group">
+                                <select class="form-control select2" name="l">
+                                    {% for optgroup in subCat %}
+                                        <optgroup label="{{ optgroup.parentId.title }} / {{ optgroup.title }}">
+                                            {% for lower in low %}
+                                                {% if lower.parentId.catNumber == optgroup.catNumber %}
+                                                    <option value="{{ lower.catNumber }}">{{ optgroup.parentId.title }}
+                                                        / {{ lower.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </optgroup>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-purple waves-effect waves-light"><i
+                                    class="mdi mdi-magnify mr-1"></i>Ara
+                            </button>
+                            <a href="{% url 'all_questions' %}" class="btn btn-danger">Sıfırla</a>
+                        </form>
+                    {% elif lower %}
+                        <form method="get">
+                            <div class="form-group">
+                                <select class="form-control select2" name="l">
+                                    {% for cat in lowCat %}
+                                        <option selected value="{{ cat.catNumber }}">{{ cat.title }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-purple waves-effect waves-light"><i
+                                    class="mdi mdi-magnify mr-1"></i>Ara
+                            </button>
+                            <a href="{% url 'all_questions' %}" class="btn btn-danger">Sıfırla</a>
+                        </form>
+                    {% else %}
+                        <form method="get">
+                            <div class="form-group">
+                                <select class="form-control select2" name="c">
+                                    <option>Birini Seçiniz</option>
+                                    {% for topCat in topCategories %}
+                                        {% if topCat.slug != 'home' %}
+                                            <option value="{{ topCat.catNumber }}">
+                                                {{ topCat.title }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-purple waves-effect waves-light"><i
+                                    class="mdi mdi-magnify mr-1"></i>Ara
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    {% if questions %}
+                        {% for question in questions %}
+                            <div class="card-deck col-lg-12 col-md-12 col-xs-12 col-sm-12 mt-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="float-left card-title">
+                                            <a href="{% url 'question_detail' question.slug question.postNumber %}">{{ question.title|safe|truncatewords:20 }}</a>
+                                        </h5>
+                                        <h5 class="float-right card-title">
+                                            <a href="">{% if question.isSolved %}
+                                                (ÇÖZÜLDÜ)
+                                            {% elif question.questioncomment_set.count == 0 %}(Cevap Bekliyor){% else %}
+                                                (Onay Bekliyor)
+                                            {% endif %}</a>
+                                        </h5>
+                                        <br/>
+                                        <hr>
+                                        <small class="card-text">Kategori: <a
+                                                href="{% url 'question_category_page' question.categoryId.slug %}">{{ question.categoryId.parentId.title }}
+                                            / {{ question.categoryId.title }}</a>
+                                        </small>
+                                        <br/>
+                                        <small class="card-text">Yorum: {{ question.questioncomment_set.count }}</small>
+                                        <br/>
+                                        <small class="card-text">Görüntülenme: {{ question.view }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger col-lg-12 col-sm-12 col-xs-12 col-md-12" role="alert">
+                            <h5><strong>Üzgünüz :(</strong></h5>
+                            <p>Henüz bir soru paylaşılmamış.</p>
+                        </div>
+                    {% endif %}
+                <div class="mt-5">
+                    <ul class="pagination pagination-split justify-content-end">
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link"><i class="fa fa-angle-left"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">1</a>
+                        </li>
+                        <li class="page-item active">
+                            <a href="#" class="page-link">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">5</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link"><i class="fa fa-angle-right"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
