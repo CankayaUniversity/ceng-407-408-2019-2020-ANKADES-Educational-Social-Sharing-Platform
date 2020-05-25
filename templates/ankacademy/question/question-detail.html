@@ -1,0 +1,499 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}{{ instance.title|lower|title }} | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'all_questions' %}">Sorular</a></li>
+                            <li class="breadcrumb-item">{{ instance.title }}</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Sorular</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-xl-3 col-md-4">
+                        <div class="mt-4">
+                            <div class="text-center card-box shadow-none border border-secoundary">
+                                <div class="member-card">
+                                    <div class="avatar-xl member-thumb mb-3 mx-auto d-block">
+                                        <img src="{{ instance.creator.image.url }}" class="rounded-circle img-thumbnail"
+                                             alt="profile-image">
+                                        {% if creatorGroup == 'admin' or creatorGroup == 'moderator' or creatorGroup == 'ogretmen' %}
+                                            <i class="mdi mdi-star-circle member-star text-success"
+                                               title="verified user"></i>{% endif %}
+                                    </div>
+
+                                    <div class="">
+                                        <h5 class="font-18 mb-1">{{ instance.creator.get_full_name }}</h5>
+                                        <p class="text-muted mb-2">{{ creatorGroup.title }}</p>
+                                    </div>
+
+                                    {% if instance.creator.username != request.user.username %}
+                                        {% if existFollower %}
+                                            <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                                    class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                                href="{% url 'follow_account' instance.creator.username %}">Takibi Bırak</a></span>
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                                    class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                                href="{% url 'follow_account' instance.creator.username %}">Takip Et</a></span>
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Mesaj
+                                    </button>
+
+                                    <p class="sub-header mt-3">
+                                        {% if instance.creator.bio %}{{ instance.creator.bio }}{% else %}
+                                            {{ instance.creator.get_full_name }} kullanıcıs biyografisini
+                                            paylaşmamış{% endif %}
+                                    </p>
+
+                                    <hr/>
+
+                                    <div class="text-left">
+                                        <p class="text-muted font-13"><strong>Ad :</strong> <span
+                                                class="ml-4">{{ instance.creator.get_full_name }}</span>
+                                        </p>
+
+                                        <p class="text-muted font-13"><strong>Email :</strong> <span
+                                                class="ml-4">{{ instance.creator.email }}</span>
+                                        </p>
+
+                                        <p class="text-muted font-13"><strong>Üyelik :</strong> <span
+                                                class="ml-4">{{ creatorGroup.title }}</span></p>
+                                    </div>
+                                    <ul class="social-links list-inline mt-4">
+                                        <li class="list-inline-item">
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                               href=""
+                                               data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                               href=""
+                                               data-original-title="Twitter"><i class="fab fa-twitter"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                               href=""
+                                               data-original-title="Skype"><i class="fab fa-skype"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-box shadow-none border border-secoundary">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">Takipçi:</th>
+                                            <td>{{ instance.followers.count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Takip:</th>
+                                            <td><span class="label label-danger">{{ instance.followings.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Makale:</th>
+                                            <td><span class="label label-danger">{{ instance.articles.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Soru:</th>
+                                            <td><span class="label label-danger">{{ instance.questions.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Kurs:</th>
+                                            <td><span class="label label-danger">{{ instance.courses.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Sınav:</th>
+                                            <td><span class="label label-danger">{{ instance.exams.count }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Onaylanmış Cevap:</th>
+                                            <td><span class="label label-danger">{{ instance.certifiedAnswer.count }}</span></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="mt-4">
+                            <div class="card blog-post bg-transparent">
+                                <div class="card-body">
+                                    <div class="text-center pt-2 pb-2">
+                                        <h3>{{ instance.title|safe|lower|title }}</h3>
+                                    </div>
+                                    <hr/>
+                                    <div class="post-data pt-2">
+                                        {% if instance.description %}
+                                            {{ instance.description|safe }}
+                                        {% else %}
+                                            {{ instance.abstract|safe }}
+                                        {% endif %}
+                                    </div>
+                                    <hr/>
+                                    <div class="text-muted">
+                                        <span>Kategori: {{ instance.categoryId.parentId.title }} / {{ instance.categoryId.title }}</span>
+                                    </div>
+                                    <div class="text-muted"><span>Paylaşım Tarihi: {{ instance.createdDate }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-5">
+                                <h5 class="text-uppercase mb-4">Yazar Hakkında</h5>
+                                <div class="media">
+                                    <div class="media-left mr-2">
+                                        <a href="#"> <img class="rounded mr-2 avatar-xl" alt="64x64"
+                                                          style="max-height: 64px !important; max-width: 64px !important;"
+                                                          src="{{ instance.creator.image.url }}"> </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-18 media-heading mt-0">{{ instance.creator.get_full_name }}</h5>
+                                        <p class="mb-2">
+                                            {% if instance.creator.bio %}
+                                                {{ instance.creator.bio }}
+                                            {% else %}
+                                                Yazar, biyografini henüz paylaşmamış.
+                                            {% endif %}
+                                        </p>
+                                        <a href="{% url 'account_detail' instance.creator.username %}"
+                                           class="btn btn-xs btn-success waves-light waves-effect">Profile Git</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="mt-5 blog-post-comment">
+                                {% if certifiedAnswer %}
+                                    <div class="timeline timeline-left">
+                                        <article class="timeline-item timeline-item-left">
+                                            <div class="text-left">
+                                                <div class="time-show first">
+                                                    <p href="#" class="btn btn-success width-lg mb-0"><i
+                                                            class="fas fa-check"></i> Onaylanmış Cevap</p>
+                                                </div>
+                                            </div>
+                                        </article>
+                                        <article class="timeline-item">
+                                            <div class="timeline-desk">
+                                                <div class="panel">
+                                                    <div class="timeline-box">
+                                                        <span class="arrow"></span>
+                                                        <span class="timeline-icon"><i
+                                                                class="mdi mdi-checkbox-blank-circle-outline"></i></span>
+                                                        <h4 class=""><b><a href="{% url 'account_detail' certifiedAnswer.creator.username %}">{{ certifiedAnswer.creator.get_full_name }}</b></a></h4>
+                                                        <p class="timeline-date text-muted"><small>{{ certifiedAnswer.createdDate }}</small></p>
+                                                        <p class="mb-0">{{ certifiedAnswer.content|safe }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <hr/>
+                                {% endif %}
+                                {% if questionAnswers %}
+                                    <h5 class="text-uppercase mt-5 mb-4">Yorumlar</h5>
+                                    <ul class="media-list pl-0">
+                                        {% for comment in questionAnswers %}
+                                            <li class="media">
+                                                <a class="mr-2" href="#">
+                                                    <img class="media-object rounded-circle"
+                                                         src="{{ comment.creator.image.url }}"
+                                                         style="max-width: 64px !important; max-height: 64px !important;"
+                                                         alt="{{ instance.title }}">
+                                                </a>
+                                                <div class="media-body">
+                                                    <h5 class="font-18 media-heading mt-0">{{ comment.creator.get_full_name }}</h5>
+                                                    <h6 class="text-muted">{{ comment.createdDate }}</h6>
+                                                    <p>{{ comment.content }}</p>
+
+                                                    <a onclick="reply_{{ comment.commentNumber }}()" type="button"
+                                                       class="btn btn-sm btn-info text-success"
+                                                       style="color: #ffffff !important;"><i
+                                                            class="mdi mdi-reply"></i>&nbsp; Cevapla</a>
+                                                    {% if instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                        {% if comment.questionId.isSolved == False and comment.isCertified == False %}
+                                                            <a href="{% url 'confirm_answer' comment.answerNumber %}"
+                                                               class="btn btn-success btn-sm">
+                                                                <i class="fas fa-check"></i> Onayla
+                                                            </a>
+                                                        {% endif %}
+                                                        {% if comment.isCertified %}
+                                                            <button class="btn btn-success btn-sm">
+                                                                <a style="color: #ffffff !important;"
+                                                                   href="{% url 'confirm_answer' comment.answerNumber %}">
+                                                                    <i class="fas fa-window-close"></i> Onayı Kaldır
+                                                                </a>
+                                                            </button>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                        <a onclick="edit_{{ comment.commentNumber }}()"
+                                                           class="btn btn-primary btn-sm"
+                                                           style="color: #ffffff !important;">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                            Düzenle
+                                                        </a>
+                                                        <a href="{% url 'delete_question_answer' comment.answerNumber %}"
+                                                           class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                            Sil
+                                                        </a>
+                                                    {% endif %}
+                                                    {# Edit Comment #}
+                                                    <div class="media sub_media">
+                                                        <div class="media-body" id="edit_{{ forloop.counter }}comment"
+                                                             style="display:none;">
+                                                            <form method="post"
+                                                                  action="{% url 'edit_question_answer' comment.answerNumber %}">
+                                                                {% csrf_token %}
+                                                                <p class="comment-form-comment form-group has-placeholder">
+                                                                    <label>Yorum Düzenle</label>
+                                                                    <i class="fa fa-edit color-main"></i>
+                                                                    <textarea class="form-control" name="edit"
+                                                                              cols="10"
+                                                                              rows="3" maxlength="65525"
+                                                                              aria-required="true"
+                                                                              required="required"
+                                                                              placeholder="">{{ comment.content }}</textarea>
+                                                                </p>
+                                                                <p class="form-submit">
+                                                                    <button type="submit"
+                                                                            class="btn btn-sm btn-success">
+                                                                        <span>Düzenle</span>
+                                                                    </button>
+                                                                </p>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    {# Reply Comment #}
+                                                    <div class="media sub_media">
+                                                        <div class="media-body" id="{{ forloop.counter }}comment"
+                                                             style="display:none;">
+                                                            <form method="post"
+                                                                  action="{% url 'add_question_answer_reply' comment.answerNumber %}">
+                                                                {% csrf_token %}
+                                                                <p class="comment-form-comment form-group has-placeholder">
+                                                                    <label>Yanıt ver</label>
+                                                                    <i class="fa fa-edit color-main"></i>
+                                                                    <textarea class="form-control" name="reply"
+                                                                              cols="10"
+                                                                              rows="3" maxlength="65525"
+                                                                              aria-required="true"
+                                                                              required="required"
+                                                                              placeholder=""></textarea>
+                                                                </p>
+                                                                <p class="form-submit">
+                                                                    <button type="submit"
+                                                                            class="btn btn-sm btn-primary">
+                                                                        <span>Gönder</span>
+                                                                    </button>
+                                                                </p>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        function reply_{{ comment.commentNumber }}() {
+                                                            let open = document.getElementById("{{ forloop.counter }}comment");
+                                                            if (open.style.display === "none") {
+                                                                open.style.display = "block";
+                                                            } else {
+                                                                open.style.display = "none";
+                                                            }
+                                                        }
+
+                                                        function edit_{{ comment.commentNumber }}() {
+                                                            let open = document.getElementById("edit_{{ forloop.counter }}comment");
+                                                            if (open.style.display === "none") {
+                                                                open.style.display = "block";
+                                                            } else {
+                                                                open.style.display = "none";
+                                                            }
+                                                        }
+                                                    </script>
+                                                    <hr/>
+                                                    {% if answerReply %}
+                                                        {% for reply in answerReply %}
+                                                            {% if reply.parentId_id == comment.id %}
+                                                                <div class="media sub_media mt-3">
+                                                                    <a class="mr-2" href="#">
+                                                                        <img class="media-object rounded-circle"
+                                                                             style="max-height: 64px !important; max-width: 64px !important;"
+                                                                             src="{{ reply.creator.image.url }}"
+                                                                             alt="{{ instance.title|lower|title|safe }}">
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h5 class="font-18 media-heading mt-0">{{ reply.creator.get_full_name }}</h5>
+                                                                        <h6 class="text-muted">{{ reply.createdDate }}</h6>
+                                                                        <p>{{ reply.content }}</p>
+                                                                        {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                                            <a onclick="edit_reply_{{ reply.answerNumber }}()"
+                                                                               class="btn btn-success btn-sm"
+                                                                               style="color: #ffffff !important;">
+                                                                                <i class="fas fa-pencil-alt"></i>
+                                                                                Düzenle
+                                                                            </a>
+                                                                            <a href="{% url 'delete_article_comment' reply.answerNumber %}"
+                                                                               class="btn btn-danger btn-sm"><i
+                                                                                    class="fas fa-trash"></i> Sil</a>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="media sub_media"
+                                                                     id="edit_{{ forloop.counter }}reply"
+                                                                     style="display:none;">
+                                                                    <div class="media-body">
+                                                                        <form method="post"
+                                                                              class="comment-form p-3"
+                                                                              action="{% url 'edit_article_comment' reply.answerNumber %}">
+                                                                            {% csrf_token %}
+                                                                            <p class="comment-form-comment form-group has-placeholder">
+                                                                                <label>Yorum Düzenle</label>
+                                                                                <i class="fa fa-edit color-main"></i>
+                                                                                <textarea class="form-control"
+                                                                                          name="edit"
+                                                                                          cols="10"
+                                                                                          rows="3"
+                                                                                          maxlength="65525"
+                                                                                          aria-required="true"
+                                                                                          required="required"
+                                                                                          placeholder="">{{ reply.content }}</textarea>
+                                                                            </p>
+                                                                            <p class="form-submit">
+                                                                                <button type="submit"
+                                                                                        class="btn btn-primary">
+                                                                                    <span>Düzenle</span>
+                                                                                </button>
+                                                                            </p>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <hr/>
+                                                                <script>
+                                                                    function edit_reply_{{ reply.commentNumber }}() {
+                                                                        let open = document.getElementById("edit_{{ forloop.counter }}reply");
+                                                                        if (open.style.display === "none") {
+                                                                            open.style.display = "block";
+                                                                        } else {
+                                                                            open.style.display = "none";
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
+                                    <form method="post" class="comment-form"
+                                          action="{% url 'add_question_answer' instance.slug instance.postNumber %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                        <textarea class="form-control" id="content" name="content" rows="5"
+                                                  placeholder="Mesajınız" required=""></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="">
+                                                    <button type="submit" class="btn btn-primary" id="send">Gönder
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="alert alert-danger col-lg-12 col-sm-12 col-xs-12 col-md-12"
+                                         role="alert">
+                                        <p>Sorunun henüz bir cevabı bulunmuyor.</p>
+                                    </div>
+                                    <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
+                                    <form method="post" class="comment-form"
+                                          action="{% url 'add_question_answer' instance.slug instance.postNumber %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                        <textarea class="form-control" id="content" name="content" rows="5"
+                                                  placeholder="Mesajınız" required=""></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="">
+                                                    <button type="submit" class="btn btn-primary" id="send">Gönder
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                                {# Report Modal #}
+                                <div class="modal fade" id="modal-default">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Şikayet Et</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form role="form" method="post"
+                                                      action="{% url 'add_report_article' postNumber=instance.postNumber %}">
+                                                    {% csrf_token %}
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <select id="select" class="form-control select2bs4"
+                                                                    style="width: 100%;"
+                                                                    value="Seçiniz" name="subjectId"
+                                                                    required>
+                                                                <option disabled>Lütfen birini seçiniz</option>
+                                                                {% if reportSubjects %}
+                                                                    {% for report in reportSubjects %}
+                                                                        {% if report.title != 'Home' %}
+                                                                            <option value="{{ report.id }}">{{ report.title }}</option>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="message">Mesajınız*</label>
+                                                            <textarea class="form-control" name="description"
+                                                                      id="message" rows="3"
+                                                                      maxlength="65525" aria-required="true" required
+                                                                      placeholder="Mesajınız"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button type="submit" name="submit" class="btn btn-primary">
+                                                            Gönder
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
