@@ -1,0 +1,189 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block meta %}Ankacademy{% endblock %}
+{% block title %}Sınav Paylaş | Ankacademy{% endblock %}
+{% block content %}
+    <style>
+        .wizard > .content > .body label {
+            margin-top: 0px !important;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">Sınav Ekle</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Sınav Ekle</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <h4 class="header-title">Sınav Ekle</h4>
+                    <p class="sub-header">
+                        Sınav eklemek için lütfen aşağıdaki gerekli alanları doldurun.
+                    </p>
+                    {% if getSchool %}
+                        <form id="wizard-validation-form" role="form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div>
+                                <h3>1. Adım</h3>
+                                <section>
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 control-label" for="lecture">Ders *</label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control select2 required" name="lecture" id="lecture">
+                                                <option disabled>Lütfen bir kategori seçiniz</option>
+                                                {% for department in departments %}
+                                                    <optgroup label="{{ department.title }}">
+                                                        {% for lecture in lectures %}
+                                                            {% if lecture.departmentId_id == department.id %}
+                                                                <option value="{{ lecture.id }}">{{ lecture.lectureCode }}
+                                                                    - {{ lecture.title }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </optgroup>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 control-label " for="term">Dönem *</label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control select2" name="term" id="term">
+                                                <option disabled>Lütfen bir dönem seçiniz</option>
+                                                {% for term in terms %}
+                                                    <option value="{{ term.id }}">{{ term.title }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </section>
+                                <h3>2. Adım</h3>
+                                <section>
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 control-label " for="title">Başlık *</label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control select2" name="title" id="title"
+                                                    style="width: 100% !important;">
+                                                <optgroup label="Sınav Türü">
+                                                    <option disabled>Lütfen sınavın türünü seçiniz</option>
+                                                    <option value="1. Midterm">1. Midterm</option>
+                                                    <option value="2. Midterm">2. Midterm</option>
+                                                    <option value="3. Midterm">3. Midterm</option>
+                                                    <option value="Final">Final</option>
+                                                    <option value="Diğer">Diğer</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 control-label" for="examDate">Sınav Tarihi:</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" class="form-control" id="examDate"
+                                                   data-toggle="input-mask" name="examDate"
+                                                   data-mask-format="0000-00-00">
+                                            <span class="font-13 text-muted">e.g "YYYY/AA/GG"</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 control-label" for="media">Sınav Dosyası: </label>
+                                        <div class="col-lg-10">
+                                            <div class="form-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="media"
+                                                           data-text="Dosya Seçin">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <h3>Son</h3>
+                                <section>
+                                    <div class="alert alert-info" role="alert">
+                                        Lütfen sınav sahibi bilgilerini doldurunuz.
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="owner" class="col-lg-2 control-label">Sınav Sahibi Adı: </label>
+                                        <div class="col-lg-10">
+                                            <input id="owner" name="owner" type="text" class="required form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="email" class="col-lg-2 control-label">Sınav Sahibi Eposta
+                                            Adresi: </label>
+                                        <div class="col-lg-10">
+                                            <input id="email" name="ownerEmail" type="email"
+                                                   class="form-control required"
+                                                   placeholder="Email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="checkbox-v" name="checked" type="checkbox" checked required
+                                                       disabled>
+                                                <label for="checkbox-v"> Sınav sahibi benim ve/ya sınav sahibinen,
+                                                    paylaşım için onay aldım.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="checkbox-v" type="checkbox" checked required disabled>
+                                                <label for="checkbox-v"> <a href="{% url 'terms_of_use' %}">Kullanım
+                                                    Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik
+                                                    Politikası</a>nı okudum ve kabul ediyorum. </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <button id="finish" type="submit" class="btn btn-md btn-primary">Paylaş</button>
+                        </form>
+                        <!-- End #wizard-vertical -->
+                    {% else %}
+                        <div class="alert alert-info" role="alert">
+                            Lütfen devam etmek için bir okul seçiniz.
+                        </div>
+                        <form role="form" method="get">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
+                                <select id="school" class="form-control select2" style="width: 100%;"
+                                        value="Seçiniz" name="school" required>
+                                    <option disabled>Lütfen bir okul seçiniz</option>
+                                    {% if schools %}
+                                        {% for school in schools %}
+                                            <option value="{{ school.slug }}">{{ school.title }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <button type="submit" name="submit" class="btn btn-md btn-primary">Devam</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/submit-wizard.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-mask-plugin/jquery.mask.min.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/form-masks.init.js' %}"></script>
+{% endblock %}

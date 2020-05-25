@@ -92,10 +92,12 @@ class Exam(models.Model):
     termId = models.ForeignKey(Term, on_delete=models.SET_NULL, null=True)
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     owner = models.CharField(null=True, blank=True, max_length=100, verbose_name="Exam Owner Name")
+    ownerEmail = models.CharField(null=True, blank=True, max_length=100, verbose_name="Exam Owner Email")
     examDate = models.DateField()
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     isActive = models.BooleanField(default=True)
+    checked = models.BooleanField(default=True)
     title = models.CharField(max_length=254)
     media = models.FileField(null=True, blank=True, storage=ExamMediaStorage())
 

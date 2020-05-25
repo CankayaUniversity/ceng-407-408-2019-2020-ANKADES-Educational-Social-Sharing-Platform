@@ -30,6 +30,7 @@
                         Makale paylaşmak için lütfen aşağıdaki gerekli alanları doldurunuz.
                     </p>
                     <form id="wizard-validation-form" role="form" method="post" action="{% url 'add_article' %}">
+                        {% csrf_token %}
                         <div>
                             <h3>1. Adım</h3>
                             <section>
@@ -113,7 +114,7 @@
                                 <div class="form-group row">
                                     <label for="resource" class="col-lg-2 control-label">Referans (URL): </label>
                                     <div class="col-lg-10">
-                                        <input id="resource" name="resource" type="text" class="required form-control"
+                                        <input id="resource" name="resource" type="text" class="form-control"
                                                placeholder="https://ankacademy.com/">
                                     </div>
                                 </div>
@@ -151,6 +152,6 @@
     <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
     <script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
     <script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
-    <script src="{% static 'ankacademy/js/pages/form-wizard.init.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/submit-wizard.js' %}"></script>
     <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
 {% endblock %}
