@@ -38,14 +38,14 @@
                             {% if instance.username != request.user.username %}
                                 {% if existFollower %}
                                     <a type="button" href="{% url 'follow_account' instance.username %}"
-                                       class="btn btn-primary btn-sm mt-2 "><i
-                                            class="mdi mdi-thumb-down"></i>
+                                       class="btn btn-primary btn-sm mt-2 "><span
+                                            class="mdi mdi-thumb-down"></span>
                                         Takibi Bırak
                                     </a>
                                 {% else %}
                                     <a type="button" href="{% url 'follow_account' instance.username %}"
-                                       class="btn btn-primary btn-sm mt-2 "><i
-                                            class="mdi mdi-thumb-up"></i>
+                                       class="btn btn-primary btn-sm mt-2 "><span
+                                            class="mdi mdi-thumb-up"></span>
                                         Takip Et
                                     </a>
                                 {% endif %}
