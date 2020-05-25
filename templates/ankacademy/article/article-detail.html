@@ -1,6 +1,6 @@
 {% extends 'ankacademy/layout/layout.html' %}
 {% load static %}
-{% block title %}{{ instance.title }} | Ankacademy{% endblock %}
+{% block title %}{{ instance.title|lower|title|safe|title }} | Ankacademy{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="text-center pt-2 pb-2">
-                                        <h3>{{ instance.title }}</h3>
+                                        <h3>{{ instance.title|lower|upper }}</h3>
                                     </div>
                                     <hr/>
                                     <div class="post-data pt-2">
@@ -264,7 +264,7 @@
                                                                         <img class="media-object rounded-circle"
                                                                              style="max-height: 64px !important; max-width: 64px !important;"
                                                                              src="{{ reply.creator.image.url }}"
-                                                                             alt="{{ instance.title }}">
+                                                                             alt="{{ instance.title|lower|title|safe }}">
                                                                     </a>
                                                                     <div class="media-body">
                                                                         <h5 class="font-18 media-heading mt-0">{{ reply.creator.get_full_name }}</h5>
