@@ -188,6 +188,7 @@ def add_article(request):
         owner = request.POST.get("owner")
         resource = request.POST.get("resource")
         introduction = request.POST.get("introduction")
+        contact = request.POST.get("contact")
         isPrivate = request.POST.get("isPrivate") == "on"
         if form.is_valid():
             description = form.cleaned_data.get("description")
@@ -201,6 +202,7 @@ def add_article(request):
             instance.media = media
         instance.creator = request.user
         instance.categoryId_id = value
+        instance.contact = contact
         instance.isActive = True
         instance.introduction = introduction
         instance.postNumber = get_random_string(length=32)
