@@ -13,7 +13,20 @@ class AddArticleComment(forms.ModelForm):
 
 
 class CourseForm(forms.Form):
-    description = forms.CharField(widget=CKEditorWidget(), label="Yazı")
+    courseDescription = forms.CharField(widget=CKEditorWidget(), label="Yazı")
+    courseIntroduction = forms.CharField(widget=CKEditorWidget(), label="Ön Bilgi")
+
+
+class SectionForm(forms.Form):
+    sectionDescription = forms.CharField(widget=CKEditorWidget(), label="Yazı")
+
+
+class LectureForm(forms.Form):
+    lectureDescription = forms.CharField(widget=CKEditorWidget(), label="Yazı")
+
+
+class VideoForm(forms.Form):
+    videos = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
 
 class CourseSectionModelForm(forms.ModelForm):

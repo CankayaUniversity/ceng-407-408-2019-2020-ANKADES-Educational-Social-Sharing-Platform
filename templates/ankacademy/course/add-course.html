@@ -1,0 +1,178 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block meta %}Ankacademy{% endblock %}
+{% block title %}Kurs Paylaş | Ankacademy{% endblock %}
+{% block content %}
+    <style>
+        .wizard > .content > .body label {
+            margin-top: 0px !important;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">Kurs Paylaş</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Kurs Paylaş</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <h4 class="header-title">Kurs Paylaş</h4>
+                    <p class="sub-header">
+                        Aşağıdaki alanları eksiksiz doldurarak, kursunuz hakkında kısaca bilgi verebilirsiniz.
+                    </p>
+                    <form id="wizard-validation-form" role="form" method="post" enctype="multipart/form-data" action="{% url 'add_course' %}">
+                        {% csrf_token %}
+                        <div>
+                            <h3>Kurs Hakkında</h3>
+                            <section>
+                                <div class="alert alert-info mt-2" role="alert">
+                                    Bu alanda kursunuzun kategorisini, kursunuz başlığını, kurslar sayfasında görünecek resmi ve kurs hakkında ön bilgiyi yazabilirsiniz.
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label " for="courseCategory">Kategori *</label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control select2 required" name="courseCategory" id="courseCategory">
+                                            <option disabled>Lütfen bir kategori seçiniz</option>
+                                            {% for sub in courseSubCategories %}
+                                                <optgroup label="{{ sub.title }}">
+                                                    {% for lower in courseLowerCategories %}
+                                                        {% if lower.parentId.catNumber == sub.catNumber %}
+                                                            <option value="{{ lower.id }}">{{ lower.title }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label " for="courseTitle">Kurs Başlığı *</label>
+                                    <div class="col-lg-10">
+                                        <input id="courseTitle" name="courseTitle" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label" for="media">Kurs Resmi: </label>
+                                    <div class="col-lg-10">
+                                        <div class="form-group">
+                                            <input type="file" class="required filestyle" name="courseMedia" data-text="Dosya Seçin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label">Kurs hakkında kısa bilgi (Introduction): </label>
+                                    <div class="col-lg-10">
+                                        {{ courseForm.courseIntroduction }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label">Kurs hakkında detaylı bilgi: </label>
+                                    <div class="col-lg-10">
+                                        {{ courseForm.courseDescription }}
+                                    </div>
+                                </div>
+                            </section>
+                            <h3>Bölüm Ekle</h3>
+                            <section>
+                                <div class="alert alert-info mt-2" role="alert">
+                                    Dersler bu bölüme bağlı olacaktır. Bu alanda bölümün başlığı, genel dersler ile ilgili bilgi verebilirsiniz.
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label " for="sectionTitle"> Bölüm Başlığı *</label>
+                                    <div class="col-lg-10">
+                                        <input id="sectionTitle" name="sectionTitle" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label">Bölüm hakkında kısa bilgi: </label>
+                                    <div class="col-lg-10">
+                                        {{ sectionForm.sectionDescription }}
+                                    </div>
+                                </div>
+                            </section>
+                            <h3>Ders Ekle</h3>
+                            <section>
+                                <div class="alert alert-info mt-2" role="alert">
+                                    Bir sonraki bölümde ekleyeceğiniz kurs videoları için, bu alanda dersinizin başlığını ve ders hakkında kısa bilgi verebilirsiniz.
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label" for="lectureTitle"> Ders Başlığı *</label>
+                                    <div class="col-lg-10">
+                                        <input id="lectureTitle" name="lectureTitle" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label">Bölüm hakkında kısa bilgi: </label>
+                                    <div class="col-lg-10">
+                                        {{ lectureForm.lectureDescription }}
+                                    </div>
+                                </div>
+                            </section>
+                            <h3>Video Ekle</h3>
+                            <section>
+                                <div class="alert alert-info mt-2" role="alert">
+                                    Bu bölümde belirlediğiniz ders için videolar ekleyebilirsiniz. Video size ait olsa bile "Ad Soyad" bölümü doldurulmalıdır..
+                                </div>
+                                <div class="alert alert-warning mt-2" role="alert">
+                                    <strong>Hatırlatma !</strong> Kursunuz için daha sonradan bölüm, ders ve video ekleyebilirsiniz.
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label" for="courseVideoOwner">Video Sahibinin Adı Soyadı *</label>
+                                    <div class="col-lg-10">
+                                        <input id="courseVideoOwner" name="courseVideoOwner" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label" for="media">Video: </label>
+                                    <div class="col-lg-10">
+                                        <div class="form-group">
+                                            {{ videoForm.videos }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="checkbox checkbox-danger">
+                                            <input id="checkbox-v" type="checkbox" name="isPrivate">
+                                            <label for="checkbox-v">Bu seçeneği işaretlerseniz, makalenizin tümünü
+                                                yayınlasanız bile, sadece ön yazı
+                                                (abstract) kullanıcılara gözükecektir.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="checkbox-v" type="checkbox" checked required disabled>
+                                            <label for="checkbox-v"> <a href="{% url 'terms_of_use' %}">Kullanım
+                                                Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik
+                                                Politikası</a>nı okudum ve kabul ediyorum. </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </form>
+                    <!-- End #wizard-vertical -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/submit-wizard.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
+{% endblock %}

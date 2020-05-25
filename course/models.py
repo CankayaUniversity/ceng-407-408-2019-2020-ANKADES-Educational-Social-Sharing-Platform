@@ -9,6 +9,7 @@ from account.models import Account
 from adminpanel.models import Tag
 from ankadescankaya.slug import slug_save
 from ankadescankaya.storage_backends import CourseMediaStorage
+from article.models import ArticleCategory
 
 
 class CourseCategory(models.Model):
@@ -38,12 +39,12 @@ class CourseCategory(models.Model):
 class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     courseNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
-    categoryId = models.ForeignKey(CourseCategory, on_delete=models.CASCADE)
-    creator = models.ForeignKey(Account, on_delete=models.CASCADE)
+    categoryId = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=254)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
     description = RichTextField()
-    introduction = models.CharField(max_length=254, null=True, blank=True)
+    introduction = RichTextField()
     coursePicture = models.FileField(null=True, blank=True, storage=CourseMediaStorage(), default="no-image-available.png")
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
@@ -66,11 +67,12 @@ class CourseSection(models.Model):
     courseId = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, null=False, blank=False)
     slug = models.SlugField(allow_unicode=True)
-    description = models.TextField()
+    description = RichTextField()
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     isPrivate = models.BooleanField(default=True)
     isActive = models.BooleanField(default=True)
+    sectionNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
 
     def __str__(self):
         return self.slug
@@ -91,15 +93,36 @@ class CourseLecture(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True)
     updatedDate = models.DateTimeField(null=True, blank=True)
     view = models.PositiveIntegerField(default=0, null=True, blank=True)
-    media = models.FileField(null=True, blank=True)
     isPrivate = models.BooleanField(default=True)
     isActive = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.slug
+        return self.lectureNumber
 
     class Meta:
         db_table = "CourseLecture"
+
+
+class CourseVideo(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    owner = models.CharField(null=True, blank=True, max_length=100)
+    lectureId = models.ForeignKey(CourseLecture, null=True, blank=True, on_delete=models.SET_NULL)
+    videoNumber = models.CharField(max_length=32)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(null=True, blank=True)
+    view = models.PositiveIntegerField(default=0)
+    isPrivate = models.BooleanField(default=False)
+    isActive = models.BooleanField(default=True)
+    likes = models.ManyToManyField(Account, related_name="courseLikes", default=0, blank=True,
+                                   db_table="AccountLikedCourse")
+    creator = models.ForeignKey(Account, null=True, blank=True, on_delete=models.SET_NULL)
+    media = models.FileField(null=False, blank=False, storage=CourseMediaStorage())
+
+    def __str__(self):
+        return self.videoNumber
+
+    class Meta:
+        db_table = "CourseVideo"
 
 
 class CourseComment(models.Model):

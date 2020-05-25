@@ -189,9 +189,9 @@ def add_article(request):
         if form.is_valid():
             description = form.cleaned_data.get("description")
             abstract = form.cleaned_data.get("abstract")
-        if not abstract or description:
+        if not abstract or not description:
             messages.error(request, "Makalenin hepsi veya ön yazısı yayınlanmadan devam edemezsiniz.")
-            return render(request, "ankades/article/add-article.html", context)
+            return render(request, "ankacademy/article/add-article.html", context)
         instance = Article(title=title, description=description, isPrivate=isPrivate, owner=owner, resource=resource)
         if request.FILES:
             media = request.FILES.get('media')

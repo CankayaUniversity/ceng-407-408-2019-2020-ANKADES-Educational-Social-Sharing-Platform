@@ -10,9 +10,11 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import DetailView
 
+from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.views.views import current_user_group, Categories
-from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm
-from course.models import Course, CourseComment, CourseCategory
+from article.models import ArticleCategory
+from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm, SectionForm, LectureForm, VideoForm
+from course.models import Course, CourseComment, CourseCategory, CourseSection, CourseLecture, CourseVideo
 
 
 def all_courses(request):
@@ -30,7 +32,6 @@ def all_courses(request):
     topCategories = ArticleCategoryView.getTopCategory(request)
     articleComment = CourseComment.objects.filter(isActive=True)
     courses = Course.objects.filter(isActive=True)
-    # TODO Paginator
     if category:
         top = CourseCategory.objects.filter(catNumber__in=category)
         sub = CourseCategory.objects.filter(isActive=True, parentId__catNumber__in=category)
@@ -40,7 +41,6 @@ def all_courses(request):
         for cat in lower:
             articleCat.append(cat.catNumber)
         courses = Course.objects.filter(isActive=True, categoryId__catNumber__in=articleCat)
-        # TODO Paginator
         context = {
             "userGroup": userGroup,
             "articleComment": articleComment,
@@ -48,15 +48,9 @@ def all_courses(request):
             "sub": sub,
             "top": top,
             "courses": courses,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
+            "courseCategories": categories[0],
+            "courseSubCategories": categories[1],
+            "courseLowerCategories": categories[2],
         }
         return render(request, "ankacademy/course/all-courses.html", context)
     if sub:
@@ -73,12 +67,6 @@ def all_courses(request):
             "subCat": subCat,
             "sub": sub,
             "courses": courses,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
             "courseCategories": categories[6],
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
@@ -93,12 +81,6 @@ def all_courses(request):
             "lowCat": lowCat,
             "lower": lower,
             "courses": courses,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
             "courseCategories": categories[6],
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
@@ -138,12 +120,6 @@ def course_category_page(request, slug):
             "courseCategory": courseCategory,
             "courses": courses,
             "userGroup": userGroup,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
             "courseCategories": categories[6],
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
@@ -153,8 +129,6 @@ def course_category_page(request, slug):
         return redirect("404")
 
 
-# TODO
-# Yönlendirme yapılacak -> Bölüm Ekle
 @login_required(login_url="login_account")
 def add_course(request):
     """
@@ -162,105 +136,124 @@ def add_course(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
-    form = CourseForm(request.POST or None)
     categories = Categories.all_categories()
-    context = {
-        "courseCategory": courseCategory,
-        "userGroup": userGroup,
-        "form": form,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
-    }
+    courseForm = CourseForm(request.POST or None)
+    sectionForm = SectionForm(request.POST or None)
+    lectureForm = LectureForm(request.POST or None)
+    videoForm = VideoForm(request.POST or None)
+    courseCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     if request.method == "POST":
-        value = request.POST['categoryId']
-        title = request.POST.get("title")
-        introduction = request.POST.get("introduction")
-        isPrivate = request.POST.get("isPrivate") == "on"
-        if form.is_valid():
-            description = form.cleaned_data.get("description")
-        if not title and description:
-            messages.error(request, "Kategori, Başlık ve Açıklama kısımları boş geçilemez")
-            return render(request, "ankades/course/add-course.html", context)
-        instance = Course(title=title, description=description, introduction=introduction, isPrivate=isPrivate)
+        new_course = Course()
+        new_section = CourseSection()
+        new_lecture = CourseLecture()
+        new_course_video = CourseVideo()
+        courseCategory = request.POST.get('courseCategory')
+        courseTitle = request.POST.get('courseTitle')
+        courseVideoTitle = request.POST.get('courseVideoTitle')
+        #  COURSE
         if request.FILES:
-            coursePicture = request.FILES.get('coursePicture')
-            fs = FileSystemStorage()
-            fs.save(coursePicture.name, coursePicture)
-            instance.coursePicture = coursePicture
-        instance.creator = request.user
-        instance.courseNumber = get_random_string(length=32)
-        instance.isActive = False
-        instance.categoryId_id = value
-        instance.save()
-        messages.success(request, "Kurs başarıyla eklendi.")
-        # return redirect(reverse("add_section", kwargs={"courseNumber": instance.courseNumber}))
-        return redirect(request, "add_section", instance.courseNumber)
-    return render(request, "ankades/course/add-course.html", context)
+            courseMedia = request.FILES.get('courseMedia')
+            new_course.coursePicture = courseMedia
+        if courseForm.is_valid():
+            courseDescription = courseForm.cleaned_data.get("courseDescription")
+            new_course.description = courseDescription
+            courseIntroduction = courseForm.cleaned_data.get("courseIntroduction")
+            new_course.introduction = courseIntroduction
+        new_course.title = courseTitle
+        new_course.creator = request.user
+        new_course.createdDate = datetime.datetime.now()
+        new_course.updatedDate = datetime.datetime.now()
+        new_course.isActive = True
+        new_course.categoryId_id = courseCategory
+        new_course.courseNumber = get_random_string(length=32)
+        new_course.save()
+        #  SECTION
+        sectionTitle = request.POST.get('sectionTitle')
+        new_section.title = sectionTitle
+        if sectionForm.is_valid():
+            sectionDescription = sectionForm.cleaned_data.get("sectionDescription")
+            new_section.description = sectionDescription
+        new_section.isActive = True
+        new_section.createdDate = datetime.datetime.now()
+        new_section.updatedDate = datetime.datetime.now()
+        new_section.courseId_id = new_course.id
+        new_section.sectionNumber = get_random_string(length=32)
+        new_section.save()
+        #  LECTURE
+        lectureTitle = request.POST.get('lectureTitle')
+        new_lecture.title = lectureTitle
+        if lectureForm.is_valid():
+            lectureDescription = lectureForm.cleaned_data.get("lectureDescription")
+            new_lecture.description = lectureDescription
+        new_lecture.lectureNumber = get_random_string(length=32)
+        new_lecture.createdDate = datetime.datetime.now()
+        new_lecture.updatedDate = datetime.datetime.now()
+        new_lecture.isActive = True
+        new_lecture.sectionId_id = new_section.id
+        new_lecture.save()
+        # COURSE VIDEO
+        lectureVideos = request.FILES.getlist('videos')
+        courseVideoOwner = request.POST.get('courseVideoOwner')
+        if lectureVideos:
+            for vid in lectureVideos:
+                new_course_video.media = vid
+                new_course_video.lectureId_id = new_lecture.id
+                new_course_video.createdDate = datetime.datetime.now()
+                new_course_video.updatedDate = datetime.datetime.now()
+                new_course_video.creator = request.user
+                new_course_video.videoNumber = get_random_string(length=32)
+                new_course_video.owner = courseVideoOwner
+                new_course_video.isActive = True
+                new_course_video.title = courseVideoTitle
+                new_course_video.save()
+        messages.success(request, "Kurs başarıyla oluşturuldu.")
+        return redirect("all_courses")
+    context = {
+        "userGroup": userGroup,
+        "courseCategory": courseCategory,
+        "courseForm": courseForm,
+        "sectionForm": sectionForm,
+        "lectureForm": lectureForm,
+        "videoForm": videoForm,
+        "courseCategories": categories[0],
+        "courseSubCategories": categories[1],
+        "courseLowerCategories": categories[2],
+    }
+    return render(request, "ankacademy/course/add-course.html", context)
 
 
 @login_required(login_url="login_account")
 def add_section(request, courseNumber):
-    lectureformset = None
-    sectionform = None
-    getCourse = get_object_or_404(Course, courseNumber=courseNumber)
-    userGroup = current_user_group(request, request.user)
-    courseCategory = CourseCategory.objects.filter(Q(isActive=True, isCategory=False))
-    categories = Categories.all_categories()
-    if request.method == 'GET':
-        sectionform = CourseSectionModelForm(request.GET or None)
-        lectureformset = CourseLectureFormSet()
-    elif request.method == 'POST':
-        sectionform = CourseSectionModelForm(request.POST)
-        lectureformset = CourseLectureFormSet(request.POST)
-        if sectionform.is_valid() and lectureformset.is_valid():
-            section = sectionform.save(commit=False)
-            section.title = sectionform.cleaned_data.get("title")
-            section.courseId = getCourse
-            section.save()
-
-            for form in lectureformset:
-                lecture = form.save(commit=False)
-                lecture.sectionId = section
-                lecture.save()
-            return redirect(reverse("add_section", kwargs={"courseNumber": courseNumber}))
-    context = {
-        "courseCategory": courseCategory,
-        "userGroup": userGroup,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
-        "lectureformset": lectureformset,
-        "sectionform": sectionform,
-    }
-    return render(request, "ankades/course/add-section.html", context)
+    """
+    :param request:
+    :param courseNumber:
+    :return:
+    """
+    return None
 
 
 # TODO
 @login_required(login_url="login_account")
 def add_lecture(request, courseNumber):
+    """
+    :param request:
+    :param courseNumber:
+    :return:
+    """
     return None
 
 
 # TODO
 def course_detail(request, slug):
+    """
+    :param request:
+    :param slug:
+    :return:
+    """
     return None
 
 
-class ArticleCategoryView(DetailView):
+class CourseCategoryView(DetailView):
 
     @staticmethod
     def getTopCategory(request):
@@ -268,7 +261,8 @@ class ArticleCategoryView(DetailView):
         :param request:
         :return topCategory:
         """
-        topCategory = CourseCategory.objects.filter(Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True)|Q(isRoot=True))
+        topCategory = CourseCategory.objects.filter(
+            Q(isActive=True, isRoot=False, parentId__slug="home", isCategory=True) | Q(isRoot=True))
         return topCategory
 
     @staticmethod
