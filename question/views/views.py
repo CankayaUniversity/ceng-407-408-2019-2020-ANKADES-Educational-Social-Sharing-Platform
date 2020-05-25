@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import RedirectView, DetailView
 
+from account.views.views import get_user_follower
 from ankadescankaya.views.views import current_user_group, Categories
 from question.forms import QuestionForm, EditQuestionForm
 from question.models import Question, QuestionComment, QuestionCategory
@@ -139,6 +140,8 @@ def question_detail(request, slug, postNumber):
     """
     try:
         instance = Question.objects.get(postNumber=postNumber, slug=slug, isActive=True)
+        creatorGroup = current_user_group(request, instance.creator)
+        existFollower = get_user_follower(request, request.user, instance.creator)
     except:
         return redirect("404")
     userGroup = current_user_group(request, request.user)
@@ -157,6 +160,8 @@ def question_detail(request, slug, postNumber):
         certifiedAnswer = None
     context = {
         "userGroup": userGroup,
+        "creatorGroup": creatorGroup,
+        "existFollower": existFollower,
         "instance": instance,
         "reportSubjects": reportSubjects,
         "questionAnswers": questionAnswers,
@@ -172,7 +177,7 @@ def question_detail(request, slug, postNumber):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "ankades/question/question-detail.html", context)
+    return render(request, "ankacademy/question/question-detail.html", context)
 
 
 @login_required(login_url="login_account")

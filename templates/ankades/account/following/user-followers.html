@@ -34,14 +34,17 @@
                                 </li>
                             </ul>
                             {% if instance.username != request.user.username %}
-                                <a type="button" href="{% url 'follow_account' instance.username %}"
-                                   class="btn btn-primary btn-block"><i class="far fa-thumbs-up"></i>
-                                    {% if existFollower %}
-                                        Takibi Bırak
-                                    {% else %}
-                                        Takip Et
-                                    {% endif %}
-                                </a>
+                                {% if existFollower %}
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                            class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                        href="{% url 'follow_account' instance.username %}">Takibi Bırak</a></span>
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                            class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                        href="{% url 'follow_account' instance.username %}">Takip Et</a></span>
+                                    </button>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -55,7 +58,8 @@
                                 {{ instance.graduate }}
                             </p>
                             <hr>
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> {% if request.user == instance %}Yaşadığınız Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> {% if request.user == instance %}
+                                Yaşadığınız Şehir{% else %}Yaşadığı Şehir{% endif %}</strong>
                             <p class="text-muted">Malibu, California</p>
                             <hr>
                             <strong><i class="fas fa-pencil-alt mr-1"></i> Yetenekler</strong>
@@ -86,7 +90,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="followers">
-{#                                    Takipçiler#}
+                                    {#                                    Takipçiler#}
                                 </div>
                                 <div class="tab-pane" id="followings">
 

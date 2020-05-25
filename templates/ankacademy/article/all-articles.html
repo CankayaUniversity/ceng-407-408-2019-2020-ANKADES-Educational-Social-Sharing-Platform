@@ -136,7 +136,7 @@
                                         <div class="listingInfo">
                                             <div class="">
                                                 <h5 class="text-overflow"><a href="{% url 'article_detail' article.creator article.slug %}"
-                                                                             class="text-dark">{{ article.title|safe|truncatechars:27 }}</a>
+                                                                             class="text-dark">{{ article.title|lower|title|safe|truncatechars:27 }}</a>
                                                 </h5>
                                                 <p class="text-muted text-overflow"><a style="color: none !important;" href="{% url 'account_detail' article.creator.username %}"><i
                                                         class="mdi mdi-account mr-1"></i>{{ article.creator.get_full_name }}</a></p>

@@ -241,7 +241,7 @@
                                                     {#                                            EDIT AND DELETE ANSWER#}
                                                     {% if answer.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                         <a onclick="edit_{{ answer.answerNumber }}()"
-                                                           class="btn btn-success btn-sm">
+                                                           class="btn btn-primary btn-sm">
                                                             <i class="fas fa-pencil-alt"></i>
                                                             Düzenle
                                                         </a>

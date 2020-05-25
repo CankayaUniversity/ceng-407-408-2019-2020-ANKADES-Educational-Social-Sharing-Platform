@@ -39,18 +39,20 @@
                                     </div>
 
                                     {% if instance.creator.username != request.user.username %}
-                                        <a type="button" href="{% url 'follow_account' instance.creator.username %}"
-                                           class="btn btn-success btn-sm width-sm waves-effect mt-2 waves-light"><i
-                                                class="far fa-thumbs-up"></i>
-                                            {% if existFollower %}
-                                                Takibi Bırak
-                                            {% else %}
-                                                Takip Et
-                                            {% endif %}
-                                        </a>
+                                        {% if existFollower %}
+                                            <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                                    class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                                href="{% url 'follow_account' instance.creator.username %}">Takibi Bırak</a></span>
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                                    class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                                href="{% url 'follow_account' instance.creator.username %}">Takip Et</a></span>
+                                            </button>
+                                        {% endif %}
                                     {% endif %}
                                     <button type="button"
-                                            class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Message
+                                            class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Mesaj
                                     </button>
 
                                     <p class="sub-header mt-3">
@@ -143,7 +145,7 @@
                                             {% endif %}
                                         </p>
                                         <a href="{% url 'account_detail' instance.creator.username %}"
-                                           class="btn btn-xs btn-success waves-light waves-effect">View Profile</a>
+                                           class="btn btn-xs btn-success waves-light waves-effect">Profile Git</a>
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +156,7 @@
                                     <ul class="media-list pl-0">
                                         {% for comment in articleComments %}
                                             <li class="media">
-                                                <a class="mr-2" href="#">
+                                                <a class="mr-2" href="{% url 'account_detail' comment.creator.username %}">
                                                     <img class="media-object rounded-circle"
                                                          src="{{ comment.creator.image.url }}"
                                                          style="max-width: 64px !important; max-height: 64px !important;"
@@ -332,7 +334,7 @@
 
                                     <form method="post" class="comment-form"
                                           action="{% url 'add_article_comment' slug=instance.slug %}">
-                                    {% csrf_token %}
+                                        {% csrf_token %}
                                         <div class="form-group">
                                         <textarea class="form-control" id="content" name="content" rows="5"
                                                   placeholder="Mesajınız" required=""></textarea>
@@ -359,7 +361,7 @@
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
                                     <form method="post" class="comment-form"
                                           action="{% url 'add_article_comment' slug=instance.slug %}">
-                                    {% csrf_token %}
+                                        {% csrf_token %}
                                         <div class="form-group">
                                         <textarea class="form-control" id="content" name="content" rows="5"
                                                   placeholder="Mesajınız" required=""></textarea>
@@ -374,7 +376,7 @@
                                         </div>
                                     </form>
                                 {% endif %}
-                            {# Report Modal #}
+                                {# Report Modal #}
                                 <div class="modal fade" id="modal-default">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
