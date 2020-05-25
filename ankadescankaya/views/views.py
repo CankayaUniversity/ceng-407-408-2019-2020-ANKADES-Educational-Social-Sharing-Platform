@@ -69,7 +69,7 @@ def get_404(request):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "404.html", context)
+    return render(request, "ankacademy/404.html", context)
 
 
 def terms_of_use(request):
