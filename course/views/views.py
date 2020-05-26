@@ -296,6 +296,40 @@ def course_detail(request, slug, courseNumber):
     return render(request, "ankacademy/course/course-detail.html", context)
 
 
+@login_required(login_url="login_account")
+def course_lecture_detail(request, lectureNumber):
+    """
+    :param request:
+    :param lectureNumber:
+    """
+    try:
+        instance = CourseLecture.objects.get(lectureNumber=lectureNumber)
+        section = CourseSection.objects.get(sectionNumber=instance.sectionId.sectionNumber)
+        course = Course.objects.get(courseNumber=section.courseId.courseNumber)
+    except:
+        messages.error(request, "Aradığınız ders bulunamadı.")
+        return redirect("404")
+    if request.user in course.enrolledAccount.all():
+        currentUserEnrolled = True
+        sections = CourseSection.objects.filter(sectionNumber=instance.sectionId.sectionNumber)
+        lectures = CourseLecture.objects.filter(sectionId=section)
+        firstVideo = CourseVideo.objects.filter(isActive=True).first()
+        userGroup = current_user_group(request, request)
+        context = {
+            "instance": instance,
+            "section": section,
+            "sections": sections,
+            "lectures": lectures,
+            "course": course,
+            "currentUserEnrolled": currentUserEnrolled,
+            "userGroup": userGroup,
+            "firstVideo": firstVideo,
+        }
+        return render(request, "ankacademy/course/watch-course.html", context)
+    else:
+        return redirect("all_courses")
+
+
 class CourseCategoryView(DetailView):
 
     @staticmethod

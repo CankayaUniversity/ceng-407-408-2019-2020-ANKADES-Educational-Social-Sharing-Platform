@@ -1,6 +1,6 @@
 {% extends 'ankacademy/layout/layout.html' %}
 {% load static %}
-{% block title %}Okullar | Ankacademy{% endblock %}
+{% block title %}{{ instance.title }} | Ankacademy{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -9,12 +9,69 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
-                            <li class="breadcrumb-item"><a href="{% url 'all_schools' %}">Okullar</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'all_courses' %}">Kurslar</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Okullar</h4>
                 </div>
             </div>
         </div>
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <div class="card-box">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item"
+                                src="{{ firstVideo.media.url }}"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-4">
+                <div class="card-body mb-0 mt-0">
+                    <div id="accordion">
+                        {% for section in sections %}
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        <a data-toggle="collapse" data-parent="#accordion"
+                                           href="#c{{ forloop.counter }}">
+                                            {{ section.title }}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="c{{ forloop.counter }}" class="panel-collapse collapse in">
+                                    <div class="card-body">
+                                        <div class="list-group">
+                                            {% for lecture in lectures %}
+                                                {% if lecture.sectionId == section %}
+                                                    {% if lecture.isPrivate %}
+                                                        {% if currentUserEnrolled %}
+                                                            <a href="#"
+                                                               class="list-group-item list-group-item-action">
+                                                                {{ lecture.title|lower|capfirst }}
+                                                            </a>
+                                                        {% else %}
+                                                            <a href="#"
+                                                               class="list-group-item list-group-item-action disabled"
+                                                               tabindex="-1"
+                                                               aria-disabled="true">{{ lecture.title|lower|capfirst }}</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    <a href="#"
+                                                       class="list-group-item list-group-item-action disabled"
+                                                       tabindex="-1"
+                                                       aria-disabled="true">{{ lecture.title|lower|capfirst }}</a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}

@@ -61,7 +61,7 @@ def index(request):
         "courseSubCategories": categories[7],
         "courseLowerCategories": categories[8],
     }
-    return render(request, "ankades/index.html", context)
+    return render(request, "ankacademy/article/all-articles.html", context)
 
 
 def account_detail(request, username):

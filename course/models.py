@@ -77,7 +77,7 @@ class CourseSection(models.Model):
     sectionNumber = models.CharField(unique=True, null=False, blank=False, max_length=32)
 
     def __str__(self):
-        return self.slug
+        return self.sectionNumber
 
     class Meta:
         db_table = "CourseSection"
