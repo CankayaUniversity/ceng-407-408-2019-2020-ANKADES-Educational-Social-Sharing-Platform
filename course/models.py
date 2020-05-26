@@ -53,6 +53,8 @@ class Course(models.Model):
     isPrivate = models.BooleanField(default=False)
     enrolledAccount = models.ManyToManyField(Account, related_name="enrolledAccount", default=0, blank=True,
                                              db_table="AccountEnrolledCourse")
+    likes = models.ManyToManyField(Account, related_name="courseLikes", default=0, blank=True,
+                                   db_table="AccountCourseLiked")
 
     def __str__(self):
         return self.courseNumber
@@ -113,8 +115,8 @@ class CourseVideo(models.Model):
     view = models.PositiveIntegerField(default=0)
     isPrivate = models.BooleanField(default=False)
     isActive = models.BooleanField(default=True)
-    likes = models.ManyToManyField(Account, related_name="courseLikes", default=0, blank=True,
-                                   db_table="AccountLikedCourse")
+    likes = models.ManyToManyField(Account, related_name="courseVideoLikes", default=0, blank=True,
+                                   db_table="AccountLikedCourseVideo")
     creator = models.ForeignKey(Account, null=True, blank=True, on_delete=models.SET_NULL)
     media = models.FileField(null=False, blank=False, storage=CourseMediaStorage())
 
