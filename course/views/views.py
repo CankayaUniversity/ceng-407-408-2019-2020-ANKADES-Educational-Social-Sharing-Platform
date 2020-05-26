@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -243,14 +244,13 @@ def add_lecture(request, courseNumber):
     return None
 
 
-# TODO
-def course_detail(request, slug):
+def course_detail(request, slug, courseNumber):
     """
     :param request:
     :param slug:
     :return:
     """
-    return None
+    return HttpResponse("hello")
 
 
 class CourseCategoryView(DetailView):
