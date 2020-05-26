@@ -19,7 +19,9 @@ class SearchKeyword(DetailView):
         article = None
         keyword = request.GET.get("keyword")
         if keyword:
-            article = Article.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(description__icontains=keyword, isActive=True) | Q(postNumber__icontains=keyword, isActive=True))
+            article = Article.objects.filter(
+                Q(title__icontains=keyword, isActive=True) | Q(description__icontains=keyword, isActive=True) | Q(
+                    postNumber__icontains=keyword, isActive=True))
         return article
 
     @staticmethod
@@ -31,7 +33,9 @@ class SearchKeyword(DetailView):
         question = None
         keyword = request.GET.get("keyword")
         if keyword:
-            question = Question.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(description__icontains=keyword, isActive=True) | Q(postNumber__icontains=keyword, isActive=True))
+            question = Question.objects.filter(
+                Q(title__icontains=keyword, isActive=True) | Q(description__icontains=keyword, isActive=True) | Q(
+                    postNumber__icontains=keyword, isActive=True))
         return question
 
     @staticmethod
@@ -44,7 +48,9 @@ class SearchKeyword(DetailView):
         keyword = request.GET.get("keyword")
         # course_category = Categories.all_categories()[6].values("title")
         if keyword:
-            course = Course.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(description__icontains=keyword, isActive=True) | Q(courseNumber__icontains=keyword, isActive=True) | Q(introduction__icontains=keyword, isActive=True))
+            course = Course.objects.filter(
+                Q(title__icontains=keyword, isActive=True) | Q(description__icontains=keyword, isActive=True) | Q(
+                    courseNumber__icontains=keyword, isActive=True) | Q(introduction__icontains=keyword, isActive=True))
         return course
 
     @staticmethod
@@ -56,7 +62,7 @@ class SearchKeyword(DetailView):
         school = None
         keyword = request.GET.get("keyword")
         if keyword:
-            school = School.objects.filter(Q(title__icontains=keyword, isActive=True))
+            school = School.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(slug__icontains=keyword, isActive=True))
         return school
 
     @staticmethod
@@ -68,7 +74,8 @@ class SearchKeyword(DetailView):
         lecture = None
         keyword = request.GET.get("keyword")
         if keyword:
-            lecture = Lecture.objects.filter(Q(title__icontains=keyword, isActive=True) | Q(lectureCode__icontains=keyword, isActive=True))
+            lecture = Lecture.objects.filter(
+                Q(title__icontains=keyword, isActive=True) | Q(lectureCode__icontains=keyword, isActive=True))
         return lecture
 
     @staticmethod
@@ -92,6 +99,7 @@ class SearchKeyword(DetailView):
         account = None
         keyword = request.GET.get("keyword")
         if keyword:
-            account = Account.objects.filter(Q(email__icontains=keyword, is_active=True) | Q(username__icontains=keyword, is_active=True) |
-                                             Q(first_name__icontains=keyword, is_active=True) | Q(last_name__icontains=keyword, is_active=True))
+            account = Account.objects.filter(
+                Q(email__icontains=keyword, is_active=True) | Q(username__icontains=keyword, is_active=True) |
+                Q(first_name__icontains=keyword, is_active=True) | Q(last_name__icontains=keyword, is_active=True))
         return account

@@ -1,0 +1,373 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}Arama: {{ keyword }} | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'all_schools' %}">Okullar</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Okullar</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <form method="get" action="{% url 'search_keyword' %}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" value="{{ keyword }}">
+                                    <span class="input-group-append">
+                                    <button type="submit"
+                                            class="btn waves-effect waves-light btn-primary"><i
+                                            class="fa fa-search mr-1"></i> Ara</button>
+                                </span>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2 text-center mt-4">
+                            <h5>"{{ keyword }}" için toplam bulunan arama sonucu: {{ resultCount }}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="search-result-box mt-3">
+                                <ul class="nav nav-tabs tabs-bordered" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="articles-tab" data-toggle="tab" href="#articles"
+                                           role="tab"
+                                           aria-controls="articles" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-book-open"></i></span>
+                                            <span class="d-none d-sm-block"><b>Makaleler</b> <span
+                                                    class="badge badge-success ml-2">{{ articles.count }}</span></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="questions-tab" data-toggle="tab" href="#questions"
+                                           role="tab"
+                                           aria-controls="questions" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-question"></i></span>
+                                            <span class="d-none d-sm-block"><b>Sorular</b> <span
+                                                    class="badge badge-success ml-2">{{ questions.count }}</span></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="courses-tab" data-toggle="tab" href="#courses"
+                                           role="tab"
+                                           aria-controls="courses" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-video"></i></span>
+                                            <span class="d-none d-sm-block"><b>Kurslar</b> <span
+                                                    class="badge badge-success ml-2">{{ courses.count }}</span></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="schools-tab" data-toggle="tab" href="#schools"
+                                           role="tab"
+                                           aria-controls="schools" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-graduation-cap"></i></span>
+                                            <span class="d-none d-sm-block"><b>Okullar</b> <span
+                                                    class="badge badge-success ml-2">{{ schools.count }}</span></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="lectures-tab" data-toggle="tab" href="#lectures"
+                                           role="tab"
+                                           aria-controls="lectures" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i style="" class="fas fa-cubes"></i></span>
+                                            <span class="d-none d-sm-block"><b>Dersler</b> <span
+                                                    class="badge badge-success ml-2">{{ lectures.count }}</span></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="accounts-tab" data-toggle="tab" href="#accounts"
+                                           role="tab"
+                                           aria-controls="accounts" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-user"></i></span>
+                                            <span class="d-none d-sm-block"><b>Kullanıcılar</b> <span
+                                                    class="badge badge-success ml-2">{{ accounts.count }}</span></span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    {# Article Tab #}
+                                    <div class="tab-pane show active" id="articles" role="tabpanel"
+                                         aria-labelledby="articles-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% if articles %}
+                                                    {% for article in articles %}
+                                                        <div class="search-item">
+                                                            <h5 class="font-18 mb-1"><a href="{% url 'article_detail' article.creator.username article.slug %}">Ankacademy
+                                                                - {{ article.title|lower|title|safe }}</a></h5>
+                                                            <div class="font-13 text-success mb-2">
+                                                                <a class="text-success"
+                                                                   href="{% url 'article_detail' article.creator.username article.slug %}">
+                                                                    http://ankacademy.com{% url 'article_detail' article.creator.username article.slug %}
+                                                                </a>
+                                                            </div>
+                                                            <div class="mb-0" style="font-size: 15px !important;">
+                                                                <p class="text-left">{{ article.description|striptags|safe|truncatechars_html:750 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="search-item">
+                                                        <h5 class="font-18 mb-1"><a href="#">Ankacademy
+                                                            - "{{ keyword }}": makalelerde sonuç bulunamadı</a></h5>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# Question Tab #}
+                                    <div class="tab-pane" id="questions" role="tabpanel"
+                                         aria-labelledby="questions-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% if questions %}
+                                                    {% for question in questions %}
+                                                        <div class="search-item">
+                                                            <h5 class="font-18 mb-1"><a href="{% url 'question_detail' question.slug question.postNumber %}">Ankacademy
+                                                                - {{ question.title|lower|title|safe }}</a></h5>
+                                                            <div class="font-13 text-success mb-2">
+                                                                <a class="text-success"
+                                                                   href="{% url 'question_detail' question.slug question.postNumber %}">
+                                                                    http://ankacademy.com{% url 'question_detail' question.slug question.postNumber %}
+                                                                </a>
+                                                            </div>
+                                                            <div class="mb-0" style="font-size: 15px !important;">
+                                                                <p class="text-left">{{ question.description|striptags|safe|truncatechars_html:750 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="search-item">
+                                                        <h5 class="font-18 mb-1"><a href="#">Ankacademy
+                                                            - "{{ keyword }}": sorularda sonuç bulunamadı</a></h5>
+                                                    </div>
+                                                {% endif %}
+
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# Course Tab #}
+                                    <div class="tab-pane" id="courses" role="tabpanel"
+                                         aria-labelledby="courses-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% if courses %}
+                                                    {% for course in courses %}
+                                                        <div class="search-item">
+                                                            <h5 class="font-18 mb-1"><a href="{% url 'course_detail' course.slug course.courseNumber %}">Ankacademy
+                                                                - {{ course.title|lower|title|safe }}</a></h5>
+                                                            <div class="font-13 text-success mb-2">
+                                                                <a class="text-success"
+                                                                   href="{% url 'course_detail' course.slug course.courseNumber %}">
+                                                                    http://ankacademy.com{% url 'course_detail' course.slug course.courseNumber %}
+                                                                </a>
+                                                            </div>
+                                                            <div class="mb-0" style="font-size: 15px !important;">
+                                                                <p class="text-left">{{ course.description|striptags|safe|truncatechars_html:750 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <ul class="pagination pagination-split float-right mb-0">
+                                                        <li class="page-item disabled">
+                                                            <a href="#" class="page-link"><i
+                                                                    class="fa fa-angle-left"></i></a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">1</a>
+                                                        </li>
+                                                        <li class="page-item active">
+                                                            <a href="#" class="page-link">2</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">3</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">4</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">5</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link"><i
+                                                                    class="fa fa-angle-right"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                {% else %}
+                                                    <div class="search-item">
+                                                        <h5 class="font-18 mb-1"><a href="#">Ankacademy
+                                                            - "{{ keyword }}": sorularda sonuç bulunamadı</a></h5>
+                                                    </div>
+                                                {% endif %}
+
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# School Tab #}
+                                    <div class="tab-pane" id="schools" role="tabpanel"
+                                         aria-labelledby="schools-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% if schools %}
+                                                    {% for school in schools %}
+                                                        <div class="search-item">
+                                                            <h5 class="font-18 mb-1"><a href="{% url 'all_departments' school.slug %}">Ankacademy
+                                                                - {{ school.title|lower|title|safe }}</a></h5>
+                                                            <div class="font-13 text-success mb-2">
+                                                                <a class="text-success"
+                                                                   href="{% url 'all_departments' school.slug %}">
+                                                                    http://ankacademy.com{% url 'all_departments' school.slug %}
+                                                                </a>
+                                                            </div>
+                                                            <div class="mb-0" style="font-size: 15px !important;">
+                                                                <p class="text-left">{{ course.description|striptags|safe|truncatechars_html:750 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <ul class="pagination pagination-split float-right mb-0">
+                                                        <li class="page-item disabled">
+                                                            <a href="#" class="page-link"><i
+                                                                    class="fa fa-angle-left"></i></a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">1</a>
+                                                        </li>
+                                                        <li class="page-item active">
+                                                            <a href="#" class="page-link">2</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">3</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">4</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link">5</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a href="#" class="page-link"><i
+                                                                    class="fa fa-angle-right"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                {% else %}
+                                                    <div class="search-item">
+                                                        <h5 class="font-18 mb-1"><a href="#">Ankacademy
+                                                            - "{{ keyword }}": sorularda sonuç bulunamadı</a></h5>
+                                                    </div>
+                                                {% endif %}
+
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# School Tab #}
+                                    <div class="tab-pane" id="lectures" role="tabpanel"
+                                         aria-labelledby="lectures-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% if lectures %}
+                                                    {% for lecture in lectures %}
+                                                        {{ lecture.title }}
+                                                        <div class="search-item">
+                                                            <h5 class="font-18 mb-1"><a href="{% url 'lectures' lecture.departmentId.departmentCode %}">Ankacademy
+                                                                - {{ lecture.title|lower|title|safe }}</a></h5>
+                                                            <div class="font-13 text-success mb-2">
+                                                                <a class="text-success"
+                                                                   href="{% url 'lectures' lecture.departmentId.departmentCode %}">
+                                                                    http://ankacademy.com{% url 'lectures' lecture.departmentId.departmentCode %}
+                                                                </a>
+                                                            </div>
+                                                            <div class="mb-0" style="font-size: 15px !important;">
+                                                                <p class="text-left">{{ lecture.description|striptags|safe|truncatechars_html:750 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="search-item">
+                                                        <h5 class="font-18 mb-1"><a href="#">Ankacademy
+                                                            - "{{ keyword }}": sorularda sonuç bulunamadı</a></h5>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# Account Tab #}
+                                    <div class="tab-pane" id="accounts" role="tabpanel" aria-labelledby="users-tab">
+                                        {% if accounts %}
+                                            {% for account in accounts %}
+                                                <div class="search-item">
+                                                    <div class="media">
+                                                        <div class="media-left mr-2">
+                                                            <a href="#">
+                                                                <img class="media-object rounded-circle" alt="64x64"
+                                                                     src="{{ account.image.url }}"
+                                                                     style="width: 54px; height: 54px;">
+                                                            </a>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <h5 class="font-16 media-heading mt-0 mb-0">
+                                                                <a href="#"
+                                                                   class="text-dark">{{ account.get_full_name }}</a>
+                                                            </h5>
+                                                            <span>@{{ account.username }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            <ul class="pagination pagination-split float-right mb-0">
+                                                <li class="page-item disabled">
+                                                    <a href="#" class="page-link"><i class="fa fa-angle-left"></i></a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a href="#" class="page-link">1</a>
+                                                </li>
+                                                <li class="page-item active">
+                                                    <a href="#" class="page-link">2</a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a href="#" class="page-link">3</a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a href="#" class="page-link">4</a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a href="#" class="page-link">5</a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a href="#" class="page-link"><i class="fa fa-angle-right"></i></a>
+                                                </li>
+                                            </ul>
+                                        {% else %}
+                                            <div class="search-item">
+                                                <h5 class="font-18 mb-1"><a href="#">Ankacademy
+                                                    - "{{ keyword }}": kullanıcılarda sonuç bulunamadı</a></h5>
+                                            </div>
+                                        {% endif %}
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

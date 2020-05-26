@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
@@ -131,32 +132,28 @@ def search_keyword(request):
     :param request:
     :return:
     """
+    keyword = request.GET.get('keyword')
     articles = SearchKeyword.search_article(request)
+    articlePaginator = Paginator(articles, 10)
+    article_page_number = request.GET.get('page')
+    article_page_obj = articlePaginator.get_page(article_page_number)
     questions = SearchKeyword.search_question(request)
     courses = SearchKeyword.search_course(request)
     schools = SearchKeyword.search_school(request)
     lectures = SearchKeyword.search_lecture(request)
-    exams = SearchKeyword.search_exam(request)
     accounts = SearchKeyword.search_account(request)
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
+    resultCount = articles.count() + questions.count() + courses.count() + schools.count() + lectures.count() + accounts.count()
     context = {
         "articles": articles,
+        "article_page_obj": article_page_obj,
         "questions": questions,
         "courses": courses,
         "schools": schools,
         "lectures": lectures,
-        "exams": exams,
         "accounts": accounts,
         "userGroup": userGroup,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
+        "resultCount": resultCount,
+        "keyword": keyword,
     }
-    return render(request, "ankades/search.html", context)
+    return render(request, "ankacademy/search-result.html", context)

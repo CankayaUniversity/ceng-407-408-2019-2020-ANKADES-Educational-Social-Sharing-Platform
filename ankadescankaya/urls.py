@@ -19,7 +19,7 @@ urlpatterns = [
     path('404/', main_view.get_404, name="404"),
     path('terms-of-use/', main_view.terms_of_use, name="terms_of_use"),
     path('privacy-policy/', main_view.privacy_policy, name="privacy_policy"),
-    path('search/', main_view.search_keyword, name="search_keyword"),
+    path('ara', main_view.search_keyword, name="search_keyword"),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^@(?P<username>[\w-]+)/$', account_view.account_detail, name="account_detail"),
 ]

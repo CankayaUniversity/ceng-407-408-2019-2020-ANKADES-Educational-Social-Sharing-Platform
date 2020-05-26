@@ -60,7 +60,8 @@
                             </p>
                         </a>
 
-                        <!-- item-->
+                        <!-- item--
+
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                             <div class="notify-icon bg-danger">
                                 <i class="mdi mdi-account-plus"></i>
@@ -113,11 +114,11 @@
                     <!-- item-->
                     <div class="dropdown-item noti-title">
                         <h5 class="font-16 m-0">
-                                                            <span class="float-right">
-                                                                <a href="" class="text-dark">
-                                                                    <small>Clear All</small>
-                                                                </a>
-                                                            </span>Messages
+                            <span class="float-right">
+                                <a href="" class="text-dark">
+                                    <small>Clear All</small>
+                                </a>
+                            </span>Messages
                         </h5>
                     </div>
 
@@ -269,14 +270,13 @@
 
 
         <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
-
             <li class="d-none d-sm-block">
-                <form class="app-search">
+                <form class="app-search" method="get" action="{% url 'search_keyword' %}">
                     <div class="app-search-box">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search...">
+                            <input type="text" class="form-control" name="keyword" style="color: #ffffff !important; font-size: 0.9em !important;" placeholder="Dilediğinizi Arayın">
                             <div class="input-group-append">
-                                <button class="btn" type="submit">
+                                <button style="font-size: 0.8em !important;" class="btn" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
