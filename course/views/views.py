@@ -11,11 +11,14 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import DetailView
 
+from account.models import AccountFollower
+from account.views.views import get_user_follower, user_articles, user_questions, user_courses, user_exams
 from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.views.views import current_user_group, Categories
 from article.models import ArticleCategory
 from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm, SectionForm, LectureForm, VideoForm
 from course.models import Course, CourseComment, CourseCategory, CourseSection, CourseLecture, CourseVideo
+from question.models import QuestionComment
 
 
 def all_courses(request):
@@ -250,7 +253,47 @@ def course_detail(request, slug, courseNumber):
     :param slug:
     :return:
     """
-    return HttpResponse("hello")
+    try:
+        instance = Course.objects.get(slug=slug, courseNumber=courseNumber)
+        sections = CourseSection.objects.filter(courseId=instance).order_by('createdDate')
+        lectures = CourseLecture.objects.filter(sectionId__courseId=instance).order_by('createdDate')
+    except:
+        messages.error(request, "Aradığınız kurs bulunamadı.")
+        return redirect("404")
+    currentUserEnrolled = False
+    userGroup = current_user_group(request, request.user)
+    existFollower = get_user_follower(request, request.user, instance.creator)
+    articlesCount = user_articles(request, instance.creator).order_by('-createdDate__day')
+    questionsCount = user_questions(request, instance.creator).order_by('-createdDate__day')
+    coursesCount = user_courses(request, instance.creator).order_by('-createdDate__day')
+    examsCount = user_exams(request, instance.creator)
+    certifiedAnswersCount = QuestionComment.objects.filter(isCertified=True, isActive=True, creator=instance.creator)
+    followers = AccountFollower.objects.filter(followingId__username=instance.creator)
+    followings = AccountFollower.objects.filter(followerId__username=instance.creator)
+    getFollowerForFollow = get_user_follower(request, request.user, followers)
+    getFollowingForFollow = get_user_follower(request, request.user, followings)
+    creatorGroup = current_user_group(request, instance.creator)
+    if request.user in instance.enrolledAccount.all():
+        currentUserEnrolled = True
+    context = {
+        "userGroup": userGroup,
+        "existFollower": existFollower,
+        "articlesCount": articlesCount,
+        "questionsCount": questionsCount,
+        "coursesCount": coursesCount,
+        "examsCount": examsCount,
+        "certifiedAnswersCount": certifiedAnswersCount,
+        "followers": followers,
+        "followings": followings,
+        "getFollowerForFollow": getFollowerForFollow,
+        "getFollowingForFollow": getFollowingForFollow,
+        "creatorGroup": creatorGroup,
+        "instance": instance,
+        "sections": sections,
+        "lectures": lectures,
+        "currentUserEnrolled": currentUserEnrolled,
+    }
+    return render(request, "ankacademy/course/course-detail.html", context)
 
 
 class CourseCategoryView(DetailView):

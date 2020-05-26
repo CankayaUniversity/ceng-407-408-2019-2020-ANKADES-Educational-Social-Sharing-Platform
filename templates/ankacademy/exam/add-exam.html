@@ -97,7 +97,7 @@
                                         <div class="col-lg-10">
                                             <div class="form-group">
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" name="media"
+                                                    <input type="file" class="" name="media"
                                                            data-text="Dosya Seçin">
                                                 </div>
                                             </div>
@@ -154,23 +154,24 @@
                             Lütfen devam etmek için bir okul seçiniz.
                         </div>
                         <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
-                                <select id="school" class="form-control select2" style="width: 100%;"
-                                        value="Seçiniz" name="school" required>
-                                    <option disabled>Lütfen bir okul seçiniz</option>
-                                    {% if schools %}
-                                        {% for school in schools %}
-                                            <option value="{{ school.slug }}">{{ school.title }}</option>
-                                        {% endfor %}
-                                    {% endif %}
-                                </select>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="school">Okul* (Devam etmek için okul seçiniz.)</label>
+                                    <select id="school" class="form-control select2" style="width: 100%;"
+                                            value="Seçiniz" name="school" required>
+                                        <option disabled>Lütfen bir okul seçiniz</option>
+                                        {% if schools %}
+                                            {% for school in schools %}
+                                                <option value="{{ school.slug }}">{{ school.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="float-right">
+                                    <button type="submit" name="submit" class="btn btn-md btn-primary">Devam</button>
+                                </div>
                             </div>
-                            <div class="float-right">
-                                <button type="submit" name="submit" class="btn btn-md btn-primary">Devam</button>
-                            </div>
-                        </div>
+                        </form>
                     {% endif %}
                 </div>
             </div>

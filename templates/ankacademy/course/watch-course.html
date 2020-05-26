@@ -1,0 +1,20 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}Okullar | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'all_schools' %}">Okullar</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Okullar</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
