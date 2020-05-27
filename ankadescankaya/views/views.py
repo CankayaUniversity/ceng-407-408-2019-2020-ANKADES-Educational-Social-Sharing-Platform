@@ -80,7 +80,6 @@ def terms_of_use(request):
     :param request:
     :return:
     """
-    categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     try:
         instance = SiteSettings.objects.get(slug="terms-of-use")
@@ -89,15 +88,6 @@ def terms_of_use(request):
     context = {
         "userGroup": userGroup,
         "instance": instance,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     return render(request, "ankacademy/terms-of-use.html", context)
 
@@ -107,7 +97,6 @@ def privacy_policy(request):
     :param request:
     :return:
     """
-    categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     try:
         instance = SiteSettings.objects.get(slug="privacy-policy")
@@ -116,15 +105,6 @@ def privacy_policy(request):
     context = {
         "userGroup": userGroup,
         "instance": instance,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     return render(request, "ankacademy/privacy-policy.html", context)
 

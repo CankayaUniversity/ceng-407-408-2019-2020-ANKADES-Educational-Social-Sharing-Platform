@@ -400,18 +400,8 @@ def add_article_comment_reply(request, commentNumber):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
     context = {
         "userGroup": userGroup,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     try:
         instance = ArticleComment.objects.get(commentNumber=commentNumber)
