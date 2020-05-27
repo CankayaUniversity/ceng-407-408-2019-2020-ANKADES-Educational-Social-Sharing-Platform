@@ -17,6 +17,7 @@ urlpatterns = [
     path('', include("support.urls")),
     path('', include("directmessage.urls")),
     path('404/', main_view.get_404, name="404"),
+    path('401/', main_view.get_401, name="401"),
     path('terms-of-use/', main_view.terms_of_use, name="terms_of_use"),
     path('privacy-policy/', main_view.privacy_policy, name="privacy_policy"),
     path('ara', main_view.search_keyword, name="search_keyword"),

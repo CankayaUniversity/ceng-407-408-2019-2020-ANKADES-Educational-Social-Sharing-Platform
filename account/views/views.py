@@ -22,7 +22,6 @@ def index(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    categories = Categories.all_categories()
     try:
         instance = Account.objects.get(username=request.user.username)
         existFollower = get_user_follower(request, request.user, instance)
@@ -51,15 +50,6 @@ def index(request):
         "existFollower": existFollower,
         "followers": followers,
         "followings": followings,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     return render(request, "ankacademy/article/all-articles.html", context)
 
