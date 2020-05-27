@@ -47,6 +47,7 @@ def add_exam(request):
                 new_exam.examNumber = get_random_string(length=32)
                 new_exam.lectureId_id = lecture
                 new_exam.createdDate = datetime.datetime.now()
+                new_exam.isActive = True
                 new_exam.save()
                 messages.success(request, "Başarıyla sınav eklendi.")
                 return redirect("all_schools")
