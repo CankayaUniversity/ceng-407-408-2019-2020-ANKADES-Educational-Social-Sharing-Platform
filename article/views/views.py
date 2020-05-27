@@ -258,7 +258,7 @@ def edit_article(request, postNumber):
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
         }
-        return render(request, "ankades/account/posts/edit-article.html", context)
+        return render(request, "ankacademy/account/posts/edit-article.html", context)
     return redirect("index")
 
 
@@ -353,7 +353,8 @@ def delete_article(request, slug):
     """
     try:
         instance = Article.objects.get(slug=slug)
-        if instance.creator == request.user:
+        userGroup = current_user_group(request, request.user)
+        if instance.creator == request.user or userGroup == 'admin' or userGroup == 'moderator':
             if instance.isActive:
                 instance.isActive = False
                 instance.save()
@@ -362,7 +363,7 @@ def delete_article(request, slug):
             else:
                 return redirect(reverse("account_detail", kwargs={"username": request.user}))
         else:
-            return redirect("404")
+            return redirect("401")
     except:
         return redirect("404")
 

@@ -1,0 +1,31 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block title %}401 | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">401</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">401</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6 text-center">
+                <div class="wrapper-page">
+                    <img src="{% static 'ankacademy/media/ankacademy.png' %}" alt="" height="120">
+                    <img src="{% static 'ankacademy/images/animat-search-color.gif' %}" alt="" height="120">
+                    <h1 class="text-uppercase text-danger">401</h1>
+
+                    <a class="btn btn-success waves-effect waves-light m-t-20" href="{% url 'index' %}"> Anasayfaya Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -56,21 +56,23 @@ def get_404(request):
     :param request:
     :return:
     """
-    categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     context = {
         "userGroup": userGroup,
-        "articleCategories": categories[0],
-        "articleSubCategories": categories[1],
-        "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     return render(request, "ankacademy/404.html", context)
+
+
+def get_401(request):
+    """
+    :param request:
+    :return:
+    """
+    userGroup = current_user_group(request, request.user)
+    context = {
+        "userGroup": userGroup,
+    }
+    return render(request, "ankacademy/401.html", context)
 
 
 def terms_of_use(request):
