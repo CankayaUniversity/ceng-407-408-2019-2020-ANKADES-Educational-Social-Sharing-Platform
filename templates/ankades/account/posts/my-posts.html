@@ -205,8 +205,8 @@
                                                     <td>{% if article.updatedDate %}{{ article.updatedDate }}{% else %}
                                                         Güncellenmemiş{% endif %}</td>
                                                     <td>
-                                                        <a href="{% url 'edit_article' article.postNumber  %}">
-
+                                                        <a type="button" class="btn-success btn" href="{% url 'edit_article' article.postNumber  %}">
+                                                            Düzenle
                                                         </a>
                                                     </td>
                                                 </tr>

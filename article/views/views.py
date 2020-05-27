@@ -74,12 +74,6 @@ def all_articles(request):
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     if sub:
@@ -99,12 +93,6 @@ def all_articles(request):
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     if lower:
@@ -119,12 +107,6 @@ def all_articles(request):
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     context = {
@@ -136,12 +118,6 @@ def all_articles(request):
         "articleCategories": categories[0],
         "articleSubCategories": categories[1],
         "articleLowerCategories": categories[2],
-        "questionCategories": categories[3],
-        "questionSubCategories": categories[4],
-        "questionLowerCategories": categories[5],
-        "courseCategories": categories[6],
-        "courseSubCategories": categories[7],
-        "courseLowerCategories": categories[8],
     }
     return render(request, "ankacademy/article/all-articles.html", context)
 
@@ -211,17 +187,17 @@ def add_article(request):
 
 
 @login_required(login_url="login_account")
-def edit_article(request, slug):
+def edit_article(request, postNumber):
     """
     :param request:
-    :param slug:
+    :param postNumber:
     :return:
     """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     try:
-        instance = Article.objects.get(slug=slug)
+        instance = Article.objects.get(postNumber=postNumber)
     except:
         return redirect("404")
     form = EditArticleForm(request.POST or None, instance=instance)
@@ -240,16 +216,17 @@ def edit_article(request, slug):
                 fs = FileSystemStorage()
                 fs.save(media.name, media)
                 instance.media = media
-            instance.title = title
+            if instance.title != title:
+                instance.title = title
+                pre_save.connect(slug_save, sender=edit_article)
             instance.isPrivate = isPrivate
             instance.description = description
             instance.categoryId_id = value
             instance.updatedDate = datetime.datetime.now()
             instance.isActive = False
             instance.save()
-            pre_save.connect(slug_save, sender=edit_article)
             messages.success(request, "Makale başarıyla güncellendi.")
-            return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
+            return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
         context = {
             "instance": instance,
             "articleCategory": articleCategory,
@@ -258,15 +235,10 @@ def edit_article(request, slug):
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
         }
-        return render(request, "ankacademy/article/edit-article.html", context)
-    return redirect("index")
+        return render(request, "ankacademy/account/post/edit-article.html", context)
+    else:
+        return redirect("401")
 
 
 def article_detail(request, username, slug):
@@ -360,7 +332,8 @@ def delete_article(request, slug):
     """
     try:
         instance = Article.objects.get(slug=slug)
-        if instance.creator == request.user:
+        userGroup = current_user_group(request, request.user)
+        if instance.creator == request.user or userGroup == 'admin' or userGroup == 'moderator':
             if instance.isActive:
                 instance.isActive = False
                 instance.save()
@@ -369,7 +342,7 @@ def delete_article(request, slug):
             else:
                 return redirect(reverse("account_detail", kwargs={"username": request.user}))
         else:
-            return redirect("404")
+            return redirect("401")
     except:
         return redirect("404")
 

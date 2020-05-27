@@ -1,6 +1,6 @@
 {% extends 'ankacademy/layout/layout.html' %}
 {% load static %}
-{% block title %}401 | Ankacademy{% endblock %}
+{% block title %}401 Unauthorized | Ankacademy{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -22,7 +22,8 @@
                     <img src="{% static 'ankacademy/media/ankacademy.png' %}" alt="" height="120">
                     <img src="{% static 'ankacademy/images/animat-search-color.gif' %}" alt="" height="120">
                     <h1 class="text-uppercase text-danger">401</h1>
-
+                    <h3 class="text-uppercase text-danger">Yetkiniz Yok !</h3>
+                    <p class="text-muted mb-2">Yetkiniz dışında bir işlem gerçekleştirmeye çalıştınız !</p>
                     <a class="btn btn-success waves-effect waves-light m-t-20" href="{% url 'index' %}"> Anasayfaya Dön</a>
                 </div>
             </div>
