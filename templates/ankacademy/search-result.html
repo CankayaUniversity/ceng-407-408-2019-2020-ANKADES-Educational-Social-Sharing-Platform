@@ -315,7 +315,7 @@
                                                 <div class="search-item">
                                                     <div class="media">
                                                         <div class="media-left mr-2">
-                                                            <a href="#">
+                                                            <a href="{% url 'account_detail' account.username %}">
                                                                 <img class="media-object rounded-circle" alt="64x64"
                                                                      src="{{ account.image.url }}"
                                                                      style="width: 54px; height: 54px;">
@@ -323,7 +323,7 @@
                                                         </div>
                                                         <div class="media-body">
                                                             <h5 class="font-16 media-heading mt-0 mb-0">
-                                                                <a href="#"
+                                                                <a href="{% url 'account_detail' account.username %}"
                                                                    class="text-dark">{{ account.get_full_name }}</a>
                                                             </h5>
                                                             <span>@{{ account.username }}</span>

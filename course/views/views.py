@@ -273,6 +273,8 @@ def course_detail(request, slug, courseNumber):
     getFollowerForFollow = get_user_follower(request, request.user, followers)
     getFollowingForFollow = get_user_follower(request, request.user, followings)
     creatorGroup = current_user_group(request, instance.creator)
+    instance.view += 1
+    instance.save()
     if request.user in instance.enrolledAccount.all():
         currentUserEnrolled = True
     context = {

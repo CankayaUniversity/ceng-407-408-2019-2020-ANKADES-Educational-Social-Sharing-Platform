@@ -209,17 +209,17 @@ def add_article(request):
 
 
 @login_required(login_url="login_account")
-def edit_article(request, slug):
+def edit_article(request, postNumber):
     """
     :param request:
-    :param slug:
+    :param postNumber:
     :return:
     """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     try:
-        instance = Article.objects.get(slug=slug)
+        instance = Article.objects.get(postNumber=postNumber)
     except:
         return redirect("404")
     form = EditArticleForm(request.POST or None, instance=instance)
@@ -238,16 +238,17 @@ def edit_article(request, slug):
                 fs = FileSystemStorage()
                 fs.save(media.name, media)
                 instance.media = media
-            instance.title = title
+            if instance.title != title:
+                instance.title = title
+                pre_save.connect(slug_save, sender=edit_article)
             instance.isPrivate = isPrivate
             instance.description = description
             instance.categoryId_id = value
             instance.updatedDate = datetime.datetime.now()
             instance.isActive = False
             instance.save()
-            pre_save.connect(slug_save, sender=edit_article)
             messages.success(request, "Makale başarıyla güncellendi.")
-            return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": slug}))
+            return redirect(reverse("article_detail", kwargs={"username": instance.creator, "slug": instance.slug}))
         context = {
             "instance": instance,
             "articleCategory": articleCategory,
@@ -256,12 +257,6 @@ def edit_article(request, slug):
             "articleCategories": categories[0],
             "articleSubCategories": categories[1],
             "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
         }
         return render(request, "ankades/account/posts/edit-article.html", context)
     return redirect("index")
