@@ -52,7 +52,7 @@ def admin_add_exam(request):
                     fs.save(media.name, media)
                     new_exam.media = media
                 new_exam.title = title
-                new_exam.isActive = False
+                new_exam.isActive = True
                 new_exam.createdDate = datetime.datetime.now()
                 new_exam.examDate = datetime.datetime.now()
                 new_exam.creator = request.user

@@ -166,6 +166,8 @@ def add_article(request):
     :param request:
     :return:
     """
+    abstract = None
+    description = None
     userGroup = current_user_group(request, request.user)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = ArticleForm(request.POST or None)
@@ -263,7 +265,7 @@ def edit_article(request, slug):
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
         }
-        return render(request, "ankades/account/posts/edit-article.html", context)
+        return render(request, "ankacademy/article/edit-article.html", context)
     return redirect("index")
 
 
