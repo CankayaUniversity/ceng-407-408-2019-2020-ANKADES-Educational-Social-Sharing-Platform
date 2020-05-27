@@ -54,7 +54,7 @@ def edit_profile(request):
         instance.save()
         messages.success(request, "Profil başarıyla güncellendi.")
         return redirect("edit_profile")
-    return render(request, "ankades/account/edit-profile.html", context)
+    return render(request, "ankacademy/account/edit-profile.html", context)
 
 
 @login_required(login_url="login_account")

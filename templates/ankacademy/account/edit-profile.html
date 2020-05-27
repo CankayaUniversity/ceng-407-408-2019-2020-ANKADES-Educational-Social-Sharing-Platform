@@ -1,0 +1,447 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block stylesheet %}
+    <link href="{% static 'ankacademy/libs/dropify/dropify.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block title %}{{ instance.get_full_name }} | Ankacademy{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
+                            <li class="breadcrumb-item">{{ instance.get_full_name }}</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Kullınıcı Bilgisi</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        <div class="row">
+            <div class="col-xl-3 col-md-4">
+                <div class="mt-4">
+                    <div class="text-center card-box shadow-none border border-secoundary">
+                        <div class="member-card">
+                            <div class="avatar-xl member-thumb mb-3 mx-auto d-block">
+                                <img src="{{ instance.image.url }}" class="rounded-circle img-thumbnail"
+                                     alt="profile-image">
+                                {% if userDetailGroup == 'admin' or userDetailGroup == 'moderator' or userDetailGroup == 'ogretmen' %}
+                                    <i class="mdi mdi-star-circle member-star text-success"
+                                       title="verified user"></i>{% endif %}
+                            </div>
+
+                            <div class="">
+                                <h5 class="font-18 mb-1">{{ instance.get_full_name }}</h5>
+                                <p class="text-muted mb-2">{{ creatorGroup.title }}</p>
+                            </div>
+                            {% if instance.username != request.user.username %}
+                                {% if existFollower %}
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                            class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                        href="{% url 'follow_account' instance.username %}">Takibi Bırak</a></span>
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 "><span
+                                            class="mdi mdi-thumb-up"><a style="color: #fff !important;"
+                                                                        href="{% url 'follow_account' instance.username %}">Takip Et</a></span>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+                            {% if instance.username != request.user.username %}
+                                <button type="button"
+                                        class="btn btn-danger btn-sm width-sm waves-effect mt-2 waves-light">Mesaj
+                                </button>
+                            {% endif %}
+                            <p class="sub-header mt-3">
+                                {% if instance.bio %}{{ instance.bio }}{% else %}
+                                    {{ instance.get_full_name }} kullanıcıs biyografisini
+                                    paylaşmamış{% endif %}
+                            </p>
+
+                            <hr/>
+
+                            <div class="text-left">
+                                <p class="text-muted font-13"><strong>Ad :</strong> <span
+                                        class="ml-4">{{ instance.get_full_name }}</span>
+                                </p>
+
+                                <p class="text-muted font-13"><strong>Email :</strong> <span
+                                        class="ml-4">{{ instance.email }}</span>
+                                </p>
+
+                                <p class="text-muted font-13"><strong>Üyelik :</strong> <span
+                                        class="ml-4">{{ userDetailGroup.title }}</span></p>
+                            </div>
+                            <hr/>
+                            <ul class="social-links list-inline mt-4">
+                                <li class="list-inline-item">
+                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                       href=""
+                                       data-original-title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                       href=""
+                                       data-original-title="Twitter"><i class="fab fa-twitter"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a title="" data-placement="top" data-toggle="tooltip" class="tooltips"
+                                       href=""
+                                       data-original-title="Skype"><i class="fab fa-skype"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-box shadow-none border border-secoundary">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Takipçi:</th>
+                                    <td>{{ followers.count }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Takip:</th>
+                                    <td><span class="label label-danger">{{ followings.count }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Makale:</th>
+                                    <td><span class="label label-danger">{{ articlesCount.count }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Soru:</th>
+                                    <td><span class="label label-danger">{{ questionsCount.count }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Kurs:</th>
+                                    <td><span class="label label-danger">{{ coursesCount.count }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Sınav:</th>
+                                    <td><span class="label label-danger">{{ examsCount.count }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Onaylanmış Cevap:</th>
+                                    <td><span class="label label-danger">{{ certifiedAnswersCount.count }}</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="mt-4">
+                    <div class="card-box">
+
+                        <ul class="nav nav-tabs tabs-bordered nav-justified" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="settings-b2-tab" data-toggle="tab" href="#settings-b2"
+                                   role="tab"
+                                   aria-controls="settings-b2" aria-selected="true">
+                                    <span class="d-block d-sm-none"><i class="fas fa-book-open"></i></span>
+                                    <span class="d-none d-sm-block">Profilim</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="photo-b2-tab" data-toggle="tab" href="#photo-b2"
+                                   role="tab" aria-controls="photo-b2" aria-selected="false">
+                                    <span class="d-block d-sm-none"><i class="fas fa-question"></i></span>
+                                    <span class="d-none d-sm-block">Fotoğraf</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="graduate-b2-tab" data-toggle="tab" href="#graduate-b2"
+                                   role="tab"
+                                   aria-controls="graduate-b2" aria-selected="false">
+                                    <span class="d-block d-sm-none"><i class="fa fa-file"></i></span>
+                                    <span class="d-none d-sm-block">Eğitim</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="bio-b2-tab" data-toggle="tab" href="#bio-b2" role="tab"
+                                   aria-controls="bio-b2" aria-selected="false">
+                                    <span class="d-block d-sm-none"><i class="fas fa-video"></i></span>
+                                    <span class="d-none d-sm-block">Biyografi</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="username-b2-tab" data-toggle="tab" href="#username-b2"
+                                   role="tab"
+                                   aria-controls="username-b2" aria-selected="false">
+                                    <span class="d-block d-sm-none"><i class="fas fa-video"></i></span>
+                                    <span class="d-none d-sm-block">Kullanıcı Adı</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="password-b2-tab" data-toggle="tab" href="#password-b2"
+                                   role="tab"
+                                   aria-controls="password-b2" aria-selected="false">
+                                    <span class="d-block d-sm-none"><i class="fas fa-video"></i></span>
+                                    <span class="d-none d-sm-block">Şifre</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="settings-b2" role="tabpanel"
+                                 aria-labelledby="settings-b2-tab">
+                                <form class="form-horizontal" role="form" method="post" id="edit-profile">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label for="first_name" class="col-sm-2 col-form-label">Ad:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="first_name"
+                                                   name="first_name"
+                                                   placeholder="Ad" value="{{ request.user.first_name }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Soyad:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="last_name" name="last_name"
+                                                   placeholder="Soyad" value="{{ request.user.last_name }}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="email" class="col-sm-2 col-form-label">Email:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="email" name="email"
+                                                   placeholder="Email" value="{{ request.user.email }}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success">Kaydet</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="photo-b2" role="tabpanel"
+                                 aria-labelledby="photo-b2-tab">
+                                <form class="form-horizontal" role="form" action="{% url 'edit_profile_photo' %}"
+                                      method="post" id="edit-photo"
+                                      enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <label class="col-lg-2 control-label" for="image">Profil Fotoğrafı</label>
+                                            <div class="col-lg-10">
+                                                <div class="form-group">
+                                                    <input type="file" class="dropify" name="image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success">Kaydet</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="graduate-b2" role="tabpanel" aria-labelledby="graduate-b2-tab">
+                                <form class="form-horizontal" role="form" action="{% url 'edit_graduate' %}"
+                                      method="post" id="edit-graduate">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label for="graduate" class="col-sm-2 col-form-label">Şu anki okulunuz:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="graduate" name="graduate"
+                                                   placeholder="Okulunuzun Adı" value="
+
+
+
+
+                                                    {% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="graduate" class="col-sm-2 col-form-label">Lisans:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="graduate" name="graduate"
+                                                   placeholder="Okulunuzun Adı" value="
+
+
+
+
+                                                    {% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="graduate" class="col-sm-2 col-form-label">Yüksek Lisans:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="graduate" name="graduate"
+                                                   placeholder="Okulunuzun Adı" value="
+
+
+
+
+                                                    {% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="graduate" class="col-sm-2 col-form-label">Doktora:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="graduate" name="graduate"
+                                                   placeholder="Okulunuzun Adı" value="
+
+
+
+
+                                                    {% if request.user.graduate != None %}{{ request.user.graduate }}{% endif %}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success">Kaydet</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="bio-b2" role="tabpanel" aria-labelledby="bio-b2-tab">
+                                <form class="form-horizontal" role="form" action="{% url 'edit_bio' %}"
+                                      method="post" id="edit-bio">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label for="bio" class="col-sm-2 col-form-label">Kendiniz Hakkında Kısa
+                                            Bilgi:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="bio" name="bio"
+                                                   placeholder="Kendinizi bize tanıtmak ister misiniz?" value="
+                                                    {% if request.user.bio != None %}{{ request.user.bio }}{% endif %}"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success">Kaydet</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="username-b2" role="tabpanel" aria-labelledby="username-b2-tab">
+                                <div class="tab-pane" id="username">
+                                    <p>
+                                        <b>"{{ instance.username }}"</b> olan kullanıcı adınızı gerçekten değiştirmek
+                                        istediğinize emin misiniz?
+                                    </p>
+                                    <hr>
+                                    <p>
+                                        <b>UYARI: Kullanıcı adınızı değiştirdiğiniz zaman, diğer kullanıcılar, sizin
+                                            profilinize artık yeni kullanıcı
+                                            adınızla erişebilecekler. Yine de değiştirmek istiyorsanız aşağıdaki
+                                            "Değiştir" butonuna tıklayınız.</b>
+                                    </p>
+                                    <button type="button" class="btn btn-md btn-danger"
+                                            data-toggle="modal"
+                                            data-target="#modal-edit-username">Değiştir
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="password-b2" role="tabpanel" aria-labelledby="password-b2-tab">
+                                <form class="form-horizontal" role="form" method="post" id="edit-password"
+                                      action="{% url 'edit_password' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label for="old_password" class="col-sm-2 col-form-label">Eski
+                                            Şifreniz:</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="old_password"
+                                                   name="old_password"
+                                                   placeholder="Eski Şifreniz" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="password" class="col-sm-2 col-form-label">Yeni Şifreniz:</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="password"
+                                                   name="password"
+                                                   placeholder="Yeni Şifreniz" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="old_password" class="col-sm-2 col-form-label">Yeni Şifreniz
+                                            Tekrar:</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="confirm_password"
+                                                   name="confirm_password"
+                                                   placeholder="Yeni Şifreniz Tekrar" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success">Kaydet</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal fade"
+                                 id="modal-edit-username">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">UYARI !</h4>
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-left">Gerçekten "<span
+                                                    class="text-bold">{{ instance.username }}</span>"
+                                                kullanıcı adınızı değiştirmek istediğinize emin
+                                                misiniz?&hellip;</p>
+                                            <br>
+                                            <form method="post"
+                                                  action="{% url 'edit_username' %}">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="username"
+                                                           placeholder="Kullanıcı Adı"
+                                                           value="{{ instance.username }}">
+                                                </div>
+                                                <br>
+                                                <button type="button"
+                                                        class="btn btn-danger"
+                                                        data-dismiss="modal">İptal
+                                                </button>
+                                                <button type="submit"
+                                                        class="btn btn-success">Değiştir
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/submit-wizard.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
+
+    <!-- Plugins js -->
+    <script src="{% static 'ankacademy/libs/dropify/dropify.js' %}"></script>
+
+    <!-- Init js-->
+    <script src="{% static 'ankacademy/js/pages/form-fileuploads.init.js' %}"></script>
+{% endblock %}

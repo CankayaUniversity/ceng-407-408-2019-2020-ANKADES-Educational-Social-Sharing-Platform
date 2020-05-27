@@ -21,7 +21,7 @@
 
     <link href="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"
           type="text/css"/>
-
+    {% block stylesheet %}{% endblock %}
     <!-- App css -->
     <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <link href="{% static 'ankacademy/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"
@@ -80,34 +80,23 @@
                 <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked/>
                 <label class="custom-control-label" for="light-mode-switch">Açık Tema</label>
             </div>
-
             <div class="custom-control custom-switch mb-3">
                 <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch"
                        data-bsStyle="{% static 'ankacademy/css/bootstrap-dark.min.css' %}"
                        data-appStyle="{% static 'ankacademy/css/app-dark.min.css' %}"/>
                 <label class="custom-control-label" for="dark-mode-switch">Koyu Tema</label>
             </div>
-
             <div class="custom-control custom-switch page_footer">
                 <a href="{% url 'terms_of_use' %}">Kullanım Koşulları</a>
             </div>
-
-
             <div class="custom-control custom-switch page_footer">
                 <a href="{% url 'terms_of_use' %}">Gizlilik Politikası</a>
             </div>
-
         </div>
-    </div> <!-- end slimscroll-menu-->
+    </div>
 </div>
-<!-- /Right-bar -->
-
-<!-- Right bar overlay-->
 <div class="rightbar-overlay"></div>
-
-<!-- Vendor js -->
 <script src="{% static 'ankacademy/js/vendor.min.js' %}"></script>
-
 <script src="{% static 'ankacademy/libs/switchery/switchery.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/multiselect/jquery.multi-select.js' %}"></script>
@@ -119,29 +108,15 @@
 <script src="{% static 'ankacademy/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
 <script src="{% static 'ankacademy/libs/bootstrap-maxlength/bootstrap-maxlength.min.js' %}"></script>
 {% block scripts %}{% endblock %}
-
-<!--Form Wizard-->
-
-
-<!--Toastr-->
 <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/tables.js' %}"></script>
-<!--ToolTip-->
 <script src="{% static 'ankacademy/libs/tooltipster/tooltipster.bundle.min.js' %}"></script>
 <script src="{% static 'ankacademy/js/pages/tooltipster.init.js' %}"></script>
-
-
-<!-- Init js-->
 <script src="{% static 'ankacademy/js/pages/form-advanced.init.js' %}"></script>
-
-<!-- App js -->
 <script src="{% static 'ankacademy/js/app.min.js' %}"></script>
 <script>
     $(function () {
-        {#//Initialize Select2 Elements#}
         $('.select2').select2();
-
-        {#//Initialize Select2 Elements#}
         $('.select2bs4').select2({
             theme: 'bootstrap4'
         });
@@ -158,7 +133,5 @@
         </script>
     {% endfor %}
 {% endif %}
-
 </body>
-
 </html>
