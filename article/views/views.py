@@ -453,7 +453,7 @@ def edit_article_comment(request, commentNumber):
             messages.success(request, "Yorumunuz başarıyla güncellendi.")
         return redirect(
             reverse("article_detail",
-                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}), context)
+                    kwargs={"username": instance.articleId.creator, "slug": instance.articleId.slug}))
     except:
         messages.error(request, "Makale bulunamadı.")
         return redirect("all_articles")
@@ -498,8 +498,10 @@ class ArticleLikeToggle(RedirectView):
             if user.is_authenticated:
                 if user in obj.likes.all():
                     obj.likes.remove(user)
+                    messages.success(self, "Makale beğenisi başarıyla kaldırıldı.")
                 else:
                     obj.likes.add(user)
+                    messages.success(self, "Makale başarıyla beğenildi")
             return url_
         except:
             return redirect("404")

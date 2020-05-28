@@ -25,7 +25,7 @@
                             <div class="card blog-post bg-transparent">
                                 <div class="post-image">
                                     <img src="{{ instance.media.url }}" alt="{{ instance.title }}"
-                                         style="width: 100% !important;"
+                                         style="width: 100% !important; max-height: 500px !important;"
                                          class="img-fluid mx-auto d-block rounded-top">
                                 </div>
                                 <div class="card-body">
@@ -49,6 +49,12 @@
                                     <div class="text-muted"><span
                                             class="text-dark">Paylaşım Tarihi: {{ instance.createdDate|date:"d M Y" }}</span>
                                     </div>
+                                    {% if request.user.is_authenticated %}
+                                        <a type="button" data-href='{{ instance.get_api_like_url }}'
+                                           data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
+                                           class="btn btn-primary btn-md mt-2"><i class="far fa-thumbs-up"></i> Beğen
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="mt-5">
@@ -65,7 +71,7 @@
                                             {% if instance.creator.bio %}
                                                 {{ instance.creator.bio }}
                                             {% else %}
-                                                Yazar, biyografini henüz paylaşmamış.
+                                                Yazar, biyografisini henüz paylaşmamış.
                                             {% endif %}
                                         </p>
                                         <a href="{% url 'account_detail' instance.creator.username %}"
@@ -91,12 +97,11 @@
                                                     <h5 class="font-18 media-heading mt-0">{{ comment.creator.get_full_name }}</h5>
                                                     <h6 class="text-muted">{{ comment.createdDate }}</h6>
                                                     <p>{{ comment.content }}</p>
-
                                                     <a onclick="reply_{{ comment.commentNumber }}()" type="button"
                                                        class="btn btn-sm btn-info text-success"
                                                        style="color: #ffffff !important;"><i
                                                             class="mdi mdi-reply"></i>&nbsp; Cevapla</a>
-                                                    {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                    {% if comment.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                         <a onclick="edit_{{ comment.commentNumber }}()"
                                                            class="btn btn-success btn-sm"
                                                            style="color: #ffffff !important;">
