@@ -13,7 +13,7 @@ urlpatterns = [
     path('kurs-ekle/', views.add_course, name="add_course"),
     path('kurs-ders-ekle/', views.add_lecture, name="add_lecture"),
     url(r'^c/(?P<slug>[\w-]+)/(?P<courseNumber>[\w-]+)/$', views.course_detail, name="course_detail"),
-    url(r'^kurc/(?P<courseNumber>[\w-]+)/duzenle/$', views.edit_course, name="edit_course"),
+    url(r'^kurs/(?P<courseNumber>[\w-]+)/duzenle/$', views.edit_course, name="edit_course"),
     url(r'^v/izle/(?P<lectureNumber>[\w-]+)/$', views.course_lecture_detail, name="course_lecture_detail"),
 
     url(r'^(?P<courseNumber>[\w-]+)/bolum-ekle/$', views.add_section, name="add_section")

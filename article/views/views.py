@@ -45,24 +45,40 @@ def all_articles(request):
     """
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
-    category = request.GET.getlist('c')
-    sub = request.GET.getlist('s')
-    lower = request.GET.getlist('l')
+    category = request.GET.get('c')
+    sub = request.GET.get('s')
+    lower = request.GET.get('l')
     getLowCategory = []
     articleCat = []
     topCategories = ArticleCategoryView.getTopCategory(request)
     articleComment = ArticleComment.objects.filter(isActive=True)
     articles = Article.objects.filter(isActive=True)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(articles, 2)
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
     # TODO Paginator
     if category:
-        top = ArticleCategory.objects.filter(catNumber__in=category)
-        sub = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=category)
+        top = ArticleCategory.objects.filter(catNumber=category)
+        sub = ArticleCategory.objects.filter(isActive=True, parentId__catNumber=category)
         for getLower in sub:
             getLowCategory.append(getLower.catNumber)
         lower = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=getLowCategory)
         for cat in lower:
             articleCat.append(cat.catNumber)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=articleCat)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(articles, 2)
+        try:
+            articles = paginator.page(page)
+        except PageNotAnInteger:
+            articles = paginator.page(1)
+        except EmptyPage:
+            articles = paginator.page(paginator.num_pages)
         # TODO Paginator
         context = {
             "userGroup": userGroup,
@@ -77,11 +93,19 @@ def all_articles(request):
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     if sub:
-        subCat = ArticleCategory.objects.filter(catNumber__in=sub)
-        low = ArticleCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
+        subCat = ArticleCategory.objects.filter(catNumber=sub)
+        low = ArticleCategory.objects.filter(isActive=True, parentId__catNumber=sub)
         for getLower in low:
             getLowCategory.append(getLower.catNumber)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(articles, 5)
+        try:
+            articles = paginator.page(page)
+        except PageNotAnInteger:
+            articles = paginator.page(1)
+        except EmptyPage:
+            articles = paginator.page(paginator.num_pages)
         context = {
             "userGroup": userGroup,
             "articleComment": articleComment,
@@ -96,8 +120,16 @@ def all_articles(request):
         }
         return render(request, "ankacademy/article/all-articles.html", context)
     if lower:
-        lowCat = ArticleCategory.objects.filter(catNumber__in=lower)
-        articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=lower)
+        lowCat = ArticleCategory.objects.filter(catNumber=lower)
+        articles = Article.objects.filter(isActive=True, categoryId__catNumber=lower)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(articles, 5)
+        try:
+            articles = paginator.page(page)
+        except PageNotAnInteger:
+            articles = paginator.page(1)
+        except EmptyPage:
+            articles = paginator.page(paginator.num_pages)
         context = {
             "userGroup": userGroup,
             "articleComment": articleComment,
