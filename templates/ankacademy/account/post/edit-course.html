@@ -29,7 +29,7 @@
                     <p class="sub-header">
                         Aşağıdaki alanları eksiksiz doldurarak, kursunuz hakkında kısaca bilgi verebilirsiniz.
                     </p>
-                    <form id="wizard-validation-form" role="form" method="post" enctype="multipart/form-data" action="{% url 'edit_course' course.courseNumber %}">
+                    <form id="wizard-validation-form" role="form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div>
                             <h3>Kurs Hakkında</h3>
