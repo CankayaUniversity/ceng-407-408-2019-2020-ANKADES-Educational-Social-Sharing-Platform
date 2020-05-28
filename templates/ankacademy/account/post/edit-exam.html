@@ -1,7 +1,7 @@
 {% extends 'ankacademy/layout/layout.html' %}
 {% load static %}
 {% block meta %}Ankacademy{% endblock %}
-{% block title %}Sınav Paylaş | Ankacademy{% endblock %}
+{% block title %}Sınav Düzenle | Ankacademy{% endblock %}
 {% block content %}
     <style>
         .wizard > .content > .body label {
@@ -15,10 +15,11 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0)">Sınav Ekle</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">Sınav Düzenle</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">{{ instance.title|truncatechars:50 }}</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Sınav Ekle</h4>
+                    <h4 class="page-title">Sınav Düzenle </h4>
                 </div>
             </div>
         </div>
@@ -40,6 +41,10 @@
                                         <div class="col-lg-10">
                                             <select class="form-control select2 required" name="lecture" id="lecture">
                                                 <option disabled>Lütfen bir kategori seçiniz</option>
+                                                <optgroup label="{{ instance.categoryId.parentId.title }}">
+                                                <option selected
+                                                        value="{{ instance.categoryId.id }}">{{ instance.categoryId.title }}</option>
+                                                </optgroup>
                                                 {% for department in departments %}
                                                     <optgroup label="{{ department.title }}">
                                                         {% for lecture in lectures %}
@@ -58,6 +63,7 @@
                                         <div class="col-lg-10">
                                             <select class="form-control select2" name="term" id="term">
                                                 <option disabled>Lütfen bir dönem seçiniz</option>
+                                                <option value="{{ instance.term.id }}">{{ instance.term.id }}</option>
                                                 <option selected
                                                         value="{{ instance.term.id }}">{{ instance.term.title }}</option>
                                                 {% for term in terms %}
@@ -75,6 +81,10 @@
                                             <select class="form-control select2" name="title" id="title"
                                                     style="width: 100% !important;">
                                                 <option disabled selected>{{ instance.title }}</option>
+                                                <optgroup label="{{ instance.title }}">
+                                                <option selected
+                                                        value="{{ instance.title }}">{{ instance.title }}</option>
+                                                </optgroup>
                                                 <optgroup label="Sınav Türü">
                                                     <option disabled>Lütfen sınavın türünü seçiniz</option>
                                                     <option value="1. Midterm">1. Midterm</option>
@@ -101,7 +111,7 @@
                                         <div class="col-lg-10">
                                             <div class="form-group">
                                                 <div class="custom-file">
-                                                    <input type="file" class="" name="media"
+                                                    <input type="file" class="" name="media" value="{{ instance.media }}"
                                                            data-text="Dosya Seçin">
                                                 </div>
                                             </div>
@@ -116,7 +126,7 @@
                                     <div class="form-group row">
                                         <label for="owner" class="col-lg-2 control-label">Sınav Sahibi Adı: </label>
                                         <div class="col-lg-10">
-                                            <input id="owner" name="owner" type="text" class="required form-control">
+                                            <input id="owner" name="owner" value="{{ instance.owner }}" type="text" class="required form-control">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -165,6 +175,7 @@
                                     <select id="school" class="form-control select2" style="width: 100%;"
                                             value="Seçiniz" name="school" required>
                                         <option disabled>Lütfen bir okul seçiniz</option>
+                                        <option value="{{ instance.school }}">{{ instance.school }}</option>
                                         {% if schools %}
                                             {% for school in schools %}
                                                 <option value="{{ school.slug }}">{{ school.title }}</option>
