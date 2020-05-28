@@ -96,7 +96,7 @@
                                                        class="btn btn-sm btn-info text-success"
                                                        style="color: #ffffff !important;"><i
                                                             class="mdi mdi-reply"></i>&nbsp; Cevapla</a>
-                                                    {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                    {% if comment.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                         <a onclick="edit_{{ comment.commentNumber }}()"
                                                            class="btn btn-success btn-sm"
                                                            style="color: #ffffff !important;">
