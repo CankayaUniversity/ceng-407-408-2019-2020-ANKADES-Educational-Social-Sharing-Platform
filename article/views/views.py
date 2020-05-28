@@ -498,8 +498,10 @@ class ArticleLikeToggle(RedirectView):
             if user.is_authenticated:
                 if user in obj.likes.all():
                     obj.likes.remove(user)
+                    messages.success(self, "Makale beğenisi başarıyla kaldırıldı.")
                 else:
                     obj.likes.add(user)
+                    messages.success(self, "Makale başarıyla beğenildi")
             return url_
         except:
             return redirect("404")
