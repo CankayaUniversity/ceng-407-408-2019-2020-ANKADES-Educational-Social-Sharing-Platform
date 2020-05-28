@@ -168,7 +168,7 @@
                                             {% if instance.creator.bio %}
                                                 {{ instance.creator.bio }}
                                             {% else %}
-                                                Yazar, biyografini henüz paylaşmamış.
+                                                Yazar, biyografisini henüz paylaşmamış.
                                             {% endif %}
                                         </p>
                                         <a href="{% url 'account_detail' instance.creator.username %}"
@@ -241,7 +241,7 @@
                                                             </button>
                                                         {% endif %}
                                                     {% endif %}
-                                                    {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                    {% if comment.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                         <a onclick="edit_{{ comment.commentNumber }}()"
                                                            class="btn btn-primary btn-sm"
                                                            style="color: #ffffff !important;">
