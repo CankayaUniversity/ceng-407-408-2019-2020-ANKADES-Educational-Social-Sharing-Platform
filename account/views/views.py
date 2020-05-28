@@ -216,6 +216,15 @@ def register_account(request):
             except ValidationError as e:
                 messages.error(request, "Girilen email adresi uygun değil", e)
                 return redirect("register_account")
+            if len(password) < 6:
+                messages.error(request, "Şifreniz 6 karakterden uzun olmalıdır.")
+                return render(request, "ankacademy/registration/register.html", context)
+            if not any(char.isdigit() for char in password):
+                messages.error(request, "Şifreniz en az 1 harf ve 1 rakam veya özel karakter içermelidir.")
+                return render(request, "ankacademy/registration/register.html", context)
+            if not any(char.isalpha() for char in password):
+                messages.error(request, "Şifreniz en az 1 harf ve 1 rakam veya özel karakter içermelidir.")
+                return render(request, "ankacademy/registration/register.html", context)
             if password and confirm_password and password != confirm_password:
                 messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
                 return render(request, "ankacademy/registration/register.html", context)
