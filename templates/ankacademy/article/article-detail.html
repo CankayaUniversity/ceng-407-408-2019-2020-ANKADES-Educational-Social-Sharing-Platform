@@ -49,6 +49,12 @@
                                     <div class="text-muted"><span
                                             class="text-dark">Paylaşım Tarihi: {{ instance.createdDate|date:"d M Y" }}</span>
                                     </div>
+                                    {% if request.user.is_authenticated %}
+                                        <a type="button" data-href='{{ instance.get_api_like_url }}'
+                                           data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'
+                                           class="btn btn-primary btn-md mt-2"><i class="far fa-thumbs-up"></i> Beğen
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="mt-5">
