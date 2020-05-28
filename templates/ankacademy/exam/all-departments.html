@@ -43,5 +43,35 @@
                     <p>Henüz okula ait bölümler sisteme kayıt edilmemiş.</p>
                 </div>
             {% endif %}
+            {% if departments.has_other_pages %}
+                    <div class="mt-5 mb-5">
+                        <ul class="pagination pagination-split justify-content-end">
+                            {% if departments.has_previous %}
+                                <li class="page-item">
+                                    <a href="{% if category %}?c={{ category }}&page={{ departments.previous_page_number }}{% elif sub %}?s={{ sub }}&page{{ departments.previous_page_number }}{% elif lower %}?l={{ lower }}&page={{ departments.previous_page_number }}{% else %}?page={{ departments.previous_page_number }}{% endif %}"
+                                       class="page-link">
+                                        <i class="fa fa-angle-left"></i></a>
+                                </li>
+                            {% endif %}
+                            {% for i in departments.paginator.page_range %}
+                                {% if departments.number == i %}
+                                    <li class="page-item active">
+                                        <a href="{% if category %}?c={{ category }}&page={{ i }}{% elif sub %}?s={{ sub }}&page{{ i }}{% elif lower %}?l={{ lower }}&page={{ i }}{% else %}?page={{ i }}{% endif %}" class="page-link">{{ i }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a href="{% if category %}?c={{ category }}&page={{ i }}{% elif sub %}?s={{ sub }}&page{{ i }}{% elif lower %}?l={{ lower }}&page={{ i }}{% else %}?page={{ i }}{% endif %}" class="page-link">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if departments.has_next %}
+                                <li class="page-item">
+                                    <a href="{% if category %}?c={{ category }}&page={{ departments.next_page_number }}{% elif sub %}?s={{ sub }}&page{{ departments.next_page_number }}{% elif lower %}?l={{ lower }}&page={{ departments.next_page_number }}{% else %}?page={{ departments.next_page_number }}{% endif %}" class="page-link"><i
+                                            class="fa fa-angle-right"></i></a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
         </div>
 {% endblock %}
