@@ -156,31 +156,36 @@
                             <p>Henüz bir soru paylaşılmamış.</p>
                         </div>
                     {% endif %}
-                <div class="mt-5">
-                    <ul class="pagination pagination-split justify-content-end">
-                        <li class="page-item disabled">
-                            <a href="#" class="page-link"><i class="fa fa-angle-left"></i></a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link">1</a>
-                        </li>
-                        <li class="page-item active">
-                            <a href="#" class="page-link">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link">4</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link">5</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link"><i class="fa fa-angle-right"></i></a>
-                        </li>
-                    </ul>
-                </div>
+                 {% if questions.has_other_pages %}
+                    <div>
+                        <ul class="pagination pagination-split justify-content-end">
+                            {% if questions.has_previous %}
+                                <li class="page-item">
+                                    <a href="{% if category %}?c={{ category }}&page={{ questions.previous_page_number }}{% elif sub %}?s={{ sub }}&page{{ questions.previous_page_number }}{% elif lower %}?l={{ lower }}&page={{ questions.previous_page_number }}{% else %}?page={{ questions.previous_page_number }}{% endif %}"
+                                       class="page-link">
+                                        <i class="fa fa-angle-left"></i></a>
+                                </li>
+                            {% endif %}
+                            {% for i in questions.paginator.page_range %}
+                                {% if questions.number == i %}
+                                    <li class="page-item active">
+                                        <a href="{% if category %}?c={{ category }}&page={{ i }}{% elif sub %}?s={{ sub }}&page{{ i }}{% elif lower %}?l={{ lower }}&page={{ i }}{% else %}?page={{ i }}{% endif %}" class="page-link">{{ i }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a href="{% if category %}?c={{ category }}&page={{ i }}{% elif sub %}?s={{ sub }}&page{{ i }}{% elif lower %}?l={{ lower }}&page={{ i }}{% else %}?page={{ i }}{% endif %}" class="page-link">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if questions.has_next %}
+                                <li class="page-item">
+                                    <a href="{% if category %}?c={{ category }}&page={{ questions.next_page_number }}{% elif sub %}?s={{ sub }}&page{{ questions.next_page_number }}{% elif lower %}?l={{ lower }}&page={{ questions.next_page_number }}{% else %}?page={{ questions.next_page_number }}{% endif %}" class="page-link"><i
+                                            class="fa fa-angle-right"></i></a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
