@@ -25,7 +25,7 @@
                             <div class="card blog-post bg-transparent">
                                 <div class="post-image">
                                     <img src="{{ instance.media.url }}" alt="{{ instance.title }}"
-                                         style="width: 100% !important;"
+                                         style="width: 100% !important; max-height: 500px !important;"
                                          class="img-fluid mx-auto d-block rounded-top">
                                 </div>
                                 <div class="card-body">
@@ -97,12 +97,11 @@
                                                     <h5 class="font-18 media-heading mt-0">{{ comment.creator.get_full_name }}</h5>
                                                     <h6 class="text-muted">{{ comment.createdDate }}</h6>
                                                     <p>{{ comment.content }}</p>
-
                                                     <a onclick="reply_{{ comment.commentNumber }}()" type="button"
                                                        class="btn btn-sm btn-info text-success"
                                                        style="color: #ffffff !important;"><i
                                                             class="mdi mdi-reply"></i>&nbsp; Cevapla</a>
-                                                    {% if comment.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                    {% if comment.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                         <a onclick="edit_{{ comment.commentNumber }}()"
                                                            class="btn btn-success btn-sm"
                                                            style="color: #ffffff !important;">

@@ -123,7 +123,9 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">Onaylanmış Cevap:</th>
-                                            <td><span class="label label-danger">{{ certifiedAnswersCount.count }}</span></td>
+                                            <td><span
+                                                    class="label label-danger">{{ certifiedAnswersCount.count }}</span>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -195,8 +197,11 @@
                                                         <span class="arrow"></span>
                                                         <span class="timeline-icon"><i
                                                                 class="mdi mdi-checkbox-blank-circle-outline"></i></span>
-                                                        <h4 class=""><b><a href="{% url 'account_detail' certifiedAnswer.creator.username %}">{{ certifiedAnswer.creator.get_full_name }}</b></a></h4>
-                                                        <p class="timeline-date text-muted"><small>{{ certifiedAnswer.createdDate }}</small></p>
+                                                        <h4 class=""><b><a
+                                                                href="{% url 'account_detail' certifiedAnswer.creator.username %}">{{ certifiedAnswer.creator.get_full_name }}
+                                                        </b></a></h4>
+                                                        <p class="timeline-date text-muted">
+                                                            <small>{{ certifiedAnswer.createdDate }}</small></p>
                                                         <p class="mb-0">{{ certifiedAnswer.content|safe }}</p>
                                                     </div>
                                                 </div>
@@ -210,7 +215,8 @@
                                     <ul class="media-list pl-0">
                                         {% for comment in questionAnswers %}
                                             <li class="media">
-                                                <a class="mr-2" href="#">
+                                                <a class="mr-2"
+                                                   href="{% url 'account_detail' comment.creator.username %}">
                                                     <img class="media-object rounded-circle"
                                                          src="{{ comment.creator.image.url }}"
                                                          style="max-width: 64px !important; max-height: 64px !important;"
@@ -220,30 +226,13 @@
                                                     <h5 class="font-18 media-heading mt-0">{{ comment.creator.get_full_name }}</h5>
                                                     <h6 class="text-muted">{{ comment.createdDate }}</h6>
                                                     <p>{{ comment.content }}</p>
-
-                                                    <a onclick="reply_{{ comment.commentNumber }}()" type="button"
+                                                    <a onclick="reply_{{ comment.answerNumber }}()" type="button"
                                                        class="btn btn-sm btn-info text-success"
                                                        style="color: #ffffff !important;"><i
                                                             class="mdi mdi-reply"></i>&nbsp; Cevapla</a>
-                                                    {% if instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
-                                                        {% if comment.questionId.isSolved == False and comment.isCertified == False %}
-                                                            <a href="{% url 'confirm_answer' comment.answerNumber %}"
-                                                               class="btn btn-success btn-sm">
-                                                                <i class="fas fa-check"></i> Onayla
-                                                            </a>
-                                                        {% endif %}
-                                                        {% if comment.isCertified %}
-                                                            <button class="btn btn-success btn-sm">
-                                                                <a style="color: #ffffff !important;"
-                                                                   href="{% url 'confirm_answer' comment.answerNumber %}">
-                                                                    <i class="fas fa-window-close"></i> Onayı Kaldır
-                                                                </a>
-                                                            </button>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                    {% if comment.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
-                                                        <a onclick="edit_{{ comment.commentNumber }}()"
-                                                           class="btn btn-primary btn-sm"
+                                                    {% if comment.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                        <a onclick="edit_{{ comment.answerNumber }}()"
+                                                           class="btn btn-success btn-sm"
                                                            style="color: #ffffff !important;">
                                                             <i class="fas fa-pencil-alt"></i>
                                                             Düzenle
@@ -253,6 +242,15 @@
                                                             <i class="fas fa-trash"></i>
                                                             Sil
                                                         </a>
+                                                    {% endif %}
+                                                    {% if instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" or userGroup == 'ogretmen' %}
+                                                        {% if comment.isCertified %}
+                                                            <a href="{% url 'confirm_answer' comment.answerNumber %}"
+                                                           class="btn btn-warning btn-sm">
+                                                            <i class="fas fa-check"></i>
+                                                            Onayı Kaldır
+                                                        </a>
+                                                        {% endif %}
                                                     {% endif %}
                                                     {# Edit Comment #}
                                                     <div class="media sub_media">
@@ -307,7 +305,7 @@
                                                         </div>
                                                     </div>
                                                     <script>
-                                                        function reply_{{ comment.commentNumber }}() {
+                                                        function reply_{{ comment.answerNumber }}() {
                                                             let open = document.getElementById("{{ forloop.counter }}comment");
                                                             if (open.style.display === "none") {
                                                                 open.style.display = "block";
@@ -316,7 +314,7 @@
                                                             }
                                                         }
 
-                                                        function edit_{{ comment.commentNumber }}() {
+                                                        function edit_{{ comment.answerNumber }}() {
                                                             let open = document.getElementById("edit_{{ forloop.counter }}comment");
                                                             if (open.style.display === "none") {
                                                                 open.style.display = "block";
@@ -340,14 +338,14 @@
                                                                         <h5 class="font-18 media-heading mt-0">{{ reply.creator.get_full_name }}</h5>
                                                                         <h6 class="text-muted">{{ reply.createdDate }}</h6>
                                                                         <p>{{ reply.content }}</p>
-                                                                        {% if reply.creator == request.user or instance.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
+                                                                        {% if reply.creator == request.user or userGroup == "admin" or userGroup == "moderator" %}
                                                                             <a onclick="edit_reply_{{ reply.answerNumber }}()"
                                                                                class="btn btn-success btn-sm"
                                                                                style="color: #ffffff !important;">
                                                                                 <i class="fas fa-pencil-alt"></i>
                                                                                 Düzenle
                                                                             </a>
-                                                                            <a href="{% url 'delete_article_comment' reply.answerNumber %}"
+                                                                            <a href="{% url 'delete_question_answer' reply.answerNumber %}"
                                                                                class="btn btn-danger btn-sm"><i
                                                                                     class="fas fa-trash"></i> Sil</a>
                                                                         {% endif %}
@@ -359,7 +357,7 @@
                                                                     <div class="media-body">
                                                                         <form method="post"
                                                                               class="comment-form p-3"
-                                                                              action="{% url 'edit_article_comment' reply.answerNumber %}">
+                                                                              action="{% url 'edit_question_answer' reply.answerNumber %}">
                                                                             {% csrf_token %}
                                                                             <p class="comment-form-comment form-group has-placeholder">
                                                                                 <label>Yorum Düzenle</label>
@@ -384,7 +382,7 @@
                                                                 </div>
                                                                 <hr/>
                                                                 <script>
-                                                                    function edit_reply_{{ reply.commentNumber }}() {
+                                                                    function edit_reply_{{ reply.answerNumber }}() {
                                                                         let open = document.getElementById("edit_{{ forloop.counter }}reply");
                                                                         if (open.style.display === "none") {
                                                                             open.style.display = "block";
@@ -401,13 +399,16 @@
                                         {% endfor %}
                                     </ul>
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
+
                                     <form method="post" class="comment-form"
-                                          action="{% url 'add_question_answer' instance.slug instance.postNumber %}">
+                                          action="{% url 'add_article_comment' slug=instance.slug %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                         <textarea class="form-control" id="content" name="content" rows="5"
                                                   placeholder="Mesajınız" required=""></textarea>
                                         </div>
+                                        <!-- /Form Msg -->
+
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="">
@@ -415,16 +416,19 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <!-- /col -->
                                         </div>
+                                        <!-- /row -->
+
                                     </form>
                                 {% else %}
                                     <div class="alert alert-danger col-lg-12 col-sm-12 col-xs-12 col-md-12"
                                          role="alert">
-                                        <p>Sorunun henüz bir cevabı bulunmuyor.</p>
+                                        <p>Makalenin henüz yorumu bulunmuyor.</p>
                                     </div>
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
                                     <form method="post" class="comment-form"
-                                          action="{% url 'add_question_answer' instance.slug instance.postNumber %}">
+                                          action="{% url 'add_article_comment' slug=instance.slug %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                         <textarea class="form-control" id="content" name="content" rows="5"
