@@ -364,6 +364,7 @@
                                             <th>Dönem</th>
                                             <th>Oluşturulma</th>
                                             <th>Son Güncelleme</th>
+                                            <th>Düzenle</th>
                                             <th>Sil</th>
                                         </tr>
                                         </thead>
@@ -376,6 +377,11 @@
                                                 <td>{{ exam.createdDate }}</td>
                                                 <td>{% if exam.updatedDate %}{{ exam.updatedDate }}{% else %}
                                                     Güncellenmemiş{% endif %}</td>
+                                                <td>
+                                                    <a href="{% url 'edit_exam' exam.examNumber %}" type="button" class="btn btn-success">
+                                                        Güncelle
+                                                    </a>
+                                                </td>
                                                 <td>
                                                     <button type="button" class="btn btn-md btn-danger"
                                                             data-toggle="modal"

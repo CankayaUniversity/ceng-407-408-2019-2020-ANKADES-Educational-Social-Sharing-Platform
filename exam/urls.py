@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^bolum/(?P<departmentCode>[\w-]+)/dersler/$', lecture.lectures, name="lectures"),
     url(r'^ders/(?P<postNumber>[\w-]+)/sinavlar/$', exam.lecture_exam, name="lecture_exam"),
     url(r'^sinav/(?P<examNumber>[\w-]+)/sil/$', exam.delete_exam, name="delete_exam"),
+    url(r'^sinav/(?P<examNumber>[\w-]+)/duzenle/$', exam.edit_exam, name="edit_exam"),
     path('bolum-ekle/', department.add_department, name="add_department"),
     path('ders-ekle/', lecture.add_lecture, name="add_lecture"),
     path('sinav-ekle/', exam.add_exam, name="add_exam"),

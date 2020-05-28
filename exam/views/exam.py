@@ -16,7 +16,6 @@ def add_exam(request):
     :param request:
     :return:
     """
-    categories = Categories.all_categories()
     userGroup = current_user_group(request, request.user)
     if userGroup == "moderator" or userGroup == "admin" or userGroup == "ogretmen":
         schools = School.objects.filter(isActive=True).order_by('slug')
@@ -65,15 +64,6 @@ def add_exam(request):
             context = {
                 "userGroup": userGroup,
                 "schools": schools,
-                "articleCategories": categories[0],
-                "articleSubCategories": categories[1],
-                "articleLowerCategories": categories[2],
-                "questionCategories": categories[3],
-                "questionSubCategories": categories[4],
-                "questionLowerCategories": categories[5],
-                "courseCategories": categories[6],
-                "courseSubCategories": categories[7],
-                "courseLowerCategories": categories[8],
             }
             return render(request, "ankacademy/exam/add-exam.html", context)
     else:
@@ -116,6 +106,68 @@ def delete_exam(request, examNumber):
                 instance.save()
                 messages.success(request, "Sınav başarıyla silindi.")
                 return redirect("my_posts")
+        else:
+            return redirect("401")
+    except:
+        return redirect("404")
+
+
+@login_required(login_url="login_account")
+def edit_exam(request, examNumber):
+    """
+    :param request:
+    :param examNumber:
+    """
+    userGroup = current_user_group(request, request.user)
+    try:
+        instance = Exam.objects.get(examNumber=examNumber)
+        if userGroup == "moderator" or userGroup == "admin" or userGroup == "ogretmen":
+            schools = School.objects.filter(isActive=True).order_by('slug')
+            getSchool = request.GET.get("school")
+            if getSchool:
+                selectedSchool = School.objects.get(slug=getSchool)
+                departments = Department.objects.filter(schoolId__slug=getSchool, isActive=True)
+                lectures = Lecture.objects.filter(departmentId__schoolId__slug=getSchool)
+                terms = Term.objects.all()
+                if request.method == 'POST':
+                    title = request.POST.get('title')
+                    term = request.POST.get('term')
+                    owner = request.POST.get('owner')
+                    getExamDate = request.POST.get('examDate')
+                    ownerEmail = request.POST.get('ownerEmail')
+                    lecture = request.POST['lecture']
+                    if request.FILES:
+                        media = request.FILES.get('media')
+                        instance.media = media
+                    instance.title = title
+                    instance.termId_id = term
+                    instance.owner = owner
+                    instance.ownerEmail = ownerEmail
+                    instance.examDate = getExamDate
+                    instance.lectureId_id = lecture
+                    instance.updatedDate = datetime.datetime.now()
+                    instance.isActive = True
+                    instance.checked = True
+                    instance.save()
+                    messages.success(request, "Başarıyla sınav güncellendi.")
+                    return redirect("my_posts")
+                context = {
+                    "userGroup": userGroup,
+                    "getSchool": getSchool,
+                    "selectedSchool": selectedSchool,
+                    "terms": terms,
+                    "lectures": lectures,
+                    "departments": departments,
+                    "instance": instance,
+                }
+                return render(request, "ankacademy/account/post/edit-exam.html", context)
+            else:
+                context = {
+                    "userGroup": userGroup,
+                    "instance": instance,
+                    "schools": schools,
+                }
+                return render(request, "ankacademy/account/post/edit-exam.html", context)
         else:
             return redirect("401")
     except:
