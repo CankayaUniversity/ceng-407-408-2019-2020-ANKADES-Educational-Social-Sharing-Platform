@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="">
                     <h5 class="text-uppercase mb-4 mt-0">Kategoriler</h5>
                     {% if category %}
@@ -115,7 +115,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <div class="row">
                     {% if articles %}
                         {% for article in articles %}
@@ -173,7 +173,7 @@
                         </div>
                     {% endif %}
                 {% if articles.has_other_pages %}
-                    <div>
+                    <div class="mt-5 mb-5">
                         <ul class="pagination pagination-split justify-content-end">
                             {% if articles.has_previous %}
                                 <li class="page-item">

@@ -71,7 +71,7 @@ def all_articles(request):
             articleCat.append(cat.catNumber)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=articleCat)
         page = request.GET.get('page', 1)
-        paginator = Paginator(articles, 2)
+        paginator = Paginator(articles, 9)
         try:
             articles = paginator.page(page)
         except PageNotAnInteger:
@@ -97,7 +97,7 @@ def all_articles(request):
             getLowCategory.append(getLower.catNumber)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
         page = request.GET.get('page', 1)
-        paginator = Paginator(articles, 5)
+        paginator = Paginator(articles, 9)
         try:
             articles = paginator.page(page)
         except PageNotAnInteger:
@@ -121,7 +121,7 @@ def all_articles(request):
         lowCat = ArticleCategory.objects.filter(catNumber=lower)
         articles = Article.objects.filter(isActive=True, categoryId__catNumber=lower)
         page = request.GET.get('page', 1)
-        paginator = Paginator(articles, 5)
+        paginator = Paginator(articles, 9)
         try:
             articles = paginator.page(page)
         except PageNotAnInteger:
