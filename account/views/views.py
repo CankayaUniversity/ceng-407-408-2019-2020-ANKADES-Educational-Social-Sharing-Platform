@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.validators import validate_email
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -51,7 +53,8 @@ def index(request):
         "followers": followers,
         "followings": followings,
     }
-    return render(request, "ankacademy/article/all-articles.html", context)
+    # return render(request, "ankacademy/article/all-articles.html", context)
+    return redirect("all_articles")
 
 
 def account_detail(request, username):
@@ -208,6 +211,11 @@ def register_account(request):
                 "username": username,
                 "email": email,
             }
+            try:
+                validate_email(email)
+            except ValidationError as e:
+                messages.error(request, "Girilen email adresi uygun değil", e)
+                return redirect("register_account")
             if password and confirm_password and password != confirm_password:
                 messages.error(request, "Şifreler uyuşmuyor. Lütfen tekrar deneyin.")
                 return render(request, "ankacademy/registration/register.html", context)

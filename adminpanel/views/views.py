@@ -13,7 +13,7 @@ from ankadescankaya.views.views import current_user_group
 from adminpanel.models import Tag, SiteSettings
 from article.models import Article
 from course.models import Course
-from exam.models import Exam
+from exam.models import Exam, School, Department
 from question.models import Question
 
 
@@ -31,6 +31,8 @@ def admin_dashboard(request):
     questionCount = Question.objects.all().count()
     courseCount = Course.objects.all().count()
     examCount = Exam.objects.all().count()
+    schoolCount = School.objects.all().count()
+    departmentCount = Department.objects.all().count()
     sum = articleCount + courseCount + questionCount
     context = {
         "userGroup": userGroup,
@@ -39,6 +41,8 @@ def admin_dashboard(request):
         "questionCount": questionCount,
         "courseCount": courseCount,
         "examCount": examCount,
+        "schoolCount": schoolCount,
+        "departmentCount": departmentCount,
         "sum": sum,
         "user_activity_objects": user_activity_objects,
         "number_of_active_users": number_of_active_users,
