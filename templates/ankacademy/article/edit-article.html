@@ -1,0 +1,164 @@
+{% extends 'ankacademy/layout/layout.html' %}
+{% load static %}
+{% block meta %}Ankacademy{% endblock %}
+{% block title %}{{ instance.title|truncatewords:5 }} | Ankacademy{% endblock %}
+{% block content %}
+    <style>
+        .wizard > .content > .body label {
+            margin-top: 0px !important;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Ankacademy</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">Makale Düzenle</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">{{ instance.title|truncatechars:30 }}</a></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Makale Düzenle</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <h4 class="header-title">Makale Düzenle</h4>
+                    <p class="sub-header">
+                        Makale düzenle için lütfen aşağıdaki gerekli alanları doldurunuz.
+                    </p>
+                    <form id="wizard-validation-form" role="form" method="post" action="{% url 'edit_article' %}">
+                        {% csrf_token %}
+                        <div>
+                            <h3>1. Adım</h3>
+                            <section>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label " for="category">Kategori *</label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control select2" name="category" required id="category">
+                                            <option disabled>Lütfen bir kategori seçiniz</option>
+                                            {% for sub in articleSubCategories %}
+                                                <option selected value="{{instance.categoryId.id}}">{{instance.categoryId.title}}</option>
+                                                <optgroup label="{{ sub.title }}">
+                                                    {% for lower in articleLowerCategories %}
+                                                        {% if lower.parentId.catNumber == sub.catNumber %}
+                                                            <option value="{{ lower.id }}">{{ lower.title }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label " for="title"> Başlık *</label>
+                                    <div class="col-lg-10">
+                                        <input id="title" name="title" value="{{ instance.title }}" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label" for="media">Makale Resmi</label>
+                                    <div class="col-lg-10">
+                                        <div class="form-group">
+                                            <input type="file" class="filestyle" name="media" data-text="Dosya Seçin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label" for="textarea">Ön Yazı</label>
+                                    <div class="col-lg-10">
+                                        <div class="form-group">
+                                            <p class="sub-header">
+                                                Makalenizi tanıtacak (Giriş), maximum 1000 karakterde metin girebilirsiniz.
+                                            </p>
+                                            <textarea id="textarea" class="form-control" name="introduction"
+                                                      maxlength="1000" rows="3"
+                                                      placeholder="Maximum 1000 karakter"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <h3>2. Adım</h3>
+                            <section>
+                                <div class="alert alert-info" role="alert">
+                                    Eğer tüm makale paylaşılmayacaksa, bir sonraki adıma geçebilirsiniz.
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label">Makale: </label>
+                                    <div class="col-lg-10">
+                                        {{ form.description }}
+                                    </div>
+                                </div>
+                            </section>
+                            <h3>3. Adım</h3>
+                            <section>
+                                <div class="alert alert-info" role="alert">
+                                    Eğer tüm makale paylaşıldıysa, bu alanı atlayabilirsiniz.
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 control-label">Makale (Abstract): </label>
+                                    <div class="col-lg-10">
+                                        {{ form.abstract }}
+                                    </div>
+                                </div>
+                            </section>
+                            <h3>Son</h3>
+                            <section>
+                                <div class="form-group row">
+                                    <label for="owner" class="col-lg-2 control-label">Makale Sahibinin Tam Adı: </label>
+                                    <div class="col-lg-10">
+                                        <input id="owner" name="owner" value="{{ instance.owner }}" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="textarea" class="col-lg-2 control-label">Makale Sahibi İletişim Bilgileri: </label>
+                                    <div class="col-lg-10">
+                                        <textarea id="textarea" name="contact" maxlength="100" type="text" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="resource" class="col-lg-2 control-label">Referans (URL): </label>
+                                    <div class="col-lg-10">
+                                        <input id="resource" name="resource" value="{{ instance.resource }}" type="text" class="form-control"
+                                               placeholder="https://ankacademy.com/">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="checkbox checkbox-danger">
+                                            <input id="checkbox-v" type="checkbox" name="isPrivate" {% if instance.isPrivate %}checked{% endif %}>
+                                            <label for="checkbox-v">Bu seçeneği işaretlerseniz, makalenizin tümünü
+                                                yayınlasanız bile, sadece ön yazı
+                                                (abstract) kullanıcılara gözükecektir.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="checkbox-v" type="checkbox" checked required disabled>
+                                            <label for="checkbox-v"> <a href="{% url 'terms_of_use' %}">Kullanım
+                                                Koşulları</a>nı ve <a href="{% url 'privacy_policy' %}">Gizlilik
+                                                Politikası</a>nı okudum ve kabul ediyorum. </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'ankacademy/js/pages/submit-wizard.js' %}"></script>
+    <script src="{% static 'ankacademy/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js' %}"></script>
+{% endblock %}
