@@ -89,7 +89,6 @@
                                     {% endfor %}
                                 </select>
                             </div>
-
                             <button type="submit" class="btn btn-purple waves-effect waves-light"><i
                                     class="mdi mdi-magnify mr-1"></i>Ara
                             </button>
@@ -99,7 +98,7 @@
                         <form method="get">
                             <div class="form-group">
                                 <select class="form-control select2" name="c">
-                                    <option>Birini Seçiniz</option>
+                                    <option disabled>Birini Seçiniz</option>
                                     {% for topCat in topCategories %}
                                         {% if topCat.slug != 'home' %}
                                             <option value="{{ topCat.catNumber }}">
@@ -109,7 +108,6 @@
                                     {% endfor %}
                                 </select>
                             </div>
-
                             <button type="submit" class="btn btn-purple waves-effect waves-light"><i
                                     class="mdi mdi-magnify mr-1"></i>Ara
                             </button>
@@ -157,7 +155,7 @@
                         </div>
                     {% endif %}
                  {% if questions.has_other_pages %}
-                    <div>
+                    <div class="mt-5 mb-5">
                         <ul class="pagination pagination-split justify-content-end">
                             {% if questions.has_previous %}
                                 <li class="page-item">

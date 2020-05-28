@@ -61,24 +61,40 @@ def all_questions(request):
     :return:
     """
     userGroup = current_user_group(request, request.user)
-    questionComment = QuestionComment.objects.filter(isActive=True)
-    questions = Question.objects.filter(isActive=True)
-    category = request.GET.getlist('c')
-    sub = request.GET.getlist('s')
-    lower = request.GET.getlist('l')
+    categories = Categories.all_categories()
+    category = request.GET.get('c')
+    sub = request.GET.get('s')
+    lower = request.GET.get('l')
     getLowCategory = []
     questionCat = []
     topCategories = QuestionCategoryView.getTopCategory(request)
+    questionComment = QuestionComment.objects.filter(isActive=True)
+    questions = Question.objects.filter(isActive=True)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(questions, 10)
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)
     if category:
-        top = QuestionCategory.objects.filter(catNumber__in=category)
-        sub = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=category)
+        top = QuestionCategory.objects.filter(catNumber=category)
+        sub = QuestionCategory.objects.filter(isActive=True, parentId__catNumber=category)
         for getLower in sub:
             getLowCategory.append(getLower.catNumber)
         lower = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=getLowCategory)
         for cat in lower:
             questionCat.append(cat.catNumber)
         questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=questionCat)
-        # TODO Paginator
+        page = request.GET.get('page', 1)
+        paginator = Paginator(questions, 10)
+        try:
+            questions = paginator.page(page)
+        except PageNotAnInteger:
+            questions = paginator.page(1)
+        except EmptyPage:
+            questions = paginator.page(paginator.num_pages)
         context = {
             "userGroup": userGroup,
             "questionComment": questionComment,
@@ -86,14 +102,25 @@ def all_questions(request):
             "sub": sub,
             "top": top,
             "questions": questions,
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
         }
         return render(request, "ankacademy/question/all-questions.html", context)
     if sub:
-        subCat = QuestionCategory.objects.filter(catNumber__in=sub)
-        low = QuestionCategory.objects.filter(isActive=True, parentId__catNumber__in=sub)
+        subCat = QuestionCategory.objects.filter(catNumber=sub)
+        low = QuestionCategory.objects.filter(isActive=True, parentId__catNumber=sub)
         for getLower in low:
             getLowCategory.append(getLower.catNumber)
         questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=getLowCategory)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(questions, 10)
+        try:
+            questions = paginator.page(page)
+        except PageNotAnInteger:
+            questions = paginator.page(1)
+        except EmptyPage:
+            questions = paginator.page(paginator.num_pages)
         context = {
             "userGroup": userGroup,
             "questionComment": questionComment,
@@ -102,17 +129,31 @@ def all_questions(request):
             "subCat": subCat,
             "sub": sub,
             "questions": questions,
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
         }
         return render(request, "ankacademy/question/all-questions.html", context)
     if lower:
-        lowCat = QuestionCategory.objects.filter(catNumber__in=lower)
-        questions = Question.objects.filter(isActive=True, categoryId__catNumber__in=lower)
+        lowCat = QuestionCategory.objects.filter(catNumber=lower)
+        questions = QuestionCategory.objects.filter(isActive=True, categoryId__catNumber=lower)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(questions, 10)
+        try:
+            questions = paginator.page(page)
+        except PageNotAnInteger:
+            questions = paginator.page(1)
+        except EmptyPage:
+            questions = paginator.page(paginator.num_pages)
         context = {
             "userGroup": userGroup,
             "questionComment": questionComment,
             "lowCat": lowCat,
             "lower": lower,
             "questions": questions,
+            "questionCategories": categories[3],
+            "questionSubCategories": categories[4],
+            "questionLowerCategories": categories[5],
         }
         return render(request, "ankacademy/question/all-questions.html", context)
     context = {
@@ -121,6 +162,9 @@ def all_questions(request):
         "category": category,
         "questions": questions,
         "questionComment": questionComment,
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
     }
     return render(request, "ankacademy/question/all-questions.html", context)
 
@@ -278,8 +322,7 @@ def edit_question(request, postNumber):
             return redirect(reverse("question_detail",
                                     kwargs={"slug": instance.slug, "postNumber": instance.postNumber}))
     else:
-        messages.error(request, "Bu soru size ait değil !")
-        return redirect("index")
+        return redirect("401")
     context = {
         "userGroup": userGroup,
         "instance": instance,
@@ -380,13 +423,16 @@ def delete_question(request, slug):
     :param slug:
     :return:
     """
-    userGroup = current_user_group(request, request.user)
     try:
         instance = Question.objects.get(slug=slug)
-        if instance.isActive and instance.creator is request.user:
-            instance.isActive = False
-            instance.save()
-        return redirect("all_questions")
+        if instance.creator is request.user:
+            if instance.isActive:
+                instance.isActive = False
+                instance.save()
+                messages.success(request, "Soru başarıyla silindi.")
+                return redirect("all_questions")
+        else:
+            return redirect("401")
     except:
         return redirect("404")
 
@@ -549,7 +595,6 @@ class QuestionLikeCommentToggle(RedirectView):
 class QuestionCategoryView(DetailView):
 
     @staticmethod
-    @login_required(login_url="login_admin")
     def getTopCategory(request):
         """
         :param request:
@@ -559,7 +604,6 @@ class QuestionCategoryView(DetailView):
         return topCategory
 
     @staticmethod
-    @login_required(login_url="login_admin")
     def getSubCategory(request, catNumber):
         """
         :param request:
@@ -571,7 +615,6 @@ class QuestionCategoryView(DetailView):
         return subCategory
 
     @staticmethod
-    @login_required(login_url="login_admin")
     def getLowCategory(request, catNumber):
         """
         :param request:
