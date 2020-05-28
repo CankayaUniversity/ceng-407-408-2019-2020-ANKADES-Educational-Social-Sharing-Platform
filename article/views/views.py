@@ -54,7 +54,7 @@ def all_articles(request):
     articleComment = ArticleComment.objects.filter(isActive=True)
     articles = Article.objects.filter(isActive=True)
     page = request.GET.get('page', 1)
-    paginator = Paginator(articles, 2)
+    paginator = Paginator(articles, 9)
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
@@ -78,7 +78,6 @@ def all_articles(request):
             articles = paginator.page(1)
         except EmptyPage:
             articles = paginator.page(paginator.num_pages)
-        # TODO Paginator
         context = {
             "userGroup": userGroup,
             "articleComment": articleComment,
