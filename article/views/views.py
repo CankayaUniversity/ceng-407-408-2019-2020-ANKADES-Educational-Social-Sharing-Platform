@@ -61,7 +61,6 @@ def all_articles(request):
         articles = paginator.page(1)
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
-    # TODO Paginator
     if category:
         top = ArticleCategory.objects.filter(catNumber=category)
         sub = ArticleCategory.objects.filter(isActive=True, parentId__catNumber=category)

@@ -51,4 +51,4 @@ def my_posts(request):
         "followings": followings,
         "existFollower": existFollower,
     }
-    return render(request, "ankades/account/posts/my-posts.html", context)
+    return render(request, "ankacademy/account/post/my-posts.html", context)

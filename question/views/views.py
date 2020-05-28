@@ -249,53 +249,46 @@ def confirm_answer(request, answerNumber):
 
 
 @login_required(login_url="login_account")
-def edit_question(request, slug, postNumber):
+def edit_question(request, postNumber):
     """
     :param request:
-    :param slug:
     :param postNumber:
     :return:
     """
+    try:
+        instance = Question.objects.get(postNumber=postNumber)
+    except:
+        return redirect("404")
     userGroup = current_user_group(request, request.user)
     categories = Categories.all_categories()
-    try:
-        instance = Question.objects.get(postNumber=postNumber, slug=slug)
-        form = EditQuestionForm(request.POST or None, instance=instance)
-        if instance.creator == request.user:
-            if request.method == "POST":
-                instance = form.save(commit=False)
-                value = request.POST['value']
-                title = request.POST.get('title')
-                if form.is_valid():
-                    description = form.cleaned_data.get("description")
-                instance.categoryId_id = value
-                instance.title = title
-                instance.description = description
-                instance.updatedDate = datetime.datetime.now()
-                instance.save()
-                messages.success(request, "Sorunuz başarıyla güncellendi")
-                return redirect(reverse("question_detail",
-                                        kwargs={"slug": instance.slug, "postNumber": instance.postNumber}))
-        else:
-            messages.error(request, "Bu soru size ait değil !")
-            return redirect("index")
-        context = {
-            "userGroup": userGroup,
-            "instance": instance,
-            "form": form,
-            "articleCategories": categories[0],
-            "articleSubCategories": categories[1],
-            "articleLowerCategories": categories[2],
-            "questionCategories": categories[3],
-            "questionSubCategories": categories[4],
-            "questionLowerCategories": categories[5],
-            "courseCategories": categories[6],
-            "courseSubCategories": categories[7],
-            "courseLowerCategories": categories[8],
-        }
-        return render(request, "ankacademy/account/post/edit-question.html", context)
-    except:
-        return render(request, "404.html")
+    form = EditQuestionForm(request.POST or None, instance=instance)
+    if instance.creator == request.user:
+        if request.method == "POST":
+            instance = form.save(commit=False)
+            value = request.POST['value']
+            title = request.POST.get('title')
+            if form.is_valid():
+                description = form.cleaned_data.get("description")
+            instance.categoryId_id = value
+            instance.title = title
+            instance.description = description
+            instance.updatedDate = datetime.datetime.now()
+            instance.save()
+            messages.success(request, "Sorunuz başarıyla güncellendi")
+            return redirect(reverse("question_detail",
+                                    kwargs={"slug": instance.slug, "postNumber": instance.postNumber}))
+    else:
+        messages.error(request, "Bu soru size ait değil !")
+        return redirect("index")
+    context = {
+        "userGroup": userGroup,
+        "instance": instance,
+        "form": form,
+        "questionCategories": categories[3],
+        "questionSubCategories": categories[4],
+        "questionLowerCategories": categories[5],
+    }
+    return render(request, "ankacademy/account/post/edit-question.html", context)
 
 
 @login_required(login_url="login_account")

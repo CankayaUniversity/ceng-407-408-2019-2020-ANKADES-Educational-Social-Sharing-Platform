@@ -10,7 +10,8 @@
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Ankacademy</a></li>
                             <li class="breadcrumb-item"><a href="javascript: void(0)">Soru Düzenle</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0)">{{ instance.title|truncatechars:30 }}</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="javascript: void(0)">{{ instance.title|truncatechars:30 }}</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Soru Düzenle</h4>
@@ -22,9 +23,10 @@
                 <div class="card-box">
                     <h4 class="header-title">Soru Düzenle</h4>
                     <p class="sub-header">
-                        Soru sormak için, lütfen aşağıdaki alanları doldurunuz.
+                        Soru düzeltmek için, lütfen aşağıdaki alanları doldurunuz.
                     </p>
-                    <form id="wizard-validation-form" role="form" method="post" action="{% url 'edit_question' %}">
+                    <form id="wizard-validation-form" role="form" method="post"
+                          action="{% url 'edit_question' instance.postNumber %}">
                         {% csrf_token %}
                         <div>
                             <h3>1. Adım</h3>
@@ -34,8 +36,11 @@
                                     <div class="col-lg-10">
                                         <select class="form-control select2" name="value" id="value">
                                             <option disabled>Lütfen bir kategori seçiniz</option>
+                                            <optgroup label="{{ instance.categoryId.parentId.title }}">
+                                                <option selected
+                                                        value="{{ instance.categoryId.id }}">{{ instance.categoryId.title }}</option>
+                                            </optgroup>
                                             {% for sub in questionSubCategories %}
-                                                <option selected value="{{instance.categoryId.id}}">{{instance.categoryId.title}}</option>
                                                 <optgroup label="{{ sub.title }}">
                                                     {% for lower in questionLowerCategories %}
                                                         {% if lower.parentId.catNumber == sub.catNumber %}
@@ -50,7 +55,8 @@
                                 <div class="form-group row">
                                     <label class="col-lg-2 control-label " for="title"> Başlık *</label>
                                     <div class="col-lg-10">
-                                        <input id="title" name="title" value="{{ instance.title }}" type="text" class="required form-control">
+                                        <input id="title" name="title" value="{{ instance.title }}" type="text"
+                                               class="required form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row">

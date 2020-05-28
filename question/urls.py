@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/$', views.question_detail, name="question_detail"),
     url(r'^(?P<postNumber>[\w-]+)/sikayet-et/$', views.add_report_question, name="add_report_question"),
     url(r'^cevap/(?P<answerNumber>[\w-]+)/onayla/$', views.confirm_answer, name="confirm_answer"),
-    url(r'^soru/(?P<postNumber>[\w-]+)/duzenle/$', views.edit_question, name="edit_question"),
+    url(r'^soru-duzenle/(?P<postNumber>[\w-]+)/$', views.edit_question, name="edit_question"),
     url(r'^soru-sil/(?P<postNumber>[\w-]+)/sil/$', views.delete_question, name="delete_question"),
     url(r'^soru/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/yorum-yap/$', views.add_question_answer,
         name="add_question_answer"),
