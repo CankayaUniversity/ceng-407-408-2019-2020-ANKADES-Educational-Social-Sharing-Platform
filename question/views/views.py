@@ -262,8 +262,9 @@ def confirm_answer(request, answerNumber):
     """
     try:
         instance = QuestionComment.objects.get(answerNumber=answerNumber)
+        userGroup = current_user_group(request, request.user)
         question = Question.objects.get(postNumber=instance.questionId.postNumber)
-        if instance.questionId.creator.username == request.user.username:
+        if instance.questionId.creator.username == request.user.username or userGroup == 'admin' or userGroup == 'moderator' or userGroup == 'ogretmen':
             if instance.isCertified:
                 instance.isCertified = False
                 question.isSolved = False
