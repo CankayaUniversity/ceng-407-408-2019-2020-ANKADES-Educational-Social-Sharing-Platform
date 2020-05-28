@@ -293,7 +293,7 @@ def edit_question(request, slug, postNumber):
             "courseSubCategories": categories[7],
             "courseLowerCategories": categories[8],
         }
-        return render(request, "ankades/question/edit-question.html", context)
+        return render(request, "ankacademy/account/post/edit-question.html", context)
     except:
         return render(request, "404.html")
 
