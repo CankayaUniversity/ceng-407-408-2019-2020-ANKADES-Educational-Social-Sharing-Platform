@@ -43,6 +43,7 @@ class Course(models.Model):
     creator = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=254)
     slug = models.SlugField(unique=True, max_length=254, allow_unicode=True)
+    # requirements = JSONField()
     description = RichTextField()
     introduction = RichTextField()
     coursePicture = models.FileField(null=True, blank=True, storage=CourseMediaStorage(), default="no-image-available.png")

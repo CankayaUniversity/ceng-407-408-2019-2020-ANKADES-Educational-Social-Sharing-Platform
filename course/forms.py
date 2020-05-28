@@ -3,7 +3,7 @@ from django import forms
 from django.forms import formset_factory, modelformset_factory
 
 from article.models import ArticleComment
-from course.models import CourseLecture, CourseSection
+from course.models import CourseLecture, CourseSection, Course
 
 
 class AddArticleComment(forms.ModelForm):
@@ -15,6 +15,12 @@ class AddArticleComment(forms.ModelForm):
 class CourseForm(forms.Form):
     courseDescription = forms.CharField(widget=CKEditorWidget(), label="Yazı")
     courseIntroduction = forms.CharField(widget=CKEditorWidget(), label="Ön Bilgi")
+
+
+class EditCourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['description', 'introduction']
 
 
 class SectionForm(forms.Form):

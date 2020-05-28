@@ -191,6 +191,7 @@
                                                 <th>Oluşturulma</th>
                                                 <th>Son Güncelleme</th>
                                                 <th>Güncelle</th>
+                                                <th>Sil</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -205,11 +206,44 @@
                                                     <td>{% if article.updatedDate %}{{ article.updatedDate }}{% else %}
                                                         Güncellenmemiş{% endif %}</td>
                                                     <td>
-                                                        <a type="button" class="btn-success btn" href="{% url 'edit_article' article.postNumber  %}">
-                                                            Düzenle
+                                                        <a type="button" class="btn-success btn"
+                                                           href="{% url 'edit_article' article.postNumber %}">
+                                                            Güncelle
                                                         </a>
                                                     </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-md btn-danger"
+                                                                data-toggle="modal"
+                                                                data-target="#article-delete{{ forloop.counter }}">Sil
+                                                        </button>
+                                                    </td>
                                                 </tr>
+                                                <div class="modal fade"
+                                                     id="article-delete{{ forloop.counter }}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">UYARI !</h4>
+                                                                <button type="button" class="close"
+                                                                        data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p class="text-left">Gerçekten "<span
+                                                                        class="text-bold"><b>{{ article.title }}</b></span>"
+                                                                    adlı makalenizi gerçekten silmek istiyor
+                                                                    musunuz?&hellip;</p>
+                                                                <br>
+                                                                <a type="button" class="btn-danger btn"
+                                                                   href="{% url 'delete_article' article.postNumber %}">
+                                                                    Sil
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             {% endfor %}
                                             </tbody>
                                         </table>
@@ -245,6 +279,8 @@
                                             <th>Yorum Sayısı</th>
                                             <th>Oluşturulma</th>
                                             <th>Son Güncelleme</th>
+                                            <th>Düzenle</th>
+                                            <th>Sil</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -258,7 +294,45 @@
                                                 <td>{{ question.createdDate }}</td>
                                                 <td>{% if question.updatedDate %}{{ question.updatedDate }}{% else %}
                                                     Güncellenmemiş{% endif %}</td>
+                                                <td>
+                                                    <a type="button" class="btn-success btn"
+                                                       href="{% url 'edit_question' question.postNumber %}">
+                                                        Güncelle
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-md btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#question-delete{{ forloop.counter }}">Sil
+                                                    </button>
+                                                </td>
                                             </tr>
+                                            <div class="modal fade"
+                                                 id="question-delete{{ forloop.counter }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">UYARI !</h4>
+                                                            <button type="button" class="close"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p class="text-left">Gerçekten "<span
+                                                                    class="text-bold"><b>{{ question.title }}</b></span>"
+                                                                adlı sorunuzu gerçekten silmek istiyor
+                                                                musunuz?&hellip;</p>
+                                                            <br>
+                                                            <a type="button" class="btn-danger btn"
+                                                               href="{% url 'delete_question' question.postNumber %}">
+                                                                Sil
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         {% endfor %}
                                         </tbody>
                                     </table>
@@ -288,10 +362,9 @@
                                             <th>Başlık</th>
                                             <th>Ders</th>
                                             <th>Dönem</th>
-                                            <th>Görüntülenme</th>
-                                            <th>Beğeni</th>
                                             <th>Oluşturulma</th>
                                             <th>Son Güncelleme</th>
+                                            <th>Sil</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -300,11 +373,42 @@
                                                 <td>{{ exam.title|truncatechars:50 }}</td>
                                                 <td>{{ exam.lectureId.title }}</td>
                                                 <td>{{ exam.termId.title }}</td>
-                                                <td>{{ exam.view }}</td>
                                                 <td>{{ exam.createdDate }}</td>
                                                 <td>{% if exam.updatedDate %}{{ exam.updatedDate }}{% else %}
                                                     Güncellenmemiş{% endif %}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-md btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#exam-delete{{ forloop.counter }}">Sil
+                                                    </button>
+                                                </td>
                                             </tr>
+                                            <div class="modal fade"
+                                                 id="exam-delete{{ forloop.counter }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">UYARI !</h4>
+                                                            <button type="button" class="close"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p class="text-left">Gerçekten "<span
+                                                                    class="text-bold"><b>{{ exam.lectureId.title }} dersinin {{ exam.title }}</b></span>"
+                                                                adlı sınavını gerçekten silmek istiyor
+                                                                musunuz?&hellip;</p>
+                                                            <br>
+                                                            <a type="button" class="btn-danger btn"
+                                                               href="{% url 'delete_exam' exam.examNumber %}">
+                                                                Sil
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         {% endfor %}
                                         </tbody>
                                     </table>
@@ -339,6 +443,8 @@
                                             <th>Öğrenci Sayısı</th>
                                             <th>Oluşturulma</th>
                                             <th>Son Güncelleme</th>
+                                            <th>Düzenle</th>
+                                            <th>Sil</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -353,7 +459,44 @@
                                                 <td>{{ course.createdDate }}</td>
                                                 <td>{% if course.updatedDate %}{{ course.updatedDate }}{% else %}
                                                     Güncellenmemiş{% endif %}</td>
+                                                <td>
+                                                    <a href="{% url 'edit_course' course.courseNumber %}" type="button" class="btn btn-success">
+                                                        Güncelle
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-md btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#course-delete{{ forloop.counter }}">Sil
+                                                    </button>
+                                                </td>
                                             </tr>
+                                            <div class="modal fade"
+                                                 id="course-delete{{ forloop.counter }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">UYARI !</h4>
+                                                            <button type="button" class="close"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p class="text-left">Gerçekten "<span
+                                                                    class="text-bold"><b>{{ course.title }}</b></span>"
+                                                                adlı kursunuzu gerçekten silmek istiyor
+                                                                musunuz?&hellip;</p>
+                                                            <br>
+                                                            <a type="button" class="btn-danger btn"
+                                                               href="{% url 'delete_course' course.courseNumber %}">
+                                                                Sil
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         {% endfor %}
                                         </tbody>
                                     </table>

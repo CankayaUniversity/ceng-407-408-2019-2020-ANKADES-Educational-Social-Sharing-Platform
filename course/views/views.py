@@ -16,7 +16,8 @@ from account.views.views import get_user_follower, user_articles, user_questions
 from adminpanel.views.article import ArticleCategoryView
 from ankadescankaya.views.views import current_user_group, Categories
 from article.models import ArticleCategory
-from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm, SectionForm, LectureForm, VideoForm
+from course.forms import CourseForm, CourseLectureFormSet, CourseSectionModelForm, SectionForm, LectureForm, VideoForm, \
+    EditCourseForm
 from course.models import Course, CourseComment, CourseCategory, CourseSection, CourseLecture, CourseVideo
 from question.models import QuestionComment
 
@@ -330,6 +331,71 @@ def course_lecture_detail(request, lectureNumber):
         return render(request, "ankacademy/course/watch-course.html", context)
     else:
         return redirect("all_courses")
+
+
+@login_required(login_url="login_account")
+def delete_course(request, courseNumber):
+    """
+    :param request:
+    :param courseNumber:
+    :return:
+    """
+    try:
+        instance = Course.objects.get(courseNumber=courseNumber)
+    except:
+        return redirect("401")
+    userGroup = current_user_group(request, request.user)
+    if userGroup == 'admin' or userGroup == 'moderator' or instance.creator == request.user:
+        if instance.isActive:
+            instance.isActive = False
+            instance.save()
+            messages.success(request, "Kurs başarıyla silindi.")
+            return redirect("my_posts")
+        else:
+            return redirect("my_posts")
+    else:
+        return redirect("401")
+
+
+@login_required(login_url="login_account")
+def edit_course(request, courseNumber):
+    """
+    :param request:
+    :param courseNumber:
+    :return:
+    """
+    try:
+        instance = Course.objects.get(courseNumber=courseNumber)
+    except:
+        return redirect("401")
+    userGroup = current_user_group(request, request.user)
+    form = EditCourseForm(request.POST or None, instance=instance)
+    if userGroup == 'admin' or userGroup == 'moderator' or instance.creator == request.user:
+        context = {
+            "instance": instance,
+            "userGroup": userGroup,
+            "form": form,
+        }
+        if request.method == 'POST':
+            courseCategory = request.POST.get('courseCategory')
+            courseTitle = request.POST.get('courseTitle')
+            if request.FILES:
+                courseMedia = request.FILES.get('courseMedia')
+                instance.coursePicture = courseMedia
+            if form.is_valid():
+                description = form.cleaned_data.get("description")
+                instance.description = description
+                introduction = form.cleaned_data.get("introduction")
+                instance.introduction = introduction
+            instance.title = courseTitle
+            instance.updatedDate = datetime.datetime.now()
+            instance.categoryId_id = courseCategory
+            instance.save()
+            messages.success(request, "Kurs başarıyla güncellendi")
+            return redirect("my_posts")
+        return render(request, "ankacademy/account/post/edit-course.html", context)
+    else:
+        return redirect("401")
 
 
 class CourseCategoryView(DetailView):
