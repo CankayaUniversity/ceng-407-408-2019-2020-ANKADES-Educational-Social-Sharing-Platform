@@ -9,7 +9,7 @@ from ankadescankaya import settings
 from api.views.v1.account import AccountRegistrationView, AccountLoginAPIView
 from api.views.v1.article import ArticleLikeAPIToggle, ArticleDetailAPIToggle, ArticleListAPIView
 from api.views.v1.group import IsActiveGroupAPIToggle
-from api.views.v1.question import QuestionLikeAPIToggle, QuestionDetailAPIToggle
+from api.views.v1.question import QuestionLikeAPIToggle, QuestionDetailAPIToggle, QuestionListAPI
 
 router = routers.SimpleRouter()
 
@@ -37,10 +37,11 @@ urlpatterns = [
     url(r'^Account/Register/', AccountRegistrationView.as_view()),
 
     # Question
-    url(r'^Question/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/Like/$', QuestionLikeAPIToggle.as_view(),
-        name="question-like-api-toggle"),
-    url(r'^Question/Detail/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/$', QuestionDetailAPIToggle.as_view(),
+    url(r'^Question/(?P<slug>[\w-]+)/(?P<postNumber>[\w-]+)/Like/$', QuestionLikeAPIToggle.as_view(), name="question-like-api-toggle"),
+    url(r'^Question/List/$', QuestionListAPI.as_view()),
+    url(r'^Question/Detail/(?P<postNumber>[\w-]+)/$', QuestionDetailAPIToggle.as_view(),
         name="question-detail"),
+
 
     # Article
     url(r'^Article/List/$', ArticleListAPIView.as_view(), name="article-list"),

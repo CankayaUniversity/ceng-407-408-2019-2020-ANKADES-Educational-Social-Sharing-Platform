@@ -68,5 +68,6 @@ class ArticleDetailAPIToggle(APIView):
 
 
 class ArticleListAPIView(ListAPIView):
-    queryset = Article.objects.all()
+    queryset = Article.objects.filter(isActive=True)
     serializer_class = ArticleSerializer
+    permission_classes = (permissions.BasePermission, )

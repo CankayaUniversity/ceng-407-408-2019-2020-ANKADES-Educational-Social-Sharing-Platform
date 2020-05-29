@@ -68,6 +68,13 @@ class Question(models.Model):
     def get_api_like_url(self, request):
         return reverse("question-like-api-toggle", kwargs={"slug": request.slug, "postNumber": request.postNumber})
 
+    @property
+    def any_children(self):
+        """
+        :return:
+        """
+        return QuestionComment.objects.filter(parentId=self)
+
     class Meta:
         db_table = "Question"
         ordering = ['-createdDate']
