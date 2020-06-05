@@ -14,7 +14,7 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('first_name', 'last_name', 'email', 'date_joined', 'is_active', 'image', 'bio', 'is_admin', 'is_staff')
+        fields = ('first_name', 'last_name')
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('username', 'password', 'profile')
+        fields = ('username', 'password', 'email', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -32,10 +32,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             user=user,
             first_name=profile_data['first_name'],
             last_name=profile_data['last_name'],
-            data_joined=profile_data['data_joined'],
-            is_active=profile_data['is_active'],
-            image=profile_data['image'],
-            description=profile_data['description'],
         )
         return user
 

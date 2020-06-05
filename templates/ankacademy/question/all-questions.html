@@ -135,9 +135,8 @@
                                         </h5>
                                         <br/>
                                         <hr>
-                                        <small class="card-text">Kategori: <a
-                                                href="{% url 'question_category_page' question.categoryId.slug %}">{{ question.categoryId.parentId.title }}
-                                            / {{ question.categoryId.title }}</a>
+                                        <small class="card-text">Kategori: {{ question.categoryId.parentId.title }}
+                                            / {{ question.categoryId.title }}
                                         </small>
                                         <br/>
                                         <small class="card-text">Yorum: {{ question.questioncomment_set.count }}</small>

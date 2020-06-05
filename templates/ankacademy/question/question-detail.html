@@ -401,7 +401,7 @@
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
 
                                     <form method="post" class="comment-form"
-                                          action="{% url 'add_article_comment' slug=instance.slug %}">
+                                          action="{% url 'add_question_answer' instance.slug instance.postNumber %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                         <textarea class="form-control" id="content" name="content" rows="5"
@@ -428,7 +428,7 @@
                                     </div>
                                     <h5 class="text-uppercase mt-5 mb-4">Yorum Yap</h5>
                                     <form method="post" class="comment-form"
-                                          action="{% url 'add_article_comment' slug=instance.slug %}">
+                                          action="{% url 'add_question_answer' instance.slug instance.postNumber %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                         <textarea class="form-control" id="content" name="content" rows="5"
