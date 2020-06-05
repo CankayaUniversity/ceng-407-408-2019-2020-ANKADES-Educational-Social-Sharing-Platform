@@ -52,39 +52,41 @@
                             <div class="card-body mb-0 mt-0">
                                 <div id="accordion">
                                     {% for section in sections %}
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4 class="card-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion"
-                                                       href="#c{{ forloop.counter }}">
-                                                        {{ section.title }}
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="c{{ forloop.counter }}" class="panel-collapse collapse in">
-                                                <div class="card-body">
-                                                    <div class="list-group">
-                                                        {% for lecture in lectures %}
-                                                            {% if lecture.sectionId == section %}
-                                                                {% if lecture.isPrivate %}
-                                                                    {% if currentUserEnrolled %}
-                                                                        <a href="{% url 'course_lecture_detail' lecture.lectureNumber %}"
-                                                                           class="list-group-item list-group-item-action">
-                                                                            {{ lecture.title|lower|capfirst }}
-                                                                        </a>
-                                                                    {% else %}
-                                                                        <a href="#"
-                                                                           class="list-group-item list-group-item-action disabled"
-                                                                           tabindex="-1"
-                                                                           aria-disabled="true">{{ lecture.title|lower|capfirst }}</a>
+                                        {% if section.courseId.courseNumber == instance.courseNumber %}
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h4 class="card-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion"
+                                                           href="#c{{ forloop.counter }}">
+                                                            {{ section.title }}
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="c{{ forloop.counter }}" class="panel-collapse collapse in">
+                                                    <div class="card-body">
+                                                        <div class="list-group">
+                                                            {% for lecture in lectures %}
+                                                                {% if lecture.sectionId == section %}
+                                                                    {% if lecture.isPrivate %}
+                                                                        {% if currentUserEnrolled %}
+                                                                            <a href="{% url 'course_lecture_detail' lecture.lectureNumber %}"
+                                                                               class="list-group-item list-group-item-action">
+                                                                                {{ lecture.title|lower|capfirst }}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            <a href="#"
+                                                                               class="list-group-item list-group-item-action disabled"
+                                                                               tabindex="-1"
+                                                                               aria-disabled="true">{{ lecture.title|lower|capfirst }}</a>
+                                                                        {% endif %}
                                                                     {% endif %}
                                                                 {% endif %}
-                                                            {% endif %}
-                                                        {% endfor %}
+                                                            {% endfor %}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
