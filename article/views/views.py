@@ -172,8 +172,6 @@ def add_article(request):
     :param request:
     :return:
     """
-    abstract = None
-    description = None
     userGroup = current_user_group(request, request.user)
     articleCategory = ArticleCategory.objects.filter(Q(isActive=True, isCategory=False))
     form = ArticleForm(request.POST or None)
@@ -194,13 +192,15 @@ def add_article(request):
         introduction = request.POST.get("introduction")
         contact = request.POST.get("contact")
         isPrivate = request.POST.get("isPrivate") == "on"
+        instance = Article(title=title, isPrivate=isPrivate, owner=owner, resource=resource)
         if form.is_valid():
             description = form.cleaned_data.get("description")
             abstract = form.cleaned_data.get("abstract")
-        if not abstract or not description:
-            messages.error(request, "Makalenin hepsi veya ön yazısı yayınlanmadan devam edemezsiniz.")
-            return render(request, "ankacademy/article/add-article.html", context)
-        instance = Article(title=title, description=description, isPrivate=isPrivate, owner=owner, resource=resource)
+            if abstract is None and description is None:
+                messages.error(request, "Makalenin hepsi veya ön yazısı yayınlanmadan devam edemezsiniz.")
+                return render(request, "ankacademy/article/add-article.html", context)
+            instance.description = description
+            instance.abstract = abstract
         if request.FILES:
             media = request.FILES.get('media')
             instance.media = media

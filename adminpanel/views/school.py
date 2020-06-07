@@ -42,5 +42,5 @@ def admin_add_school(request):
         instance.updatedDate = datetime.datetime.now()
         instance.save()
         messages.success(request, "Okul başarıyla eklendi.")
-        return redirect("admin_add_school")
-    return render(request, "adminpanel/exam/add/add-school.html", context)
+        return render(request, "best_result.html", {'similarity: similarity'})
+    return render(request, "index.html", context)
