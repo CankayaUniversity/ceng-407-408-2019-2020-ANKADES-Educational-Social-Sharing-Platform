@@ -6,8 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect, render
 from django.utils.crypto import get_random_string
 
-from ankadescankaya.storage_backends import ExamMediaStorage
-from ankadescankaya.views.views import Categories, current_user_group
+from ankadescankaya.views.views import current_user_group
 from exam.models import School, Department, Term, Lecture, Exam
 
 

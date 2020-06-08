@@ -484,15 +484,18 @@ def delete_article_comment(request, commentNumber):
 
 
 class ArticleLikeToggle(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
+    def get_redirect_url(self, username=None, slug=None, *args, **kwargs):
         """
+        :param slug:
+        :param username:
         :param args:
         :param kwargs:
         :return:
         """
         slug = self.kwargs.get("slug")
+        username = self.kwargs.get("username")
         try:
-            obj = Article.objects.get(slug=slug)
+            obj = Article.objects.get(slug=slug, creator__username=username)
             url_ = obj.get_absolute_url()
             user = self.request.user
             if user.is_authenticated:

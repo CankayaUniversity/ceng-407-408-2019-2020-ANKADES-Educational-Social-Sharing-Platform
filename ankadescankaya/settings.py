@@ -39,10 +39,14 @@ INSTALLED_APPS = [
     'online_users',
     'storages',
     'django_filters',
+    'django_hosts',
 ]
+
+ROOT_HOSTCONF = 'adminpanel.hosts'
 
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -53,9 +57,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'online_users.middleware.OnlineNowMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
-ROOT_URLCONF = 'ankadescankaya.urls'
+ROOT_URLCONF = 'adminpanel.urls'
 
 TEMPLATES = [
     {
